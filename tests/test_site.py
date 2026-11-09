@@ -68,7 +68,7 @@ def test_pages_name_the_author_and_the_date(site):
 def test_structured_data(site):
     root, pages = site
     expected = {"home": "WebSite", "question": "Article", "note": "Article",
-                "author": "ProfilePage", "book": "Book"}
+                "author": "ProfilePage", "book": "Book", "landing": "WebPage", "page": "WebPage"}
     for page in pages:
         data = structured(read(root, page))
         assert data["@context"] == "https://schema.org"

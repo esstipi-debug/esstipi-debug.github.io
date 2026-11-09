@@ -5,10 +5,16 @@ Usage:
     python build.py
 
 Each page is a Markdown file that starts with a front matter block: "key: value"
-lines between two "---" lines, where a repeated key ("cite") makes a list. The
-build writes index.html, one folder per page, style.css, favicon.svg,
-robots.txt, sitemap.xml, 404.html and .nojekyll. Folders of pages that no longer
-exist are removed, using src/generated.json as the record of what it wrote.
+lines between two "---" lines, where a repeated key ("cite", "offer") makes a
+list. The build writes index.html, one folder per page, style.css, favicon.svg,
+the files in src/files/, robots.txt, sitemap.xml, 404.html and .nojekyll.
+Folders of pages that no longer exist are removed, using src/generated.json as
+the record of what it wrote.
+
+Page types: "question" and "note" are the field notes, "author" and "book" the
+author page and the manuscript. "home" is the home page; "landing" the five
+entry pages (three floors and two kinds of buyer, shown as doors on the home
+page); "page" the other commercial pages (engagements, proof, working terms).
 """
 from __future__ import annotations
 
@@ -20,12 +26,14 @@ import shutil
 from dataclasses import dataclass
 from datetime import date
 from pathlib import Path
+from urllib.parse import quote
 
 import markdown
 
 ROOT = Path(__file__).resolve().parent
 SRC = ROOT / "src"
 PAGES_DIR = SRC / "pages"
+FILES_DIR = SRC / "files"
 MANIFEST = SRC / "generated.json"
 ASSETS = ("style.css", "favicon.svg")
 
@@ -54,12 +62,30 @@ SEARCH_BOTS = ("Googlebot", "Bingbot", "OAI-SearchBot", "Claude-SearchBot", "Per
 TRAINING_BOTS = ("GPTBot", "ClaudeBot", "CCBot", "Google-Extended")
 DISALLOWED_PATHS = ("/src/", "/tests/")
 
-PAGE_TYPES = ("home", "question", "note", "author", "book")
+PAGE_TYPES = ("home", "question", "note", "author", "book", "landing", "page")
 REQUIRED_KEYS = ("type", "order", "slug", "title", "description", "published", "updated")
+KIND_KEYS = {"home": ("headline", "lede"), "landing": ("group", "door", "door_text")}
 SLUG_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
+RESERVED_SLUGS = frozenset({"files", "src", "tests"})  # folders the build or the repository already use
 FRONT_MATTER_RE = re.compile(r"\A---\n(.*?)\n---\n(.*)\Z", re.S)
 MONTHS = ("January", "February", "March", "April", "May", "June", "July",
           "August", "September", "October", "November", "December")
+
+# Commercial pages. A target that starts with "#" is an anchor on the home page.
+NAV = (
+    ("Industries", "#industries"),
+    ("Engagements", "engagements/"),
+    ("Proof", "proof/"),
+    ("Field notes", "#field-notes"),
+    ("About", f"{AUTHOR_SLUG}/"),
+    ("Contact", "contact/"),
+)
+DOOR_GROUPS = (("floor", "Where is the work?"), ("buyer", "Or what are you?"))
+NEXT_LINKS = (("Engagements and fees", "engagements"), ("Proof", "proof"), ("Working terms", "working-terms"))
+DEFAULT_CTA = "Tell me what's breaking"
+OFFER_UNITS = ("project", "month", "hour", "day")
+FROM_PRICE_UNITS = ("project", "month")  # quoted as "from"; hours and days are flat rates
+AREA_SERVED = ("United States", "Australia", "Canada", "United Kingdom", "Europe")
 
 log = logging.getLogger("build")
 
@@ -68,6 +94,18 @@ log = logging.getLogger("build")
 class Citation:
     text: str
     url: str | None
+
+
+@dataclass(frozen=True)
+class Offer:
+    """A priced service on the engagements page, for its structured data. The amount is in USD."""
+    name: str
+    amount: int
+    unit: str
+
+    @property
+    def is_from_price(self) -> bool:
+        return self.unit in FROM_PRICE_UNITS
 
 
 @dataclass(frozen=True)
@@ -87,6 +125,16 @@ class Page:
     pdf: str | None = None
     pdf_pages: int | None = None
     cites: tuple[Citation, ...] = ()
+    headline: str | None = None
+    lede: str | None = None
+    base_line: str | None = None
+    secondary: tuple[str, str] | None = None
+    subject: str | None = None
+    cta: str | None = None
+    group: str | None = None
+    door: str | None = None
+    door_text: str | None = None
+    offers: tuple[Offer, ...] = ()
 
     @property
     def is_home(self) -> bool:
@@ -134,6 +182,53 @@ def parse_citation(value: str) -> Citation:
     return Citation(text=text.strip(), url=url.strip() if sep and url.strip() else None)
 
 
+def parse_offer(value: str) -> Offer:
+    """'name | amount | unit', with the amount in USD and the unit one of OFFER_UNITS."""
+    parts = [part.strip() for part in value.split("|")]
+    if len(parts) != 3:
+        raise ValueError(f"offer must be 'name | amount | unit': {value!r}")
+    name, amount, unit = parts
+    if unit not in OFFER_UNITS:
+        raise ValueError(f"offer {name!r}: unknown unit {unit!r}, expected one of {OFFER_UNITS}")
+    if not amount.isdigit():
+        raise ValueError(f"offer {name!r}: the amount must be a whole number of USD, got {amount!r}")
+    return Offer(name=name, amount=int(amount), unit=unit)
+
+
+def parse_link(value: str) -> tuple[str, str]:
+    """'label | slug': a link to another page of the site."""
+    label, sep, slug = value.partition("|")
+    label, slug = label.strip(), slug.strip()
+    if not sep or not label or not SLUG_RE.match(slug):
+        raise ValueError(f"link must be 'label | slug': {value!r}")
+    return label, slug
+
+
+def check_kind_keys(one: dict[str, str], name: str) -> None:
+    missing = [key for key in KIND_KEYS.get(one["type"], ()) if key not in one]
+    if missing:
+        raise ValueError(f"{name}: missing {', '.join(missing)}")
+    groups = [group for group, _ in DOOR_GROUPS]
+    if one["type"] == "landing" and one["group"] not in groups:
+        raise ValueError(f"{name}: unknown group {one['group']!r}, expected one of {groups}")
+
+
+def commercial_fields(one: dict[str, str], meta: dict[str, list[str]]) -> dict:
+    """Optional keys of the commercial pages; the other page types leave them empty."""
+    return {
+        "headline": one.get("headline"),
+        "lede": one.get("lede"),
+        "base_line": one.get("base_line"),
+        "secondary": parse_link(one["secondary"]) if "secondary" in one else None,
+        "subject": one.get("subject"),
+        "cta": one.get("cta"),
+        "group": one.get("group"),
+        "door": one.get("door"),
+        "door_text": one.get("door_text"),
+        "offers": tuple(parse_offer(value) for value in meta.get("offer", [])),
+    }
+
+
 def load_page(path: Path) -> Page:
     meta, body = parse_front_matter(path.read_text(encoding="utf-8"), path.name)
     missing = [key for key in REQUIRED_KEYS if key not in meta]
@@ -142,8 +237,13 @@ def load_page(path: Path) -> Page:
     one = {key: values[0] for key, values in meta.items()}
     if one["type"] not in PAGE_TYPES:
         raise ValueError(f"{path.name}: unknown type {one['type']!r}")
-    if not SLUG_RE.match(one["slug"]):
-        raise ValueError(f"{path.name}: bad slug {one['slug']!r}")
+    if not SLUG_RE.match(one["slug"]) or one["slug"] in RESERVED_SLUGS:
+        raise ValueError(f"{path.name}: bad or reserved slug {one['slug']!r}")
+    check_kind_keys(one, path.name)
+    try:
+        extra = commercial_fields(one, meta)
+    except ValueError as error:
+        raise ValueError(f"{path.name}: {error}") from error
     return Page(
         kind=one["type"],
         order=int(one["order"]),
@@ -160,6 +260,7 @@ def load_page(path: Path) -> Page:
         pdf=one.get("pdf"),
         pdf_pages=int(one["pdf_pages"]) if "pdf_pages" in one else None,
         cites=tuple(parse_citation(value) for value in meta.get("cite", [])),
+        **extra,
     )
 
 
@@ -178,6 +279,8 @@ def load_site(pages_dir: Path = PAGES_DIR) -> list[Page]:
     for page in pages:
         if page.kind == "question" and page.origin not in notes and not page.origin_url:
             raise ValueError(f"{page.slug}: origin must be a field note or an origin_url")
+        if page.secondary and page.secondary[1] not in slugs:
+            raise ValueError(f"{page.slug}: link to an unknown page {page.secondary[1]!r}")
     return pages
 
 
@@ -204,6 +307,10 @@ def notes_of(pages: list[Page]) -> list[Page]:
 def questions_of(pages: list[Page], origin: str | None = None) -> list[Page]:
     return [page for page in pages
             if page.kind == "question" and (origin is None or page.origin == origin)]
+
+
+def landings_of(pages: list[Page], group: str) -> list[Page]:
+    return [page for page in pages if page.kind == "landing" and page.group == group]
 
 
 def find(pages: list[Page], slug: str) -> Page:
@@ -275,6 +382,38 @@ def article_data(page: Page, pages: list[Page]) -> dict:
     return data
 
 
+def service_data(offer: Offer) -> dict:
+    price_key = "minPrice" if offer.is_from_price else "price"
+    return {
+        "@type": "Service",
+        "name": offer.name,
+        "provider": person_ref(),
+        "areaServed": list(AREA_SERVED),
+        "offers": {
+            "@type": "Offer",
+            "priceSpecification": {"@type": "UnitPriceSpecification", "priceCurrency": "USD",
+                                   price_key: offer.amount, "unitText": offer.unit},
+        },
+    }
+
+
+def webpage_data(page: Page) -> dict:
+    data = {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "name": page.title,
+        "description": page.description,
+        "url": page.url,
+        "inLanguage": "en",
+        "dateModified": page.updated.isoformat(),
+        "isPartOf": {"@type": "WebSite", "url": f"{SITE_URL}/"},
+        "author": person_ref(),
+    }
+    if page.offers:
+        data["mainEntity"] = [service_data(offer) for offer in page.offers]
+    return data
+
+
 def structured_data(page: Page, pages: list[Page]) -> dict:
     base = {"@context": "https://schema.org"}
     if page.kind == "home":
@@ -287,6 +426,8 @@ def structured_data(page: Page, pages: list[Page]) -> dict:
         return {**base, "@type": "Book", "name": page.title, "url": page.url, "inLanguage": "en",
                 "description": page.description, "creativeWorkStatus": "Manuscript",
                 "author": person_ref()}
+    if page.kind in ("landing", "page"):
+        return webpage_data(page)
     return article_data(page, pages)
 
 
@@ -315,7 +456,8 @@ def verification_tags(page: Page) -> str:
 
 
 def head(page: Page, pages: list[Page], depth: int) -> str:
-    og_type = {"home": "website", "author": "profile", "book": "book"}.get(page.kind, "article")
+    og_types = {"home": "website", "author": "profile", "book": "book", "landing": "website", "page": "website"}
+    og_type = og_types.get(page.kind, "article")
     data = json.dumps(structured_data(page, pages), ensure_ascii=False).replace("</", "<\\/")
     prefix = "../" * depth
     return f"""<!doctype html>
@@ -344,12 +486,16 @@ def head(page: Page, pages: list[Page], depth: int) -> str:
 
 def site_header(depth: int) -> str:
     home = href("", depth)
+    items = []
+    for label, target in NAV:
+        link = f"{home}{target}" if target.startswith("#") else href(target, depth)
+        css = ' class="nav-contact"' if target == "contact/" else ""
+        items.append(f'<li><a{css} href="{link}">{label}</a></li>')
+    links = "\n".join(items)
     return f"""<header class="site-header"><div class="wrap">
 <a class="name" href="{home}">{AUTHOR}</a>
 <nav aria-label="Site"><ul>
-<li><a href="{home}#questions">Questions</a></li>
-<li><a href="{home}#field-notes">Field notes</a></li>
-<li><a href="{href(AUTHOR_SLUG + '/', depth)}">About</a></li>
+{links}
 </ul></nav>
 </div></header>"""
 
@@ -371,8 +517,12 @@ def byline(page: Page, depth: int) -> str:
     return f'<p class="byline">{" · ".join(parts)}</p>'
 
 
+def mark_first_paragraph(body_html: str, css_class: str) -> str:
+    return body_html.replace("<p>", f'<p class="{css_class}">', 1)
+
+
 def lead_with_answer(body_html: str) -> str:
-    return body_html.replace("<p>", '<p class="answer">', 1)
+    return mark_first_paragraph(body_html, "answer")
 
 
 def origin_line(page: Page, pages: list[Page], depth: int) -> str:
@@ -381,6 +531,22 @@ def origin_line(page: Page, pages: list[Page], depth: int) -> str:
         return (f'<p class="origin">From the field notes <a href="{href(note.path, depth)}">'
                 f'<em>{esc(note.title)}</em></a> · {pdf_link(note)}</p>')
     return f'<p class="origin">From <a href="{esc(page.origin_url or "")}">{esc(page.origin_label or "")}</a></p>'
+
+
+def heading(page: Page) -> str:
+    return render_inline(page.headline or page.title)
+
+
+def contact_button(page: Page) -> str:
+    """The one call to action of a commercial page: an email with the page's subject line."""
+    subject = quote(page.subject or page.title, safe="")
+    label = esc(page.cta or DEFAULT_CTA)
+    return f'<a class="btn btn-contact" href="mailto:{EMAIL}?subject={subject}">{label}</a>'
+
+
+def next_links(depth: int) -> str:
+    links = " · ".join(f'<a href="{href(slug + "/", depth)}">{esc(label)}</a>' for label, slug in NEXT_LINKS)
+    return f'<p class="next">{links}</p>'
 
 
 # ---------------------------------------------------------------- page bodies
@@ -450,23 +616,79 @@ def list_item(page: Page, depth: int, extra: str = "") -> str:
             f'<span class="gist">{esc(page.description)}{extra}</span></li>')
 
 
-def home_main(page: Page, pages: list[Page], depth: int) -> str:
-    questions = "\n".join(list_item(question, depth) for question in questions_of(pages))
+def hero(page: Page, depth: int) -> str:
+    secondary = ""
+    if page.secondary:
+        label, slug = page.secondary
+        secondary = f'\n<a class="btn btn-ghost" href="{href(slug + "/", depth)}">{esc(label)}</a>'
+    base = f'\n<p class="base">{render_inline(page.base_line)}</p>' if page.base_line else ""
+    return f"""<section class="hero">
+<p class="kicker">{esc(page.kicker or AUTHOR_ROLE)}</p>
+<h1>{heading(page)}</h1>
+<p class="lede">{render_inline(page.lede or "")}</p>
+<p class="actions">{contact_button(page)}{secondary}</p>{base}
+</section>"""
+
+
+def door_item(page: Page, depth: int) -> str:
+    return (f'<li><a class="door" href="{href(page.path, depth)}">'
+            f'<span class="door-t">{esc(page.door or page.title)}</span>'
+            f'<span class="door-d">{esc(page.door_text or "")}</span></a></li>')
+
+
+def doors(pages: list[Page], depth: int) -> str:
+    groups = []
+    for group, question in DOOR_GROUPS:
+        items = "\n".join(door_item(page, depth) for page in landings_of(pages, group))
+        groups.append(f'<h2 class="doors-q">{esc(question)}</h2>\n<ul class="doors">\n{items}\n</ul>')
+    joined = "\n".join(groups)
+    return f'<section id="industries" class="doors-block">\n{joined}\n</section>'
+
+
+def library(pages: list[Page], depth: int) -> str:
+    """The field notes and the short answers, at the foot of the home page."""
     notes = "\n".join(list_item(note, depth, f" · {pdf_link(note)}") for note in notes_of(pages))
-    return f"""<h1>{AUTHOR}</h1>
-<p class="lede">{AUTHOR_ROLE}</p>
-{page.body_html}
-<h2 id="questions">Questions</h2>
-<ul class="list">
-{questions}
-</ul>
+    questions = "\n".join(list_item(question, depth) for question in questions_of(pages))
+    return f"""<section id="library">
 <h2 id="field-notes">Field notes</h2>
 <ul class="list">
 {notes}
 </ul>
-<h2>About</h2>
-<p><a href="{href(AUTHOR_SLUG + '/', depth)}">About the author</a> · \
-<a href="{href(BOOK_SLUG + '/', depth)}"><em>The Deployment Chasm</em></a>, a manuscript</p>"""
+<h2 id="questions">Short answers</h2>
+<ul class="list">
+{questions}
+</ul>
+<p class="next"><a href="{href(AUTHOR_SLUG + '/', depth)}">About the author</a> · \
+<a href="{href(BOOK_SLUG + '/', depth)}"><em>The Deployment Chasm</em></a>, a manuscript</p>
+</section>"""
+
+
+def home_main(page: Page, pages: list[Page], depth: int) -> str:
+    return f"""{hero(page, depth)}
+{doors(pages, depth)}
+<div class="home-body">
+{page.body_html}
+</div>
+{library(pages, depth)}"""
+
+
+def landing_main(page: Page, pages: list[Page], depth: int) -> str:
+    return f"""<article class="landing">
+<p class="kicker">{esc(page.kicker or "Industry")}</p>
+<h1>{heading(page)}</h1>
+{mark_first_paragraph(page.body_html, "scene")}
+<p class="actions">{contact_button(page)}</p>
+{next_links(depth)}
+</article>"""
+
+
+def page_main(page: Page, pages: list[Page], depth: int) -> str:
+    return f"""<article class="page">
+<p class="kicker">{esc(page.kicker or page.title)}</p>
+<h1>{heading(page)}</h1>
+{page.body_html}
+<p class="actions">{contact_button(page)}</p>
+</article>"""
 
 
 MAIN_BUILDERS = {
@@ -475,6 +697,8 @@ MAIN_BUILDERS = {
     "note": note_main,
     "author": author_main,
     "book": book_main,
+    "landing": landing_main,
+    "page": page_main,
 }
 
 
@@ -555,6 +779,9 @@ def write_site(pages: list[Page], root: Path = ROOT, manifest: Path = MANIFEST) 
         write_text(root / page.path / "index.html", render_page(page, pages))
     for asset in ASSETS:
         shutil.copyfile(SRC / asset, root / asset)
+    shutil.rmtree(root / "files", ignore_errors=True)  # files/ is generated: a file removed from src/files/ goes too
+    if FILES_DIR.is_dir():
+        shutil.copytree(FILES_DIR, root / "files")
     write_text(root / "robots.txt", robots_txt())
     write_text(root / "sitemap.xml", sitemap_xml(pages))
     write_text(root / "404.html", not_found_html())

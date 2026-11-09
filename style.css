@@ -71,3 +71,40 @@ li::marker { color: var(--accent); }
 .site-footer .wrap { padding-top: 1.5rem; padding-bottom: 2.5rem; }
 .site-footer p { margin: 0 0 .35rem; }
 .site-footer a { color: var(--ink-2); }
+
+/* Commercial pages: home, landing pages and the pages behind them. */
+.site-header .nav-contact { color: var(--accent); }
+
+.hero h1 { font-size: clamp(2rem, 1.35rem + 2.8vw, 2.875rem); line-height: 1.12; margin-bottom: 1rem; }
+.hero .lede { font: 400 1.125rem/1.6 var(--sans); color: var(--ink-2); margin-bottom: 0; }
+.base { font: 400 .875rem/1.5 var(--sans); color: var(--muted); }
+
+.actions { display: flex; flex-wrap: wrap; gap: .75rem; margin: 1.75rem 0; }
+.btn { display: inline-block; font: 600 .875rem/1.2 var(--sans); letter-spacing: .03em; text-decoration: none;
+  padding: .8rem 1.15rem; border: 1px solid var(--accent); border-radius: 2px; }
+.btn-contact { background: var(--accent); color: var(--bg); }
+.btn-contact:hover { background: var(--ink); border-color: var(--ink); color: var(--bg); }
+.btn-ghost { background: transparent; color: var(--accent); }
+.btn-ghost:hover { border-color: var(--ink); color: var(--ink); }
+
+.doors-block { margin: 2.25rem 0 1rem; }
+.doors { list-style: none; padding: 0; margin: 0 0 1.75rem; display: grid; gap: .75rem;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); }
+.doors li { margin: 0; }
+.door { display: grid; align-content: start; gap: .35rem; height: 100%; padding: 1rem 1.1rem;
+  border: 1px solid var(--rule); border-radius: 2px; text-decoration: none; background: rgba(255, 255, 255, .015); }
+.door:hover, .door:focus-visible { border-color: var(--accent); background: var(--accent-soft); }
+.door-t { font: 400 1.125rem/1.3 var(--serif); color: var(--ink); }
+.door-d { font: 400 .875rem/1.45 var(--sans); color: var(--muted); }
+
+.home-body h2, .page h2 { font: 400 1.5rem/1.25 var(--serif); letter-spacing: 0; text-transform: none;
+  color: var(--ink); margin: 2.5rem 0 .6rem; }
+.scene { font-size: 1.25rem; line-height: 1.55; margin-bottom: 2rem; }
+.note { font: 400 .9375rem/1.55 var(--sans); color: var(--muted); border-top: 1px solid var(--rule); padding-top: 1rem; }
+.next { font: 400 .9375rem/1.5 var(--sans); color: var(--ink-2); border-top: 1px solid var(--rule); padding-top: 1rem; margin-top: 2rem; }
+.price { font: 600 .9375rem/1.4 var(--sans); color: var(--accent); margin: 0 0 .9rem; }
+
+details { border: 1px solid var(--rule); border-radius: 2px; padding: .75rem 1rem; margin: 2.25rem 0; }
+summary { cursor: pointer; font: 600 .9375rem/1.4 var(--sans); color: var(--ink); }
+details[open] summary { margin-bottom: .75rem; }
+details ul { margin-bottom: 0; }
