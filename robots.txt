@@ -1,0 +1,17 @@
+# Search engines, AI search and AI training crawlers may read this site.
+# Google-Extended covers Gemini training and grounding in the Gemini app.
+User-agent: Googlebot
+User-agent: Bingbot
+User-agent: OAI-SearchBot
+User-agent: Claude-SearchBot
+User-agent: PerplexityBot
+User-agent: GPTBot
+User-agent: ClaudeBot
+User-agent: CCBot
+User-agent: Google-Extended
+User-agent: *
+Allow: /
+Disallow: /src/
+Disallow: /tests/
+
+Sitemap: https://esstipi-debug.github.io/sitemap.xml

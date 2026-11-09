@@ -1,0 +1,73 @@
+/* Dark only, on purpose: there is no light theme. Palette from the field notes PDFs. */
+:root {
+  color-scheme: dark;
+  --bg: #101217;
+  --ink: #EEE9DE;
+  --ink-2: #CFC8BA;
+  --muted: #9A958A;
+  --rule: #2C303A;
+  --accent: #E3A27E;
+  --accent-soft: rgba(227, 162, 126, .08);
+  --serif: Georgia, "Times New Roman", Times, serif;
+  --sans: "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+* { box-sizing: border-box; }
+html { background: var(--bg); }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 400 1.125rem/1.65 var(--serif);
+  -webkit-text-size-adjust: 100%;
+  text-rendering: optimizeLegibility;
+}
+
+a { color: var(--accent); text-underline-offset: .18em; text-decoration-thickness: 1px; }
+a:hover { color: var(--ink); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+::selection { background: rgba(227, 162, 126, .35); color: var(--ink); }
+
+.wrap { max-width: 42rem; margin: 0 auto; padding: 0 1rem; }
+
+.site-header { border-bottom: 1px solid var(--rule); font: 500 .8125rem/1.2 var(--sans); letter-spacing: .08em; text-transform: uppercase; }
+.site-header .wrap { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .75rem 1.5rem; padding-top: 1rem; padding-bottom: 1rem; }
+.site-header a { color: var(--ink-2); text-decoration: none; }
+.site-header a:hover { color: var(--accent); }
+.site-header .name { color: var(--ink); font-weight: 600; }
+.site-header ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: .5rem 1.25rem; }
+.site-header li { margin: 0; }
+
+main.wrap { padding-top: 2.75rem; padding-bottom: 3.5rem; }
+
+h1 { font: 400 clamp(1.75rem, 1.25rem + 2.2vw, 2.5rem)/1.15 var(--serif); letter-spacing: -.01em; margin: 0 0 .75rem; text-wrap: balance; }
+h2 { font: 600 .8125rem/1.3 var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin: 2.5rem 0 .75rem; }
+p { margin: 0 0 1.1rem; }
+em { font-style: italic; }
+
+.kicker { font: 600 .8125rem/1.3 var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--accent); margin: 0 0 .6rem; }
+.lede { font: 400 1rem/1.5 var(--sans); color: var(--ink-2); margin: 0 0 1.75rem; }
+.byline { font: 400 .875rem/1.5 var(--sans); color: var(--muted); margin: 0 0 1.75rem; }
+.byline a { color: var(--ink-2); }
+
+.answer { font-size: 1.25rem; line-height: 1.55; border-left: 3px solid var(--accent); background: var(--accent-soft); padding: .9rem 1rem .9rem 1.1rem; margin: 0 0 2rem; }
+
+ul { padding-left: 1.25rem; }
+li { margin: 0 0 .55rem; }
+li::marker { color: var(--accent); }
+
+.sources { font: 400 .9375rem/1.55 var(--sans); color: var(--ink-2); overflow-wrap: anywhere; }
+.origin, .cta { font: 400 .9375rem/1.5 var(--sans); color: var(--ink-2); }
+.origin { border-top: 1px solid var(--rule); padding-top: 1rem; margin-top: 2.25rem; }
+.cta a { font-weight: 600; }
+
+.list { list-style: none; padding: 0; margin: 0; border-top: 1px solid var(--rule); }
+.list li { margin: 0; padding: .95rem 0; border-bottom: 1px solid var(--rule); }
+.list > li > a { color: var(--ink); text-decoration: none; font-size: 1.1875rem; line-height: 1.4; }
+.list > li > a:hover { color: var(--accent); }
+.gist { display: block; font: 400 .9375rem/1.5 var(--sans); color: var(--muted); margin-top: .3rem; }
+
+.site-footer { border-top: 1px solid var(--rule); font: 400 .875rem/1.6 var(--sans); color: var(--muted); }
+.site-footer .wrap { padding-top: 1.5rem; padding-bottom: 2.5rem; }
+.site-footer p { margin: 0 0 .35rem; }
+.site-footer a { color: var(--ink-2); }
