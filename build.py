@@ -47,7 +47,7 @@ KNOWS_ABOUT = (
     "Deployment strategy",
 )
 # Tokens from Google Search Console and Bing Webmaster Tools, printed on the home page once set.
-GOOGLE_SITE_VERIFICATION = ""
+GOOGLE_SITE_VERIFICATION = "yWgq7sziMlBmLplKNEser905TPbsTWBzZ840z-s1YfE"
 BING_SITE_VERIFICATION = ""
 
 SEARCH_BOTS = ("Googlebot", "Bingbot", "OAI-SearchBot", "Claude-SearchBot", "PerplexityBot")
