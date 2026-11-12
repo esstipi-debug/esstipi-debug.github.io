@@ -5,10 +5,22 @@ Usage:
     python build.py
 
 Each page is a Markdown file that starts with a front matter block: "key: value"
-lines between two "---" lines, where a repeated key ("cite") makes a list. The
-build writes index.html, one folder per page, style.css, favicon.svg,
-robots.txt, sitemap.xml, 404.html and .nojekyll. Folders of pages that no longer
-exist are removed, using src/generated.json as the record of what it wrote.
+lines between two "---" lines, where a repeated key ("cite", "offer") makes a
+list. The build writes index.html, one folder per page, style.css, favicon.svg,
+the files in src/files/, robots.txt, sitemap.xml, 404.html and .nojekyll.
+Folders of pages that no longer exist are removed, using src/generated.json as
+the record of what it wrote.
+
+Page types: "question" and "note" are the field notes, "author" and "book" the
+author page and the manuscript. "home" is the home page; "landing" the eight
+entry pages, shown as doors on the home page (three situations first, then
+three floors and two kinds of buyer); "page" the other commercial pages
+(engagements, proof, working terms).
+
+The method section of the home page shows four plates once they all exist in
+src/files/plates/ (plates.py writes them); until then it shows three drawn tools.
+Under it comes the kit: the objects carried onto a floor, each one a door to a page.
+A figure of the kit shows once its picture is in src/files/kit/ (kit.py writes them).
 """
 from __future__ import annotations
 
@@ -20,12 +32,14 @@ import shutil
 from dataclasses import dataclass
 from datetime import date
 from pathlib import Path
+from urllib.parse import quote
 
 import markdown
 
 ROOT = Path(__file__).resolve().parent
 SRC = ROOT / "src"
 PAGES_DIR = SRC / "pages"
+FILES_DIR = SRC / "files"
 MANIFEST = SRC / "generated.json"
 ASSETS = ("style.css", "favicon.svg")
 
@@ -54,12 +68,83 @@ SEARCH_BOTS = ("Googlebot", "Bingbot", "OAI-SearchBot", "Claude-SearchBot", "Per
 TRAINING_BOTS = ("GPTBot", "ClaudeBot", "CCBot", "Google-Extended")
 DISALLOWED_PATHS = ("/src/", "/tests/")
 
-PAGE_TYPES = ("home", "question", "note", "author", "book")
+PAGE_TYPES = ("home", "question", "note", "author", "book", "landing", "page")
 REQUIRED_KEYS = ("type", "order", "slug", "title", "description", "published", "updated")
+KIND_KEYS = {"home": ("headline", "lede"), "landing": ("group", "door", "door_text")}
 SLUG_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
+RESERVED_SLUGS = frozenset({"files", "src", "tests"})  # folders the build or the repository already use
 FRONT_MATTER_RE = re.compile(r"\A---\n(.*?)\n---\n(.*)\Z", re.S)
 MONTHS = ("January", "February", "March", "April", "May", "June", "July",
           "August", "September", "October", "November", "December")
+
+# Commercial pages. A target that starts with "#" is an anchor on the home page.
+NAV = (
+    ("Engagements", "engagements/"),
+    ("Proof", "proof/"),
+    ("About", f"{AUTHOR_SLUG}/"),
+    ("Contact", "contact/"),
+)
+# The first choice on the home page is what is happening, not who the visitor is: the situation doors
+# stand alone under the hero. The doors by floor and by kind of buyer sit lower, under "industries".
+SITUATION_GROUP = ("situation", "Which one is yours?")
+DOOR_GROUPS = (("floor", "Where is the work?"), ("buyer", "Or what are you?"))
+ALL_GROUPS = (SITUATION_GROUP, *DOOR_GROUPS)
+
+# The living element: a tailor's tools, drawn inline so they take the page's colours. No text inside,
+# so nothing here counts as copy or as a figure.
+TAPE_SVG = """<svg class="tool tape" viewBox="0 0 320 44" aria-hidden="true" focusable="false">
+<rect class="tape-case" x="1" y="6" width="34" height="32" rx="6"/>
+<circle class="tape-hub" cx="18" cy="22" r="5"/>
+<g class="tape-blade">
+<rect x="35" y="14" width="278" height="16"/>
+<path d="M55 14v7M75 14v10M95 14v7M115 14v10M135 14v7M155 14v10M175 14v7M195 14v10M215 14v7M235 14v10M255 14v7M275 14v10M295 14v7"/>
+<path class="tape-hook" d="M313 10v24"/>
+</g>
+</svg>"""
+SHEARS_SVG = """<svg class="tool shears" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+<g class="blade blade-a"><path d="M32 32L58 12"/><circle cx="16" cy="44" r="8"/><path d="M22 39l10-7"/></g>
+<g class="blade blade-b"><path d="M32 32L58 52"/><circle cx="16" cy="20" r="8"/><path d="M22 25l10 7"/></g>
+<circle class="pivot" cx="32" cy="32" r="2"/>
+</svg>"""
+RULE_SVG = """<svg class="tool rule" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+<rect x="6" y="24" width="52" height="16" rx="2"/>
+<path class="rule-ticks" d="M14 24v6M22 24v9M30 24v6M38 24v9M46 24v6M54 24v9"/>
+</svg>"""
+NEEDLE_SVG = """<svg class="tool needle" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+<path class="needle-body" d="M50 10L20 44"/><ellipse cx="48" cy="12.5" rx="1.6" ry="3" transform="rotate(41 48 12.5)"/>
+<path class="thread" d="M48 13c10 8 6 20-6 22s-22 2-28 10 2 12 10 9"/>
+</svg>"""
+METHOD_STEPS = (
+    (RULE_SVG, "Measure", "Count what the floor holds against what the record says."),
+    (SHEARS_SVG, "Cut", "Take out the loss the count exposes, at its cause."),
+    (NEEDLE_SVG, "Stitch", "Stay through go-live until the new way of working holds."),
+)
+# The plates: four engraved scenes that take the place of the three tools once every file exists in
+# src/files/plates/, in both sizes. Each entry is numeral, title, line and the picture's description.
+PLATE_SIZE = (1600, 900)
+PLATE_SMALL = 800  # width of the second file, for narrow screens
+SCENES = (
+    ("I", "Measure", "I count what the floor holds before I trust the record.",
+     "Engraving: on a night shift, a man in a high-visibility vest holds a steel tape measure against a pallet rack."),
+    ("II", "Mark", "I mark where the record and the floor part, and what the gap costs you.",
+     "Engraving: late at night at a desk, the same man checks a sheet of tally marks against two lines "
+     "drifting apart on a laptop."),
+    ("III", "Fit", "I try the fix loose on your own files, so you see where it pulls before you pay for it.",
+     "Engraving: at a cutting table, the man checks a loosely basted work jacket; the shears lie closed "
+     "beside a laptop."),
+    ("IV", "Return", "Weeks after go-live, when the vendor has left, I come back to check it still holds.",
+     "Engraving: in daylight, back in the same aisle, the man and an operator seen from behind read a "
+     "terminal together."),
+)
+# The kit plate: square pictures of real objects, engraved from photographs by kit.py.
+KIT_SIZE = 720   # side of a picture
+KIT_SMALL = 360  # side of the second file, for narrow screens
+KIT_MIN = 2      # one figure alone is not a plate
+NEXT_LINKS = (("Engagements and fees", "engagements"), ("Proof", "proof"), ("Working terms", "working-terms"))
+DEFAULT_CTA = "Tell me what's breaking"
+OFFER_UNITS = ("project", "month", "hour", "day")
+FROM_PRICE_UNITS = ("project", "month")  # quoted as "from"; hours and days are flat rates
+AREA_SERVED = ("United States", "Australia", "Canada", "United Kingdom", "Europe")
 
 log = logging.getLogger("build")
 
@@ -68,6 +153,18 @@ log = logging.getLogger("build")
 class Citation:
     text: str
     url: str | None
+
+
+@dataclass(frozen=True)
+class Offer:
+    """A priced service on the engagements page, for its structured data. The amount is in USD."""
+    name: str
+    amount: int
+    unit: str
+
+    @property
+    def is_from_price(self) -> bool:
+        return self.unit in FROM_PRICE_UNITS
 
 
 @dataclass(frozen=True)
@@ -87,6 +184,16 @@ class Page:
     pdf: str | None = None
     pdf_pages: int | None = None
     cites: tuple[Citation, ...] = ()
+    headline: str | None = None
+    lede: str | None = None
+    base_line: str | None = None
+    secondary: tuple[str, str] | None = None
+    subject: str | None = None
+    cta: str | None = None
+    group: str | None = None
+    door: str | None = None
+    door_text: str | None = None
+    offers: tuple[Offer, ...] = ()
 
     @property
     def is_home(self) -> bool:
@@ -100,6 +207,33 @@ class Page:
     @property
     def url(self) -> str:
         return f"{SITE_URL}/{self.path}"
+
+
+@dataclass(frozen=True)
+class KitFigure:
+    """One object of the kit. It shows on the home page, as a door, once its picture exists."""
+    key: str   # the picture's file name, without size or extension
+    name: str
+    line: str  # what the object does in the work
+    rule: str  # the limit it works under on a client's site, or ""
+    slug: str  # the page it opens
+
+
+# In the order of the plate. No maker is named and the pictures carry no mark.
+KIT = (
+    KitFigure("tape", "Steel tape", "I measure the floor before I trust the number on the screen.",
+              "", "the-inventory-number-is-wrong"),
+    KitFigure("notebook", "Notebook", "The count goes on paper before it meets the system. You keep the sheets.",
+              "", "engagements"),
+    KitFigure("gloves", "Work gloves", "I walk the floor, off shifts included, to see what the screen does not show.",
+              "I do not run your equipment or fill a post.", "the-floor-works-around-the-system"),
+    KitFigure("camera", "Chest camera", "What I report, you can check: I record the screen, the label and the rack.",
+              "In plain sight, with notice on your site. Short clips of screens and labels, never of faces.", "proof"),
+    KitFigure("recorder", "Recorder", "I dictate what I see while I am still standing in front of it.",
+              "My own notes only. An operator is recorded only if they say yes.", "how-i-work"),
+    KitFigure("blade", "Blade", "Go-live is one cut: the old system closes, the new one opens, and there is a way back.",
+              "On your site I use the blade you issue.", "a-new-system-goes-live"),
+)
 
 
 # ---------------------------------------------------------------- loading
@@ -134,6 +268,53 @@ def parse_citation(value: str) -> Citation:
     return Citation(text=text.strip(), url=url.strip() if sep and url.strip() else None)
 
 
+def parse_offer(value: str) -> Offer:
+    """'name | amount | unit', with the amount in USD and the unit one of OFFER_UNITS."""
+    parts = [part.strip() for part in value.split("|")]
+    if len(parts) != 3:
+        raise ValueError(f"offer must be 'name | amount | unit': {value!r}")
+    name, amount, unit = parts
+    if unit not in OFFER_UNITS:
+        raise ValueError(f"offer {name!r}: unknown unit {unit!r}, expected one of {OFFER_UNITS}")
+    if not amount.isdigit():
+        raise ValueError(f"offer {name!r}: the amount must be a whole number of USD, got {amount!r}")
+    return Offer(name=name, amount=int(amount), unit=unit)
+
+
+def parse_link(value: str) -> tuple[str, str]:
+    """'label | slug': a link to another page of the site."""
+    label, sep, slug = value.partition("|")
+    label, slug = label.strip(), slug.strip()
+    if not sep or not label or not SLUG_RE.match(slug):
+        raise ValueError(f"link must be 'label | slug': {value!r}")
+    return label, slug
+
+
+def check_kind_keys(one: dict[str, str], name: str) -> None:
+    missing = [key for key in KIND_KEYS.get(one["type"], ()) if key not in one]
+    if missing:
+        raise ValueError(f"{name}: missing {', '.join(missing)}")
+    groups = [group for group, _ in ALL_GROUPS]
+    if one["type"] == "landing" and one["group"] not in groups:
+        raise ValueError(f"{name}: unknown group {one['group']!r}, expected one of {groups}")
+
+
+def commercial_fields(one: dict[str, str], meta: dict[str, list[str]]) -> dict:
+    """Optional keys of the commercial pages; the other page types leave them empty."""
+    return {
+        "headline": one.get("headline"),
+        "lede": one.get("lede"),
+        "base_line": one.get("base_line"),
+        "secondary": parse_link(one["secondary"]) if "secondary" in one else None,
+        "subject": one.get("subject"),
+        "cta": one.get("cta"),
+        "group": one.get("group"),
+        "door": one.get("door"),
+        "door_text": one.get("door_text"),
+        "offers": tuple(parse_offer(value) for value in meta.get("offer", [])),
+    }
+
+
 def load_page(path: Path) -> Page:
     meta, body = parse_front_matter(path.read_text(encoding="utf-8"), path.name)
     missing = [key for key in REQUIRED_KEYS if key not in meta]
@@ -142,8 +323,13 @@ def load_page(path: Path) -> Page:
     one = {key: values[0] for key, values in meta.items()}
     if one["type"] not in PAGE_TYPES:
         raise ValueError(f"{path.name}: unknown type {one['type']!r}")
-    if not SLUG_RE.match(one["slug"]):
-        raise ValueError(f"{path.name}: bad slug {one['slug']!r}")
+    if not SLUG_RE.match(one["slug"]) or one["slug"] in RESERVED_SLUGS:
+        raise ValueError(f"{path.name}: bad or reserved slug {one['slug']!r}")
+    check_kind_keys(one, path.name)
+    try:
+        extra = commercial_fields(one, meta)
+    except ValueError as error:
+        raise ValueError(f"{path.name}: {error}") from error
     return Page(
         kind=one["type"],
         order=int(one["order"]),
@@ -160,6 +346,7 @@ def load_page(path: Path) -> Page:
         pdf=one.get("pdf"),
         pdf_pages=int(one["pdf_pages"]) if "pdf_pages" in one else None,
         cites=tuple(parse_citation(value) for value in meta.get("cite", [])),
+        **extra,
     )
 
 
@@ -178,6 +365,8 @@ def load_site(pages_dir: Path = PAGES_DIR) -> list[Page]:
     for page in pages:
         if page.kind == "question" and page.origin not in notes and not page.origin_url:
             raise ValueError(f"{page.slug}: origin must be a field note or an origin_url")
+        if page.secondary and page.secondary[1] not in slugs:
+            raise ValueError(f"{page.slug}: link to an unknown page {page.secondary[1]!r}")
     return pages
 
 
@@ -204,6 +393,10 @@ def notes_of(pages: list[Page]) -> list[Page]:
 def questions_of(pages: list[Page], origin: str | None = None) -> list[Page]:
     return [page for page in pages
             if page.kind == "question" and (origin is None or page.origin == origin)]
+
+
+def landings_of(pages: list[Page], group: str) -> list[Page]:
+    return [page for page in pages if page.kind == "landing" and page.group == group]
 
 
 def find(pages: list[Page], slug: str) -> Page:
@@ -275,6 +468,38 @@ def article_data(page: Page, pages: list[Page]) -> dict:
     return data
 
 
+def service_data(offer: Offer) -> dict:
+    price_key = "minPrice" if offer.is_from_price else "price"
+    return {
+        "@type": "Service",
+        "name": offer.name,
+        "provider": person_ref(),
+        "areaServed": list(AREA_SERVED),
+        "offers": {
+            "@type": "Offer",
+            "priceSpecification": {"@type": "UnitPriceSpecification", "priceCurrency": "USD",
+                                   price_key: offer.amount, "unitText": offer.unit},
+        },
+    }
+
+
+def webpage_data(page: Page) -> dict:
+    data = {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "name": page.title,
+        "description": page.description,
+        "url": page.url,
+        "inLanguage": "en",
+        "dateModified": page.updated.isoformat(),
+        "isPartOf": {"@type": "WebSite", "url": f"{SITE_URL}/"},
+        "author": person_ref(),
+    }
+    if page.offers:
+        data["mainEntity"] = [service_data(offer) for offer in page.offers]
+    return data
+
+
 def structured_data(page: Page, pages: list[Page]) -> dict:
     base = {"@context": "https://schema.org"}
     if page.kind == "home":
@@ -287,6 +512,8 @@ def structured_data(page: Page, pages: list[Page]) -> dict:
         return {**base, "@type": "Book", "name": page.title, "url": page.url, "inLanguage": "en",
                 "description": page.description, "creativeWorkStatus": "Manuscript",
                 "author": person_ref()}
+    if page.kind in ("landing", "page"):
+        return webpage_data(page)
     return article_data(page, pages)
 
 
@@ -315,7 +542,8 @@ def verification_tags(page: Page) -> str:
 
 
 def head(page: Page, pages: list[Page], depth: int) -> str:
-    og_type = {"home": "website", "author": "profile", "book": "book"}.get(page.kind, "article")
+    og_types = {"home": "website", "author": "profile", "book": "book", "landing": "website", "page": "website"}
+    og_type = og_types.get(page.kind, "article")
     data = json.dumps(structured_data(page, pages), ensure_ascii=False).replace("</", "<\\/")
     prefix = "../" * depth
     return f"""<!doctype html>
@@ -344,12 +572,16 @@ def head(page: Page, pages: list[Page], depth: int) -> str:
 
 def site_header(depth: int) -> str:
     home = href("", depth)
+    items = []
+    for label, target in NAV:
+        link = f"{home}{target}" if target.startswith("#") else href(target, depth)
+        css = ' class="nav-contact"' if target == "contact/" else ""
+        items.append(f'<li><a{css} href="{link}">{label}</a></li>')
+    links = "\n".join(items)
     return f"""<header class="site-header"><div class="wrap">
 <a class="name" href="{home}">{AUTHOR}</a>
 <nav aria-label="Site"><ul>
-<li><a href="{home}#questions">Questions</a></li>
-<li><a href="{home}#field-notes">Field notes</a></li>
-<li><a href="{href(AUTHOR_SLUG + '/', depth)}">About</a></li>
+{links}
 </ul></nav>
 </div></header>"""
 
@@ -371,8 +603,12 @@ def byline(page: Page, depth: int) -> str:
     return f'<p class="byline">{" · ".join(parts)}</p>'
 
 
+def mark_first_paragraph(body_html: str, css_class: str) -> str:
+    return body_html.replace("<p>", f'<p class="{css_class}">', 1)
+
+
 def lead_with_answer(body_html: str) -> str:
-    return body_html.replace("<p>", '<p class="answer">', 1)
+    return mark_first_paragraph(body_html, "answer")
 
 
 def origin_line(page: Page, pages: list[Page], depth: int) -> str:
@@ -381,6 +617,22 @@ def origin_line(page: Page, pages: list[Page], depth: int) -> str:
         return (f'<p class="origin">From the field notes <a href="{href(note.path, depth)}">'
                 f'<em>{esc(note.title)}</em></a> · {pdf_link(note)}</p>')
     return f'<p class="origin">From <a href="{esc(page.origin_url or "")}">{esc(page.origin_label or "")}</a></p>'
+
+
+def heading(page: Page) -> str:
+    return render_inline(page.headline or page.title)
+
+
+def contact_button(page: Page) -> str:
+    """The one call to action of a commercial page: an email with the page's subject line."""
+    subject = quote(page.subject or page.title, safe="")
+    label = esc(page.cta or DEFAULT_CTA)
+    return f'<a class="btn btn-contact" href="mailto:{EMAIL}?subject={subject}">{label}</a>'
+
+
+def next_links(depth: int) -> str:
+    links = " · ".join(f'<a href="{href(slug + "/", depth)}">{esc(label)}</a>' for label, slug in NEXT_LINKS)
+    return f'<p class="next">{links}</p>'
 
 
 # ---------------------------------------------------------------- page bodies
@@ -450,23 +702,183 @@ def list_item(page: Page, depth: int, extra: str = "") -> str:
             f'<span class="gist">{esc(page.description)}{extra}</span></li>')
 
 
-def home_main(page: Page, pages: list[Page], depth: int) -> str:
-    questions = "\n".join(list_item(question, depth) for question in questions_of(pages))
+def hero(page: Page, depth: int) -> str:
+    secondary = ""
+    if page.secondary:
+        label, slug = page.secondary
+        secondary = f'\n<a class="btn btn-ghost" href="{href(slug + "/", depth)}">{esc(label)}</a>'
+    base = f'\n<p class="base">{render_inline(page.base_line)}</p>' if page.base_line else ""
+    return f"""<section class="hero">
+{TAPE_SVG}
+<p class="kicker">{esc(page.kicker or AUTHOR_ROLE)}</p>
+<h1>{heading(page)}</h1>
+<p class="lede">{render_inline(page.lede or "")}</p>
+<p class="actions">{contact_button(page)}{secondary}</p>{base}
+</section>"""
+
+
+def door_item(page: Page, depth: int) -> str:
+    return (f'<li><a class="door" href="{href(page.path, depth)}">'
+            f'<span class="door-t">{esc(page.door or page.title)}</span>'
+            f'<span class="door-d">{esc(page.door_text or "")}</span></a></li>')
+
+
+def door_group(pages: list[Page], depth: int, group: str, question: str) -> str:
+    items = "\n".join(door_item(page, depth) for page in landings_of(pages, group))
+    return f'<h2 class="doors-q">{esc(question)}</h2>\n<ul class="doors">\n{items}\n</ul>'
+
+
+def situation_doors(pages: list[Page], depth: int) -> str:
+    group = door_group(pages, depth, *SITUATION_GROUP)
+    return f'<section id="situations" class="doors-block situations">\n{group}\n</section>'
+
+
+def plates_dir() -> Path:
+    return FILES_DIR / "plates"
+
+
+def plate_name(number: int, small: bool = False) -> str:
+    return f"scene-{number}{f'-{PLATE_SMALL}' if small else ''}.webp"
+
+
+def scenes_ready() -> bool:
+    """True once every plate, in both sizes, is in src/files/plates/."""
+    folder = plates_dir()
+    return all((folder / plate_name(number, small)).is_file()
+               for number in range(1, len(SCENES) + 1) for small in (False, True))
+
+
+def scene_item(number: int, numeral: str, title: str, text: str, alt: str, depth: int) -> str:
+    large = href(f"files/plates/{plate_name(number)}", depth)
+    small = href(f"files/plates/{plate_name(number, small=True)}", depth)
+    width, height = PLATE_SIZE
+    return f"""<li><figure class="scene">
+<img src="{large}" srcset="{small} {PLATE_SMALL}w, {large} {width}w" sizes="(min-width: 44rem) 40rem, 100vw"
+ width="{width}" height="{height}" alt="{esc(alt)}" loading="lazy" decoding="async">
+<figcaption><span class="scene-n" aria-hidden="true">{numeral}</span><span class="scene-t">{esc(title)}</span>
+<span class="scene-d">{esc(text)}</span></figcaption>
+</figure></li>"""
+
+
+def scenes(depth: int) -> str:
+    items = "\n".join(scene_item(number, *scene, depth) for number, scene in enumerate(SCENES, 1))
+    return f"""<section id="method" class="method">
+<h2 class="doors-q">How the work goes</h2>
+<ol class="scenes">
+{items}
+</ol>
+</section>"""
+
+
+def method(depth: int) -> str:
+    """The method section of the home page: the four plates once they all exist, the three tools until then."""
+    return scenes(depth) if scenes_ready() else method_strip(depth)
+
+
+def method_strip(depth: int) -> str:
+    steps = "\n".join(f'<li class="step">{svg}<span class="step-t">{esc(title)}</span>'
+                      f'<span class="step-d">{esc(text)}</span></li>' for svg, title, text in METHOD_STEPS)
+    return f"""<section id="method" class="method">
+<h2 class="doors-q">How the work goes</h2>
+<ol class="steps">
+{steps}
+</ol>
+</section>"""
+
+
+def kit_dir() -> Path:
+    return FILES_DIR / "kit"
+
+
+def figure_name(key: str, small: bool = False) -> str:
+    return f"{key}{f'-{KIT_SMALL}' if small else ''}.webp"
+
+
+def kit_ready() -> list[KitFigure]:
+    """The figures whose picture is in src/files/kit/ in both sizes, in the order of the plate."""
+    folder = kit_dir()
+    return [figure for figure in KIT
+            if all((folder / figure_name(figure.key, small)).is_file() for small in (False, True))]
+
+
+def figure_item(figure: KitFigure, pages: list[Page], depth: int) -> str:
+    large = href(f"files/kit/{figure_name(figure.key)}", depth)
+    small = href(f"files/kit/{figure_name(figure.key, small=True)}", depth)
+    rule = f'\n<span class="fig-r">{esc(figure.rule)}</span>' if figure.rule else ""
+    return f"""<li><a class="fig" href="{href(find(pages, figure.slug).path, depth)}">
+<img src="{large}" srcset="{small} {KIT_SMALL}w, {large} {KIT_SIZE}w" sizes="(min-width: 36rem) 13rem, 45vw"
+ width="{KIT_SIZE}" height="{KIT_SIZE}" alt="" loading="lazy" decoding="async">
+<span class="fig-t">{esc(figure.name)}</span>
+<span class="fig-d">{esc(figure.line)}</span>{rule}
+</a></li>"""
+
+
+def kit(pages: list[Page], depth: int) -> str:
+    """The kit plate of the home page: one door per object. Empty until enough pictures exist."""
+    figures = kit_ready()
+    if len(figures) < KIT_MIN:
+        return ""
+    items = "\n".join(figure_item(figure, pages, depth) for figure in figures)
+    return f"""<section id="kit" class="kit-block">
+<h2 class="doors-q">What I carry onto your floor</h2>
+<ol class="kit">
+{items}
+</ol>
+</section>"""
+
+
+def doors(pages: list[Page], depth: int) -> str:
+    joined = "\n".join(door_group(pages, depth, group, question) for group, question in DOOR_GROUPS)
+    return f'<section id="industries" class="doors-block">\n{joined}\n</section>'
+
+
+def library(pages: list[Page], depth: int) -> str:
+    """The field notes and the short answers, at the foot of the home page."""
     notes = "\n".join(list_item(note, depth, f" · {pdf_link(note)}") for note in notes_of(pages))
-    return f"""<h1>{AUTHOR}</h1>
-<p class="lede">{AUTHOR_ROLE}</p>
-{page.body_html}
-<h2 id="questions">Questions</h2>
-<ul class="list">
-{questions}
-</ul>
+    questions = "\n".join(list_item(question, depth) for question in questions_of(pages))
+    return f"""<section id="library">
 <h2 id="field-notes">Field notes</h2>
 <ul class="list">
 {notes}
 </ul>
-<h2>About</h2>
-<p><a href="{href(AUTHOR_SLUG + '/', depth)}">About the author</a> · \
-<a href="{href(BOOK_SLUG + '/', depth)}"><em>The Deployment Chasm</em></a>, a manuscript</p>"""
+<h2 id="questions">Short answers</h2>
+<ul class="list">
+{questions}
+</ul>
+<p class="next"><a href="{href(AUTHOR_SLUG + '/', depth)}">About the author</a> · \
+<a href="{href(BOOK_SLUG + '/', depth)}"><em>The Deployment Chasm</em></a>, a manuscript</p>
+</section>"""
+
+
+def home_main(page: Page, pages: list[Page], depth: int) -> str:
+    return f"""{hero(page, depth)}
+{situation_doors(pages, depth)}
+{method(depth)}
+{kit(pages, depth)}
+<div class="home-body">
+{page.body_html}
+</div>
+{doors(pages, depth)}
+{library(pages, depth)}"""
+
+
+def landing_main(page: Page, pages: list[Page], depth: int) -> str:
+    return f"""<article class="landing">
+<p class="kicker">{esc(page.kicker or "Industry")}</p>
+<h1>{heading(page)}</h1>
+{mark_first_paragraph(page.body_html, "scene")}
+<p class="actions">{contact_button(page)}</p>
+{next_links(depth)}
+</article>"""
+
+
+def page_main(page: Page, pages: list[Page], depth: int) -> str:
+    return f"""<article class="page">
+<p class="kicker">{esc(page.kicker or page.title)}</p>
+<h1>{heading(page)}</h1>
+{page.body_html}
+<p class="actions">{contact_button(page)}</p>
+</article>"""
 
 
 MAIN_BUILDERS = {
@@ -475,6 +887,8 @@ MAIN_BUILDERS = {
     "note": note_main,
     "author": author_main,
     "book": book_main,
+    "landing": landing_main,
+    "page": page_main,
 }
 
 
@@ -555,6 +969,9 @@ def write_site(pages: list[Page], root: Path = ROOT, manifest: Path = MANIFEST) 
         write_text(root / page.path / "index.html", render_page(page, pages))
     for asset in ASSETS:
         shutil.copyfile(SRC / asset, root / asset)
+    shutil.rmtree(root / "files", ignore_errors=True)  # files/ is generated: a file removed from src/files/ goes too
+    if FILES_DIR.is_dir():
+        shutil.copytree(FILES_DIR, root / "files")
     write_text(root / "robots.txt", robots_txt())
     write_text(root / "sitemap.xml", sitemap_xml(pages))
     write_text(root / "404.html", not_found_html())
