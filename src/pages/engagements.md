@@ -22,13 +22,13 @@ Each one starts from the same place: what your records say against what your flo
 Three weeks · fixed price · from USD 8,500
 {: .price }
 
-For stock that does not reconcile, waste nobody can explain, or a deployment that has stalled.
+For stock that does not reconcile, write-offs nobody can explain, or a deployment that has stalled.
 
 - **Week one, the floor.** On site or by video, with every shift included.
 - **Week two, the records.** A five-column event log: case, activity, timestamp, who, where.
-- **Week three, the report.** What is breaking, what it costs, and a 30-60-90-day plan, presented to whoever signs.
+- **Week three, the baseline and the list.** Every loss in the order of what it costs, with the count and the arithmetic shown on pages you can forward, and a 30-60-90-day plan, presented to whoever signs.
 
-Paid 50% at the start and 50% on delivery. On-site days are billed separately.
+Paid 50% at the start and 50% on delivery. On-site days are billed separately. Your team keeps the count sheets and the queries.
 
 ## Deployment & Cutover Leadership
 
@@ -48,7 +48,7 @@ Paid 30% at the start, 40% at go-live and 30% when the agreed measures hold 30 d
 Three to six months · from USD 6,000 per month
 {: .price }
 
-For a team that needs a senior operations or deployment lead for 15 to 20 hours a week: stock accuracy and waste, the flow from purchasing to the warehouse, and the deployment calendar, with two or three working sessions a week with your leadership.
+For a team that needs a senior operations or deployment lead for 15 to 20 hours a week: stock accuracy and shrink, the flow from purchasing to the warehouse, and the deployment calendar, with two or three working sessions a week with your leadership.
 
 ## Advisory & Operational Due Diligence
 
@@ -64,6 +64,24 @@ USD 1,200 per day, plus travel at cost
 
 For any engagement that needs me on the floor. [How travel works](../working-terms/).
 
+## Who to hire for what
+
+Not everything is a job for me.
+
+<table class="compare">
+<thead>
+<tr><th>Who</th><th>Hire them when</th><th>What they leave</th></tr>
+</thead>
+<tbody>
+<tr><td>A large consulting firm</td><td data-label="Hire them when">The programme spans many sites and the board wants a well-known name behind it.</td><td data-label="What they leave">A team whose members can change along the way, a report and a plan.</td></tr>
+<tr><td>Your auditor</td><td data-label="Hire them when">You need an opinion on whether the accounts are right.</td><td data-label="What they leave">An opinion. Independence rules limit what an auditor may fix for a client it audits.</td></tr>
+<tr><td>Your system integrator</td><td data-label="Hire them when">The system has to be installed and configured.</td><td data-label="What they leave">An installed system.</td></tr>
+<tr><td>Me</td><td data-label="Hire them when">One operation loses money between the record and the floor, or a system goes live and the orders still have to ship.</td><td data-label="What they leave">The baseline, the list of losses, the fix at its cause, and the method in the hands of your team.</td></tr>
+</tbody>
+</table>
+
+If you need one of the first three, hire them. I work alongside all of them.
+
 ## Best fit
 
 An operation with its own floor (a farm, a plant, a kitchen or a warehouse) and revenue between USD 10M and USD 100M, or a technology team deploying into one; a system change in the last or next 12 months; and an executive who signs. The entry point is the field audit.
@@ -74,7 +92,7 @@ An operation with its own floor (a farm, a plant, a kitchen or a warehouse) and 
 - **Deployment Strategist.** For applied-AI, robotics, AgTech and food-tech teams: turn a pilot into a deployment the floor keeps using. *Fractional lead or cutover leadership.*
 - **Head of AI Adoption.** For companies with software bought but underused: retire the parallel spreadsheets and align the incentives with the system. *Fractional lead, three to six months.*
 - **Implementation Lead.** For WMS, ERP, farm and hospitality software vendors: run go-lives on site without burning the services margin. *Cutover leadership or fractional lead.*
-- **Fractional Head of Operations.** For farms, restaurant and hotel groups, distributors and e-commerce businesses: own purchasing, logistics, waste and inventory without the fixed cost of a full-time executive. *Fractional lead.*
+- **Fractional Head of Operations.** For farms, restaurant and hotel groups, distributors and e-commerce businesses: own purchasing, logistics, shrink and inventory without the fixed cost of a full-time executive. *Fractional lead.*
 - **Inventory and Supply Chain Strategist.** For meat processors, importers, food-service distributors and multichannel retailers: free cash held in stock, tighten yield and food cost, and cut stockouts. *Field audit or fractional lead.*
 - **WMS / ERP Cutover Manager.** For operations moving their core system: close the old system and open the new one without stopping dispatch. *Cutover leadership.*
 - **Operating Advisor.** For private equity, search funds and investment firms: check the floor, the cold rooms, the warehouses and the systems before an acquisition. *Advisory or field audit.*

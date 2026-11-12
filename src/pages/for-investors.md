@@ -16,7 +16,7 @@ The data room says the inventory is worth what the balance sheet says. Somebody 
 
 ## What I check first
 
-Record accuracy, by blind sample. Whether waste is recorded when it happens or at period end. What runs on the system and what runs on a spreadsheet beside it. What the floor is paid for.
+Record accuracy, by blind sample. Whether shrink and spoilage are recorded when they happen or at period end. What runs on the system and what runs on a spreadsheet beside it. What the floor is paid for.
 
 ## Where I have stood
 

@@ -20,7 +20,18 @@ import build  # noqa: E402
 
 COMMERCIAL_KINDS = ("home", "landing", "page")
 LANDING_SECTIONS = ("What I check first", "Where I have stood", "What I don't claim", "How we would start")
-DOORS_PER_GROUP = {"floor": 3, "buyer": 2}
+DOORS_PER_GROUP = {"situation": 3, "floor": 3, "buyer": 2}
+# Situation pages carry one more section: the first question of each of the three people who will read it.
+ROLE_SECTION = "What each of you will ask first"
+ROLES_ASKING = ("Finance", "Operations", "The chief executive")
+# The engagements page says who to hire for what: a large firm, an auditor, an integrator, or one operator.
+WHO_TO_HIRE = ("Who", "Hire them when", "What they leave")
+# The site speaks as one person ("I"), not as a firm ("we"): the owner's decision of 2026-11-12.
+COMPANY_VOICE = re.compile(
+    r"\b(?:our (?:team|firm|company|clients|consultants|experts|people|services)"
+    r"|we (?:are|help|deliver|offer|provide|work with|believe|speciali[sz]e))\b",
+    re.I,
+)
 PRICE_WORDS = re.compile(r"\bper (?:hour|day|month)\b|\bfrom USD\b", re.I)
 FOREIGN_MONEY = re.compile(r"[$€£]|\b(?:AUD|CAD|GBP|EUR|CLP|UF)\b")
 BANNED = re.compile(
@@ -74,6 +85,7 @@ FIGURES = {
     "9,689": "engine test count, CLM_TESTS_KERN_ACTUAL (HECHOS, kern)",
     "15,000": "cutover leadership fee in USD (plan C, option A)",
     "50,000": "50,000-SKU distribution centre (HECHOS, AGCO row)",
+    "2M": "about USD 2M a year of savings identified (HECHOS, Trayectoria 2013-2014)",
     "5M": "about USD 5M of inventory freed (HECHOS, Trayectoria 2020-2022)",
     "10M": "best-fit revenue floor (plan C)",
     "15M": "USD 15M budget (HECHOS, Trayectoria 2018-2020)",
@@ -122,8 +134,28 @@ def test_landing_pages_follow_one_skeleton(site):
     for page in landings(pages):
         text = read(root, page)
         headings = [html.unescape(h).replace("’", "'") for h in re.findall(r"<h2[^>]*>(.*?)</h2>", text)]
-        assert headings == list(LANDING_SECTIONS), page.slug
+        expected = [*LANDING_SECTIONS, ROLE_SECTION] if page.group == "situation" else list(LANDING_SECTIONS)
+        assert headings == expected, page.slug
         assert '<p class="scene">' in text, page.slug
+
+
+def test_situation_pages_answer_each_role(site):
+    root, pages = site
+    for page in landings(pages, "situation"):
+        section = read(root, page).split(f"{ROLE_SECTION}</h2>", 1)[1]
+        asked = re.findall(r"<p><strong>([^:<]+):", section)
+        assert sorted(asked) == sorted(ROLES_ASKING), page.slug
+
+
+def test_home_opens_with_situations_not_job_titles(site):
+    """The first choice is what is happening, not who you are (audience doors come second)."""
+    root, pages = site
+    text = read(root, build.find(pages, "index"))
+    assert text.index('id="situations"') < text.index('id="method"') < text.index('id="industries"')
+    first = text.split('id="situations"', 1)[1].split("</section>", 1)[0]
+    labels = [html.unescape(label) for label in re.findall(r'<span class="door-t">(.*?)</span>', first)]
+    assert len(labels) == DOORS_PER_GROUP["situation"]
+    assert not [label for label in labels if label.startswith("I ")], labels
 
 
 def test_home_has_a_door_to_every_landing_page(site):
@@ -204,6 +236,28 @@ def test_every_figure_has_a_source(site):
         assert not sorted(figures - FIGURES.keys()), (page.slug, sorted(figures - FIGURES.keys()))
 
 
+def test_commercial_pages_speak_as_one_person(site):
+    root, pages = site
+    for page in commercial(pages):
+        text = main_text(read(root, page))
+        assert not COMPANY_VOICE.search(text), (page.slug, COMPANY_VOICE.search(text).group(0))
+        assert re.search(r"\bI\b", text), page.slug
+
+
+def test_engagements_says_who_to_hire_for_what(site):
+    root, pages = site
+    text = read(root, build.find(pages, "engagements"))
+    table = re.search(r"<table[^>]*>(.*?)</table>", text, re.S)
+    assert table, "the comparison table is missing"
+    headers = [html.unescape(header) for header in re.findall(r"<th[^>]*>(.*?)</th>", table.group(1))]
+    assert headers == list(WHO_TO_HIRE)
+    rows = re.findall(r"<tr>\s*<td[^>]*>(.*?)</td>", table.group(1), re.S)
+    assert len(rows) == 4 and rows[-1].strip() == "Me", rows
+    labels = set(re.findall(r'data-label="([^"]+)"', table.group(1)))
+    assert labels == set(WHO_TO_HIRE[1:])  # each cell carries its column name for the stacked phone layout
+    assert text.index("<table") < text.index("Best fit</h2>")
+
+
 def test_contact_subject_is_url_encoded(site):
     _, pages = site
     assert "?subject=What%27s%20breaking" in build.contact_button(build.find(pages, "contact"))
@@ -216,6 +270,132 @@ def test_removed_files_are_not_kept(tmp_path):
     build.write_site(build.load_site(), tmp_path, tmp_path / "generated.json")
     assert not stale.exists()
     assert (tmp_path / "files" / "client-onboarding-plan.pdf").is_file()
+
+
+# ---------------------------------------------------------------- the plates of the method section
+
+SCENE_FIGURE = re.compile(r'<figure class="scene">.*?</figure>', re.S)
+
+
+def home_with_plates(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, count: int) -> tuple[Path, str]:
+    """Builds the site as if `count` plates, in both sizes, were in src/files/plates/."""
+    files = tmp_path / "files-src"
+    (files / "plates").mkdir(parents=True)
+    for number in range(1, count + 1):
+        for small in (False, True):
+            (files / "plates" / build.plate_name(number, small)).write_bytes(b"RIFF")
+    monkeypatch.setattr(build, "FILES_DIR", files)
+    root = tmp_path / "out"
+    build.write_site(build.load_site(), root, root / "generated.json")
+    return root, (root / "index.html").read_text(encoding="utf-8")
+
+
+def test_home_keeps_the_method_strip_until_every_plate_exists(tmp_path, monkeypatch):
+    _, text = home_with_plates(tmp_path, monkeypatch, count=len(build.SCENES) - 1)
+    assert '<ol class="steps">' in text
+    assert 'class="scene"' not in text
+
+
+def test_home_shows_the_four_scenes_once_the_plates_exist(tmp_path, monkeypatch):
+    root, text = home_with_plates(tmp_path, monkeypatch, count=len(build.SCENES))
+    figures = SCENE_FIGURE.findall(text)
+    assert len(figures) == len(build.SCENES) == 4
+    assert '<ol class="steps">' not in text
+    assert text.count('id="method"') == 1
+    width, height = build.PLATE_SIZE
+    for number, figure in enumerate(figures, 1):
+        assert f'src="files/plates/scene-{number}.webp"' in figure, number
+        assert f'files/plates/scene-{number}-800.webp 800w' in figure, number
+        assert f'width="{width}" height="{height}"' in figure, number
+        assert re.search(r'alt="[^"]{40,}"', figure), number
+        assert (root / "files" / "plates" / f"scene-{number}.webp").is_file(), number
+    visible = main_text(text)
+    assert not BANNED.search(visible)
+    assert not SPANISH.search(visible)
+    assert not COMPANY_VOICE.search(visible)
+    assert not set(NUMBER.findall(FORM_NAMES.sub(" ", visible))) - FIGURES.keys()
+
+
+# ---------------------------------------------------------------- the kit
+
+KIT_FIGURE = re.compile(r'<li><a class="fig" href="([^"]+)">(.*?)</a></li>', re.S)
+KIT_PICTURE = re.compile(r'src="files/kit/([a-z-]+)\.webp"')
+KIT_MAKERS = re.compile(r"\b(?:Stanley|FatMax|Insta360|DJI|Ironclad)\b", re.I)  # who made the real objects
+
+
+def home_with_kit(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, keys: list[str]) -> tuple[Path, str]:
+    """Builds the site as if the pictures of these figures, in both sizes, were in src/files/kit/."""
+    files = tmp_path / "files-src"
+    (files / "kit").mkdir(parents=True)
+    for key in keys:
+        for small in (False, True):
+            (files / "kit" / build.figure_name(key, small)).write_bytes(b"RIFF")
+    monkeypatch.setattr(build, "FILES_DIR", files)
+    root = tmp_path / "out"
+    build.write_site(build.load_site(), root, root / "generated.json")
+    return root, (root / "index.html").read_text(encoding="utf-8")
+
+
+def kit_keys() -> list[str]:
+    return [figure.key for figure in build.KIT]
+
+
+def test_home_has_no_kit_until_two_figures_exist(tmp_path, monkeypatch):
+    _, text = home_with_kit(tmp_path, monkeypatch, kit_keys()[:build.KIT_MIN - 1])
+    assert 'id="kit"' not in text
+
+
+def test_a_figure_needs_its_picture_in_both_sizes(tmp_path, monkeypatch):
+    key = kit_keys()[0]
+    (tmp_path / "kit").mkdir()
+    (tmp_path / "kit" / build.figure_name(key)).write_bytes(b"RIFF")
+    monkeypatch.setattr(build, "FILES_DIR", tmp_path)
+    assert build.kit_ready() == []
+    (tmp_path / "kit" / build.figure_name(key, small=True)).write_bytes(b"RIFF")
+    assert [figure.key for figure in build.kit_ready()] == [key]
+
+
+def test_home_shows_the_figures_that_exist_in_the_order_of_the_plate(tmp_path, monkeypatch):
+    keys = kit_keys()
+    root, text = home_with_kit(tmp_path, monkeypatch, [keys[2], keys[0]])  # written out of order, and not all
+    figures = KIT_FIGURE.findall(text)
+    assert [KIT_PICTURE.search(body).group(1) for _, body in figures] == [keys[0], keys[2]]
+    assert text.count('id="kit"') == 1
+    assert text.index('id="method"') < text.index('id="kit"') < text.index('class="home-body"')
+    for _, body in figures:
+        key = KIT_PICTURE.search(body).group(1)
+        assert f'files/kit/{key}-{build.KIT_SMALL}.webp {build.KIT_SMALL}w' in body, key
+        assert f'width="{build.KIT_SIZE}" height="{build.KIT_SIZE}"' in body, key
+        assert 'alt=""' in body and 'loading="lazy"' in body, key  # the name beside the picture says what it is
+        assert (root / "files" / "kit" / f"{key}.webp").is_file(), key
+
+
+def test_every_figure_of_the_kit_opens_a_page_of_its_own(tmp_path, monkeypatch):
+    keys = kit_keys()
+    assert len(set(keys)) == len(keys) >= build.KIT_MIN
+    assert all(re.fullmatch(r"[a-z]+(?:-[a-z]+)*", key) for key in keys)  # a key is also a file name
+    root, text = home_with_kit(tmp_path, monkeypatch, keys)
+    figures = KIT_FIGURE.findall(text)
+    assert len(figures) == len(build.KIT)
+    assert len({door for door, _ in figures}) == len(figures)  # no two figures open the same page
+    for (door, body), figure in zip(figures, build.KIT):
+        assert door == f"{figure.slug}/"
+        assert (root / door / "index.html").is_file(), door
+        assert f'<span class="fig-t">{build.esc(figure.name)}</span>' in body, figure.key
+        assert f'<span class="fig-d">{build.esc(figure.line)}</span>' in body, figure.key
+        assert ('class="fig-r"' in body) == bool(figure.rule), figure.key
+        assert not figure.rule or f'<span class="fig-r">{build.esc(figure.rule)}</span>' in body, figure.key
+
+
+def test_the_kit_follows_the_rules_of_the_commercial_pages(tmp_path, monkeypatch):
+    _, text = home_with_kit(tmp_path, monkeypatch, kit_keys())
+    visible = main_text(text)
+    assert not BANNED.search(visible)
+    assert not SPANISH.search(visible)
+    assert not COMPANY_VOICE.search(visible)
+    assert not KIT_MAKERS.search(text)  # no maker is named: not in the text, not in a file name
+    # "Fig. 1" is written by the style sheet, so the page prints no figure that lacks a source
+    assert not set(NUMBER.findall(FORM_NAMES.sub(" ", visible))) - FIGURES.keys()
 
 
 # ---------------------------------------------------------------- front matter errors

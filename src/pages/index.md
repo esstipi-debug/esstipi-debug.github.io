@@ -4,12 +4,12 @@ order: 0
 slug: index
 title: Marcos Stipicich · Supply chain operations and system deployment
 kicker: Supply Chain & Operations × Deployment Strategy
-headline: Systems fail where they meet the floor. That is where I work.
-lede: I check what your records say against what your floor does, clean up the supply chain underneath, and lead the cutover until the old shortcuts die. The result is measured where you already count it: inventory, waste and order processing time.
+headline: Your operation loses money between the record and the floor. I find it and take it out.
+lede: Stock the books show and the floor does not hold. Write-offs nobody can explain. Orders shipped wrong, and the overtime to put them right. I count it first, so you can check the result against a number, and I stay until the fix holds.
 base_line: Based in Santiago, Chile. I take on work in English and in USD in the United States, Australia, Canada, the United Kingdom and Europe.
 secondary: See a sample audit | not-received-but-delivered
 subject: What's breaking
-description: Supply chain operations and system deployment for farms, kitchens, warehouses and the teams that sell them technology. US, Australia, Canada, UK, Europe.
+description: I find the money an operation loses between its records and its floor, and take it out at the cause. US, Australia, Canada, UK, Europe.
 published: 2026-11-09
 updated: 2026-11-09
 ---
