@@ -14,4 +14,4 @@ Allow: /
 Disallow: /src/
 Disallow: /tests/
 
-Sitemap: https://esstipi-debug.github.io/sitemap.xml
+Sitemap: https://esstipi-debug.github.io/landpage/sitemap.xml

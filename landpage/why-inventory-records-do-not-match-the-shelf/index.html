@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Why don&#x27;t inventory records match the shelf, and what does that do to a model? · Marcos Stipicich</title>
+<meta name="description" content="In one retailer&#x27;s audit, 65% of nearly 370,000 records did not match the shelf. A model trained on them is wrong exactly where the record is.">
+<meta name="author" content="Marcos Stipicich">
+<link rel="canonical" href="https://esstipi-debug.github.io/landpage/why-inventory-records-do-not-match-the-shelf/">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#101217">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Why don&#x27;t inventory records match the shelf, and what does that do to a model?">
+<meta property="og:description" content="In one retailer&#x27;s audit, 65% of nearly 370,000 records did not match the shelf. A model trained on them is wrong exactly where the record is.">
+<meta property="og:url" content="https://esstipi-debug.github.io/landpage/why-inventory-records-do-not-match-the-shelf/">
+<meta property="og:site_name" content="Marcos Stipicich">
+<meta name="twitter:card" content="summary">
+
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../style.css">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "Why don't inventory records match the shelf, and what does that do to a model?", "description": "In one retailer's audit, 65% of nearly 370,000 records did not match the shelf. A model trained on them is wrong exactly where the record is.", "url": "https://esstipi-debug.github.io/landpage/why-inventory-records-do-not-match-the-shelf/", "mainEntityOfPage": "https://esstipi-debug.github.io/landpage/why-inventory-records-do-not-match-the-shelf/", "inLanguage": "en", "datePublished": "2026-11-09", "dateModified": "2026-11-09", "author": {"@type": "Person", "@id": "https://esstipi-debug.github.io/landpage/marcos-stipicich/#person", "name": "Marcos Stipicich", "url": "https://esstipi-debug.github.io/landpage/marcos-stipicich/", "sameAs": ["https://www.linkedin.com/in/marcos-stipicich", "https://github.com/esstipi-debug"]}, "isBasedOn": "https://cdn.jsdelivr.net/gh/esstipi-debug/esstipi-debug@main/papers/nobody-pays-for-being-wrong.pdf", "citation": [{"@type": "CreativeWork", "name": "DeHoratius, N., and A. Raman. 2008. \"Inventory record inaccuracy: An empirical analysis.\" Management Science 54(4): 627–641.", "url": "https://doi.org/10.1287/mnsc.1070.0789"}]}</script>
+</head>
+<body>
+<header class="site-header"><div class="wrap">
+<a class="name" href="../">Marcos Stipicich</a>
+<nav aria-label="Site"><ul>
+<li><a href="../engagements/">Engagements</a></li>
+<li><a href="../proof/">Proof</a></li>
+<li><a href="../marcos-stipicich/">About</a></li>
+<li><a class="nav-contact" href="../contact/">Contact</a></li>
+</ul></nav>
+</div></header>
+<main class="wrap">
+<article>
+<h1>Why don&rsquo;t inventory records match the shelf, and what does that do to a model?</h1>
+<p class="byline">By <a href="../marcos-stipicich/">Marcos Stipicich</a> · <time datetime="2026-11-09">9 November 2026</time></p>
+<p class="answer">Because the record changes only when someone types, and the shelf changes all day. The gap is larger than most teams assume: in one retailer&rsquo;s audit, 65% of nearly 370,000 inventory records did not match the shelf. A model trained on those records can be careful, elegant and wrong in exactly the places where the record is wrong. Check it against a blind count before you trust it.</p>
+<h2>How it works</h2>
+<p>An analytics team, or a model, never sees the shelf. It sees what the shelf was recorded as. When the record is wrong, the error is paid on the floor and booked in finance, so the people who draw the floor from the record rarely find out where.</p>
+<p>Medieval illustrators drew lions they had never seen, from descriptions and earlier drawings. A model built from exports is the same kind of lion. The cheapest correction is a physical count by someone who cannot see the system&rsquo;s number, and a note next to every model saying which numbers were counted and which were typed. Most models carry no such note, and nobody asks for one.</p>
+<h2>Evidence</h2>
+<p>Nicole DeHoratius and Ananth Raman examined nearly 370,000 inventory records from 37 stores of one retailer and found 65% to be inaccurate. The error had structure: auditing practices reduced it, while a more complex store environment and the distribution structure made it worse.</p>
+<h2>What this does not prove</h2>
+<ul>
+<li>One retailer and 37 stores. The share will differ elsewhere, and a store is not a warehouse.</li>
+<li>The lion is my image. It does not measure how often models fail.</li>
+<li>The blind count is a practice, not a tested threshold.</li>
+</ul>
+<h2>Sources</h2>
+<ul class="sources">
+<li>DeHoratius, N., and A. Raman. 2008. &ldquo;Inventory record inaccuracy: An empirical analysis.&rdquo; <em>Management Science</em> 54(4): 627–641. <a href="https://doi.org/10.1287/mnsc.1070.0789">doi.org/10.1287/mnsc.1070.0789</a></li>
+</ul>
+<p class="origin">From the field notes <a href="../nobody-pays-for-being-wrong/"><em>Nobody Pays for Being Wrong</em></a> · <a href="https://cdn.jsdelivr.net/gh/esstipi-debug/esstipi-debug@main/papers/nobody-pays-for-being-wrong.pdf">PDF, 27 pages</a></p>
+</article>
+</main>
+<footer class="site-footer"><div class="wrap">
+<p><a href="../marcos-stipicich/">Marcos Stipicich</a> · Deployment Strategist · Supply Chain & Operations</p>
+<p><a href="https://www.linkedin.com/in/marcos-stipicich">LinkedIn</a> · <a href="https://github.com/esstipi-debug">GitHub</a></p>
+</div></footer>
+</body>
+</html>
