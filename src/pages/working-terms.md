@@ -15,6 +15,8 @@ updated: 2026-11-13
 
 **Field notes and capture.** To keep my eyes on the operation rather than a notebook, I dictate observations into a pocket recorder and take short clips of screens, labels, and racks, never faces, and an operator is recorded only if they agree. Captures are working notes to build the timeline and check counts, not a video deliverable. They stay under your NDA, never leave the project, and are deleted on closeout unless your contract requires handover. Where site rules prohibit recording, I work strictly from paper notes and system exports.
 
+**After the work.** Every audit and every go-live includes a check by video 90 days later. If the measures we agreed in writing before kickoff have not held, I work with your team to bring them back, with no fee for that work; travel, if needed, is at cost. This assumes the three things I ask for above were in place. Returning clients pay 20% less for advisory hours and on-site days for 12 months after an engagement ends.
+
 **Contracting.** I work as an independent contractor from Chile. Your contractor agreement or mine, invoices in USD, payment by wire or Wise, or through Deel or Remote if you prefer. W-8BEN or W-8BEN-E on request, depending on how the contract is set up. No payroll, benefits or employer contributions on your side.
 
 **On site.** No work-visa sponsorship is needed to bring me to your site. I travel on business-visitor entry, with fees invoiced from Chile.

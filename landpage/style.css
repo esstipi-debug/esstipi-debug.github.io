@@ -177,6 +177,19 @@ details ul { margin-bottom: 0; }
     .tape span { animation: measure linear both; animation-timeline: scroll(root block); }
   }
 }
+/* A source line under a figure taken from a study or a filing. */
+.src { margin-top: -.35rem; font: 500 .75rem/1.55 var(--mono); color: var(--muted); overflow-wrap: anywhere; }
+.src a { color: inherit; text-decoration: underline; text-underline-offset: .2em; }
+/* The five steps of a deployment: the list numbers them, the text does not. */
+.steps ol { display: grid; gap: 1.15rem; margin: 1.25rem 0 1.5rem; }
+.steps li { padding-left: .35rem; }
+.steps em { display: block; margin-top: .3rem; font: 500 .8125rem/1.5 var(--mono); color: var(--muted); }
+/* The rule the systems are built to: four boxes, one way down, and the branch that stops. */
+.flow { display: grid; gap: 1.75rem; max-width: 40rem; margin: 1.25rem 0 1.5rem; }
+.flow li { position: relative; padding: .9rem 1.1rem; border: 1px solid var(--rule-strong); background: var(--panel); }
+.flow li + li::before { content: "\2193"; position: absolute; top: -1.55rem; left: 1.1rem; color: var(--accent); line-height: 1; }
+.flow-stop { display: block; margin-top: .6rem; padding-left: .75rem; border-left: 2px solid var(--accent); color: var(--ink-2); }
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }

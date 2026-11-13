@@ -44,7 +44,7 @@ SPANISH = re.compile(r"[¿¡ñÑ]|\b(?:que|para|los|las|del|una|por|con|también
 EMPLOYER_SHA256 = "317d710efc13fed0f8c4fc2b9a35d0106a560a632af7bdf38ec5a2747b8b4c7e"
 WORD = re.compile(r"[^\W\d_]+")
 NUMBER = re.compile(r"\d(?:[\d,.:]*\d)?(?:%|M\b)?")
-FORM_NAMES = re.compile(r"\b(?:B-1|W-8BEN(?:-E)?)\b")  # names with a digit in them, not figures
+FORM_NAMES = re.compile(r"\b(?:B-1|W-8BEN(?:-E)?|10-K)\b")  # names with a digit in them, not figures
 JSONLD = re.compile(r'<script type="application/ld\+json">(.*?)</script>', re.S)
 CONTACT_BUTTON = re.compile(r'<a class="btn btn-contact" href="([^"]+)"')
 
@@ -52,10 +52,12 @@ CONTACT_BUTTON = re.compile(r'<a class="btn btn-contact" href="([^"]+)"')
 # until it is added here with its source. HECHOS = cv dossier/HECHOS.md; plan = the approved site plan.
 FIGURES = {
     "02:30": "the night shift, a time of day used as a scene, not a measurement",
-    "12": "best fit: a system change in the last or next 12 months (plan C)",
+    "12": "best fit: a system change in the last or next 12 months (plan C); 12 months of the returning-client "
+          "rate (owner decision 2026-11-13, content plan §3 A)",
     "15": "15 planners (HECHOS, Trayectoria 2016-2017); 15 to 20 hours a week (plan B5)",
     "20": "team of 20 (HECHOS, AGCO row); 15 to 20 hours a week; 20 October 2026 (HECHOS, fdekit)",
-    "20%": "order processing time down 20% (HECHOS, AGCO row)",
+    "20%": "order processing time down about 20%, by his estimate (HECHOS, AGCO row; book l.6921); returning "
+           "clients pay 20% less (owner decision 2026-11-13, content plan §3 A)",
     "23": "23 operators trained on RF (HECHOS, AGCO row)",
     "25": "25 October 2026, date of the receiving-kit count (HECHOS, mellon)",
     "30": "30-60-90-day plan; measures that hold 30 days after go-live (plan B5)",
@@ -66,8 +68,10 @@ FIGURES = {
     "57%": "Olist triage, published page not-received-but-delivered",
     "60": "30-60-90-day plan; 60-minute sessions (plan B5)",
     "65%": "DeHoratius and Raman 2008, published page why-inventory-records-do-not-match-the-shelf",
-    "90": "the 90-day check; visa stays of up to 90 days; 30-60-90-day plan",
-    "95%": "MIT NANDA 2025, The GenAI Divide (book appendix EV-MIT-01, industry report)",
+    "90": "the 90-day check, included after every audit and go-live (owner decision 2026-11-13, content plan "
+          "§3 B); visa stays of up to 90 days; 30-60-90-day plan",
+    "95%": "MIT NANDA 2025, The GenAI Divide (book appendix EV-MIT-01, industry report); at least 95% glue "
+           "code (Sculley et al. 2015, NeurIPS, verified in the paper 2026-11-13)",
     "100": "about 100 people (HECHOS, Trayectoria 2018-2020)",
     "200": "more than 200 stores (HECHOS, Trayectoria 2016-2017)",
     "250": "advisory fee in USD per hour (plan C, option A)",
@@ -77,7 +81,9 @@ FIGURES = {
     "1,187": "field-kit passing tests (HECHOS, fdekit)",
     "1,200": "on-site day fee in USD (plan C, option A)",
     "2022": "start of the Melbourne role (HECHOS, AGCO row)",
-    "2024": "end of the Melbourne role (HECHOS, AGCO row)",
+    "2024": "end of the Melbourne role (HECHOS, AGCO row); year of tau-bench (Yao et al., arXiv 2406.12045)",
+    "2015": "year of Sculley et al., Hidden Technical Debt in Machine Learning Systems (NeurIPS)",
+    "2018": "year of the ERP launch (Revlon, Inc., Form 10-K for 2018, verified 2026-11-13)",
     "2025": "year of the MIT NANDA report",
     "2026": "year of the test counts (HECHOS, Sistemas construidos)",
     "6,000": "fractional lead fee in USD per month (plan C, option A)",
@@ -86,6 +92,14 @@ FIGURES = {
     "15,000": "cutover leadership fee in USD (plan C, option A)",
     "50,000": "50,000-SKU distribution centre (HECHOS, AGCO row)",
     "2M": "about USD 2M a year of savings identified (HECHOS, Trayectoria 2013-2014)",
+    "64": "about USD 64 million of net sales not shipped after an ERP launch (Revlon 10-K for 2018)",
+    "64M": "the same USD 64 million, on the home page (Revlon 10-K for 2018)",
+    "53.6": "USD 53.6 million of incremental charges in 2018 (Revlon 10-K for 2018)",
+    "5%": "at most 5% model code in a mature ML system (Sculley et al. 2015, NeurIPS)",
+    "73": "claims at flagged sellers (Which Record Lies?, README results table, Olist)",
+    "1,093": "claims with no clear cause (Which Record Lies?, README results table, Olist)",
+    "1,542": "late orders: claims written on or before the delivery day (Which Record Lies?, Olist)",
+    "2,708": "\"not received\" claims on delivered orders (Which Record Lies?, Olist)",
     "5M": "about USD 5M of inventory freed (HECHOS, Trayectoria 2020-2022)",
     "10M": "best-fit revenue floor (plan C)",
     "15M": "USD 15M budget (HECHOS, Trayectoria 2018-2020)",
@@ -299,8 +313,9 @@ def test_removed_files_are_not_kept(tmp_path):
 
 # ---------------------------------------------------------------- the home page, from top to bottom
 
-HOME_FIGURE = re.compile(r'<a class="fig[^"]*" href="([^"]+)">\s*<span class="fig-n">(.*?)</span>\s*'
-                         r'<span class="fig-t">(.*?)</span>\s*<span class="fig-go">(.*?)</span>', re.S)
+HOME_FIGURE = re.compile(r'<a class="fig[^"]*" href="([^"]+)">\s*<span class="fig-g">(.*?)</span>\s*'
+                         r'<span class="fig-n">(.*?)</span>\s*<span class="fig-t">(.*?)</span>.*?'
+                         r'<span class="fig-go">(.*?)</span>', re.S)
 KIT_TILE = re.compile(r'<li><a class="tile" href="([^"]+)">(.*?)</a></li>', re.S)
 MAKERS = re.compile(r"\b(?:Stanley|FatMax|Insta360|DJI|Ironclad)\b", re.I)  # who made the real objects
 SCRIPT = re.compile(r'<script(?! type="application/ld\+json")')
@@ -340,13 +355,14 @@ def test_home_names_the_symptoms_before_asking_which_one(site):
     assert block.index('class="statement"') < block.index('class="doors-q"')
 
 
-def test_home_shows_three_figures_each_with_its_page(site):
+def test_home_shows_four_figures_each_with_its_source_and_page(site):
     root, pages = site
     figures = HOME_FIGURE.findall(section_of(read(root, build.find(pages, "index")), "proof"))
-    assert [number for _, number, _, _ in figures] == [figure.number for figure in build.HOME_FIGURES]
-    assert len(figures) == 3
-    for link, number, caption, label in figures:
-        assert number in FIGURES, number
+    assert [number for _, _, number, _, _ in figures] == [figure.number for figure in build.HOME_FIGURES]
+    assert len(figures) == 4
+    assert [grade for _, grade, _, _, _ in figures] == list(build.FIGURE_GRADES)   # one of each, in order
+    for link, grade, number, caption, label in figures:
+        assert set(NUMBER.findall(number)) <= FIGURES.keys(), number
         assert (root / link / "index.html").is_file(), link
         assert caption.strip() and label.strip(), number
 
@@ -441,7 +457,7 @@ def home_with_desk(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, missing: tup
     return root, (root / "index.html").read_text(encoding="utf-8")
 
 
-@pytest.mark.parametrize("missing", ["desk.webp", "desk-800.webp", "kit-tape.webp", "chart.webp", "yard.webp"])
+@pytest.mark.parametrize("missing", ["desk.webp", "desk-800.webp", "kit-tape.webp", "yard.webp"])
 def test_home_shows_no_picture_of_the_desk_until_every_file_exists(tmp_path, monkeypatch, missing):
     assert missing in build.desk_files()
     _, text = home_with_desk(tmp_path, monkeypatch, missing=(missing,))
@@ -526,8 +542,8 @@ def test_no_marks_file_means_no_marks(tmp_path):
 
 def test_details_are_marked_like_objects(tmp_path, monkeypatch):
     spots = {key: [5, 40, 8, 20] for key in desk_keys()}
-    path = write_marks(tmp_path, monkeypatch, {"spots": spots, "details": {"chart": [70, 30, 20, 25]}})
-    assert build.load_details(path) == {"chart": (70, 30, 20, 25)}
+    path = write_marks(tmp_path, monkeypatch, {"spots": spots, "details": {"yard": [70, 30, 20, 25]}})
+    assert build.load_details(path) == {"yard": (70, 30, 20, 25)}
     assert build.load_spots(path).keys() == set(desk_keys())
     path.write_text(json.dumps({"spots": spots, "details": {"window": [1, 1, 5, 5]}}), encoding="utf-8")
     with pytest.raises(ValueError, match=r"desk\.json: unknown detail 'window'"):
@@ -617,3 +633,70 @@ def test_links_must_point_to_an_existing_page(tmp_path):
                lede="Lede.", secondary="See it | missing-page")
     with pytest.raises(ValueError, match="unknown page"):
         build.load_site(tmp_path)
+
+
+# ---------------------------------------------------------------- the content of 2026-11-13
+# The owner's decisions of 2026-11-13: show the deployment work, take more from the manuscript, and
+# promise a 90-day check and a returning-client rate (content plan, C:/tolkien/docs/designs/).
+DEPLOYMENT_STEPS = ("Discover on the floor.", "Tune.", "Orchestrate.", "Value case.", "Let go.")
+SOURCE_LINE = re.compile(r'<p class="src">(.*?)</p>', re.S)
+
+
+def test_the_home_bar_draws_the_published_triage(site):
+    root, pages = site
+    figures = section_of(read(root, build.find(pages, "index")), "proof")
+    counts = [count for _, _, count in build.CLAIMS_TRIAGE]
+    assert sum(counts) == 2708 and round(100 * counts[0] / sum(counts)) == 57   # the 57% it sits under
+    assert figures.count("<rect ") == len(counts)
+    for _, words, count in build.CLAIMS_TRIAGE:
+        assert f"{count:,} {words}" in figures, words
+    assert 'role="img"' in figures and "2,708 claims" in figures
+    assert "How a deployment runs" in section_of(read(root, build.find(pages, "index")), "method")
+
+
+def test_engagements_promise_what_happens_after_the_work(site):
+    root, pages = site
+    engagements = main_text(read(root, build.find(pages, "engagements")))
+    assert "After the work" in engagements
+    assert "The 90-day check is included." in engagements
+    assert "putting it back is on me" in engagements
+    assert "For 12 months after an engagement ends, advisory hours and on-site days cost 20% less." in engagements
+    terms = main_text(read(root, build.find(pages, "working-terms")))
+    assert "After the work." in terms and "This assumes the three things I ask for above" in terms
+
+
+def test_the_vendors_page_runs_a_deployment_in_five_steps(site):
+    root, pages = site
+    text = read(root, build.find(pages, "for-technology-vendors"))
+    start = text.split('id="how-we-would-start"', 1)[1].split("<h2", 1)[0]
+    steps = re.findall(r"<li><strong>(.*?)</strong>", start)
+    assert steps == list(DEPLOYMENT_STEPS)
+    assert start.count("<em>Out:") == len(DEPLOYMENT_STEPS)
+    assert "data contract" in start and "files/client-onboarding-plan.pdf" in start
+
+
+def test_the_hiring_door_and_the_engineering_handoff(site):
+    root, pages = site
+    author = read(root, build.find(pages, "marcos-stipicich"))
+    assert "If you are hiring</h2>" in author and "for-technology-vendors/#how-we-would-start" in author
+    assert "data contract" in main_text(read(root, build.find(pages, "how-i-work")))
+
+
+def test_the_proof_page_draws_the_rule_as_a_flow(site):
+    root, pages = site
+    flow = read(root, build.find(pages, "proof")).split('<ol class="flow">', 1)[1].split("</ol>", 1)[0]
+    assert flow.count("<li>") == 4
+    assert '<span class="flow-stop">If a number fails, nothing is written' in flow
+
+
+def test_figures_from_the_manuscript_name_their_source(site):
+    root, pages = site
+    golive = read(root, build.find(pages, "a-new-system-goes-live"))
+    assert "USD 64 million" in golive and "USD 53.6 million" in golive
+    assert "sec.gov/Archives/edgar/data/887921/" in SOURCE_LINE.search(golive).group(1)
+    assert "Revlon" not in golive.split('<p class="src">', 1)[0]   # the company is named in the source only
+    vendors = SOURCE_LINE.search(read(root, build.find(pages, "for-technology-vendors"))).group(1)
+    assert "arxiv.org/abs/2406.12045" in vendors and "papers.nips.cc" in vendors
+    for slug in ("a-new-system-goes-live", "proof", "marcos-stipicich"):
+        assert "about 20%" in main_text(read(root, build.find(pages, slug))), slug   # as the manuscript states it
+

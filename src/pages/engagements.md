@@ -64,6 +64,14 @@ USD 1,200 per day, plus travel at cost
 
 For any engagement that needs me on the floor. [How travel works](../working-terms/).
 
+## After the work
+
+**The 90-day check is included.** Ninety days after an audit is delivered or a system goes live, we check by video whether it held. After an audit, your team re-counts the same sample and we see whether the losses on the list came down. After a go-live, the [90-day check](../90-day-check-after-go-live/): who still uses the system, who went around it, and why.
+
+**If it did not hold, putting it back is on me.** The work to bring the agreed measures back carries no fee; travel, if it is needed, is at cost. The measures are the ones we agree in writing before we start.
+
+**Coming back costs less.** For 12 months after an engagement ends, advisory hours and on-site days cost 20% less.
+
 ## Who to hire for what
 
 Not everything is a job for me.

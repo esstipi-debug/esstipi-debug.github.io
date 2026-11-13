@@ -6,11 +6,11 @@ Usage:
 
 The picture is cut to 16:9 and written twice, as desk.webp and desk-800.webp, with its edges faded
 into the page colour. Then, from the marks in src/desk.json, the script cuts a tile around each
-object (kit-<object>.webp) and the two details the home page uses (chart.webp and yard.webp). A
+object (kit-<object>.webp) and the detail the home page uses (yard.webp). A
 mark is left, top, width and height, in percent of the picture:
 
     {"spots": {"passport": [4, 58, 9, 14], "boots": [14, 40, 12, 30]},
-     "details": {"chart": [72, 28, 24, 29], "yard": [53, 1, 22, 32]}}
+     "details": {"yard": [53, 1, 22, 32]}}
 
 build.py shows the desk on the home page once every file exists. Run without marks, or with some
 missing, the script writes the picture, removes the tiles and details cut from an earlier one and

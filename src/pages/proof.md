@@ -12,7 +12,7 @@ updated: 2026-11-09
 ---
 ## Track record {: #track-record }
 
-**Outbound Leader, AGCO Corporation, Melbourne, 2022-2024.** A 50,000-SKU distribution centre through its warehouse-system changeover. I closed down the legacy system and stood up its replacement, with a team of 20 and 23 operators trained on RF scanning, and I stayed on the floor through hypercare until the shortcuts died. Order processing time fell 20%. The job mixed the desk and the floor: forklift, picking and packing, and dispatch with the carriers.
+**Outbound Leader, AGCO Corporation, Melbourne, 2022-2024.** A 50,000-SKU distribution centre through its warehouse-system changeover. I closed down the legacy system and stood up its replacement, with a team of 20 and 23 operators trained on RF scanning, and I stayed on the floor through hypercare until the shortcuts died. By my estimate, order processing time fell about 20%. The job mixed the desk and the floor: forklift, picking and packing, and dispatch with the carriers.
 
 Before that: planning for more than 200 stores, a three-site logistics operation, a USD 30M cross-border e-commerce P&L and a USD 100M inventory position, across Chile, Argentina and Australia. Those employers are described, not named, under confidentiality.
 
@@ -32,7 +32,16 @@ Prototypes: none of them runs a client's operation yet.
 - A warehouse-receiving kit, open source under the MIT licence, with 1,079 tests counted on 25 October 2026.
 - A field kit for deployment work, with 1,187 passing tests on 20 October 2026.
 
-The rule I build to: a model may propose, deterministic code checks every number, and a named person signs before anything changes a system of record. The code is on [GitHub](https://github.com/esstipi-debug).
+The rule I build to:
+
+<ol class="flow">
+<li><strong>A model proposes.</strong> A forecast, a reorder, a match between two records.</li>
+<li><strong>Deterministic code checks every number.</strong> Same input, same answer, and the check is written down. <span class="flow-stop">If a number fails, nothing is written: the location goes back to the floor for a recount.</span></li>
+<li><strong>A named person signs.</strong> Nothing changes a system of record without a signature.</li>
+<li><strong>The record changes.</strong> The proposal, the check and the signature are kept together.</li>
+</ol>
+
+The code is on [GitHub](https://github.com/esstipi-debug).
 
 ## Writing
 
