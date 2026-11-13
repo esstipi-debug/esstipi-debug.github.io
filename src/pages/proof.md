@@ -6,7 +6,7 @@ title: Proof of work
 headline: What I have done, and what you can check
 kicker: Proof
 description: A warehouse-system changeover, an audit anyone can re-run, the bonus that made broken orders, the systems I build and a one-page plan.
-subject: What's breaking
+subject: What we're seeing
 published: 2026-11-09
 updated: 2026-11-09
 ---

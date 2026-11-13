@@ -260,7 +260,30 @@ def test_engagements_says_who_to_hire_for_what(site):
 
 def test_contact_subject_is_url_encoded(site):
     _, pages = site
-    assert "?subject=What%27s%20breaking" in build.contact_button(build.find(pages, "contact"))
+    assert "?subject=What%20we%27re%20seeing" in build.contact_button(build.find(pages, "contact"))
+
+
+ASKS_FOR_THE_DIAGNOSIS = re.compile(r"\b(?:breaking|broken|wrong|failing|problem|root cause)\b", re.I)
+
+
+def test_no_contact_button_asks_the_reader_for_the_diagnosis(site):
+    """The reader reports what they see. Naming what is broken is the work, so no button asks for it."""
+    root, pages = site
+    label = re.compile(r'<a class="btn btn-contact" href="[^"]+">(.*?)</a>', re.S)
+    assert not ASKS_FOR_THE_DIAGNOSIS.search(build.DEFAULT_CTA)
+    seen = 0
+    for path in root.rglob("*.html"):
+        for text in label.findall(path.read_text(encoding="utf-8")):
+            seen += 1
+            assert not ASKS_FOR_THE_DIAGNOSIS.search(html.unescape(text)), (path.name, text)
+    assert seen, "no contact button was found on the built site"
+
+
+def test_home_says_the_cause_sits_outside_the_department_that_shows_it(site):
+    """The line under the headline reads the operation as one chain, not department by department."""
+    _, pages = site
+    lede = build.find(pages, "index").lede or ""
+    assert "one department" in lede and "whole chain" in lede
 
 
 def test_removed_files_are_not_kept(tmp_path):

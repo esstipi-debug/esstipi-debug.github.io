@@ -3,10 +3,10 @@ type: page
 order: 50
 slug: contact
 title: Contact
-headline: Tell me what's breaking
+headline: Tell me what you're seeing
 kicker: Contact
 description: Write to me about the operation, what changed or is about to change, and what does not add up. I answer from Santiago, Chile, in English.
-subject: What's breaking
+subject: What we're seeing
 cta: Write to me
 published: 2026-11-09
 updated: 2026-11-09

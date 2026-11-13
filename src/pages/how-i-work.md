@@ -5,7 +5,7 @@ slug: how-i-work
 title: How I diagnose an operation
 kicker: How I work
 description: How I diagnose an operation: walk the floor first, ask what happened, put the record and the floor on one timeline, and write the working down.
-subject: What's breaking
+subject: What we're seeing
 published: 2026-11-09
 updated: 2026-11-09
 ---

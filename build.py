@@ -112,7 +112,8 @@ DETAIL_SIZES = {"chart": (800, 536), "yard": (800, 668)}  # two more cuts of the
 DESK_DETAILS = tuple(DETAIL_SIZES)
 FONT_FILES = ("archivo-latin-variable.woff2", "jetbrains-mono-latin-variable.woff2")  # in src/files/fonts/
 NEXT_LINKS = (("Engagements and fees", SERVICES_SLUG), ("Proof", "proof"), ("Working terms", "working-terms"))
-DEFAULT_CTA = "Tell me what's breaking"
+# The button asks for what the reader sees. Naming what is broken is my work, not theirs.
+DEFAULT_CTA = "Tell me what you're seeing"
 OFFER_UNITS = ("project", "month", "hour", "day")
 FROM_PRICE_UNITS = ("project", "month")  # quoted as "from"; hours and days are flat rates
 AREA_SERVED = ("United States", "Australia", "Canada", "United Kingdom", "Europe")
