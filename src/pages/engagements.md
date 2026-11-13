@@ -17,45 +17,87 @@ updated: 2026-11-09
 ---
 Each one starts from the same place: what your records say against what your floor does.
 
-## Diagnostic Field Audit
+<div class="eng-deck" role="region" aria-label="Four ways to work together">
+<input class="eng-pick" type="radio" name="eng-deck" id="eng-1" checked>
+<input class="eng-pick" type="radio" name="eng-deck" id="eng-2">
+<input class="eng-pick" type="radio" name="eng-deck" id="eng-3">
+<input class="eng-pick" type="radio" name="eng-deck" id="eng-4">
+<div class="eng-cards">
 
-Three weeks · fixed price · from USD 8,500
-{: .price }
+<article class="eng-card" data-card="1">
+<div class="eng-art" aria-hidden="true"></div>
+<label class="eng-hit" for="eng-1"><span class="eng-sr">Show Diagnostic Field Audit</span></label>
+<div class="eng-rail" aria-hidden="true">
+<span class="eng-num">I</span>
+<span class="eng-rail-copy"><span class="eng-rail-title">Diagnostic Field Audit</span><span class="eng-rail-price">from USD 8,500</span></span>
+</div>
+<div class="eng-body">
+<div class="eng-head"><span class="eng-idx">I · Three weeks · fixed price</span><span class="eng-price">from USD 8,500</span></div>
+<h2>Diagnostic Field Audit</h2>
+<p>For stock that does not reconcile, write-offs nobody can explain, or a deployment that has stalled.</p>
+<ul>
+<li><strong>Week one, the floor.</strong> On site or by video, with every shift included.</li>
+<li><strong>Week two, the records.</strong> A five-column event log: case, activity, timestamp, who, where.</li>
+<li><strong>Week three, the baseline and the list.</strong> Every loss in the order of what it costs, with the count and the arithmetic shown on pages you can forward, and a 30-60-90-day plan, presented to whoever signs.</li>
+</ul>
+<p>Paid 50% at the start and 50% on delivery. On-site days are billed separately. Your team keeps the count sheets and the queries.</p>
+<p class="eng-foot"><a class="eng-cta" href="mailto:marcos.stipicich@gmail.com?subject=Diagnostic%20Field%20Audit">Enquire <span aria-hidden="true">↗</span></a></p>
+</div>
+</article>
 
-For stock that does not reconcile, write-offs nobody can explain, or a deployment that has stalled.
+<article class="eng-card" data-card="2">
+<div class="eng-art" aria-hidden="true"></div>
+<label class="eng-hit" for="eng-2"><span class="eng-sr">Show Deployment &amp; Cutover Leadership</span></label>
+<div class="eng-rail" aria-hidden="true">
+<span class="eng-num">II</span>
+<span class="eng-rail-copy"><span class="eng-rail-title">Deployment &amp; Cutover Leadership</span><span class="eng-rail-price">from USD 15,000</span></span>
+</div>
+<div class="eng-body">
+<div class="eng-head"><span class="eng-idx">II · Two to three months · by milestone</span><span class="eng-price">from USD 15,000</span></div>
+<h2>Deployment &amp; Cutover Leadership</h2>
+<p>For a WMS, ERP, hotel, farm or AI system going live where a bad start stops dispatch or service.</p>
+<ul>
+<li>Data staged and checked before anything writes to production, with a way back.</li>
+<li>Step-by-step instruction on the floor, in the crew&rsquo;s own terms.</li>
+<li>Go-live and hypercare on the floor, until the old shortcuts die.</li>
+</ul>
+<p>Paid 30% at the start, 40% at go-live and 30% when the agreed measures hold 30 days later.</p>
+<p class="eng-foot"><a class="eng-cta" href="mailto:marcos.stipicich@gmail.com?subject=Deployment%20%26%20Cutover%20Leadership">Enquire <span aria-hidden="true">↗</span></a></p>
+</div>
+</article>
 
-- **Week one, the floor.** On site or by video, with every shift included.
-- **Week two, the records.** A five-column event log: case, activity, timestamp, who, where.
-- **Week three, the baseline and the list.** Every loss in the order of what it costs, with the count and the arithmetic shown on pages you can forward, and a 30-60-90-day plan, presented to whoever signs.
+<article class="eng-card" data-card="3">
+<div class="eng-art" aria-hidden="true"></div>
+<label class="eng-hit" for="eng-3"><span class="eng-sr">Show Fractional Operations / Deployment Lead</span></label>
+<div class="eng-rail" aria-hidden="true">
+<span class="eng-num">III</span>
+<span class="eng-rail-copy"><span class="eng-rail-title">Fractional Operations / Deployment Lead</span><span class="eng-rail-price">from USD 6,000 per month</span></span>
+</div>
+<div class="eng-body">
+<div class="eng-head"><span class="eng-idx">III · Three to six months</span><span class="eng-price">from USD 6,000 per month</span></div>
+<h2>Fractional Operations / Deployment Lead</h2>
+<p>For a team that needs a senior operations or deployment lead for 15 to 20 hours a week: stock accuracy and shrink, the flow from purchasing to the warehouse, and the deployment calendar, with two or three working sessions a week with your leadership.</p>
+<p class="eng-foot"><a class="eng-cta" href="mailto:marcos.stipicich@gmail.com?subject=Fractional%20Operations%20%2F%20Deployment%20Lead">Enquire <span aria-hidden="true">↗</span></a></p>
+</div>
+</article>
 
-Paid 50% at the start and 50% on delivery. On-site days are billed separately. Your team keeps the count sheets and the queries.
+<article class="eng-card" data-card="4">
+<div class="eng-art" aria-hidden="true"></div>
+<label class="eng-hit" for="eng-4"><span class="eng-sr">Show Advisory &amp; Operational Due Diligence</span></label>
+<div class="eng-rail" aria-hidden="true">
+<span class="eng-num">IV</span>
+<span class="eng-rail-copy"><span class="eng-rail-title">Advisory &amp; Operational Due Diligence</span><span class="eng-rail-price">USD 250 per hour</span></span>
+</div>
+<div class="eng-body">
+<div class="eng-head"><span class="eng-idx">IV · Per hour</span><span class="eng-price">USD 250 per hour</span></div>
+<h2>Advisory &amp; Operational Due Diligence</h2>
+<p>For boards and investors: 60-minute sessions, or a short review of the data before a decision.</p>
+<p class="eng-foot"><a class="eng-cta" href="mailto:marcos.stipicich@gmail.com?subject=Advisory%20%26%20Operational%20Due%20Diligence">Enquire <span aria-hidden="true">↗</span></a></p>
+</div>
+</article>
 
-## Deployment & Cutover Leadership
-
-Two to three months · by milestone · from USD 15,000
-{: .price }
-
-For a WMS, ERP, hotel, farm or AI system going live where a bad start stops dispatch or service.
-
-- Data staged and checked before anything writes to production, with a way back.
-- Step-by-step instruction on the floor, in the crew's own terms.
-- Go-live and hypercare on the floor, until the old shortcuts die.
-
-Paid 30% at the start, 40% at go-live and 30% when the agreed measures hold 30 days later.
-
-## Fractional Operations / Deployment Lead
-
-Three to six months · from USD 6,000 per month
-{: .price }
-
-For a team that needs a senior operations or deployment lead for 15 to 20 hours a week: stock accuracy and shrink, the flow from purchasing to the warehouse, and the deployment calendar, with two or three working sessions a week with your leadership.
-
-## Advisory & Operational Due Diligence
-
-USD 250 per hour
-{: .price }
-
-For boards and investors: 60-minute sessions, or a short review of the data before a decision.
+</div>
+</div>
 
 ## On-site days
 
