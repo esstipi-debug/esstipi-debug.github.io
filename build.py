@@ -19,14 +19,15 @@ three floors and two kinds of buyer); "page" the other commercial pages
 
 The method section of the home page shows four plates once they all exist in
 src/files/plates/ (plates.py writes them); until then it shows three drawn tools.
-Under it comes the kit: the objects carried onto a floor, each one a door to a page.
-A figure of the kit shows once its picture is in src/files/kit/ (kit.py writes them).
+The home page opens with the desk once its picture is in src/files/desk/ (desk.py writes
+it) and every object on it is marked in src/desk.json: each object opens a card.
 """
 from __future__ import annotations
 
 import html
 import json
 import logging
+import math
 import re
 import shutil
 from dataclasses import dataclass
@@ -41,7 +42,7 @@ SRC = ROOT / "src"
 PAGES_DIR = SRC / "pages"
 FILES_DIR = SRC / "files"
 MANIFEST = SRC / "generated.json"
-ASSETS = ("style.css", "favicon.svg")
+ASSETS = ("style.css", "home.css", "favicon.svg")
 
 SITE_URL = "https://esstipi-debug.github.io"
 AUTHOR = "Marcos Stipicich"
@@ -90,57 +91,24 @@ SITUATION_GROUP = ("situation", "Which one is yours?")
 DOOR_GROUPS = (("floor", "Where is the work?"), ("buyer", "Or what are you?"))
 ALL_GROUPS = (SITUATION_GROUP, *DOOR_GROUPS)
 
-# The living element: a tailor's tools, drawn inline so they take the page's colours. No text inside,
-# so nothing here counts as copy or as a figure.
-TAPE_SVG = """<svg class="tool tape" viewBox="0 0 320 44" aria-hidden="true" focusable="false">
-<rect class="tape-case" x="1" y="6" width="34" height="32" rx="6"/>
-<circle class="tape-hub" cx="18" cy="22" r="5"/>
-<g class="tape-blade">
-<rect x="35" y="14" width="278" height="16"/>
-<path d="M55 14v7M75 14v10M95 14v7M115 14v10M135 14v7M155 14v10M175 14v7M195 14v10M215 14v7M235 14v10M255 14v7M275 14v10M295 14v7"/>
-<path class="tape-hook" d="M313 10v24"/>
-</g>
-</svg>"""
-SHEARS_SVG = """<svg class="tool shears" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
-<g class="blade blade-a"><path d="M32 32L58 12"/><circle cx="16" cy="44" r="8"/><path d="M22 39l10-7"/></g>
-<g class="blade blade-b"><path d="M32 32L58 52"/><circle cx="16" cy="20" r="8"/><path d="M22 25l10 7"/></g>
-<circle class="pivot" cx="32" cy="32" r="2"/>
-</svg>"""
-RULE_SVG = """<svg class="tool rule" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
-<rect x="6" y="24" width="52" height="16" rx="2"/>
-<path class="rule-ticks" d="M14 24v6M22 24v9M30 24v6M38 24v9M46 24v6M54 24v9"/>
-</svg>"""
-NEEDLE_SVG = """<svg class="tool needle" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
-<path class="needle-body" d="M50 10L20 44"/><ellipse cx="48" cy="12.5" rx="1.6" ry="3" transform="rotate(41 48 12.5)"/>
-<path class="thread" d="M48 13c10 8 6 20-6 22s-22 2-28 10 2 12 10 9"/>
-</svg>"""
+# The method, in the tailor's three verbs. On the home page each step is a panel, and the panels stack.
 METHOD_STEPS = (
-    (RULE_SVG, "Measure", "Count what the floor holds against what the record says."),
-    (SHEARS_SVG, "Cut", "Take out the loss the count exposes, at its cause."),
-    (NEEDLE_SVG, "Stitch", "Stay through go-live until the new way of working holds."),
+    ("Measure", "Count what the floor holds against what the record says."),
+    ("Cut", "Take out the loss the count exposes, at its cause."),
+    ("Stitch", "Stay through go-live until the new way of working holds."),
 )
-# The plates: four engraved scenes that take the place of the three tools once every file exists in
-# src/files/plates/, in both sizes. Each entry is numeral, title, line and the picture's description.
-PLATE_SIZE = (1600, 900)
-PLATE_SMALL = 800  # width of the second file, for narrow screens
-SCENES = (
-    ("I", "Measure", "I count what the floor holds before I trust the record.",
-     "Engraving: on a night shift, a man in a high-visibility vest holds a steel tape measure against a pallet rack."),
-    ("II", "Mark", "I mark where the record and the floor part, and what the gap costs you.",
-     "Engraving: late at night at a desk, the same man checks a sheet of tally marks against two lines "
-     "drifting apart on a laptop."),
-    ("III", "Fit", "I try the fix loose on your own files, so you see where it pulls before you pay for it.",
-     "Engraving: at a cutting table, the man checks a loosely basted work jacket; the shears lie closed "
-     "beside a laptop."),
-    ("IV", "Return", "Weeks after go-live, when the vendor has left, I come back to check it still holds.",
-     "Engraving: in daylight, back in the same aisle, the man and an operator seen from behind read a "
-     "terminal together."),
-)
-# The kit plate: square pictures of real objects, engraved from photographs by kit.py.
-KIT_SIZE = 720   # side of a picture
-KIT_SMALL = 360  # side of the second file, for narrow screens
-KIT_MIN = 2      # one figure alone is not a plate
-NEXT_LINKS = (("Engagements and fees", "engagements"), ("Proof", "proof"), ("Working terms", "working-terms"))
+# The desk: a picture of the kit laid out the night before a visit. desk.py prepares it and cuts a tile
+# around each object. The home page shows it beside the headline, and the objects in a strip lower down.
+DESK_SIZE = (1600, 900)
+DESK_SMALL = 800  # width of the second file, for narrow screens
+DESK_SPOTS = SRC / "desk.json"  # where each object lies on the picture: left, top, width and height, in percent
+SERVICES_SLUG = "engagements"
+HERO_SIZES = "(min-width: 62rem) 56vw, 100vw"  # the width the picture of the desk takes beside the headline
+TILE_SIZE = (480, 384)  # the picture of one object on the desk, 5:4
+DETAIL_SIZES = {"chart": (800, 536), "yard": (800, 668)}  # two more cuts of the picture the home page uses
+DESK_DETAILS = tuple(DETAIL_SIZES)
+FONT_FILES = ("archivo-latin-variable.woff2", "jetbrains-mono-latin-variable.woff2")  # in src/files/fonts/
+NEXT_LINKS = (("Engagements and fees", SERVICES_SLUG), ("Proof", "proof"), ("Working terms", "working-terms"))
 DEFAULT_CTA = "Tell me what's breaking"
 OFFER_UNITS = ("project", "month", "hour", "day")
 FROM_PRICE_UNITS = ("project", "month")  # quoted as "from"; hours and days are flat rates
@@ -194,6 +162,7 @@ class Page:
     door: str | None = None
     door_text: str | None = None
     offers: tuple[Offer, ...] = ()
+    symptoms: tuple[str, ...] = ()  # the home page: what is going wrong, one sentence each
 
     @property
     def is_home(self) -> bool:
@@ -210,29 +179,64 @@ class Page:
 
 
 @dataclass(frozen=True)
-class KitFigure:
-    """One object of the kit. It shows on the home page, as a door, once its picture exists."""
-    key: str   # the picture's file name, without size or extension
+class DeskObject:
+    """One object on the desk of the home page. Picking it opens a card."""
+    key: str
     name: str
-    line: str  # what the object does in the work
+    text: str  # what the object says about the work
     rule: str  # the limit it works under on a client's site, or ""
-    slug: str  # the page it opens
+    slug: str  # the page its card leads to
 
 
-# In the order of the plate. No maker is named and the pictures carry no mark.
-KIT = (
-    KitFigure("tape", "Steel tape", "I measure the floor before I trust the number on the screen.",
-              "", "the-inventory-number-is-wrong"),
-    KitFigure("notebook", "Notebook", "The count goes on paper before it meets the system. You keep the sheets.",
-              "", "engagements"),
-    KitFigure("gloves", "Work gloves", "I walk the floor, off shifts included, to see what the screen does not show.",
-              "I do not run your equipment or fill a post.", "the-floor-works-around-the-system"),
-    KitFigure("camera", "Chest camera", "What I report, you can check: I record the screen, the label and the rack.",
-              "In plain sight, with notice on your site. Short clips of screens and labels, never of faces.", "proof"),
-    KitFigure("recorder", "Recorder", "I dictate what I see while I am still standing in front of it.",
-              "My own notes only. An operator is recorded only if they say yes.", "how-i-work"),
-    KitFigure("blade", "Blade", "Go-live is one cut: the old system closes, the new one opens, and there is a way back.",
-              "On your site I use the blade you issue.", "a-new-system-goes-live"),
+# From left to right on the picture. No maker is named, and the picture carries no mark.
+DESK = (
+    DeskObject("passport", "Passport and boarding pass",
+               "I come to you. The work starts on your floor, and how the visit is contracted, paid and "
+               "travelled fits on one page.", "", "working-terms"),
+    DeskObject("boots", "Safety boots",
+               "I walk the floor first, off shifts included. Dust on a rack is stock that has not moved; "
+               "a sheet taped beside a terminal is a gap the software left.", "",
+               "the-floor-works-around-the-system"),
+    DeskObject("vest", "Vest and gloves",
+               "On your floor I follow your site rules, induction included.",
+               "I do not run your equipment or fill a post.", "how-i-work"),
+    DeskObject("tape", "Steel tape",
+               "I measure before I trust the record: the rack, the aisle, the pallet, and a blind count "
+               "of a sample of locations.", "", "the-inventory-number-is-wrong"),
+    DeskObject("knife", "Knife",
+               "Go-live is one cut: the old system closes, the new one opens, and there is a way back.",
+               "On your site I use the blade you issue.", "a-new-system-goes-live"),
+    DeskObject("camera", "Chest camera",
+               "What I report, you can check: I record what the screen, the label and the rack show.",
+               "In plain sight, with notice on your site. Short clips, never of faces.", "proof"),
+    DeskObject("recorder", "Recorder",
+               "I dictate what I see while I am still standing in front of it.",
+               "My own notes only. An operator is recorded only if they say yes.", "how-i-work"),
+    DeskObject("notebook", "Notebook",
+               "The count goes on paper before it meets the system. Your team keeps the sheets.", "",
+               "the-inventory-number-is-wrong"),
+    DeskObject("laptop", "Laptop",
+               "At night I put the record and the floor on one timeline. You get the baseline and the "
+               "list of losses, in the order to fix them.", "", SERVICES_SLUG),
+)
+
+
+@dataclass(frozen=True)
+class HomeFigure:
+    """A number the home page prints large: what it measures, and the page where it can be checked."""
+    number: str
+    caption: str
+    label: str
+    slug: str
+
+
+HOME_FIGURES = (
+    HomeFigure("65%", "of about 370,000 inventory records were inaccurate, in one retailer’s audit.",
+               "Why records drift", "why-inventory-records-do-not-match-the-shelf"),
+    HomeFigure("57%", "of “not received” reviews on delivered orders were written on or before the "
+               "delivery day, in a public marketplace dataset.", "See a sample audit", "not-received-but-delivered"),
+    HomeFigure("50,000", "SKU distribution centre, taken through its warehouse-system changeover. "
+               "Order processing time fell 20%.", "Proof", "proof"),
 )
 
 
@@ -312,6 +316,7 @@ def commercial_fields(one: dict[str, str], meta: dict[str, list[str]]) -> dict:
         "door": one.get("door"),
         "door_text": one.get("door_text"),
         "offers": tuple(parse_offer(value) for value in meta.get("offer", [])),
+        "symptoms": tuple(meta.get("symptom", [])),
     }
 
 
@@ -541,6 +546,26 @@ def verification_tags(page: Page) -> str:
     return "\n".join(tags)
 
 
+def font_preload(prefix: str) -> str:
+    """The display font is on every page, in the first screen: fetch it early. Nothing while the file is missing."""
+    if not (FILES_DIR / "fonts" / FONT_FILES[0]).is_file():
+        return ""
+    return f'<link rel="preload" href="{prefix}files/fonts/{FONT_FILES[0]}" as="font" type="font/woff2" crossorigin>'
+
+
+def home_links(page: Page, prefix: str) -> str:
+    """What only the home page loads: its own style sheet and, once it exists, the picture of the desk."""
+    if not page.is_home:
+        return ""
+    links = [f'<link rel="stylesheet" href="{prefix}home.css">']
+    if desk_ready():
+        large, small = f"{prefix}files/desk/{desk_name()}", f"{prefix}files/desk/{desk_name(small=True)}"
+        links.append(f'<link rel="preload" as="image" href="{large}" '
+                     f'imagesrcset="{small} {DESK_SMALL}w, {large} {DESK_SIZE[0]}w" imagesizes="{HERO_SIZES}" '
+                     f'fetchpriority="high">')
+    return "\n" + "\n".join(links)
+
+
 def head(page: Page, pages: list[Page], depth: int) -> str:
     og_types = {"home": "website", "author": "profile", "book": "book", "landing": "website", "page": "website"}
     og_type = og_types.get(page.kind, "article")
@@ -565,7 +590,8 @@ def head(page: Page, pages: list[Page], depth: int) -> str:
 <meta name="twitter:card" content="summary">
 {verification_tags(page)}
 <link rel="icon" href="{prefix}favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="{prefix}style.css">
+{font_preload(prefix)}
+<link rel="stylesheet" href="{prefix}style.css">{home_links(page, prefix)}
 <script type="application/ld+json">{data}</script>
 </head>"""
 
@@ -575,21 +601,29 @@ def site_header(depth: int) -> str:
     items = []
     for label, target in NAV:
         link = f"{home}{target}" if target.startswith("#") else href(target, depth)
-        css = ' class="nav-contact"' if target == "contact/" else ""
-        items.append(f'<li><a{css} href="{link}">{label}</a></li>')
+        items.append(f'<li><a href="{link}">{label}</a></li>')
     links = "\n".join(items)
     return f"""<header class="site-header"><div class="wrap">
 <a class="name" href="{home}">{AUTHOR}</a>
 <nav aria-label="Site"><ul>
 {links}
 </ul></nav>
-</div></header>"""
+</div>
+<div class="tape" aria-hidden="true"><span></span></div>
+</header>"""
 
 
 def site_footer(depth: int) -> str:
+    roles = "\n".join(f"<p>{esc(part)}</p>" for part in AUTHOR_ROLE.split(" · "))
     return f"""<footer class="site-footer"><div class="wrap">
-<p><a href="{href(AUTHOR_SLUG + '/', depth)}">{AUTHOR}</a> · {AUTHOR_ROLE}</p>
-<p><a href="{LINKEDIN}">LinkedIn</a> · <a href="{GITHUB}">GitHub</a></p>
+<div>
+<a class="name" href="{href(AUTHOR_SLUG + '/', depth)}">{AUTHOR}</a>
+{roles}
+</div>
+<ul>
+<li><a href="{LINKEDIN}">LinkedIn</a></li>
+<li><a href="{GITHUB}">GitHub</a></li>
+</ul>
 </div></footer>"""
 
 
@@ -623,11 +657,14 @@ def heading(page: Page) -> str:
     return render_inline(page.headline or page.title)
 
 
+def contact_href(page: Page) -> str:
+    """An email to the author with the page's subject line."""
+    return f'mailto:{EMAIL}?subject={quote(page.subject or page.title, safe="")}'
+
+
 def contact_button(page: Page) -> str:
     """The one call to action of a commercial page: an email with the page's subject line."""
-    subject = quote(page.subject or page.title, safe="")
-    label = esc(page.cta or DEFAULT_CTA)
-    return f'<a class="btn btn-contact" href="mailto:{EMAIL}?subject={subject}">{label}</a>'
+    return f'<a class="btn btn-contact" href="{contact_href(page)}">{esc(page.cta or DEFAULT_CTA)}</a>'
 
 
 def next_links(depth: int) -> str:
@@ -702,164 +739,106 @@ def list_item(page: Page, depth: int, extra: str = "") -> str:
             f'<span class="gist">{esc(page.description)}{extra}</span></li>')
 
 
-def hero(page: Page, depth: int) -> str:
-    secondary = ""
-    if page.secondary:
-        label, slug = page.secondary
-        secondary = f'\n<a class="btn btn-ghost" href="{href(slug + "/", depth)}">{esc(label)}</a>'
-    base = f'\n<p class="base">{render_inline(page.base_line)}</p>' if page.base_line else ""
-    return f"""<section class="hero">
-{TAPE_SVG}
-<p class="kicker">{esc(page.kicker or AUTHOR_ROLE)}</p>
-<h1>{heading(page)}</h1>
-<p class="lede">{render_inline(page.lede or "")}</p>
-<p class="actions">{contact_button(page)}{secondary}</p>{base}
-</section>"""
+def desk_dir() -> Path:
+    return FILES_DIR / "desk"
 
 
-def door_item(page: Page, depth: int) -> str:
-    return (f'<li><a class="door" href="{href(page.path, depth)}">'
-            f'<span class="door-t">{esc(page.door or page.title)}</span>'
-            f'<span class="door-d">{esc(page.door_text or "")}</span></a></li>')
+def desk_name(small: bool = False) -> str:
+    return f"desk{f'-{DESK_SMALL}' if small else ''}.webp"
 
 
-def door_group(pages: list[Page], depth: int, group: str, question: str) -> str:
-    items = "\n".join(door_item(page, depth) for page in landings_of(pages, group))
-    return f'<h2 class="doors-q">{esc(question)}</h2>\n<ul class="doors">\n{items}\n</ul>'
+def tile_name(key: str) -> str:
+    return f"kit-{key}.webp"
 
 
-def situation_doors(pages: list[Page], depth: int) -> str:
-    group = door_group(pages, depth, *SITUATION_GROUP)
-    return f'<section id="situations" class="doors-block situations">\n{group}\n</section>'
+def detail_name(name: str) -> str:
+    return f"{name}.webp"
 
 
-def plates_dir() -> Path:
-    return FILES_DIR / "plates"
+def desk_files() -> tuple[str, ...]:
+    """Every file desk.py writes and the home page waits for: the picture in two sizes, a tile for each
+    object and the two details."""
+    return (desk_name(), desk_name(small=True), *(tile_name(item.key) for item in DESK),
+            *(detail_name(name) for name in DESK_DETAILS))
 
 
-def plate_name(number: int, small: bool = False) -> str:
-    return f"scene-{number}{f'-{PLATE_SMALL}' if small else ''}.webp"
+def desk_ready() -> bool:
+    """True once every file of the desk is in src/files/desk/. Until then the home page shows no picture."""
+    folder = desk_dir()
+    return all((folder / name).is_file() for name in desk_files())
 
 
-def scenes_ready() -> bool:
-    """True once every plate, in both sizes, is in src/files/plates/."""
-    folder = plates_dir()
-    return all((folder / plate_name(number, small)).is_file()
-               for number in range(1, len(SCENES) + 1) for small in (False, True))
+def is_number(value: object) -> bool:
+    return isinstance(value, (int, float)) and not isinstance(value, bool) and math.isfinite(value)
 
 
-def scene_item(number: int, numeral: str, title: str, text: str, alt: str, depth: int) -> str:
-    large = href(f"files/plates/{plate_name(number)}", depth)
-    small = href(f"files/plates/{plate_name(number, small=True)}", depth)
-    width, height = PLATE_SIZE
-    return f"""<li><figure class="scene">
-<img src="{large}" srcset="{small} {PLATE_SMALL}w, {large} {width}w" sizes="(min-width: 44rem) 40rem, 100vw"
- width="{width}" height="{height}" alt="{esc(alt)}" loading="lazy" decoding="async">
-<figcaption><span class="scene-n" aria-hidden="true">{numeral}</span><span class="scene-t">{esc(title)}</span>
-<span class="scene-d">{esc(text)}</span></figcaption>
-</figure></li>"""
+def read_marks(path: Path) -> object:
+    """The marks of the desk as written, or None while the file does not exist."""
+    if not path.is_file():
+        return None
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as error:
+        raise ValueError(f"{path.name}: is not valid JSON ({error.msg}, line {error.lineno})") from error
 
 
-def scenes(depth: int) -> str:
-    items = "\n".join(scene_item(number, *scene, depth) for number, scene in enumerate(SCENES, 1))
-    return f"""<section id="method" class="method">
-<h2 class="doors-q">How the work goes</h2>
-<ol class="scenes">
-{items}
-</ol>
-</section>"""
+def checked_box(file_name: str, key: str, box: object) -> tuple[float, ...]:
+    """A mark is left, top, width and height, in percent of the picture, and lies inside it."""
+    if not (isinstance(box, list) and len(box) == 4 and all(is_number(value) for value in box)):
+        raise ValueError(f"{file_name}: {key} needs four numbers: left, top, width and height")
+    left, top, wide, high = box
+    if wide <= 0 or high <= 0:
+        raise ValueError(f"{file_name}: {key} has no width or no height")
+    if left < 0 or top < 0 or left + wide > 100 or top + high > 100:
+        raise ValueError(f"{file_name}: {key} lies outside the picture")
+    return (left, top, wide, high)
 
 
-def method(depth: int) -> str:
-    """The method section of the home page: the four plates once they all exist, the three tools until then."""
-    return scenes(depth) if scenes_ready() else method_strip(depth)
+def load_spots(path: Path) -> dict[str, tuple[float, ...]]:
+    """Where each object lies on the picture of the desk. {} while the file does not exist.
+    A file that cannot be used is an error that names it and the fault."""
+    marks = read_marks(path)
+    if marks is None:
+        return {}
+    raw = marks.get("spots") if isinstance(marks, dict) else None
+    if not isinstance(raw, dict):
+        raise ValueError(f'{path.name}: needs a "spots" object')
+    known = {item.key for item in DESK}
+    spots = {}
+    for key, box in raw.items():
+        if key not in known:
+            raise ValueError(f"{path.name}: unknown object '{key}'")
+        spots[key] = checked_box(path.name, key, box)
+    return spots
 
 
-def method_strip(depth: int) -> str:
-    steps = "\n".join(f'<li class="step">{svg}<span class="step-t">{esc(title)}</span>'
-                      f'<span class="step-d">{esc(text)}</span></li>' for svg, title, text in METHOD_STEPS)
-    return f"""<section id="method" class="method">
-<h2 class="doors-q">How the work goes</h2>
-<ol class="steps">
-{steps}
-</ol>
-</section>"""
+def load_details(path: Path) -> dict[str, tuple[float, ...]]:
+    """Where the details lie on the picture: under "details" in the same file, marked like the objects."""
+    marks = read_marks(path)
+    raw = marks.get("details", {}) if isinstance(marks, dict) else {}
+    if not isinstance(raw, dict):
+        raise ValueError(f'{path.name}: "details" must be an object')
+    details = {}
+    for name, box in raw.items():
+        if name not in DETAIL_SIZES:
+            raise ValueError(f"{path.name}: unknown detail '{name}'")
+        details[name] = checked_box(path.name, name, box)
+    return details
 
 
-def kit_dir() -> Path:
-    return FILES_DIR / "kit"
-
-
-def figure_name(key: str, small: bool = False) -> str:
-    return f"{key}{f'-{KIT_SMALL}' if small else ''}.webp"
-
-
-def kit_ready() -> list[KitFigure]:
-    """The figures whose picture is in src/files/kit/ in both sizes, in the order of the plate."""
-    folder = kit_dir()
-    return [figure for figure in KIT
-            if all((folder / figure_name(figure.key, small)).is_file() for small in (False, True))]
-
-
-def figure_item(figure: KitFigure, pages: list[Page], depth: int) -> str:
-    large = href(f"files/kit/{figure_name(figure.key)}", depth)
-    small = href(f"files/kit/{figure_name(figure.key, small=True)}", depth)
-    rule = f'\n<span class="fig-r">{esc(figure.rule)}</span>' if figure.rule else ""
-    return f"""<li><a class="fig" href="{href(find(pages, figure.slug).path, depth)}">
-<img src="{large}" srcset="{small} {KIT_SMALL}w, {large} {KIT_SIZE}w" sizes="(min-width: 36rem) 13rem, 45vw"
- width="{KIT_SIZE}" height="{KIT_SIZE}" alt="" loading="lazy" decoding="async">
-<span class="fig-t">{esc(figure.name)}</span>
-<span class="fig-d">{esc(figure.line)}</span>{rule}
-</a></li>"""
-
-
-def kit(pages: list[Page], depth: int) -> str:
-    """The kit plate of the home page: one door per object. Empty until enough pictures exist."""
-    figures = kit_ready()
-    if len(figures) < KIT_MIN:
-        return ""
-    items = "\n".join(figure_item(figure, pages, depth) for figure in figures)
-    return f"""<section id="kit" class="kit-block">
-<h2 class="doors-q">What I carry onto your floor</h2>
-<ol class="kit">
-{items}
-</ol>
-</section>"""
-
-
-def doors(pages: list[Page], depth: int) -> str:
-    joined = "\n".join(door_group(pages, depth, group, question) for group, question in DOOR_GROUPS)
-    return f'<section id="industries" class="doors-block">\n{joined}\n</section>'
-
-
-def library(pages: list[Page], depth: int) -> str:
-    """The field notes and the short answers, at the foot of the home page."""
-    notes = "\n".join(list_item(note, depth, f" · {pdf_link(note)}") for note in notes_of(pages))
-    questions = "\n".join(list_item(question, depth) for question in questions_of(pages))
-    return f"""<section id="library">
-<h2 id="field-notes">Field notes</h2>
-<ul class="list">
-{notes}
-</ul>
-<h2 id="questions">Short answers</h2>
-<ul class="list">
-{questions}
-</ul>
-<p class="next"><a href="{href(AUTHOR_SLUG + '/', depth)}">About the author</a> · \
-<a href="{href(BOOK_SLUG + '/', depth)}"><em>The Deployment Chasm</em></a>, a manuscript</p>
-</section>"""
+def desk_spots() -> dict[str, tuple[float, ...]]:
+    """The mark of every object on the desk, for desk.py to cut a tile around each. {} while nothing is
+    marked. Marks that leave an object out are an error."""
+    spots = load_spots(DESK_SPOTS)
+    missing = [item.key for item in DESK if item.key not in spots]
+    if spots and missing:
+        raise ValueError(f"{DESK_SPOTS.name}: no mark for {', '.join(missing)}")
+    return spots
 
 
 def home_main(page: Page, pages: list[Page], depth: int) -> str:
-    return f"""{hero(page, depth)}
-{situation_doors(pages, depth)}
-{method(depth)}
-{kit(pages, depth)}
-<div class="home-body">
-{page.body_html}
-</div>
-{doors(pages, depth)}
-{library(pages, depth)}"""
+    import home  # late: home.py lays the page out with this module's data and helpers
+    return home.main(page, pages, depth)
 
 
 def landing_main(page: Page, pages: list[Page], depth: int) -> str:
@@ -895,10 +874,13 @@ MAIN_BUILDERS = {
 def render_page(page: Page, pages: list[Page]) -> str:
     depth = 0 if page.is_home else 1
     main = MAIN_BUILDERS[page.kind](page, pages, depth)
+    body_class = f"kind-{page.kind}{' has-desk' if page.is_home and desk_ready() else ''}"
+    main_class = "" if page.is_home else ' class="wrap"'  # the home page lays out its own full-width sections
     return f"""{head(page, pages, depth)}
-<body>
+<body class="{body_class}">
+<a class="skip" href="#main">Skip to content</a>
 {site_header(depth)}
-<main class="wrap">
+<main id="main"{main_class}>
 {main}
 </main>
 {site_footer(depth)}
@@ -989,4 +971,6 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    import build  # run as the module the other files import, so its data exists once
+
+    raise SystemExit(build.main())

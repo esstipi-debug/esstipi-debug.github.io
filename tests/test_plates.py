@@ -43,10 +43,10 @@ def drawing(path: Path, ground: int, ink: int) -> Path:
 def test_a_scene_becomes_two_plates_in_the_page_colours(tmp_path):
     source = drawing(tmp_path / "escena-1.png", ground=30, ink=240)
     written = plates.convert(source, tmp_path / "out", number=1)
-    assert [path.name for path in written] == [build.plate_name(1), build.plate_name(1, small=True)]
+    assert [path.name for path in written] == [plates.plate_name(1), plates.plate_name(1, small=True)]
     large, small = (Image.open(path).convert("RGB") for path in written)
-    assert large.size == build.PLATE_SIZE
-    assert small.size == (build.PLATE_SMALL, build.PLATE_SMALL * build.PLATE_SIZE[1] // build.PLATE_SIZE[0])
+    assert large.size == plates.PLATE_SIZE
+    assert small.size == (plates.PLATE_SMALL, plates.PLATE_SMALL * plates.PLATE_SIZE[1] // plates.PLATE_SIZE[0])
     width, height = large.size
     for corner in ((0, 0), (width - 1, 0), (0, height - 1), (width - 1, height - 1)):
         assert is_ground(large.getpixel(corner)), corner   # no hard edge: the border is the page itself

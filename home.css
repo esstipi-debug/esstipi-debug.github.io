@@ -1,0 +1,244 @@
+/* The home page only, on top of style.css: the hero with the desk, the symptoms and the three
+   situations, the figures, the method as three stacked panels, the nine objects, the argument, the
+   pillars, the doors, the library and the closing call. Sections run the full width; .wrap or a
+   padded edge keeps their content on the page's column. No script. */
+
+:where(.kind-home) { --band: clamp(4rem, 8vw, 7rem); --edge: max(1.25rem, calc((100% - 84rem) / 2)); }
+:where(.kind-home) h2 { font-stretch: 76%; font-size: clamp(1.75rem, 2.9vw, 2.75rem); line-height: 1.06; letter-spacing: -.012em; }
+.text-link, .thesis-body a, .pillar a, .short a, #library .next a { color: var(--ink); box-shadow: inset 0 -1px 0 var(--accent); transition: color .2s; }
+.text-link:hover, .thesis-body a:hover, .pillar a:hover, .short a:hover, #library .next a:hover { color: var(--accent); }
+
+/* ---------------------------------------------------------------- hero */
+.hero { padding-block: clamp(1.75rem, 3.2vw, 3rem) clamp(2.5rem, 5vw, 4.5rem); }
+.hero-in { container-type: inline-size; }
+.hero h1 { font-stretch: 68%; font-size: clamp(2.05rem, 4.7cqi, 4.6rem); line-height: 1.03; text-wrap: wrap; }
+.h1-a, .h1-b { display: block; text-wrap: balance; }
+.h1-b { color: var(--accent); }
+.hero-body { display: grid; gap: 2rem; margin-top: clamp(1.5rem, 3cqi, 2.5rem); }
+.hero .lede { max-width: 34ch; margin: 0; font-size: clamp(1.125rem, 1.6cqi, 1.3125rem); }
+.hero .actions { margin: 1.5rem 0 0; }
+.hero-figure img {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  min-height: 13rem;
+  object-fit: cover;
+  object-position: 50% 60%;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 90%, transparent), linear-gradient(180deg, transparent, #000 12%, #000 78%, transparent);
+  -webkit-mask-composite: source-in;
+  mask-image: linear-gradient(90deg, transparent, #000 12%, #000 90%, transparent), linear-gradient(180deg, transparent, #000 12%, #000 78%, transparent);
+  mask-composite: intersect;
+}
+.hero-figure figcaption { margin-top: -.4rem; padding-right: 10%; font: 400 .6875rem/1 var(--mono); color: var(--muted); text-align: right; }
+@media (min-width: 62rem) {
+  .hero-body { grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); align-items: end; gap: 2.5rem; }
+  .hero-copy { padding-bottom: 2.25rem; }
+  .hero-figure img { max-height: calc(100dvh - 20.5rem); }
+}
+/* Short laptop screens: the whole hero, picture included, stays in the first screen. */
+@media (min-width: 62rem) and (max-height: 51rem) {
+  .hero { padding-block: 1.25rem 1.5rem; }
+  .hero .kicker { margin-bottom: .6rem; }
+  .hero-body { margin-top: 1.5rem; }
+  .hero-copy { padding-bottom: 1.25rem; }
+  .hero-figure img { max-height: calc(100dvh - 20.75rem); }
+}
+
+/* ---------------------------------------------------------------- the symptoms and the three situations */
+.situations { padding-block: var(--band) clamp(3.5rem, 7vw, 6rem); border-top: 1px solid var(--rule); }
+.statement { max-width: 22em; font-weight: 300; font-stretch: 80%; font-size: clamp(1.7rem, 3.6vw, 3.25rem); line-height: 1.12; letter-spacing: -.012em; }
+.statement span { display: block; text-wrap: balance; }
+.statement span + span { margin-top: .35em; }
+.situations .doors-q { margin-top: clamp(3rem, 6vw, 5rem); }
+.situations .doors { margin-top: 1.5rem; border-top: 1px solid var(--rule-strong); }
+.situations .door { display: grid; grid-template-columns: minmax(0, 1fr) 2rem; gap: .35rem 1.5rem; align-items: baseline; padding-block: 1.35rem; border-bottom: 1px solid var(--rule); }
+.situations .door::after { content: "\2192"; grid-row: 1; grid-column: 2; justify-self: end; font-size: 1.4rem; line-height: 1; color: var(--accent); transition: transform .35s var(--ease); }
+.situations .door-t { font-weight: 620; font-stretch: 80%; font-size: clamp(1.35rem, 2.1vw, 1.9rem); line-height: 1.15; transition: color .2s, transform .35s var(--ease); }
+.situations .door-d { grid-column: 1 / -1; color: var(--ink-2); }
+.situations .door:hover .door-t { color: var(--accent); transform: translateX(.4rem); }
+.situations .door:hover::after { transform: translateX(.4rem); }
+@media (min-width: 52rem) {
+  .situations .door { grid-template-columns: minmax(0, 5fr) minmax(0, 6fr) 2rem; }
+  .situations .door-d { grid-column: 2; grid-row: 1; }
+  .situations .door::after { grid-column: 3; }
+}
+
+/* ---------------------------------------------------------------- what you can check */
+.figures { padding-block: var(--band); background: var(--ground-deep); }
+.fig-grid { display: grid; margin-top: 2rem; border-top: 1px solid var(--rule-strong); }
+.fig { position: relative; isolation: isolate; display: flex; flex-direction: column; gap: .6rem; padding-block: clamp(1.5rem, 3vw, 2.5rem); border-bottom: 1px solid var(--rule); overflow: hidden; }
+.fig-n { font-weight: 660; font-stretch: 66%; font-size: clamp(3.25rem, 6.6vw, 5.75rem); line-height: .9; letter-spacing: -.02em; font-variant-numeric: lining-nums tabular-nums; }
+.fig-lead .fig-n { font-size: clamp(5.5rem, 16vw, 14rem); color: var(--accent); }
+.fig-t { max-width: 34ch; color: var(--ink-2); }
+.fig-go { margin-top: auto; padding-top: 1rem; font-weight: 620; font-stretch: 88%; transition: color .2s; }
+.fig-go::after { content: " \2192"; color: var(--accent); }
+.fig:hover .fig-go { color: var(--accent); }
+.fig-art { width: 100%; margin-top: 1.25rem; -webkit-mask-image: linear-gradient(180deg, #000 55%, transparent); mask-image: linear-gradient(180deg, #000 55%, transparent); }
+@media (min-width: 56rem) {
+  .fig-grid { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); }
+  .fig-lead { grid-row: 1 / span 2; min-height: 30rem; padding-right: 2.5rem; border-right: 1px solid var(--rule); }
+  .fig:not(.fig-lead) { padding-left: 2.5rem; }
+  .fig-art {
+    position: absolute; right: 0; bottom: 0; z-index: -1; width: min(60%, 27rem); margin: 0;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 45%), linear-gradient(180deg, transparent, #000 35%, #000 70%, transparent);
+    -webkit-mask-composite: source-in;
+    mask-image: linear-gradient(90deg, transparent, #000 45%), linear-gradient(180deg, transparent, #000 35%, #000 70%, transparent);
+    mask-composite: intersect;
+  }
+}
+
+/* ---------------------------------------------------------------- how the work goes: three panels that stack */
+.method { padding-top: var(--band); }
+.method h2 { margin-bottom: 2rem; }
+.stack li { position: sticky; top: calc(var(--nav) + 8px); z-index: 1; background: var(--ground); }
+.stack li:nth-child(1) { --to: 33.4%; }
+.stack li:nth-child(2) { --to: 66.7%; background: var(--panel); }
+.stack li:nth-child(3) { --to: 100%; background: var(--ground-deep); }
+.step { display: grid; align-content: space-between; gap: 2rem; min-height: min(44vh, 25rem); padding-bottom: clamp(1.5rem, 3vw, 2.5rem); }
+/* The rule on top of each panel is the tape again: it has run a third, two thirds, all the way. */
+.step-rule {
+  height: 10px;
+  background:
+    linear-gradient(90deg, var(--accent), var(--accent)) 0 0 / var(--to) 2px no-repeat,
+    linear-gradient(90deg, var(--rule-strong) 1px, transparent 1px) 0 0 / 60px 10px repeat-x,
+    linear-gradient(90deg, var(--rule) 1px, transparent 1px) 0 0 / 12px 5px repeat-x;
+}
+.step-body { display: grid; gap: 1rem; align-items: end; }
+.step h3 { font-weight: 700; font-stretch: 62%; font-size: clamp(4.5rem, 15vw, 13rem); line-height: .86; letter-spacing: -.02em; }
+.step p { max-width: 26ch; font-size: clamp(1.125rem, 1.7vw, 1.5rem); line-height: 1.35; color: var(--ink-2); }
+@media (max-width: 51.99rem) { .step { min-height: min(38vh, 19rem); } }
+@media (min-width: 52rem) {
+  .step-body { grid-template-columns: minmax(0, 8fr) minmax(0, 4fr); }
+  .step p { padding-bottom: .9rem; }
+}
+
+/* ---------------------------------------------------------------- the desk: nine objects */
+.kit { padding-block: var(--band) clamp(3rem, 6vw, 5rem); }
+.kit-note { max-width: 44ch; margin-top: .75rem; color: var(--ink-2); }
+.strip {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: clamp(15.5rem, 23vw, 19rem);
+  gap: 1.25rem;
+  margin-top: calc(2rem - 6px);
+  padding: 6px var(--edge) 1rem; /* 6px on top: room for the focus ring, which the scroller would cut */
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  scroll-padding-inline: var(--edge);
+  scrollbar-width: thin;
+  scrollbar-color: var(--rule-strong) transparent;
+}
+.strip li { scroll-snap-align: start; }
+.tile { display: grid; gap: .5rem; align-content: start; }
+.tile-frame { display: block; overflow: hidden; background: var(--ground-deep); }
+.tile img { width: 100%; aspect-ratio: 5 / 4; object-fit: cover; transition: transform .6s var(--ease); }
+.tile h3 { margin-top: .4rem; transition: color .2s; }
+.tile p { font-size: .9688rem; line-height: 1.5; color: var(--ink-2); }
+.tile .tile-limit { font-size: .875rem; color: var(--muted); }
+.tile:hover img { transform: scale(1.04); }
+.tile:hover h3 { color: var(--accent); }
+.kit-foot { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: .75rem 2rem; margin-top: 1rem; }
+.kit-credit { font: 400 .75rem/1.4 var(--mono); color: var(--muted); }
+
+/* ---------------------------------------------------------------- the argument */
+.home-thesis { display: grid; gap: 2.5rem; padding: var(--band) var(--edge); background: var(--panel); }
+.thesis-head p { max-width: 30ch; margin-top: 1rem; font-size: 1.1875rem; line-height: 1.45; color: var(--ink-2); }
+.thesis-body li { max-width: 60ch; padding-block: 1.6rem; color: var(--ink-2); }
+.thesis-body li:first-child { padding-top: 0; }
+.thesis-body li + li { border-top: 1px solid var(--rule); }
+.thesis-body li strong { display: block; margin-bottom: .6rem; font-weight: 640; font-stretch: 82%; font-size: clamp(1.35rem, 2vw, 1.75rem); line-height: 1.15; color: var(--ink); }
+.note { max-width: 62ch; margin-top: 2rem; font-size: .9063rem; line-height: 1.55; color: var(--muted); }
+@media (min-width: 60rem) {
+  .home-thesis { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 4rem; }
+  .thesis-head { position: sticky; top: 6.5rem; align-self: start; }
+}
+
+/* ---------------------------------------------------------------- how I work, engagements, proof, terms */
+.home-pillars { display: grid; gap: 1px; width: min(100% - 2.5rem, 84rem); margin: var(--band) auto; border: 1px solid var(--rule); background: var(--rule); }
+.pillar { display: flex; flex-direction: column; gap: .8rem; padding: clamp(1.5rem, 3vw, 2.5rem); background: var(--ground); }
+.pillar h2 { font-size: clamp(1.5rem, 2.3vw, 2.1rem); }
+.pillar p { max-width: 54ch; color: var(--ink-2); }
+.pillar:first-child { justify-content: flex-end; min-height: 20rem; }
+.pillar:nth-child(2) { background: var(--tint); }
+/* The yard at night stands behind the first pillar once the desk's files exist. */
+.has-desk .pillar:first-child {
+  background:
+    linear-gradient(180deg, rgba(16, 18, 23, .12) 0%, rgba(16, 18, 23, .78) 46%, var(--ground) 88%),
+    url("files/desk/yard.webp") center / cover no-repeat var(--ground);
+}
+@media (min-width: 58rem) {
+  .home-pillars { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); }
+  .pillar:first-child { grid-row: 1 / span 3; min-height: 32rem; }
+}
+
+/* ---------------------------------------------------------------- where the work is */
+.index { padding-bottom: var(--band); }
+.index-grid { display: grid; gap: 3rem; }
+.index .doors-q { font-size: clamp(1.5rem, 2.2vw, 2rem); }
+.index .doors { margin-top: 1rem; }
+.index .doors li + li { border-top: 1px solid var(--rule); }
+.index .door { display: block; padding-block: 1rem; }
+.index .door-t { display: block; font-weight: 620; font-stretch: 82%; font-size: 1.25rem; line-height: 1.2; transition: color .2s; }
+.index .door-d { display: block; margin-top: .2rem; font-size: .9688rem; color: var(--ink-2); }
+.index .door:hover .door-t { color: var(--accent); }
+@media (min-width: 56rem) { .index-grid { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 4rem; } }
+
+/* ---------------------------------------------------------------- field notes and short answers */
+#library { padding-block: var(--band); background: var(--ground-deep); }
+.notes { display: grid; gap: 2.5rem; margin-top: 2rem; }
+.note-item h3 { font-weight: 300; font-stretch: 78%; font-size: clamp(1.8rem, 3.2vw, 2.9rem); line-height: 1.04; letter-spacing: -.012em; }
+.note-item h3 a { transition: color .2s; }
+.note-item h3 a:hover { color: var(--accent); }
+.note-item p { max-width: 46ch; margin-top: .75rem; color: var(--ink-2); }
+.note-item .meta { margin-top: .9rem; font: 500 .8125rem/1.2 var(--mono); }
+.note-item .meta a { color: var(--accent); transition: color .2s; }
+.note-item .meta a:hover { color: var(--accent-up); }
+#questions { margin-top: clamp(3rem, 6vw, 5rem); }
+.qa { display: grid; gap: 0 4rem; margin-top: 1.25rem; }
+.qa details { margin: 0; padding-block: .7rem; border: 0; }
+.qa summary { display: grid; grid-template-columns: 1.4rem minmax(0, 1fr); gap: .4rem; list-style: none; line-height: 1.35; transition: color .2s; }
+.qa summary::-webkit-details-marker { display: none; }
+.qa summary::before { content: "+"; font-family: var(--mono); color: var(--accent); }
+.qa details[open] summary { margin-bottom: 0; }
+.qa details[open] summary::before { content: "-"; }
+.qa summary:hover { color: var(--accent); }
+.qa .short { margin: .5rem 0 .4rem 1.8rem; font-size: .9688rem; color: var(--ink-2); }
+#library .next { margin-top: 2.5rem; }
+@media (min-width: 52rem) {
+  .notes { grid-template-columns: 1fr 1fr; gap: 4rem; }
+  .qa { grid-template-columns: 1fr 1fr; }
+}
+
+/* ---------------------------------------------------------------- the closing call */
+.close { padding-block: clamp(5rem, 10vw, 9rem); }
+.close-link { display: inline-block; font-weight: 660; font-stretch: 66%; font-size: clamp(2.6rem, 8.5vw, 8rem); line-height: .95; letter-spacing: -.02em; transition: color .25s; }
+.close-link span { display: inline-block; color: var(--accent); transition: transform .35s var(--ease); }
+.close-link:hover { color: var(--accent); }
+.close-link:hover span { transform: translateX(.12em); }
+.close p { max-width: 52ch; margin-top: 1.5rem; color: var(--ink-2); }
+
+/* ---------------------------------------------------------------- motion */
+@keyframes rise { from { opacity: 0; transform: translateY(14px); } }
+@keyframes lamp { from { opacity: 0; transform: scale(1.025); } }
+@keyframes lit { from { opacity: .22; } to { opacity: 1; } }
+@keyframes arrive { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: none; } }
+
+@media (prefers-reduced-motion: no-preference) {
+  /* On load: the headline, then the line and the buttons, while the lamp comes on. */
+  .hero .kicker, .h1-a, .h1-b, .hero .lede, .hero .actions { animation: rise .8s var(--ease) both; }
+  .h1-a { animation-delay: .05s; }
+  .h1-b { animation-delay: .14s; }
+  .hero .lede { animation-delay: .24s; }
+  .hero .actions { animation-delay: .32s; }
+  .hero-figure img { animation: lamp 1.4s var(--ease) .1s both; }
+
+  @supports (animation-timeline: view()) {
+    /* The three symptoms light up one after another as they are read. */
+    .statement span { animation: lit linear both; animation-timeline: view(); animation-range: entry 10% cover 42%; }
+    /* Blocks arrive as they enter the screen. */
+    .situations .doors li, .fig, .tile, .thesis-body li, .pillar, .index .doors li, .note-item {
+      animation: arrive linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 42%;
+    }
+  }
+}

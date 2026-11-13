@@ -274,128 +274,266 @@ def test_removed_files_are_not_kept(tmp_path):
 
 # ---------------------------------------------------------------- the plates of the method section
 
-SCENE_FIGURE = re.compile(r'<figure class="scene">.*?</figure>', re.S)
+# ---------------------------------------------------------------- the home page, from top to bottom
+
+HOME_FIGURE = re.compile(r'<a class="fig[^"]*" href="([^"]+)">\s*<span class="fig-n">(.*?)</span>\s*'
+                         r'<span class="fig-t">(.*?)</span>\s*<span class="fig-go">(.*?)</span>', re.S)
+KIT_TILE = re.compile(r'<li><a class="tile" href="([^"]+)">(.*?)</a></li>', re.S)
+MAKERS = re.compile(r"\b(?:Stanley|FatMax|Insta360|DJI|Ironclad)\b", re.I)  # who made the real objects
+SCRIPT = re.compile(r'<script(?! type="application/ld\+json")')
+HERO_WORDS = 20  # the line under the headline is read in one breath
 
 
-def home_with_plates(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, count: int) -> tuple[Path, str]:
-    """Builds the site as if `count` plates, in both sizes, were in src/files/plates/."""
+def section_of(text: str, anchor: str) -> str:
+    """The markup of the section that carries this id, up to where it closes."""
+    return text.split(f'id="{anchor}"', 1)[1].split("</section>", 1)[0]
+
+
+def desk_keys() -> list[str]:
+    return [item.key for item in build.DESK]
+
+
+def test_the_hero_fits_a_first_screen(site):
+    """One headline, a short line under it, the contact button and one more link. Nothing else."""
+    root, pages = site
+    home = build.find(pages, "index")
+    hero = section_of(read(root, home), "hero")
+    assert hero.count("<h1") == 1
+    lede = re.sub(r"<[^>]+>", " ", re.search(r'<p class="lede">(.*?)</p>', hero, re.S).group(1))
+    assert 0 < len(lede.split()) <= HERO_WORDS, lede
+    assert len(CONTACT_BUTTON.findall(hero)) == 1
+    assert hero.count('class="btn btn-ghost"') == 1
+    assert home.base_line and home.base_line[:24] not in html.unescape(hero)   # where I work goes at the foot
+
+
+def test_home_names_the_symptoms_before_asking_which_one(site):
+    root, pages = site
+    home = build.find(pages, "index")
+    block = section_of(read(root, home), "situations")
+    statement = block.split('<p class="statement">', 1)[1].split("</p>", 1)[0]
+    lines = [html.unescape(line) for line in re.findall(r"<span>(.*?)</span>", statement)]
+    assert lines == list(home.symptoms) and len(lines) == 3
+    assert all(line.endswith(".") for line in lines)
+    assert block.index('class="statement"') < block.index('class="doors-q"')
+
+
+def test_home_shows_three_figures_each_with_its_page(site):
+    root, pages = site
+    figures = HOME_FIGURE.findall(section_of(read(root, build.find(pages, "index")), "proof"))
+    assert [number for _, number, _, _ in figures] == [figure.number for figure in build.HOME_FIGURES]
+    assert len(figures) == 3
+    for link, number, caption, label in figures:
+        assert number in FIGURES, number
+        assert (root / link / "index.html").is_file(), link
+        assert caption.strip() and label.strip(), number
+
+
+def test_the_method_is_three_steps_that_need_no_picture(site):
+    root, pages = site
+    method = section_of(read(root, build.find(pages, "index")), "method")
+    steps = re.findall(r"<h3>(.*?)</h3>\s*<p>(.*?)</p>", method, re.S)
+    assert steps == [(build.esc(title), build.esc(text)) for title, text in build.METHOD_STEPS]
+    assert len(steps) == 3
+    assert "<svg" not in method and "<img" not in method
+
+
+def test_short_answers_open_in_place(site):
+    root, pages = site
+    text = read(root, build.find(pages, "index"))
+    library = text.split('<section id="library">', 1)[1].split("</section>", 1)[0]
+    questions = [page for page in pages if page.kind == "question"]
+    assert library.count("<details>") == len(questions) > 0
+    for page in questions:
+        assert f'href="{page.slug}/"' in library, page.slug
+    for note in (page for page in pages if page.kind == "note"):
+        assert f'href="{note.slug}/"' in library, note.slug
+
+
+def test_home_ends_on_the_same_call_as_it_opens(site):
+    root, pages = site
+    home = build.find(pages, "index")
+    text = read(root, home)
+    closing = section_of(text, "contact")
+    address = CONTACT_BUTTON.findall(text)[0]
+    assert f'href="{address}"' in closing                        # the same address and subject
+    assert build.esc(home.cta or build.DEFAULT_CTA) in closing   # and the same words
+    assert home.base_line[:24] in html.unescape(closing)
+
+
+def test_home_has_its_own_style_sheet_and_no_other_page_does(site):
+    root, pages = site
+    for page in pages:
+        assert ('href="home.css"' in read(root, page)) == page.is_home, page.slug
+    css = (root / "home.css").read_text(encoding="utf-8")
+    assert "prefers-color-scheme" not in css      # dark only, like the rest of the site
+    assert "prefers-reduced-motion" in css        # what moves stops for whoever asks
+
+
+def test_fonts_are_served_by_the_site_itself(site):
+    root, pages = site
+    for page in pages:
+        text = read(root, page)
+        assert "fonts.googleapis.com" not in text and "fonts.gstatic.com" not in text, page.slug
+    css = (root / "style.css").read_text(encoding="utf-8")
+    assert len(build.FONT_FILES) == 2
+    for name in build.FONT_FILES:
+        assert (root / "files" / "fonts" / name).is_file(), name
+        assert f'url("files/fonts/{name}")' in css, name
+    assert css.count("font-display: swap") == len(build.FONT_FILES)
+
+
+def test_no_page_runs_a_script(site):
+    root, pages = site
+    for page in pages:
+        assert not SCRIPT.search(read(root, page)), page.slug
+
+
+UNSTYLED = ("landing", "page")  # they name the kind of article; nothing is drawn differently for them yet
+
+
+def test_every_class_a_page_carries_has_a_rule(site):
+    """The markup and the two style sheets are written apart: a class one of them forgot shows up here."""
+    root, pages = site
+    css = (root / "style.css").read_text(encoding="utf-8") + (root / "home.css").read_text(encoding="utf-8")
+    for page in pages:
+        tokens = {token for value in re.findall(r'class="([^"]+)"', read(root, page)) for token in value.split()}
+        orphans = sorted(token for token in tokens
+                         if not token.startswith("kind-") and token not in UNSTYLED
+                         and not re.search(rf"\.{re.escape(token)}(?![\w-])", css))
+        assert not orphans, (page.slug, orphans)
+
+
+# ---------------------------------------------------------------- the desk
+
+def home_with_desk(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, missing: tuple[str, ...] = ()) -> tuple[Path, str]:
+    """Builds the site as if desk.py had written the files of the desk in src/files/desk/, but for `missing`."""
     files = tmp_path / "files-src"
-    (files / "plates").mkdir(parents=True)
-    for number in range(1, count + 1):
-        for small in (False, True):
-            (files / "plates" / build.plate_name(number, small)).write_bytes(b"RIFF")
+    (files / "desk").mkdir(parents=True)
+    for name in build.desk_files():
+        if name not in missing:
+            (files / "desk" / name).write_bytes(b"RIFF")
     monkeypatch.setattr(build, "FILES_DIR", files)
     root = tmp_path / "out"
     build.write_site(build.load_site(), root, root / "generated.json")
     return root, (root / "index.html").read_text(encoding="utf-8")
 
 
-def test_home_keeps_the_method_strip_until_every_plate_exists(tmp_path, monkeypatch):
-    _, text = home_with_plates(tmp_path, monkeypatch, count=len(build.SCENES) - 1)
-    assert '<ol class="steps">' in text
-    assert 'class="scene"' not in text
-
-
-def test_home_shows_the_four_scenes_once_the_plates_exist(tmp_path, monkeypatch):
-    root, text = home_with_plates(tmp_path, monkeypatch, count=len(build.SCENES))
-    figures = SCENE_FIGURE.findall(text)
-    assert len(figures) == len(build.SCENES) == 4
-    assert '<ol class="steps">' not in text
-    assert text.count('id="method"') == 1
-    width, height = build.PLATE_SIZE
-    for number, figure in enumerate(figures, 1):
-        assert f'src="files/plates/scene-{number}.webp"' in figure, number
-        assert f'files/plates/scene-{number}-800.webp 800w' in figure, number
-        assert f'width="{width}" height="{height}"' in figure, number
-        assert re.search(r'alt="[^"]{40,}"', figure), number
-        assert (root / "files" / "plates" / f"scene-{number}.webp").is_file(), number
-    visible = main_text(text)
-    assert not BANNED.search(visible)
-    assert not SPANISH.search(visible)
-    assert not COMPANY_VOICE.search(visible)
-    assert not set(NUMBER.findall(FORM_NAMES.sub(" ", visible))) - FIGURES.keys()
-
-
-# ---------------------------------------------------------------- the kit
-
-KIT_FIGURE = re.compile(r'<li><a class="fig" href="([^"]+)">(.*?)</a></li>', re.S)
-KIT_PICTURE = re.compile(r'src="files/kit/([a-z-]+)\.webp"')
-KIT_MAKERS = re.compile(r"\b(?:Stanley|FatMax|Insta360|DJI|Ironclad)\b", re.I)  # who made the real objects
-
-
-def home_with_kit(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, keys: list[str]) -> tuple[Path, str]:
-    """Builds the site as if the pictures of these figures, in both sizes, were in src/files/kit/."""
-    files = tmp_path / "files-src"
-    (files / "kit").mkdir(parents=True)
-    for key in keys:
-        for small in (False, True):
-            (files / "kit" / build.figure_name(key, small)).write_bytes(b"RIFF")
-    monkeypatch.setattr(build, "FILES_DIR", files)
-    root = tmp_path / "out"
-    build.write_site(build.load_site(), root, root / "generated.json")
-    return root, (root / "index.html").read_text(encoding="utf-8")
-
-
-def kit_keys() -> list[str]:
-    return [figure.key for figure in build.KIT]
-
-
-def test_home_has_no_kit_until_two_figures_exist(tmp_path, monkeypatch):
-    _, text = home_with_kit(tmp_path, monkeypatch, kit_keys()[:build.KIT_MIN - 1])
+@pytest.mark.parametrize("missing", ["desk.webp", "desk-800.webp", "kit-tape.webp", "chart.webp", "yard.webp"])
+def test_home_shows_no_picture_of_the_desk_until_every_file_exists(tmp_path, monkeypatch, missing):
+    assert missing in build.desk_files()
+    _, text = home_with_desk(tmp_path, monkeypatch, missing=(missing,))
+    assert 'class="hero-figure"' not in text
     assert 'id="kit"' not in text
+    assert "files/desk/" not in text
+    assert "has-desk" not in text
+    assert len(CONTACT_BUTTON.findall(text)) == 1   # the page still stands without it
 
 
-def test_a_figure_needs_its_picture_in_both_sizes(tmp_path, monkeypatch):
-    key = kit_keys()[0]
-    (tmp_path / "kit").mkdir()
-    (tmp_path / "kit" / build.figure_name(key)).write_bytes(b"RIFF")
-    monkeypatch.setattr(build, "FILES_DIR", tmp_path)
-    assert build.kit_ready() == []
-    (tmp_path / "kit" / build.figure_name(key, small=True)).write_bytes(b"RIFF")
-    assert [figure.key for figure in build.kit_ready()] == [key]
+def test_the_desk_stands_beside_the_headline(tmp_path, monkeypatch):
+    root, text = home_with_desk(tmp_path, monkeypatch)
+    assert text.index("<h1") < text.index('class="hero-figure"') < text.index('id="situations"')
+    figure = text.split('class="hero-figure"', 1)[1].split("</figure>", 1)[0]
+    width, height = build.DESK_SIZE
+    picture = re.search(r'<img src="files/desk/desk\.webp"[^>]*>', figure).group(0)
+    assert f'files/desk/desk-{build.DESK_SMALL}.webp {build.DESK_SMALL}w' in picture
+    assert f'width="{width}" height="{height}"' in picture
+    assert re.search(r'alt="[^"]{60,}"', picture)   # the picture is described for whoever cannot see it
+    assert 'loading="lazy"' not in picture           # it is in the first screen
+    assert "<figcaption>Illustration</figcaption>" in figure   # it is not a photograph, and the page says so
+    assert (root / "files" / "desk" / "desk.webp").is_file()
+    assert 'class="kind-home has-desk"' in text
 
 
-def test_home_shows_the_figures_that_exist_in_the_order_of_the_plate(tmp_path, monkeypatch):
-    keys = kit_keys()
-    root, text = home_with_kit(tmp_path, monkeypatch, [keys[2], keys[0]])  # written out of order, and not all
-    figures = KIT_FIGURE.findall(text)
-    assert [KIT_PICTURE.search(body).group(1) for _, body in figures] == [keys[0], keys[2]]
-    assert text.count('id="kit"') == 1
-    assert text.index('id="method"') < text.index('id="kit"') < text.index('class="home-body"')
-    for _, body in figures:
-        key = KIT_PICTURE.search(body).group(1)
-        assert f'files/kit/{key}-{build.KIT_SMALL}.webp {build.KIT_SMALL}w' in body, key
-        assert f'width="{build.KIT_SIZE}" height="{build.KIT_SIZE}"' in body, key
-        assert 'alt=""' in body and 'loading="lazy"' in body, key  # the name beside the picture says what it is
-        assert (root / "files" / "kit" / f"{key}.webp").is_file(), key
+def test_every_object_on_the_desk_has_a_tile_that_leads_to_its_page(tmp_path, monkeypatch):
+    root, text = home_with_desk(tmp_path, monkeypatch)
+    tiles = KIT_TILE.findall(section_of(text, "kit"))
+    assert [link for link, _ in tiles] == [f"{item.slug}/" for item in build.DESK]
+    assert len(set(desk_keys())) == len(desk_keys()) == 9
+    width, height = build.TILE_SIZE
+    for (link, body), item in zip(tiles, build.DESK):
+        key = item.key
+        assert re.fullmatch(r"[a-z]+(?:-[a-z]+)*", key)   # a key is also part of a file name
+        assert f'<img src="files/desk/{build.tile_name(key)}" width="{width}" height="{height}" alt=""' in body, key
+        assert 'loading="lazy"' in body, key
+        assert f"<h3>{build.esc(item.name)}</h3>" in body, key
+        assert f"<p>{build.esc(item.text)}</p>" in body, key
+        assert ('class="tile-limit"' in body) == bool(item.rule), key
+        assert not item.rule or f'<p class="tile-limit">{build.esc(item.rule)}</p>' in body, key
+        assert (root / link / "index.html").is_file(), link
+        assert (root / "files" / "desk" / build.tile_name(key)).is_file(), key
 
 
-def test_every_figure_of_the_kit_opens_a_page_of_its_own(tmp_path, monkeypatch):
-    keys = kit_keys()
-    assert len(set(keys)) == len(keys) >= build.KIT_MIN
-    assert all(re.fullmatch(r"[a-z]+(?:-[a-z]+)*", key) for key in keys)  # a key is also a file name
-    root, text = home_with_kit(tmp_path, monkeypatch, keys)
-    figures = KIT_FIGURE.findall(text)
-    assert len(figures) == len(build.KIT)
-    assert len({door for door, _ in figures}) == len(figures)  # no two figures open the same page
-    for (door, body), figure in zip(figures, build.KIT):
-        assert door == f"{figure.slug}/"
-        assert (root / door / "index.html").is_file(), door
-        assert f'<span class="fig-t">{build.esc(figure.name)}</span>' in body, figure.key
-        assert f'<span class="fig-d">{build.esc(figure.line)}</span>' in body, figure.key
-        assert ('class="fig-r"' in body) == bool(figure.rule), figure.key
-        assert not figure.rule or f'<span class="fig-r">{build.esc(figure.rule)}</span>' in body, figure.key
-
-
-def test_the_kit_follows_the_rules_of_the_commercial_pages(tmp_path, monkeypatch):
-    _, text = home_with_kit(tmp_path, monkeypatch, kit_keys())
+def test_the_desk_follows_the_rules_of_the_commercial_pages(tmp_path, monkeypatch):
+    _, text = home_with_desk(tmp_path, monkeypatch)
     visible = main_text(text)
     assert not BANNED.search(visible)
     assert not SPANISH.search(visible)
     assert not COMPANY_VOICE.search(visible)
-    assert not KIT_MAKERS.search(text)  # no maker is named: not in the text, not in a file name
-    # "Fig. 1" is written by the style sheet, so the page prints no figure that lacks a source
+    assert not MAKERS.search(text)   # no maker is named: not in the text, not in a file name
     assert not set(NUMBER.findall(FORM_NAMES.sub(" ", visible))) - FIGURES.keys()
+    assert not SCRIPT.search(text)
+    assert len(CONTACT_BUTTON.findall(text)) == 1
+
+
+def write_marks(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, marks: dict) -> Path:
+    path = tmp_path / "desk.json"
+    path.write_text(json.dumps(marks), encoding="utf-8")
+    monkeypatch.setattr(build, "DESK_SPOTS", path)
+    return path
+
+
+def test_an_object_left_unmarked_is_an_error(tmp_path, monkeypatch):
+    first, second, *rest = desk_keys()
+    write_marks(tmp_path, monkeypatch, {"spots": {key: [5, 40, 8, 20] for key in rest}})
+    with pytest.raises(ValueError, match=rf"desk\.json: no mark for {first}, {second}$"):
+        build.desk_spots()
+
+
+def test_a_mark_for_an_unknown_object_is_an_error(tmp_path, monkeypatch):
+    spots = {key: [5, 40, 8, 20] for key in desk_keys()} | {"hammer": [5, 5, 5, 5]}
+    write_marks(tmp_path, monkeypatch, {"spots": spots})
+    with pytest.raises(ValueError, match="unknown object 'hammer'"):
+        build.desk_spots()
+
+
+def test_no_marks_file_means_no_marks(tmp_path):
+    assert build.load_spots(tmp_path / "desk.json") == {}
+    assert build.load_details(tmp_path / "desk.json") == {}
+
+
+def test_details_are_marked_like_objects(tmp_path, monkeypatch):
+    spots = {key: [5, 40, 8, 20] for key in desk_keys()}
+    path = write_marks(tmp_path, monkeypatch, {"spots": spots, "details": {"chart": [70, 30, 20, 25]}})
+    assert build.load_details(path) == {"chart": (70, 30, 20, 25)}
+    assert build.load_spots(path).keys() == set(desk_keys())
+    path.write_text(json.dumps({"spots": spots, "details": {"window": [1, 1, 5, 5]}}), encoding="utf-8")
+    with pytest.raises(ValueError, match=r"desk\.json: unknown detail 'window'"):
+        build.load_details(path)
+    path.write_text(json.dumps({"spots": spots, "details": {"yard": [90, 1, 20, 5]}}), encoding="utf-8")
+    with pytest.raises(ValueError, match=r"desk\.json: yard lies outside the picture"):
+        build.load_details(path)
+
+
+@pytest.mark.parametrize("content, fault", [
+    ("{not json", "is not valid JSON"),
+    ('{"marks": {}}', 'needs a "spots" object'),
+    ('{"spots": []}', 'needs a "spots" object'),
+    ('{"spots": {"tape": 5}}', "tape needs four numbers: left, top, width and height"),
+    ('{"spots": {"tape": [1, 2, 3]}}', "tape needs four numbers: left, top, width and height"),
+    ('{"spots": {"tape": [1, 2, "3", 4]}}', "tape needs four numbers: left, top, width and height"),
+    ('{"spots": {"tape": [true, 2, 3, 4]}}', "tape needs four numbers: left, top, width and height"),
+    ('{"spots": {"tape": [NaN, 2, 3, 4]}}', "tape needs four numbers: left, top, width and height"),
+    ('{"spots": {"tape": [10, 20, 0, 5]}}', "tape has no width or no height"),
+    ('{"spots": {"tape": [10, 20, 5, -5]}}', "tape has no width or no height"),
+    ('{"spots": {"tape": [96, 20, 5, 5]}}', "tape lies outside the picture"),
+    ('{"spots": {"tape": [10, 90, 5, 20]}}', "tape lies outside the picture"),
+    ('{"spots": {"tape": [-1, 20, 5, 5]}}', "tape lies outside the picture"),
+])
+def test_marks_that_cannot_be_used_name_the_file_and_the_fault(tmp_path, content, fault):
+    path = tmp_path / "desk.json"
+    path.write_text(content, encoding="utf-8")
+    with pytest.raises(ValueError, match=re.escape(f"desk.json: {fault}")):
+        build.load_spots(path)
 
 
 # ---------------------------------------------------------------- front matter errors
