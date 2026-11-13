@@ -10,7 +10,7 @@ python build.py
 python -m pytest
 ```
 
-`build.py` writes the HTML at the repository root, together with `robots.txt`, `sitemap.xml` and `404.html`. Folders of pages that were removed from `src/pages/` are deleted on the next build. Files in `src/files/` (the one-page plan, the two fonts and the pictures of the desk) are copied to `files/`.
+`build.py` writes the HTML, assets, `files/` and `sitemap.xml` inside `landpage/`, and writes `robots.txt`, a neutral `404.html` and `.nojekyll` at the repository root (so `/` serves 404). Folders of pages that were removed from `src/pages/` are deleted on the next build. Files in `src/files/` (the one-page plan, the two fonts and the pictures of the desk) are copied to `landpage/files/`.
 
 ## Page types
 

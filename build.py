@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
-"""Build the static site at the repository root from src/pages/*.md.
+"""Build the static site under landpage/ from src/pages/*.md.
 
 Usage:
     python build.py
 
 Each page is a Markdown file that starts with a front matter block: "key: value"
 lines between two "---" lines, where a repeated key ("cite", "offer") makes a
-list. The build writes index.html, one folder per page, style.css, favicon.svg,
-the files in src/files/, robots.txt, sitemap.xml, 404.html and .nojekyll.
+list. The build writes the site inside landpage/ (index.html, one folder per
+page, style.css, favicon.svg, the files in src/files/, and sitemap.xml) and
+writes robots.txt, a neutral 404.html and .nojekyll at the repository root.
 Folders of pages that no longer exist are removed, using src/generated.json as
 the record of what it wrote.
 
@@ -38,13 +39,15 @@ from urllib.parse import quote
 import markdown
 
 ROOT = Path(__file__).resolve().parent
+SITE_DIR = "landpage"
+OUT = ROOT / SITE_DIR
 SRC = ROOT / "src"
 PAGES_DIR = SRC / "pages"
 FILES_DIR = SRC / "files"
 MANIFEST = SRC / "generated.json"
 ASSETS = ("style.css", "home.css", "favicon.svg")
 
-SITE_URL = "https://esstipi-debug.github.io"
+SITE_URL = f"https://esstipi-debug.github.io/{SITE_DIR}"
 AUTHOR = "Marcos Stipicich"
 AUTHOR_ROLE = "Deployment Strategist · Supply Chain & Operations"
 AUTHOR_SLUG = "marcos-stipicich"
@@ -890,21 +893,25 @@ def render_page(page: Page, pages: list[Page]) -> str:
 
 
 def not_found_html() -> str:
-    return f"""<!doctype html>
+    return """<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Page not found · {AUTHOR}</title>
+<title>404 · Page not found</title>
 <meta name="robots" content="noindex">
 <meta name="color-scheme" content="dark">
-<link rel="icon" href="/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="/style.css">
+<style>
+body{margin:0;background:#101217;color:#e6e8ec;font:16px/1.6 system-ui,-apple-system,sans-serif}
+main{max-width:34rem;margin:18vh auto 0;padding:0 1.25rem}
+h1{font-size:1.25rem;font-weight:600;margin:0 0 .5rem}
+p{color:#9ca3af;margin:0}
+</style>
 </head>
 <body>
 <main class="wrap">
 <h1>Page not found</h1>
-<p>The page you asked for is not here. <a href="/">Go to the home page</a>.</p>
+<p>There is nothing at this address.</p>
 </main>
 </body>
 </html>
@@ -945,7 +952,13 @@ def write_text(path: Path, text: str) -> None:
     path.write_text(text, encoding="utf-8", newline="\n")
 
 
-def write_site(pages: list[Page], root: Path = ROOT, manifest: Path = MANIFEST) -> None:
+def write_site(
+    pages: list[Page],
+    root: Path = OUT,
+    manifest: Path = MANIFEST,
+    host_root: Path | None = None,
+) -> None:
+    site_host = root if host_root is None else host_root
     remove_stale(pages, root, manifest)
     for page in pages:
         write_text(root / page.path / "index.html", render_page(page, pages))
@@ -954,10 +967,10 @@ def write_site(pages: list[Page], root: Path = ROOT, manifest: Path = MANIFEST) 
     shutil.rmtree(root / "files", ignore_errors=True)  # files/ is generated: a file removed from src/files/ goes too
     if FILES_DIR.is_dir():
         shutil.copytree(FILES_DIR, root / "files")
-    write_text(root / "robots.txt", robots_txt())
     write_text(root / "sitemap.xml", sitemap_xml(pages))
-    write_text(root / "404.html", not_found_html())
-    write_text(root / ".nojekyll", "")
+    write_text(site_host / "robots.txt", robots_txt())
+    write_text(site_host / "404.html", not_found_html())
+    write_text(site_host / ".nojekyll", "")
     current = sorted(page.slug for page in pages if not page.is_home)
     write_text(manifest, json.dumps(current, indent=2) + "\n")
 
@@ -965,8 +978,8 @@ def write_site(pages: list[Page], root: Path = ROOT, manifest: Path = MANIFEST) 
 def main() -> int:
     logging.basicConfig(level=logging.INFO, format="%(message)s")
     pages = load_site()
-    write_site(pages)
-    log.info("built %d pages at %s", len(pages), ROOT)
+    write_site(pages, OUT, MANIFEST, host_root=ROOT)
+    log.info("built %d pages at %s", len(pages), OUT)
     return 0
 
 

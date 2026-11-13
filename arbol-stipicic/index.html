@@ -1,0 +1,1387 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b0d12">
+<meta name="robots" content="noindex,nofollow">
+<title>Familia Stipicic · Tronco Barbun</title>
+<style>
+:root{
+  --bg:#0b0d12; --surface:#12151d; --surface-2:#181c26; --surface-3:#212634;
+  --line:#252b39; --line-2:#323a4d;
+  --text:#eceef3; --muted:#9ba4b7; --faint:#6c7589;
+  --accent:#8cc8ff; --accent-ink:#0b0d12;
+  --radius:14px; --header-h:60px; --tab-h:62px;
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--text);font:15px/1.45 var(--sans);-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
+body{overflow:hidden;display:flex;flex-direction:column;height:100dvh}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;padding:0}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:8px}
+svg.i{width:20px;height:20px;flex:none;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+
+/* ---------- Encabezado ---------- */
+.top{flex:none;min-height:var(--header-h);display:flex;align-items:center;gap:16px;padding:0 16px;padding-top:env(safe-area-inset-top);border-bottom:1px solid var(--line);background:var(--bg);position:relative;z-index:25}
+.brand{min-width:0;flex:1}
+.brand h1{margin:0;font:600 19px/1.15 var(--serif);letter-spacing:.01em}
+.brand p{margin:2px 0 0;font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.seg{display:none;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:3px}
+.seg button{padding:7px 16px;border-radius:999px;color:var(--muted);font-weight:600;font-size:13.5px}
+.seg button[aria-pressed=true]{background:var(--surface-3);color:var(--text)}
+.search-desk{display:none;position:relative}
+.search-field{position:relative;display:flex;align-items:center}
+.search-field svg{position:absolute;left:12px;color:var(--faint);pointer-events:none}
+.search-input{width:300px;height:40px;border-radius:999px;background:var(--surface);border:1px solid var(--line);color:var(--text);padding:0 14px 0 38px;font:inherit;font-size:14px}
+.search-input::placeholder{color:var(--faint)}
+.search-input:focus{outline:none;border-color:var(--line-2);background:var(--surface-2)}
+.results{list-style:none;margin:0;padding:6px}
+.drop{position:absolute;top:46px;right:0;width:380px;max-height:62vh;overflow:auto;background:var(--surface);border:1px solid var(--line-2);border-radius:var(--radius);box-shadow:0 24px 60px rgba(0,0,0,.55);z-index:40}
+.res{display:flex;gap:10px;align-items:flex-start;width:100%;text-align:left;padding:10px 12px;border-radius:10px}
+.res:hover,.res[aria-selected=true]{background:var(--surface-3)}
+.res .dot{margin-top:6px}
+.res strong{display:block;font-weight:600;font-size:14.5px}
+.res small{display:block;font-size:12px;color:var(--muted)}
+.res mark{background:none;color:var(--accent);font-weight:700}
+.res-empty{padding:18px 14px;color:var(--muted);font-size:13.5px}
+
+/* ---------- Estructura ---------- */
+.app{flex:1;min-height:0;display:flex;position:relative}
+.views{flex:1;min-width:0;position:relative}
+.view{position:absolute;inset:0}
+
+/* ---------- Abanico ---------- */
+#v-fan{display:flex;flex-direction:column}
+.crumbs{flex:none;display:flex;gap:4px;align-items:center;overflow-x:auto;padding:10px 16px;scrollbar-width:none;white-space:nowrap}
+.crumbs::-webkit-scrollbar{display:none}
+.crumbs button{padding:6px 11px;border-radius:999px;font-size:13px;color:var(--muted);background:var(--surface);border:1px solid var(--line)}
+.crumbs button:hover{color:var(--text)}
+.crumbs button[aria-current]{color:var(--text);border-color:var(--line-2);background:var(--surface-3);font-weight:600}
+.crumbs .sep{color:var(--faint);font-size:12px;padding:0 1px}
+.fan-wrap{flex:1;min-height:0;position:relative;outline:none}
+.fan-wrap:focus-visible{box-shadow:inset 0 0 0 2px var(--accent)}
+#fan{position:absolute;inset:0;width:100%;height:100%;display:block;cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none}
+#fan.dragging{cursor:grabbing}
+.sector{stroke:var(--bg);stroke-width:1.4;stroke-linejoin:round;fill-rule:evenodd}
+.sector:hover{filter:brightness(1.18)}
+.sector.sel{stroke:#fff;stroke-width:2.6}
+.band{pointer-events:none}
+.lbl{pointer-events:none;font-family:var(--sans);font-weight:600;dominant-baseline:central;text-anchor:middle}
+.center-disk{cursor:pointer}
+.center-disk text{pointer-events:none;font-family:var(--sans);text-anchor:middle;dominant-baseline:central}
+.center-disk circle{stroke:var(--line-2);stroke-width:1.5}
+.center-disk:hover circle{stroke:var(--muted)}
+.tools{position:absolute;right:12px;bottom:12px;display:flex;flex-direction:column;gap:8px}
+.tool{width:44px;height:44px;border-radius:12px;background:rgba(18,21,29,.9);border:1px solid var(--line-2);display:grid;place-items:center;color:var(--muted);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.tool:hover{color:var(--text);border-color:var(--muted)}
+.legend{position:absolute;left:12px;bottom:12px;right:68px;display:flex;flex-wrap:wrap;gap:6px;pointer-events:none}
+.chip{pointer-events:auto;display:inline-flex;align-items:center;gap:7px;padding:7px 11px;border-radius:999px;background:rgba(18,21,29,.9);border:1px solid var(--line);font-size:12.5px;white-space:nowrap;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.chip:hover{border-color:var(--line-2)}
+.dot{width:9px;height:9px;border-radius:50%;flex:none;display:inline-block}
+.hint{position:absolute;left:50%;top:6px;transform:translateX(-50%);padding:8px 14px;border-radius:999px;background:var(--surface-3);border:1px solid var(--line-2);font-size:12.5px;color:var(--text);white-space:nowrap;transition:opacity .4s;pointer-events:none;max-width:calc(100% - 24px);overflow:hidden;text-overflow:ellipsis}
+.hint.off{opacity:0}
+
+/* ---------- Organigrama ---------- */
+.org-wrap{position:absolute;inset:0;outline:none;overflow:hidden;background:
+  radial-gradient(circle at 1px 1px,#1a1f2b 1px,transparent 0) 0 0/22px 22px}
+.org-wrap:focus-visible{box-shadow:inset 0 0 0 2px var(--accent)}
+#org{position:absolute;inset:0;width:100%;height:100%;display:block;cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none}
+#org.dragging{cursor:grabbing}
+.org-bar{position:absolute;top:10px;left:12px;right:12px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;pointer-events:none}
+.org-bar>*{pointer-events:auto}
+.org-bar .seg-on{display:flex;background:rgba(18,21,29,.92)}
+.org-bar .seg-on button{display:inline-flex;align-items:center;gap:6px;padding:6px 12px}
+.org-bar .seg-on svg.i{width:17px;height:17px}
+.btn.sm{min-height:34px;padding:0 12px;font-size:13px;background:rgba(33,38,52,.92)}
+.org-bar .count{margin-left:auto;font-size:12px;color:var(--faint);pointer-events:none}
+.olink{fill:none;stroke:#3a4256;stroke-width:1.6}
+.olink.on{stroke:var(--accent);stroke-width:2.4}
+.onode{cursor:pointer}
+.onode .card{fill:var(--surface-2);stroke:var(--line-2);stroke-width:1}
+.onode:hover .card{fill:var(--surface-3)}
+.onode.sel .card{stroke:var(--accent);stroke-width:2}
+.onode.dim{opacity:.55}
+.onode text{font-family:var(--sans);pointer-events:none}
+.onode .nm{font-size:13px;font-weight:600;fill:var(--text)}
+.onode .mt{font-size:11px;fill:var(--muted)}
+.otg circle{fill:var(--surface-3);stroke:var(--line-2)}
+.otg:hover circle{stroke:var(--accent)}
+.otg text{font-size:10.5px;font-weight:700;fill:var(--text);text-anchor:middle;dominant-baseline:central}
+
+/* ---------- Ficha ---------- */
+.sheet{background:var(--surface);display:flex;flex-direction:column;min-height:0}
+.grab{display:none}
+.sheet-head{padding:18px 20px 16px;border-bottom:1px solid var(--line);position:relative}
+.sheet-body{flex:1;overflow:auto;padding:4px 20px 28px;overscroll-behavior:contain}
+.x{position:absolute;top:12px;right:12px;width:36px;height:36px;border-radius:10px;display:grid;place-items:center;color:var(--muted)}
+.x:hover{background:var(--surface-3);color:var(--text)}
+.badges{display:flex;gap:6px;flex-wrap:wrap;margin:0 40px 10px 0}
+.badge{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;padding:4px 9px;border-radius:999px;background:var(--surface-3);color:var(--muted);font-weight:600}
+.sheet h2{margin:0;font:600 23px/1.2 var(--serif);padding-right:36px}
+.sheet .lead{margin:6px 0 0;color:var(--muted);font-size:13.5px}
+.actions{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+.btn{min-height:40px;padding:0 14px;border-radius:10px;background:var(--surface-3);border:1px solid var(--line-2);font-size:13.5px;font-weight:600;display:inline-flex;align-items:center;gap:7px;text-decoration:none}
+.btn:hover{border-color:var(--muted)}
+.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:transparent}
+.btn.primary:hover{filter:brightness(1.08)}
+.btn svg.i{width:17px;height:17px}
+.sec{margin-top:22px}
+.sec h3{margin:0 0 9px;font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--faint);font-weight:700}
+.people{display:flex;flex-wrap:wrap;gap:6px}
+.person{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:10px;background:var(--surface-2);border:1px solid var(--line);font-size:13.5px;text-align:left;line-height:1.25}
+button.person:hover{border-color:var(--line-2);background:var(--surface-3)}
+.person.static{color:var(--muted)}
+.person em{font-style:normal;color:var(--faint);font-size:12px}
+.union{padding:12px;border-radius:12px;background:var(--surface-2);border:1px solid var(--line);margin-bottom:8px}
+.union-who{display:flex;justify-content:space-between;gap:8px;align-items:baseline;margin-bottom:8px}
+.union-who strong{font-weight:600}
+.union-who span{font-size:12px;color:var(--faint);white-space:nowrap}
+.union .person{background:var(--surface)}
+.note{margin:0;color:var(--text);font-size:14px}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:18px}
+.stat{padding:12px;border-radius:12px;background:var(--surface-2);border:1px solid var(--line)}
+.stat b{display:block;font:600 22px/1.1 var(--serif)}
+.stat span{font-size:12px;color:var(--muted)}
+.src{margin-top:22px;font-size:12px;color:var(--faint)}
+
+.portrait{display:block;width:96px;height:96px;margin-top:18px;border-radius:16px;object-fit:cover;border:1px solid var(--line-2);background:var(--surface-2)}
+
+/* ---------- Formulario de datos ---------- */
+.dlg{width:min(480px,calc(100vw - 24px));max-height:calc(100dvh - 24px);padding:0;border:1px solid var(--line-2);border-radius:18px;background:var(--surface);color:var(--text);box-shadow:0 30px 80px rgba(0,0,0,.6);overflow:hidden}
+.dlg[open]{display:flex;flex-direction:column}
+.dlg::backdrop{background:rgba(5,6,9,.74)}
+.dlg-head{padding:18px 20px 14px;border-bottom:1px solid var(--line);position:relative}
+.dlg-head h2{margin:0;font:600 20px/1.2 var(--serif);padding-right:40px}
+.dlg-head p{margin:5px 0 0;font-size:13px;color:var(--muted)}
+.dlg-body{flex:1;min-height:0;overflow:auto;padding:4px 20px calc(20px + env(safe-area-inset-bottom));overscroll-behavior:contain}
+.edit{display:grid;gap:14px;margin-top:12px}
+.edit-foot{display:flex;gap:10px;align-items:center;justify-content:flex-end;flex-wrap:wrap}
+.field{display:grid;gap:5px}
+.field>span{font-size:12.5px;font-weight:600;color:var(--muted)}
+.field small{color:var(--faint);font-weight:400}
+.inp{width:100%;min-height:44px;border-radius:10px;background:var(--surface-2);border:1px solid var(--line-2);color:var(--text);padding:10px 12px;font:inherit;font-size:16px}
+textarea.inp{min-height:88px;resize:vertical}
+.inp::placeholder{color:var(--faint)}
+.inp:focus{outline:none;border-color:var(--accent)}
+.photo-pick{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.photo-prev{width:72px;height:72px;border-radius:12px;object-fit:cover;border:1px solid var(--line-2)}
+.dlg-msg{margin:0 auto 0 0;font-size:13px;color:var(--muted)}
+.dlg-msg.err{color:#ff9d9d}
+.btn[disabled]{opacity:.55;cursor:default}
+.done{padding:40px 24px 28px;text-align:center;display:grid;gap:10px;justify-items:center}
+.done h2{margin:0;font:600 22px/1.2 var(--serif)}
+.done p{margin:0 0 10px;color:var(--muted);font-size:14px;max-width:34ch}
+
+/* ---------- Barra inferior (celular) ---------- */
+.tabbar{position:fixed;left:0;right:0;bottom:0;height:calc(var(--tab-h) + env(safe-area-inset-bottom));padding-bottom:env(safe-area-inset-bottom);display:flex;background:rgba(11,13,18,.95);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-top:1px solid var(--line);z-index:20}
+.tabbar button{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:11.5px;color:var(--faint);font-weight:600}
+.tabbar button[aria-pressed=true]{color:var(--text)}
+.tabbar button[aria-pressed=true] svg{color:var(--accent)}
+
+/* ---------- Búsqueda a pantalla completa (celular) ---------- */
+.ss{position:fixed;inset:0;background:var(--bg);z-index:50;display:flex;flex-direction:column;padding-top:env(safe-area-inset-top)}
+.ss-head{display:flex;gap:8px;align-items:center;padding:12px 16px;border-bottom:1px solid var(--line)}
+.ss-head .search-field{flex:1}
+.ss-head .search-input{width:100%;height:46px;font-size:16px}
+.ss-head .btn{min-height:46px;background:none;border-color:transparent;color:var(--muted)}
+.ss-list{flex:1;overflow:auto;padding:6px 8px 24px}
+
+/* ---------- Escritorio ---------- */
+@media (min-width:900px){
+  .seg,.search-desk{display:flex}
+  .search-desk{display:block}
+  .tabbar,.ss{display:none!important}
+  .sheet{width:400px;flex:none;border-left:1px solid var(--line)}
+  .sheet .x{display:none}
+}
+/* ---------- Celular ---------- */
+@media (max-width:899px){
+  .view{bottom:calc(var(--tab-h) + env(safe-area-inset-bottom))}
+  .brand h1{font-size:18px}
+  .legend{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+  .legend::-webkit-scrollbar{display:none}
+  .org-bar .seg-on span{display:none}
+  .org-bar .count{display:none}
+  .sheet{position:fixed;left:0;right:0;bottom:calc(var(--tab-h) + env(safe-area-inset-bottom));height:calc(90dvh - var(--tab-h));border-radius:20px 20px 0 0;border:1px solid var(--line-2);border-bottom:0;z-index:30;transform:translateY(calc(100% + var(--tab-h) + 60px));transition:transform .34s cubic-bezier(.2,.8,.2,1);box-shadow:0 -24px 60px rgba(0,0,0,.55)}
+  .sheet[data-state=peek]{transform:translateY(calc(100% - var(--peek,180px)))}
+  .sheet[data-state=full]{transform:none}
+  .sheet.drag{transition:none}
+  .grab{display:grid;place-items:center;padding:10px 0 2px;touch-action:none;cursor:grab}
+  .grab span{width:42px;height:5px;border-radius:3px;background:var(--line-2)}
+  .sheet-head{padding-top:6px;touch-action:none}
+}
+@media (prefers-reduced-motion:reduce){
+  *{transition:none!important;animation:none!important}
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="brand">
+    <h1>Familia Stipicic</h1>
+    <p id="stats-line">Tronco Barbun</p>
+  </div>
+  <div class="seg" role="group" aria-label="Vista">
+    <button type="button" data-view="fan" aria-pressed="true">Abanico</button>
+    <button type="button" data-view="tree" aria-pressed="false">Árbol</button>
+  </div>
+  <div class="search-desk">
+    <div class="search-field">
+      <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="q-desk" class="search-input" type="search" placeholder="Buscar persona o pareja…" autocomplete="off" aria-label="Buscar persona o pareja" aria-controls="drop" aria-expanded="false">
+    </div>
+    <div id="drop" class="drop" hidden><ul class="results" id="res-desk" role="listbox" aria-label="Resultados"></ul></div>
+  </div>
+</header>
+
+<div class="app">
+  <main class="views">
+    <section id="v-fan" class="view" aria-label="Abanico familiar">
+      <nav class="crumbs" id="crumbs" aria-label="Ruta en el abanico"></nav>
+      <div class="fan-wrap" id="fan-wrap" tabindex="0" aria-label="Abanico. Flechas para girar, más y menos para acercar, Escape para subir un nivel.">
+        <svg id="fan" role="img" aria-label="Abanico de descendientes"></svg>
+        <div class="hint" id="hint"></div>
+        <div class="legend" id="legend"></div>
+        <div class="tools">
+          <button class="tool" type="button" id="t-in" aria-label="Acercar" title="Acercar"><svg class="i" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>
+          <button class="tool" type="button" id="t-out" aria-label="Alejar" title="Alejar"><svg class="i" viewBox="0 0 24 24"><path d="M5 12h14"/></svg></button>
+          <button class="tool" type="button" id="t-straight" aria-label="Enderezar el abanico" title="Enderezar"><svg class="i" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg></button>
+          <button class="tool" type="button" id="t-root" aria-label="Volver a la raíz" title="Volver a la raíz"><svg class="i" viewBox="0 0 24 24"><path d="m3 11 9-7 9 7"/><path d="M5 10v10h14V10"/></svg></button>
+        </div>
+      </div>
+    </section>
+
+    <section id="v-tree" class="view" aria-label="Organigrama familiar" hidden>
+      <div class="org-wrap" id="org-wrap" tabindex="0" aria-label="Organigrama. Flechas para mover, más y menos para acercar.">
+        <svg id="org" role="img" aria-label="Organigrama de descendientes"></svg>
+        <div class="org-bar">
+          <div class="seg seg-on" role="group" aria-label="Orientación">
+            <button type="button" data-dir="h" aria-pressed="false" title="Horizontal"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="9" width="6" height="6" rx="1.5"/><rect x="15" y="3" width="6" height="6" rx="1.5"/><rect x="15" y="15" width="6" height="6" rx="1.5"/><path d="M9 12h3M12 6v12M12 6h3M12 18h3"/></svg><span>Horizontal</span></button>
+            <button type="button" data-dir="v" aria-pressed="false" title="Vertical"><svg class="i" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="6" rx="1.5"/><rect x="3" y="15" width="6" height="6" rx="1.5"/><rect x="15" y="15" width="6" height="6" rx="1.5"/><path d="M12 9v3M6 12h12M6 12v3M18 12v3"/></svg><span>Vertical</span></button>
+          </div>
+          <button class="btn sm" type="button" id="t-expand">Abrir todo</button>
+          <button class="btn sm" type="button" id="t-collapse">Cerrar</button>
+          <span class="count" id="tree-count"></span>
+        </div>
+        <div class="tools">
+          <button class="tool" type="button" id="o-in" aria-label="Acercar" title="Acercar"><svg class="i" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>
+          <button class="tool" type="button" id="o-out" aria-label="Alejar" title="Alejar"><svg class="i" viewBox="0 0 24 24"><path d="M5 12h14"/></svg></button>
+          <button class="tool" type="button" id="o-fit" aria-label="Ver todo" title="Ver todo"><svg class="i" viewBox="0 0 24 24"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/></svg></button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <aside class="sheet" id="sheet" data-state="closed" aria-labelledby="sheet-title">
+    <div class="grab" id="grab" role="button" tabindex="0" aria-label="Agrandar o achicar la ficha"><span></span></div>
+    <div class="sheet-head" id="sheet-head"></div>
+    <div class="sheet-body" id="sheet-body"></div>
+  </aside>
+</div>
+
+<nav class="tabbar" aria-label="Secciones">
+  <button type="button" data-view="fan" aria-pressed="true"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.5"/><path d="M12 3v5.5M12 15.5V21M3 12h5.5M15.5 12H21"/></svg>Abanico</button>
+  <button type="button" data-view="tree" aria-pressed="false"><svg class="i" viewBox="0 0 24 24"><path d="M5 5h6M9 12h10M9 19h10M7 5v14M7 12h2M7 19h2"/></svg>Árbol</button>
+  <button type="button" id="tab-search" aria-pressed="false"><svg class="i" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>Buscar</button>
+</nav>
+
+<div class="ss" id="ss" hidden role="dialog" aria-modal="true" aria-label="Buscar">
+  <div class="ss-head">
+    <div class="search-field">
+      <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="q-mob" class="search-input" type="search" placeholder="Nombre, apellido o pareja" autocomplete="off" aria-label="Buscar persona o pareja">
+    </div>
+    <button class="btn" type="button" id="ss-close">Cancelar</button>
+  </div>
+  <div class="ss-list"><ul class="results" id="res-mob" aria-label="Resultados"></ul></div>
+</div>
+
+<dialog class="dlg" id="dlg" aria-labelledby="dlg-title"></dialog>
+
+<script>
+'use strict';
+const DATA = {"metadata":{"title":"Árbol Genealógico Stipicic – Barbun","subtitle":"Linaje Histórico Barbun (Brač, Croacia – Punta Arenas / Chile)","revision":"Nov, 2022 – Rev 3 (Corregido con partición exacta de uniones)","sourceFile":"ARBOL_STIPICIC_(55).xlsx","totalBranches":6,"historicalContext":"Tronco fundacional originario de Barbun (isla de Brač, Dalmacia) establecido en el sur austral (Punta Arenas / Magallanes, Chile)."},"branches":[{"id":"barbun","name":"Tronco Barbun (Raíz)","patriarch":"Ivan Stipicic & Franka Vrsalovic","color":"#3B82F6","badge":"Tronco Principal","sheet":"HOJA 1 BARBUN"},{"id":"marinelic","name":"Rama II: Ivan (Zane) × Marinelic","patriarch":"Ivan (Zane) Stipicic & Perica Marinelic","color":"#10B981","badge":"Rama II - Zane","sheet":"HOJA 2 STIPICIC MARINELI"},{"id":"ursic","name":"Rama III: Juraj × Ursic","patriarch":"Juraj Stipicic & Jova Ursic","color":"#8B5CF6","badge":"Rama III - Juraj","sheet":"HOJA 3 STIPICIC URSIC"},{"id":"martinovic","name":"Rama IV: Jerónimo × Martinovic","patriarch":"Jerónimo Stipicic & Francisca Martinovic","color":"#F59E0B","badge":"Rama IV - Jerónimo","sheet":"HOJA4 STIPICIC MARTINOVIC"},{"id":"mladineo","name":"Rama V: Josip × Mladineo","patriarch":"Josip Stipicic & Catalina Mladineo","color":"#EC4899","badge":"Rama V - Josip","sheet":"HOJA 5 STIPICIC MLADINEO"},{"id":"ursic_stipicic","name":"Rama VI: Jerónima × Ursic","patriarch":"Jerónima Stipicic & Juan Ursic","color":"#06B6D4","badge":"Rama VI - Jerónima","sheet":"HOJA 6 URSIC STIPICIC"}],"persons":[{"id":"gen1_ivan","name":"Ivan","firstSurname":"Stipicic","secondSurname":"","fullName":"Ivan Stipicic","generation":1,"generationName":"Gen I (Tronco Raíz Barbun)","branchId":"barbun","isDescendant":true,"spouses":[{"name":"Franka Vrsalovic","role":"Esposa / Tronco Materno"}],"parentId":null,"motherName":"","childrenIds":["gen2_ivan"],"unions":[],"status":"registered","dates":"","notes":"Patriarca fundador de la línea Barbun en Brač.","sheet":"HOJA 1 BARBUN","familyGroup":""},{"id":"gen2_ivan","name":"Ivan","firstSurname":"Stipicic","secondSurname":"Vrsalovic","fullName":"Ivan Stipicic Vrsalovic","generation":2,"generationName":"Gen II (Bisabuelo)","branchId":"barbun","isDescendant":true,"spouses":[{"name":"Ursulu Martinic Debelu","role":"Esposa"}],"parentId":"gen1_ivan","motherName":"Franka Vrsalovic","childrenIds":["gen3_nikola","gen3_ivan_zane","gen3_juraj","gen3_jeronimo","gen3_josip","gen3_franka","gen3_jeronima"],"unions":[],"status":"registered","dates":"","notes":"Tronco directo bisabuelo enlazado con la familia Martinic Debelu.","sheet":"HOJA 1 BARBUN","familyGroup":""},{"id":"gen3_nikola","name":"Nikola","firstSurname":"Stipicic","secondSurname":"Martinic","fullName":"Nikola Stipicic Martinic","generation":3,"generationName":"Gen III (Hermanos Fundadores)","branchId":"barbun","isDescendant":true,"spouses":[],"parentId":"gen2_ivan","motherName":"Ursulu Martinic Debelu","childrenIds":[],"unions":[],"status":"no_data","dates":"","notes":"Sin datos en Hoja 1.","sheet":"HOJA 1 BARBUN","familyGroup":""},{"id":"gen3_ivan_zane","name":"Ivan (Zane)","firstSurname":"Stipicic","secondSurname":"Martinic","fullName":"Ivan (Zane) Stipicic Martinic","generation":3,"generationName":"Gen III (Hermanos Fundadores)","branchId":"marinelic","isDescendant":true,"spouses":[{"name":"Perich (Perica) Marinelic Gvardijan","role":"Esposa"}],"parentId":"gen2_ivan","motherName":"Ursulu Martinic Debelu","childrenIds":["m_ivan","m_nikola","m_jerko","m_aurelia","m_juraj_zorko","m_franka","m_jerka","m_josip_sibo","m_jerko_marijan","m_jerko_bernard"],"unions":[],"status":"registered","dates":"","notes":"Tronco de la Rama II (Zane × Marinelic).","sheet":"HOJA 2 STIPICIC MARINELI","familyGroup":""},{"id":"gen3_juraj","name":"Juraj","firstSurname":"Stipicic","secondSurname":"Martinic","fullName":"Juraj Stipicic Martinic","generation":3,"generationName":"Gen III (Hermanos Fundadores)","branchId":"ursic","isDescendant":true,"spouses":[{"name":"Jova Ursic Ostoic","role":"Esposa"}],"parentId":"gen2_ivan","motherName":"Ursulu Martinic Debelu","childrenIds":["u_doimo","u_juan_soltero","u_jeronimo","u_jose_maria"],"unions":[],"status":"registered","dates":"","notes":"Tronco de la Rama III (Juraj × Ursic).","sheet":"HOJA 3 STIPICIC URSIC","familyGroup":""},{"id":"gen3_jeronimo","name":"Jerónimo","firstSurname":"Stipicic","secondSurname":"Martinic","fullName":"Jerónimo Stipicic Martinic","generation":3,"generationName":"Gen III (Hermanos Fundadores)","branchId":"martinovic","isDescendant":true,"spouses":[{"name":"Francisca Martinovic","role":"Esposa"}],"parentId":"gen2_ivan","motherName":"Ursulu Martinic Debelu","childrenIds":["mart_juan","mart_aurelia","mart_jerka","mart_maria"],"unions":[],"status":"registered","dates":"","notes":"Tronco de la Rama IV (Jerónimo × Martinovic).","sheet":"HOJA4 STIPICIC MARTINOVIC","familyGroup":""},{"id":"gen3_josip","name":"Josip (José)","firstSurname":"Stipicic","secondSurname":"Martinic","fullName":"Josip (José) Stipicic Martinic","generation":3,"generationName":"Gen III (Hermanos Fundadores)","branchId":"mladineo","isDescendant":true,"spouses":[{"name":"Catalina Mladineo","role":"Esposa"}],"parentId":"gen2_ivan","motherName":"Ursulu Martinic Debelu","childrenIds":["mlad_ivo"],"unions":[],"status":"registered","dates":"","notes":"Tronco de la Rama V (Josip × Mladineo).","sheet":"HOJA 5 STIPICIC MLADINEO","familyGroup":""},{"id":"gen3_franka","name":"Franka","firstSurname":"Stipicic","secondSurname":"Martinic","fullName":"Franka Stipicic Martinic","generation":3,"generationName":"Gen III (Hermanos Fundadores)","branchId":"barbun","isDescendant":true,"spouses":[],"parentId":"gen2_ivan","motherName":"Ursulu Martinic Debelu","childrenIds":[],"unions":[],"status":"no_data","dates":"","notes":"Sin datos en Hoja 1.","sheet":"HOJA 1 BARBUN","familyGroup":""},{"id":"gen3_jeronima","name":"Jerónima","firstSurname":"Stipicic","secondSurname":"Martinic","fullName":"Jerónima Stipicic Martinic","generation":3,"generationName":"Gen III (Hermanos Fundadores)","branchId":"ursic_stipicic","isDescendant":true,"spouses":[{"name":"Juan Ursic Ostoic","role":"Esposo"}],"parentId":"gen2_ivan","motherName":"Ursulu Martinic Debelu","childrenIds":["urs_doimo","urs_catalina"],"unions":[],"status":"registered","dates":"","notes":"Tronco de la Rama VI (Jerónima × Ursic Ostoic).","sheet":"HOJA 6 URSIC STIPICIC","familyGroup":""},{"id":"m_ivan","name":"Ivan","firstSurname":"Stipicic","secondSurname":"Marinelic","fullName":"Ivan Stipicic Marinelic","generation":4,"generationName":"Gen IV (Hijos)","branchId":"marinelic","isDescendant":true,"spouses":[],"parentId":"gen3_ivan_zane","motherName":"Perica Marinelic","childrenIds":[],"unions":[],"status":"no_data","dates":"","notes":"","sheet":"HOJA 2 STIPICIC MARINELI","familyGroup":""},{"id":"m_nikola","name":"Nikola","firstSurname":"Stipicic","secondSurname":"Marinelic","fullName":"Nikola Stipicic Marinelic","generation":4,"generationName":"Gen IV (Hijos)","branchId":"marinelic","isDescendant":true,"spouses":[{"name":"Flora Vergara","role":"Esposa"}],"parentId":"gen3_ivan_zane","motherName":"Perica Marinelic","childrenIds":["m_nikola_nicolas"],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 2 STIPICIC MARINELI","familyGroup":""},{"id":"m_nikola_nicolas","name":"Nicolás","firstSurname":"Stipicic","secondSurname":"Vergara","fullName":"Nicolás Stipicic Vergara","generation":5,"generationName":"Gen V (Nietos)","branchId":"marinelic","isDescendant":true,"spouses":[{"name":"Silvia Barrientos","role":"Esposa"}],"parentId":"m_nikola","motherName":"Flora Vergara","childrenIds":["m_nicolas_cabral","m_jorge_ballesteros"],"unions":[],"status":"registered","dates":"","notes":"Sub-rama Stipicic Barrientos","sheet":"HOJA 2 STIPICIC MARINELI","familyGroup":""},{"id":"m_nicolas_cabral","name":"Nicolás","firstSurname":"Stipicic","secondSurname":"Barrientos","fullName":"Nicolás Stipicic Barrientos","generation":6,"generationName":"Gen VI (Bisnietos)","branchId":"marinelic","isDescendant":true,"spouses":[{"name":"Patricia Cabral","role":"Esposa"}],"parentId":"m_nikola_nicolas","motherName":"Silvia Barrientos","childrenIds":["m_cabral_nicolas","m_cabral_ivo"],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 2 STIPICIC MARINELI","familyGroup":""},{"id":"m_cabral_nicolas","name":"Nicolás","firstSurname":"Stipicic","secondSurname":"Cabral","fullName":"Nicolás Stipicic Cabral","generation":7,"generationName":"Gen VII (Tataranietos)","branchId":"marinelic","isDescendant":true,"spouses":[],"parentId":"m_nicolas_cabral","motherName":"Patricia Cabral","childrenIds":[],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 2 STIPICIC MARINELI","familyGroup":""},{"id":"m_cabral_ivo","name":"Ivo","firstSurname":"Stipicic","secondSurname":"Cabral","fullName":"Ivo Stipicic Cabral","generation":7,"generationName":"Gen VII (Tataranietos)","branchId":"marinelic","isDescendant":true,"spouses":[],"parentId":"m_nicolas_cabral","motherName":"Patricia Cabral","childrenIds":[],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 2 STIPICIC MARINELI","familyGroup":""},{"id":"m_jorge_ballesteros","name":"Jorge","firstSurname":"Stipicic","secondSurname":"Barrientos","fullName":"Jorge Stipicic Barrientos","generation":6,"generationName":"Gen VI (Bisnietos)","branchId":"marinelic","isDescendant":true,"spouses":[{"name":"Edita Ballesteros","role":"Esposa"}],"parentId":"m_nikola_nicolas","motherName":"Silvia Barrientos","childrenIds":["m_ballesteros_ana","m_ballesteros_incog"],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 2 STIPICIC MARINELI","familyGroup":""},{"id":"m_ballesteros_ana","name":"Ana","firstSurname":"Stipicic","secondSurname":"Ballesteros","fullName":"Ana Stipicic Ballesteros","generation":7,"generationName":"Gen VII (Tataranietos)","branchId":"marinelic","isDescendant":true,"spouses":[],"parentId":"m_jorge_ballesteros","motherName":"Edita Ballesteros","childrenIds":[],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 2 STIPICIC MARINELI","familyGroup":""},{"id":"m_ballesteros_incog","name":"[Hijo/a ?]","firstSurname":"Stipicic","secondSurname":"Ballesteros","fullName":"[Hijo/a ?] Stipicic Ballesteros","generation":7,"generationName":"Gen VII (Tataranietos)","branchId":"marinelic","isDescendant":true,"spouses":[],"parentId":"m_jorge_ballesteros","motherName":"Edita Ballesteros","childrenIds":[],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 2 STIPICIC MARINELI","familyGroup":""},{"id":"m_jerko","name":"Jerko","firstSurname":"Stipicic","secondSurname":"Marinelic","fullName":"Jerko Stipicic Marinelic","generation":4,"generationName":"Gen IV (Hijos)","branchId":"marinelic","isDescendant":true,"spouses":[],"parentId":"gen3_ivan_zane","motherName":"Perica Marinelic","childrenIds":[],"unions":[],"status":"no_data","dates":"","notes":"","sheet":"HOJA 2 STIPICIC MARINELI","familyGroup":""},{"id":"m_aurelia","name":"Aurelia","firstSurname":"Stipicic","secondSurname":"Marinelic","fullName":"Aurelia Stipicic Marinelic","generation":4,"generationName":"Gen IV (Hijos)","branchId":"marinelic","isDescendant":true,"spouses":[],"parentId":"gen3_ivan_zane","motherName":"Perica Marinelic","childrenIds":[],"unions":[],"status":"single","dates":"","notes":"Soltera.","sheet":"HOJA 2 STIPICIC MARINELI","familyGroup":""},{"id":"m_juraj_zorko","name":"Juraj (Zorko)","firstSurname":"Stipicic","secondSurname":"Marinelic","fullName":"Juraj (Zorko) Stipicic Marinelic","generation":4,"generationName":"Gen IV (Hijos)","branchId":"marinelic","isDescendant":true,"spouses":[{"name":"Marija Plenkovic","role":"Esposa"}],"parentId":"gen3_ivan_zane","motherName":"Perica Marinelic","childrenIds":["m_plenk_ivan","m_plenk_nila","m_plenk_frane","m_plenk_elda"],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 2 STIPICIC MARINELI","familyGroup":""},{"id":"m_plenk_ivan","name":"Ivan","firstSurname":"Stipicic","secondSurname":"Plenkovic","fullName":"Ivan Stipicic Plenkovic","generation":5,"generationName":"Gen V (Nietos)","branchId":"marinelic","isDescendant":true,"spouses":[{"name":"Radojka Lucin","role":"Esposa"}],"parentId":"m_juraj_zorko","motherName":"Marija Plenkovic","childrenIds":["m_lucin_tonci","m_lucin_zeljka","m_lucin_zorana"],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 2 STIPICIC MARINELI","familyGroup":""},{"id":"m_lucin_tonci","name":"Tonci","firstSurname":"Stipicic","secondSurname":"Lucin","fullName":"Tonci Stipicic Lucin","generation":6,"generationName":"Gen VI (Bisnietos)","branchId":"marinelic","isDescendant":true,"spouses":[{"name":"Neda Mandaric","role":"Esposa"}],"parentId":"m_plenk_ivan","motherName":"Radojka Lucin","childrenIds":["m_mand_ivan","m_mand_antonija"],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 2 STIPICIC MARINELI","familyGroup":""},{"id":"m_mand_ivan","name":"Ivan","firstSurname":"Stipicic","secondSurname":"Mandaric","fullName":"Ivan Stipicic Mandaric","generation":7,"generationName":"Gen VII (Tataranietos)","branchId":"marinelic","isDescendant":true,"spouses":[],"parentId":"m_lucin_tonci","motherName":"Neda Mandaric","childrenIds":[],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 2 STIPICIC MARINELI","familyGroup":""},{"id":"m_mand_antonija","name":"Antonija","firstSurname":"Stipicic","secondSurname":"Mandaric","fullName":"Antonija Stipicic Mandaric","generation":7,"generationName":"Gen VII (Tataranietos)","branchId":"marinelic","isDescendant":true,"spouses":[],"parentId":"m_lucin_tonci","motherName":"Neda Mandaric","childrenIds":[],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 2 STIPICIC MARINELI","familyGroup":""},{"id":"m_lucin_zeljka","name":"Zeljka","firstSurname":"Stipicic","secondSurname":"Lucin","fullName":"Zeljka Stipicic Lucin","generation":6,"generationName":"Gen VI (Bisnietos)","branchId":"marinelic","isDescendant":true,"spouses":[{"name":"Denis Belak","role":"Esposo"}],"parentId":"m_plenk_ivan","motherName":"Radojka Lucin","childrenIds":["m_belak_toni","m_belak_marko","m_belak_duje"],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 2 STIPICIC MARINELI","familyGroup":""},{"id":"m_belak_toni","name":"Toni","firstSurname":"Belak","secondSurname":"Stipicic","fullName":"Toni Belak Stipicic","generation":7,"generationName":"Gen VII (Tataranietos)","branchId":"marinelic","isDescendant":true,"spouses":[],"parentId":"m_lucin_zeljka","motherName":"Zeljka Stipicic Lucin","childrenIds":[],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 2 STIPICIC MARINELI","familyGroup":""},{"id":"m_belak_marko","name":"Marko","firstSurname":"Belak","secondSurname":"Stipicic","fullName":"Marko Belak Stipicic","generation":7,"generationName":"Gen VII (Tataranietos)","branchId":"marinelic","isDescendant":true,"spouses":[],"parentId":"m_lucin_zeljka","motherName":"Zeljka Stipicic Lucin","childrenIds":[],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 2 STIPICIC MARINELI","familyGroup":""},{"id":"m_belak_duje","name":"Duje","firstSurname":"Belak","secondSurname":"Stipicic","fullName":"Duje Belak Stipicic","generation":7,"generationName":"Gen VII (Tataranietos)","branchId":"marinelic","isDescendant":true,"spouses":[],"parentId":"m_lucin_zeljka","motherName":"Zeljka Stipicic Lucin","childrenIds":[],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 2 STIPICIC MARINELI","familyGroup":""},{"id":"m_lucin_zorana","name":"Zorana","firstSurname":"Stipicic","secondSurname":"Lucin","fullName":"Zorana Stipicic Lucin","generation":6,"generationName":"Gen VI (Bisnietos)","branchId":"marinelic","isDescendant":true,"spouses":[{"name":"Branimir Brstilo","role":"Esposo"}],"parentId":"m_plenk_ivan","motherName":"Radojka Lucin","childrenIds":["m_brst_marjana","m_brst_darija"],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 2 STIPICIC MARINELI","familyGroup":""},{"id":"m_brst_marjana","name":"Marjana","firstSurname":"Brstilo","secondSurname":"Stipicic","fullName":"Marjana Brstilo Stipicic","generation":7,"generationName":"Gen VII (Tataranietos)","branchId":"marinelic","isDescendant":true,"spouses":[],"parentId":"m_lucin_zorana","motherName":"Zorana Stipicic Lucin","childrenIds":[],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 2 STIPICIC MARINELI","familyGroup":""},{"id":"m_brst_darija","name":"Darija","firstSurname":"Brstilo","secondSurname":"Stipicic","fullName":"Darija Brstilo Stipicic","generation":7,"generationName":"Gen VII (Tataranietos)","branchId":"marinelic","isDescendant":true,"spouses":[],"parentId":"m_lucin_zorana","motherName":"Zorana Stipicic Lucin","childrenIds":[],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 2 STIPICIC MARINELI","familyGroup":""},{"id":"m_plenk_nila","name":"Nila","firstSurname":"Stipicic","secondSurname":"Plenkovic","fullName":"Nila Stipicic Plenkovic","generation":5,"generationName":"Gen V (Nietos)","branchId":"marinelic","isDescendant":true,"spouses":[{"name":"Igor Gudic","role":"Esposo"}],"parentId":"m_juraj_zorko","motherName":"Marija Plenkovic","childrenIds":["m_gudic_branko"],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 2 STIPICIC MARINELI","familyGroup":""},{"id":"m_gudic_branko","name":"Branko","firstSurname":"Gudic","secondSurname":"Stipicic","fullName":"Branko Gudic Stipicic","generation":6,"generationName":"Gen VI (Bisnietos)","branchId":"marinelic","isDescendant":true,"spouses":[],"parentId":"m_plenk_nila","motherName":"Nila Stipicic Plenkovic","childrenIds":[],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 2 STIPICIC MARINELI","familyGroup":""},{"id":"m_plenk_frane","name":"Frane","firstSurname":"Stipicic","secondSurname":"Plenkovic","fullName":"Frane Stipicic Plenkovic","generation":5,"generationName":"Gen V (Nietos)","branchId":"marinelic","isDescendant":true,"spouses":[{"name":"Rina Zuljevic","role":"Esposa"}],"parentId":"m_juraj_zorko","motherName":"Marija Plenkovic","childrenIds":["m_zulj_marija","m_zulj_magdalena","m_zulj_zorana"],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 2 STIPICIC MARINELI","familyGroup":""},{"id":"m_zulj_marija","name":"Marija","firstSurname":"Stipicic","secondSurname":"Zuljevic","fullName":"Marija Stipicic Zuljevic","generation":6,"generationName":"Gen VI (Bisnietos)","branchId":"marinelic","isDescendant":true,"spouses":[],"parentId":"m_plenk_frane","motherName":"Rina Zuljevic","childrenIds":[],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 2 STIPICIC MARINELI","familyGroup":""},{"id":"m_zulj_magdalena","name":"Magdalena","firstSurname":"Stipicic","secondSurname":"Zuljevic","fullName":"Magdalena Stipicic Zuljevic","generation":6,"generationName":"Gen VI (Bisnietos)","branchId":"marinelic","isDescendant":true,"spouses":[{"name":"Goran Kozina","role":"Esposo"}],"parentId":"m_plenk_frane","motherName":"Rina Zuljevic","childrenIds":["m_koz_antonija"],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 2 STIPICIC MARINELI","familyGroup":""},{"id":"m_koz_antonija","name":"Antonija","firstSurname":"Kozina","secondSurname":"Stipicic","fullName":"Antonija Kozina Stipicic","generation":7,"generationName":"Gen VII (Tataranietos)","branchId":"marinelic","isDescendant":true,"spouses":[],"parentId":"m_zulj_magdalena","motherName":"Magdalena Stipicic Zuljevic","childrenIds":[],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 2 STIPICIC MARINELI","familyGroup":""},{"id":"m_zulj_zorana","name":"Zorana","firstSurname":"Stipicic","secondSurname":"Zuljevic","fullName":"Zorana Stipicic Zuljevic","generation":6,"generationName":"Gen VI (Bisnietos)","branchId":"marinelic","isDescendant":true,"spouses":[{"name":"Josip Gudelj","role":"Esposo"}],"parentId":"m_plenk_frane","motherName":"Rina Zuljevic","childrenIds":["m_gudelj_josip","m_gudelj_mariana","m_gudelj_danijela"],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 2 STIPICIC MARINELI","familyGroup":""},{"id":"m_gudelj_josip","name":"Josip","firstSurname":"Gudelj","secondSurname":"Stipicic","fullName":"Josip Gudelj Stipicic","generation":7,"generationName":"Gen VII (Tataranietos)","branchId":"marinelic","isDescendant":true,"spouses":[],"parentId":"m_zulj_zorana","motherName":"Zorana Stipicic Zuljevic","childrenIds":[],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 2 STIPICIC MARINELI","familyGroup":""},{"id":"m_gudelj_mariana","name":"Mariana","firstSurname":"Gudelj","secondSurname":"Stipicic","fullName":"Mariana Gudelj Stipicic","generation":7,"generationName":"Gen VII (Tataranietos)","branchId":"marinelic","isDescendant":true,"spouses":[],"parentId":"m_zulj_zorana","motherName":"Zorana Stipicic Zuljevic","childrenIds":[],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 2 STIPICIC MARINELI","familyGroup":""},{"id":"m_gudelj_danijela","name":"Danijela","firstSurname":"Gudelj","secondSurname":"Stipicic","fullName":"Danijela Gudelj Stipicic","generation":7,"generationName":"Gen VII (Tataranietos)","branchId":"marinelic","isDescendant":true,"spouses":[],"parentId":"m_zulj_zorana","motherName":"Zorana Stipicic Zuljevic","childrenIds":[],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 2 STIPICIC MARINELI","familyGroup":""},{"id":"m_plenk_elda","name":"Elda","firstSurname":"Stipicic","secondSurname":"Plenkovic","fullName":"Elda Stipicic Plenkovic","generation":5,"generationName":"Gen V (Nietos)","branchId":"marinelic","isDescendant":true,"spouses":[],"parentId":"m_juraj_zorko","motherName":"Marija Plenkovic","childrenIds":[],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 2 STIPICIC MARINELI","familyGroup":""},{"id":"m_franka","name":"Franka","firstSurname":"Stipicic","secondSurname":"Marinelic","fullName":"Franka Stipicic Marinelic","generation":4,"generationName":"Gen IV (Hijos)","branchId":"marinelic","isDescendant":true,"spouses":[{"name":"Duje Bezmalinovic","role":"Esposo"}],"parentId":"gen3_ivan_zane","motherName":"Perica Marinelic","childrenIds":["m_bez_niko","m_bez_ivo","m_bez_jeroslava"],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 2 STIPICIC MARINELI","familyGroup":""},{"id":"m_bez_niko","name":"Niko","firstSurname":"Bezmalinovic","secondSurname":"Stipicic","fullName":"Niko Bezmalinovic Stipicic","generation":5,"generationName":"Gen V (Nietos)","branchId":"marinelic","isDescendant":true,"spouses":[{"name":"Bonina Lucksic","role":"Esposa"}],"parentId":"m_franka","motherName":"Franka Stipicic Marinelic","childrenIds":["m_luck_mislav","m_luck_gorjana","m_luck_tijana"],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 2 STIPICIC MARINELI","familyGroup":""},{"id":"m_luck_mislav","name":"Mislav","firstSurname":"Bezmalinovic","secondSurname":"Lucksic","fullName":"Mislav Bezmalinovic Lucksic","generation":6,"generationName":"Gen VI (Bisnietos)","branchId":"marinelic","isDescendant":true,"spouses":[{"name":"?","role":"Cónyuge"}],"parentId":"m_bez_niko","motherName":"Bonina Lucksic","childrenIds":["m_mis_danjiel","m_mis_duje"],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 2 STIPICIC MARINELI","familyGroup":""},{"id":"m_mis_danjiel","name":"Danjiel","firstSurname":"Bezmalinovic","secondSurname":"","fullName":"Danjiel Bezmalinovic","generation":7,"generationName":"Gen VII (Tataranietos)","branchId":"marinelic","isDescendant":true,"spouses":[],"parentId":"m_luck_mislav","motherName":"?","childrenIds":[],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 2 STIPICIC MARINELI","familyGroup":""},{"id":"m_mis_duje","name":"Duje","firstSurname":"Bezmalinovic","secondSurname":"","fullName":"Duje Bezmalinovic","generation":7,"generationName":"Gen VII (Tataranietos)","branchId":"marinelic","isDescendant":true,"spouses":[],"parentId":"m_luck_mislav","motherName":"?","childrenIds":[],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 2 STIPICIC MARINELI","familyGroup":""},{"id":"m_luck_gorjana","name":"Gorjana","firstSurname":"Bezmalinovic","secondSurname":"Lucksic","fullName":"Gorjana Bezmalinovic Lucksic","generation":6,"generationName":"Gen VI (Bisnietos)","branchId":"marinelic","isDescendant":true,"spouses":[{"name":"Bruno Anodic","role":"Esposo"}],"parentId":"m_bez_niko","motherName":"Bonina Lucksic","childrenIds":["m_anod_nico","m_anod_lara"],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 2 STIPICIC MARINELI","familyGroup":""},{"id":"m_anod_nico","name":"Nico","firstSurname":"Anodic","secondSurname":"Bezmalinovic","fullName":"Nico Anodic Bezmalinovic","generation":7,"generationName":"Gen VII (Tataranietos)","branchId":"marinelic","isDescendant":true,"spouses":[],"parentId":"m_luck_gorjana","motherName":"Gorjana Bezmalinovic Lucksic","childrenIds":[],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 2 STIPICIC MARINELI","familyGroup":""},{"id":"m_anod_lara","name":"Lara","firstSurname":"Anodic","secondSurname":"Bezmalinovic","fullName":"Lara Anodic Bezmalinovic","generation":7,"generationName":"Gen VII (Tataranietos)","branchId":"marinelic","isDescendant":true,"spouses":[],"parentId":"m_luck_gorjana","motherName":"Gorjana Bezmalinovic Lucksic","childrenIds":[],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 2 STIPICIC MARINELI","familyGroup":""},{"id":"m_luck_tijana","name":"Tijana","firstSurname":"Bezmalinovic","secondSurname":"Lucksic","fullName":"Tijana Bezmalinovic Lucksic","generation":6,"generationName":"Gen VI (Bisnietos)","branchId":"marinelic","isDescendant":true,"spouses":[{"name":"Stipe Borlaviv","role":"Esposo"}],"parentId":"m_bez_niko","motherName":"Bonina Lucksic","childrenIds":["m_borl_catalina"],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 2 STIPICIC MARINELI","familyGroup":""},{"id":"m_borl_catalina","name":"Catalina","firstSurname":"Borlaviv","secondSurname":"Bezmalinovic","fullName":"Catalina Borlaviv Bezmalinovic","generation":7,"generationName":"Gen VII (Tataranietos)","branchId":"marinelic","isDescendant":true,"spouses":[],"parentId":"m_luck_tijana","motherName":"Tijana Bezmalinovic Lucksic","childrenIds":[],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 2 STIPICIC MARINELI","familyGroup":""},{"id":"m_bez_ivo","name":"Ivo (+)","firstSurname":"Bezmalinovic","secondSurname":"Stipicic","fullName":"Ivo (+) Bezmalinovic Stipicic","generation":5,"generationName":"Gen V (Nietos)","branchId":"marinelic","isDescendant":true,"spouses":[{"name":"?","role":"Cónyuge"}],"parentId":"m_franka","motherName":"Franka Stipicic Marinelic","childrenIds":["m_bez_ivo_desc"],"unions":[],"status":"deceased","dates":"","notes":"","sheet":"HOJA 2 STIPICIC MARINELI","familyGroup":""},{"id":"m_bez_ivo_desc","name":"[Descendencia ?]","firstSurname":"Bezmalinovic","secondSurname":"","fullName":"[Descendencia ?] Bezmalinovic","generation":6,"generationName":"Gen VI (Bisnietos)","branchId":"marinelic","isDescendant":true,"spouses":[],"parentId":"m_bez_ivo","motherName":"?","childrenIds":[],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 2 STIPICIC MARINELI","familyGroup":""},{"id":"m_bez_jeroslava","name":"Jeroslava","firstSurname":"Bezmalinovic","secondSurname":"Stipicic","fullName":"Jeroslava Bezmalinovic Stipicic","generation":5,"generationName":"Gen V (Nietos)","branchId":"marinelic","isDescendant":true,"spouses":[{"name":"Ante Antonini","role":"Esposo"}],"parentId":"m_franka","motherName":"Franka Stipicic Marinelic","childrenIds":["m_ant_sonja","m_ant_zdeslav"],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 2 STIPICIC MARINELI","familyGroup":""},{"id":"m_ant_sonja","name":"Sonja","firstSurname":"Antonini","secondSurname":"Bezmalinovic","fullName":"Sonja Antonini Bezmalinovic","generation":6,"generationName":"Gen VI (Bisnietos)","branchId":"marinelic","isDescendant":true,"spouses":[],"parentId":"m_bez_jeroslava","motherName":"Jeroslava Bezmalinovic Stipicic","childrenIds":[],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 2 STIPICIC MARINELI","familyGroup":""},{"id":"m_ant_zdeslav","name":"Zdeslav (+)","firstSurname":"Antonini","secondSurname":"Bezmalinovic","fullName":"Zdeslav (+) Antonini Bezmalinovic","generation":6,"generationName":"Gen VI (Bisnietos)","branchId":"marinelic","isDescendant":true,"spouses":[],"parentId":"m_bez_jeroslava","motherName":"Jeroslava Bezmalinovic Stipicic","childrenIds":[],"unions":[],"status":"deceased","dates":"","notes":"","sheet":"HOJA 2 STIPICIC MARINELI","familyGroup":""},{"id":"m_jerka","name":"Jerka","firstSurname":"Stipicic","secondSurname":"Marinelic","fullName":"Jerka Stipicic Marinelic","generation":4,"generationName":"Gen IV (Hijos)","branchId":"marinelic","isDescendant":true,"spouses":[{"name":"John Robertson Dobman","role":"Esposo"}],"parentId":"gen3_ivan_zane","motherName":"Perica Marinelic","childrenIds":["m_rob_ivo","m_rob_rosemary","m_rob_danilo"],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 2 STIPICIC MARINELI","familyGroup":""},{"id":"m_rob_ivo","name":"Ivo","firstSurname":"Robertson","secondSurname":"Stipicic","fullName":"Ivo Robertson Stipicic","generation":5,"generationName":"Gen V (Nietos)","branchId":"marinelic","isDescendant":true,"spouses":[{"name":"Gloria Kusanovic","role":"Esposa"}],"parentId":"m_jerka","motherName":"Jerka Stipicic Marinelic","childrenIds":["m_kus_john_george"],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 2 STIPICIC MARINELI","familyGroup":""},{"id":"m_kus_john_george","name":"John George","firstSurname":"Robertson","secondSurname":"Kusanovic","fullName":"John George Robertson Kusanovic","generation":6,"generationName":"Gen VI (Bisnietos)","branchId":"marinelic","isDescendant":true,"spouses":[{"name":"?","role":"Cónyuge"}],"parentId":"m_rob_ivo","motherName":"Gloria Kusanovic","childrenIds":[],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 2 STIPICIC MARINELI","familyGroup":""},{"id":"m_rob_rosemary","name":"Rosemary","firstSurname":"Robertson","secondSurname":"Stipicic","fullName":"Rosemary Robertson Stipicic","generation":5,"generationName":"Gen V (Nietos)","branchId":"marinelic","isDescendant":true,"spouses":[{"name":"Rodrigo Solar","role":"Esposo"}],"parentId":"m_jerka","motherName":"Jerka Stipicic Marinelic","childrenIds":["m_solar_rosa_maria"],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 2 STIPICIC MARINELI","familyGroup":""},{"id":"m_solar_rosa_maria","name":"Rosa María","firstSurname":"Solar","secondSurname":"Robertson","fullName":"Rosa María Solar Robertson","generation":6,"generationName":"Gen VI (Bisnietos)","branchId":"marinelic","isDescendant":true,"spouses":[],"parentId":"m_rob_rosemary","motherName":"Rosemary Robertson Stipicic","childrenIds":[],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 2 STIPICIC MARINELI","familyGroup":""},{"id":"m_rob_danilo","name":"Danilo","firstSurname":"Robertson","secondSurname":"Stipicic","fullName":"Danilo Robertson Stipicic","generation":5,"generationName":"Gen V (Nietos)","branchId":"marinelic","isDescendant":true,"spouses":[{"name":"Norka Shaw","role":"1ra Pareja"},{"name":"Carmen Solo Zaldívar","role":"2da Pareja"}],"parentId":"m_jerka","motherName":"Jerka Stipicic Marinelic","childrenIds":["m_shaw_john_christian","m_shaw_michael_patrick","m_solo_jeremy_andrew"],"unions":[{"unionId":"danilo_shaw","partner":"Norka Shaw","type":"1ra Unión","childrenIds":["m_shaw_john_christian","m_shaw_michael_patrick"]},{"unionId":"danilo_solo","partner":"Carmen Solo Zaldívar","type":"2da Unión","childrenIds":["m_solo_jeremy_andrew"]}],"status":"registered","dates":"","notes":"","sheet":"HOJA 2 STIPICIC MARINELI","familyGroup":""},{"id":"m_shaw_john_christian","name":"John Christian","firstSurname":"Robertson","secondSurname":"Shaw","fullName":"John Christian Robertson Shaw","generation":6,"generationName":"Gen VI (Bisnietos)","branchId":"marinelic","isDescendant":true,"spouses":[{"name":"Ximena Salazar","role":"Esposa"}],"parentId":"m_rob_danilo","motherName":"Norka Shaw","childrenIds":["m_sal_juan","m_sal_luz"],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 2 STIPICIC MARINELI","familyGroup":""},{"id":"m_sal_juan","name":"Juan","firstSurname":"Robertson","secondSurname":"Salazar","fullName":"Juan Robertson Salazar","generation":7,"generationName":"Gen VII (Tataranietos)","branchId":"marinelic","isDescendant":true,"spouses":[],"parentId":"m_shaw_john_christian","motherName":"Ximena Salazar","childrenIds":[],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 2 STIPICIC MARINELI","familyGroup":""},{"id":"m_sal_luz","name":"Luz","firstSurname":"Robertson","secondSurname":"Salazar","fullName":"Luz Robertson Salazar","generation":7,"generationName":"Gen VII (Tataranietos)","branchId":"marinelic","isDescendant":true,"spouses":[],"parentId":"m_shaw_john_christian","motherName":"Ximena Salazar","childrenIds":[],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 2 STIPICIC MARINELI","familyGroup":""},{"id":"m_shaw_michael_patrick","name":"Michael Patrick","firstSurname":"Robertson","secondSurname":"Shaw","fullName":"Michael Patrick Robertson Shaw","generation":6,"generationName":"Gen VI (Bisnietos)","branchId":"marinelic","isDescendant":true,"spouses":[{"name":"Florence Marie Constantinescu","role":"Esposa"}],"parentId":"m_rob_danilo","motherName":"Norka Shaw","childrenIds":["m_const_daniel"],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 2 STIPICIC MARINELI","familyGroup":""},{"id":"m_const_daniel","name":"Daniel","firstSurname":"Robertson","secondSurname":"Constantinescu","fullName":"Daniel Robertson Constantinescu","generation":7,"generationName":"Gen VII (Tataranietos)","branchId":"marinelic","isDescendant":true,"spouses":[],"parentId":"m_shaw_michael_patrick","motherName":"Florence Marie Constantinescu","childrenIds":[],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 2 STIPICIC MARINELI","familyGroup":""},{"id":"m_solo_jeremy_andrew","name":"Jeremy Andrew","firstSurname":"Robertson","secondSurname":"Solo","fullName":"Jeremy Andrew Robertson Solo","generation":6,"generationName":"Gen VI (Bisnietos)","branchId":"marinelic","isDescendant":true,"spouses":[{"name":"Tania Villanueva","role":"Esposa"}],"parentId":"m_rob_danilo","motherName":"Carmen Solo Zaldívar","childrenIds":["m_vill_ian_thomas"],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 2 STIPICIC MARINELI","familyGroup":""},{"id":"m_vill_ian_thomas","name":"Ian Thomas","firstSurname":"Robertson","secondSurname":"Villanueva","fullName":"Ian Thomas Robertson Villanueva","generation":7,"generationName":"Gen VII (Tataranietos)","branchId":"marinelic","isDescendant":true,"spouses":[],"parentId":"m_solo_jeremy_andrew","motherName":"Tania Villanueva","childrenIds":[],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 2 STIPICIC MARINELI","familyGroup":""},{"id":"m_josip_sibo","name":"Josip (Sibo)","firstSurname":"Stipicic","secondSurname":"Marinelic","fullName":"Josip (Sibo) Stipicic Marinelic","generation":4,"generationName":"Gen IV (Hijos)","branchId":"marinelic","isDescendant":true,"spouses":[{"name":"Marija Erdeljac","role":"Esposa"}],"parentId":"gen3_ivan_zane","motherName":"Perica Marinelic","childrenIds":["m_erd_edita_ita"],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 2 STIPICIC MARINELI","familyGroup":""},{"id":"m_erd_edita_ita","name":"Edita (Ita)","firstSurname":"Stipicic","secondSurname":"Erdeljac","fullName":"Edita (Ita) Stipicic Erdeljac","generation":5,"generationName":"Gen V (Nietos)","branchId":"marinelic","isDescendant":true,"spouses":[{"name":"Slobodan Durdevic","role":"Esposo"}],"parentId":"m_josip_sibo","motherName":"Marija Erdeljac","childrenIds":["m_durd_sibila","m_durd_robert","m_durd_sinisa"],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 2 STIPICIC MARINELI","familyGroup":""},{"id":"m_durd_sibila","name":"Sibila","firstSurname":"Durdevic","secondSurname":"Stipicic","fullName":"Sibila Durdevic Stipicic","generation":6,"generationName":"Gen VI (Bisnietos)","branchId":"marinelic","isDescendant":true,"spouses":[],"parentId":"m_erd_edita_ita","motherName":"Edita (Ita) Stipicic Erdeljac","childrenIds":[],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 2 STIPICIC MARINELI","familyGroup":""},{"id":"m_durd_robert","name":"Robert","firstSurname":"Durdevic","secondSurname":"Stipicic","fullName":"Robert Durdevic Stipicic","generation":6,"generationName":"Gen VI (Bisnietos)","branchId":"marinelic","isDescendant":true,"spouses":[],"parentId":"m_erd_edita_ita","motherName":"Edita (Ita) Stipicic Erdeljac","childrenIds":[],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 2 STIPICIC MARINELI","familyGroup":""},{"id":"m_durd_sinisa","name":"Sinisa","firstSurname":"Durdevic","secondSurname":"Stipicic","fullName":"Sinisa Durdevic Stipicic","generation":6,"generationName":"Gen VI (Bisnietos)","branchId":"marinelic","isDescendant":true,"spouses":[],"parentId":"m_erd_edita_ita","motherName":"Edita (Ita) Stipicic Erdeljac","childrenIds":[],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 2 STIPICIC MARINELI","familyGroup":""},{"id":"m_jerko_marijan","name":"Jerko Marijan","firstSurname":"Stipicic","secondSurname":"Marinelic","fullName":"Jerko Marijan Stipicic Marinelic","generation":4,"generationName":"Gen IV (Hijos)","branchId":"marinelic","isDescendant":true,"spouses":[],"parentId":"gen3_ivan_zane","motherName":"Perica Marinelic","childrenIds":[],"unions":[],"status":"no_data","dates":"","notes":"","sheet":"HOJA 2 STIPICIC MARINELI","familyGroup":""},{"id":"m_jerko_bernard","name":"Jerko Bernard","firstSurname":"Stipicic","secondSurname":"Marinelic","fullName":"Jerko Bernard Stipicic Marinelic","generation":4,"generationName":"Gen IV (Hijos)","branchId":"marinelic","isDescendant":true,"spouses":[{"name":"Ruth Strafella","role":"Esposa"}],"parentId":"gen3_ivan_zane","motherName":"Perica Marinelic","childrenIds":["m_straf_nicky","m_straf_sonja"],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 2 STIPICIC MARINELI","familyGroup":""},{"id":"m_straf_nicky","name":"Nicky","firstSurname":"Stipicic","secondSurname":"Strafella","fullName":"Nicky Stipicic Strafella","generation":5,"generationName":"Gen V (Nietos)","branchId":"marinelic","isDescendant":true,"spouses":[{"name":"?","role":"Cónyuge"}],"parentId":"m_jerko_bernard","motherName":"Ruth Strafella","childrenIds":["m_nicky_gregor","m_nicky_lorena"],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 2 STIPICIC MARINELI","familyGroup":""},{"id":"m_nicky_gregor","name":"Gregor","firstSurname":"Stipicic","secondSurname":"","fullName":"Gregor Stipicic","generation":6,"generationName":"Gen VI (Bisnietos)","branchId":"marinelic","isDescendant":true,"spouses":[],"parentId":"m_straf_nicky","motherName":"?","childrenIds":[],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 2 STIPICIC MARINELI","familyGroup":""},{"id":"m_nicky_lorena","name":"Lorena","firstSurname":"Stipicic","secondSurname":"","fullName":"Lorena Stipicic","generation":6,"generationName":"Gen VI (Bisnietos)","branchId":"marinelic","isDescendant":true,"spouses":[],"parentId":"m_straf_nicky","motherName":"?","childrenIds":[],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 2 STIPICIC MARINELI","familyGroup":""},{"id":"m_straf_sonja","name":"Sonja","firstSurname":"Stipicic","secondSurname":"Strafella","fullName":"Sonja Stipicic Strafella","generation":5,"generationName":"Gen V (Nietos)","branchId":"marinelic","isDescendant":true,"spouses":[{"name":"?","role":"Cónyuge"}],"parentId":"m_jerko_bernard","motherName":"Ruth Strafella","childrenIds":[],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 2 STIPICIC MARINELI","familyGroup":""},{"id":"u_doimo","name":"Doimo","firstSurname":"Stipicic","secondSurname":"Ursic","fullName":"Doimo Stipicic Ursic","generation":4,"generationName":"Gen IV (Hijos)","branchId":"ursic","isDescendant":true,"spouses":[{"name":"Carmen Caicheo Ojeda","role":"Esposa"}],"parentId":"gen3_juraj","motherName":"Jova Ursic Ostoic","childrenIds":["u_caich_ivan","u_caich_jose","u_caich_juana"],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 3 STIPICIC URSIC","familyGroup":""},{"id":"u_caich_ivan","name":"Iván","firstSurname":"Stipicic","secondSurname":"Caicheo","fullName":"Iván Stipicic Caicheo","generation":5,"generationName":"Gen V (Nietos)","branchId":"ursic","isDescendant":true,"spouses":[{"name":"Berta Veas","role":"Pareja"},{"name":"Mónica Liendo","role":"Pareja"}],"parentId":"u_doimo","motherName":"Carmen Caicheo Ojeda","childrenIds":["u_veas_marcos","u_veas_danilo","u_veas_vania","u_liendo_juan"],"unions":[{"unionId":"ivan_berta","partner":"Berta Veas","relationType":"Con Berta Veas","groupName":"Stipicic Veas","notes":"","childrenIds":["u_veas_marcos","u_veas_danilo","u_veas_vania"]},{"unionId":"ivan_monica","partner":"Mónica Liendo","relationType":"Con Mónica Liendo","groupName":"Stipicic Liendo","notes":"","childrenIds":["u_liendo_juan"]}],"status":"registered","dates":"","notes":"","sheet":"HOJA 3 STIPICIC URSIC","familyGroup":"Stipicic Caicheo"},{"id":"u_veas_marcos","name":"Marcos","firstSurname":"Stipicic","secondSurname":"Veas","fullName":"Marcos Stipicic Veas","generation":6,"generationName":"Gen VI (Bisnietos)","branchId":"ursic","isDescendant":true,"spouses":[],"parentId":"u_caich_ivan","motherName":"Berta Veas","childrenIds":[],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 3 STIPICIC URSIC","familyGroup":"Stipicic Veas"},{"id":"u_veas_danilo","name":"Danilo","firstSurname":"Stipicic","secondSurname":"Veas","fullName":"Danilo Stipicic Veas","generation":6,"generationName":"Gen VI (Bisnietos)","branchId":"ursic","isDescendant":true,"spouses":[],"parentId":"u_caich_ivan","motherName":"Berta Veas","childrenIds":[],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 3 STIPICIC URSIC","familyGroup":"Stipicic Veas"},{"id":"u_veas_vania","name":"Vania","firstSurname":"Stipicic","secondSurname":"Veas","fullName":"Vania Stipicic Veas","generation":6,"generationName":"Gen VI (Bisnietos)","branchId":"ursic","isDescendant":true,"spouses":[],"parentId":"u_caich_ivan","motherName":"Berta Veas","childrenIds":[],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 3 STIPICIC URSIC","familyGroup":"Stipicic Veas"},{"id":"u_liendo_juan","name":"Juan","firstSurname":"Stipicic","secondSurname":"Liendo","fullName":"Juan Stipicic Liendo","generation":6,"generationName":"Gen VI (Bisnietos)","branchId":"ursic","isDescendant":true,"spouses":[],"parentId":"u_caich_ivan","motherName":"Mónica Liendo","childrenIds":[],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 3 STIPICIC URSIC","familyGroup":"Stipicic Liendo"},{"id":"u_caich_jose","name":"José","firstSurname":"Stipicic","secondSurname":"Caicheo","fullName":"José Stipicic Caicheo","generation":5,"generationName":"Gen V (Nietos)","branchId":"ursic","isDescendant":true,"spouses":[{"name":"Janet Bilbao","role":"Esposa"}],"parentId":"u_doimo","motherName":"Carmen Caicheo","childrenIds":["u_bilb_milena"],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 3 STIPICIC URSIC","familyGroup":"Stipicic Bilbao"},{"id":"u_bilb_milena","name":"Milena","firstSurname":"Stipicic","secondSurname":"Bilbao","fullName":"Milena Stipicic Bilbao","generation":6,"generationName":"Gen VI (Bisnietos)","branchId":"ursic","isDescendant":true,"spouses":[],"parentId":"u_caich_jose","motherName":"Janet Bilbao","childrenIds":[],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 3 STIPICIC URSIC","familyGroup":"Stipicic Bilbao"},{"id":"u_caich_juana","name":"Juana","firstSurname":"Stipicic","secondSurname":"Caicheo","fullName":"Juana Stipicic Caicheo","generation":5,"generationName":"Gen V (Nietos)","branchId":"ursic","isDescendant":true,"spouses":[{"name":"Rodrigo Covacevich","role":"Esposo"}],"parentId":"u_doimo","motherName":"Carmen Caicheo","childrenIds":["u_cov_vesna","u_cov_tamara","u_cov_branco"],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 3 STIPICIC URSIC","familyGroup":"Covacevich Stipicic"},{"id":"u_cov_vesna","name":"Vesna","firstSurname":"Covacevich","secondSurname":"Stipicic","fullName":"Vesna Covacevich Stipicic","generation":6,"generationName":"Gen VI (Bisnietos)","branchId":"ursic","isDescendant":true,"spouses":[],"parentId":"u_caich_juana","motherName":"Juana Stipicic Caicheo","childrenIds":[],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 3 STIPICIC URSIC","familyGroup":"Covacevich Stipicic"},{"id":"u_cov_tamara","name":"Tamara","firstSurname":"Covacevich","secondSurname":"Stipicic","fullName":"Tamara Covacevich Stipicic","generation":6,"generationName":"Gen VI (Bisnietos)","branchId":"ursic","isDescendant":true,"spouses":[],"parentId":"u_caich_juana","motherName":"Juana Stipicic Caicheo","childrenIds":[],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 3 STIPICIC URSIC","familyGroup":"Covacevich Stipicic"},{"id":"u_cov_branco","name":"Branco","firstSurname":"Covacevich","secondSurname":"Stipicic","fullName":"Branco Covacevich Stipicic","generation":6,"generationName":"Gen VI (Bisnietos)","branchId":"ursic","isDescendant":true,"spouses":[],"parentId":"u_caich_juana","motherName":"Juana Stipicic Caicheo","childrenIds":[],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 3 STIPICIC URSIC","familyGroup":"Covacevich Stipicic"},{"id":"u_juan_soltero","name":"Juan","firstSurname":"Stipicic","secondSurname":"Ursic","fullName":"Juan Stipicic Ursic","generation":4,"generationName":"Gen IV (Hijos)","branchId":"ursic","isDescendant":true,"spouses":[],"parentId":"gen3_juraj","motherName":"Jova Ursic Ostoic","childrenIds":[],"unions":[],"status":"single","dates":"","notes":"Soltero.","sheet":"HOJA 3 STIPICIC URSIC","familyGroup":""},{"id":"u_jeronimo","name":"Jerónimo","firstSurname":"Stipicic","secondSurname":"Ursic","fullName":"Jerónimo Stipicic Ursic","generation":4,"generationName":"Gen IV (Hijos)","branchId":"ursic","isDescendant":true,"spouses":[{"name":"Ana Bilbao Arriola","role":"Esposa"}],"parentId":"gen3_juraj","motherName":"Jova Ursic Ostoic","childrenIds":["u_bilb_jorge","u_bilb_julio","u_bilb_anita"],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 3 STIPICIC URSIC","familyGroup":""},{"id":"u_bilb_jorge","name":"Jorge","firstSurname":"Stipicic","secondSurname":"Bilbao","fullName":"Jorge Stipicic Bilbao","generation":5,"generationName":"Gen V (Nietos)","branchId":"ursic","isDescendant":true,"spouses":[{"name":"Ema Escauriaza","role":"Esposa"}],"parentId":"u_jeronimo","motherName":"Ana Bilbao Arriola","childrenIds":["u_esc_ana_pilar","u_esc_maria_javiera","u_esc_gregor"],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 3 STIPICIC URSIC","familyGroup":""},{"id":"u_esc_ana_pilar","name":"Ana Pilar","firstSurname":"Stipicic","secondSurname":"Escauriaza","fullName":"Ana Pilar Stipicic Escauriaza","generation":6,"generationName":"Gen VI (Bisnietos)","branchId":"ursic","isDescendant":true,"spouses":[{"name":"José De Pablo","role":"Esposo"}],"parentId":"u_bilb_jorge","motherName":"Ema Escauriaza","childrenIds":["u_depablo_juan_jose"],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 3 STIPICIC URSIC","familyGroup":""},{"id":"u_depablo_juan_jose","name":"Juan José","firstSurname":"De Pablo","secondSurname":"Stipicic","fullName":"Juan José De Pablo Stipicic","generation":7,"generationName":"Gen VII (Tataranietos)","branchId":"ursic","isDescendant":true,"spouses":[],"parentId":"u_esc_ana_pilar","motherName":"Ana Pilar Stipicic Escauriaza","childrenIds":[],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 3 STIPICIC URSIC","familyGroup":""},{"id":"u_esc_maria_javiera","name":"María Javiera","firstSurname":"Stipicic","secondSurname":"Escauriaza","fullName":"María Javiera Stipicic Escauriaza","generation":6,"generationName":"Gen VI (Bisnietos)","branchId":"ursic","isDescendant":true,"spouses":[{"name":"Andrés Mosqueira","role":"Esposo"}],"parentId":"u_bilb_jorge","motherName":"Ema Escauriaza","childrenIds":["u_mosq_leon","u_mosq_gaspar","u_mosq_jesusa"],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 3 STIPICIC URSIC","familyGroup":""},{"id":"u_mosq_leon","name":"León","firstSurname":"Mosqueira","secondSurname":"Stipicic","fullName":"León Mosqueira Stipicic","generation":7,"generationName":"Gen VII (Tataranietos)","branchId":"ursic","isDescendant":true,"spouses":[],"parentId":"u_esc_maria_javiera","motherName":"María Javiera Stipicic Escauriaza","childrenIds":[],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 3 STIPICIC URSIC","familyGroup":""},{"id":"u_mosq_gaspar","name":"Gaspar","firstSurname":"Mosqueira","secondSurname":"Stipicic","fullName":"Gaspar Mosqueira Stipicic","generation":7,"generationName":"Gen VII (Tataranietos)","branchId":"ursic","isDescendant":true,"spouses":[],"parentId":"u_esc_maria_javiera","motherName":"María Javiera Stipicic Escauriaza","childrenIds":[],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 3 STIPICIC URSIC","familyGroup":""},{"id":"u_mosq_jesusa","name":"Jesusa","firstSurname":"Mosqueira","secondSurname":"Stipicic","fullName":"Jesusa Mosqueira Stipicic","generation":7,"generationName":"Gen VII (Tataranietos)","branchId":"ursic","isDescendant":true,"spouses":[],"parentId":"u_esc_maria_javiera","motherName":"María Javiera Stipicic Escauriaza","childrenIds":[],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 3 STIPICIC URSIC","familyGroup":""},{"id":"u_esc_gregor","name":"Gregor","firstSurname":"Stipicic","secondSurname":"Escauriaza","fullName":"Gregor Stipicic Escauriaza","generation":6,"generationName":"Gen VI (Bisnietos)","branchId":"ursic","isDescendant":true,"spouses":[{"name":"Gabriela Simonetti","role":"Esposa"}],"parentId":"u_bilb_jorge","motherName":"Ema Escauriaza","childrenIds":[],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 3 STIPICIC URSIC","familyGroup":""},{"id":"u_bilb_julio","name":"Julio","firstSurname":"Stipicic","secondSurname":"Bilbao","fullName":"Julio Stipicic Bilbao","generation":5,"generationName":"Gen V (Nietos)","branchId":"ursic","isDescendant":true,"spouses":[{"name":"Patricia Mackeney","role":"Esposa"}],"parentId":"u_jeronimo","motherName":"Ana Bilbao Arriola","childrenIds":["u_mack_alicia","u_mack_maria_ines","u_mack_ivan"],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 3 STIPICIC URSIC","familyGroup":""},{"id":"u_mack_alicia","name":"Alicia","firstSurname":"Stipicic","secondSurname":"Mackney","fullName":"Alicia Stipicic Mackney","generation":6,"generationName":"Gen VI (Bisnietos)","branchId":"ursic","isDescendant":true,"spouses":[{"name":"Juan José Szardanovic","role":"Esposo"}],"parentId":"u_bilb_julio","motherName":"Patricia Mackeney","childrenIds":[],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 3 STIPICIC URSIC","familyGroup":""},{"id":"u_mack_maria_ines","name":"María Inés","firstSurname":"Stipicic","secondSurname":"Mackney","fullName":"María Inés Stipicic Mackney","generation":6,"generationName":"Gen VI (Bisnietos)","branchId":"ursic","isDescendant":true,"spouses":[{"name":"Omar Herrera","role":"Esposo"}],"parentId":"u_bilb_julio","motherName":"Patricia Mackeney","childrenIds":["u_herr_maite","u_herr_julio","u_herr_isabel"],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 3 STIPICIC URSIC","familyGroup":""},{"id":"u_herr_maite","name":"Maite","firstSurname":"Herrera","secondSurname":"Stipicic","fullName":"Maite Herrera Stipicic","generation":7,"generationName":"Gen VII (Tataranietos)","branchId":"ursic","isDescendant":true,"spouses":[],"parentId":"u_mack_maria_ines","motherName":"María Inés Stipicic Mackney","childrenIds":[],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 3 STIPICIC URSIC","familyGroup":""},{"id":"u_herr_julio","name":"Julio","firstSurname":"Herrera","secondSurname":"Stipicic","fullName":"Julio Herrera Stipicic","generation":7,"generationName":"Gen VII (Tataranietos)","branchId":"ursic","isDescendant":true,"spouses":[],"parentId":"u_mack_maria_ines","motherName":"María Inés Stipicic Mackney","childrenIds":[],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 3 STIPICIC URSIC","familyGroup":""},{"id":"u_herr_isabel","name":"Isabel","firstSurname":"Herrera","secondSurname":"Stipicic","fullName":"Isabel Herrera Stipicic","generation":7,"generationName":"Gen VII (Tataranietos)","branchId":"ursic","isDescendant":true,"spouses":[],"parentId":"u_mack_maria_ines","motherName":"María Inés Stipicic Mackney","childrenIds":[],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 3 STIPICIC URSIC","familyGroup":""},{"id":"u_mack_ivan","name":"Iván","firstSurname":"Stipicic","secondSurname":"Mackney","fullName":"Iván Stipicic Mackney","generation":6,"generationName":"Gen VI (Bisnietos)","branchId":"ursic","isDescendant":true,"spouses":[],"parentId":"u_bilb_julio","motherName":"Patricia Mackeney","childrenIds":[],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 3 STIPICIC URSIC","familyGroup":""},{"id":"u_bilb_anita","name":"Anita Beatriz","firstSurname":"Stipicic","secondSurname":"Bilbao","fullName":"Anita Beatriz Stipicic Bilbao","generation":5,"generationName":"Gen V (Nietos)","branchId":"ursic","isDescendant":true,"spouses":[],"parentId":"u_jeronimo","motherName":"Ana Bilbao Arriola","childrenIds":[],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 3 STIPICIC URSIC","familyGroup":""},{"id":"u_jose_maria","name":"José María","firstSurname":"Stipicic","secondSurname":"Ursic","fullName":"José María Stipicic Ursic","generation":4,"generationName":"Gen IV (Hijos)","branchId":"ursic","isDescendant":true,"spouses":[{"name":"Eliana Bon Guzmán","role":"Esposa","dates":"06.09.1924 – 28.09.2002"}],"parentId":"gen3_juraj","motherName":"Jova Ursic Ostoic","childrenIds":["u_bon_jorge","u_bon_carlos"],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 3 STIPICIC URSIC","familyGroup":""},{"id":"u_bon_jorge","name":"Jorge","firstSurname":"Stipicic","secondSurname":"Bon","fullName":"Jorge Stipicic Bon","generation":5,"generationName":"Gen V (Nietos)","branchId":"ursic","isDescendant":true,"spouses":[{"name":"Cony Hartley","role":"1ra Pareja"},{"name":"Pamela Maturana","role":"2da Pareja"}],"parentId":"u_jose_maria","motherName":"Eliana Bon Guzmán","childrenIds":["u_hart_cony","u_hart_monica","u_hart_francisco","u_mat_pamela_mia"],"unions":[{"unionId":"jorge_hartley","partner":"Cony Hartley","type":"1ra Unión","groupName":"Stipicic Hartley","childrenIds":["u_hart_cony","u_hart_monica","u_hart_francisco"]},{"unionId":"jorge_maturana","partner":"Pamela Maturana","type":"2da Unión","groupName":"Stipicic Maturana","childrenIds":["u_mat_pamela_mia"]}],"status":"registered","dates":"","notes":"","sheet":"HOJA 3 STIPICIC URSIC","familyGroup":""},{"id":"u_hart_cony","name":"Cony","firstSurname":"Stipicic","secondSurname":"Hartley","fullName":"Cony Stipicic Hartley","generation":6,"generationName":"Gen VI (Bisnietos)","branchId":"ursic","isDescendant":true,"spouses":[{"name":"Julio Carrasco","role":"Esposo"}],"parentId":"u_bon_jorge","motherName":"Cony Hartley","childrenIds":["u_carr_jose","u_carr_felipe"],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 3 STIPICIC URSIC","familyGroup":"Carrasco Stipicic"},{"id":"u_carr_jose","name":"José","firstSurname":"Carrasco","secondSurname":"Stipicic","fullName":"José Carrasco Stipicic","generation":7,"generationName":"Gen VII (Tataranietos)","branchId":"ursic","isDescendant":true,"spouses":[],"parentId":"u_hart_cony","motherName":"Cony Stipicic Hartley","childrenIds":[],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 3 STIPICIC URSIC","familyGroup":"Carrasco Stipicic"},{"id":"u_carr_felipe","name":"Felipe","firstSurname":"Carrasco","secondSurname":"Stipicic","fullName":"Felipe Carrasco Stipicic","generation":7,"generationName":"Gen VII (Tataranietos)","branchId":"ursic","isDescendant":true,"spouses":[],"parentId":"u_hart_cony","motherName":"Cony Stipicic Hartley","childrenIds":[],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 3 STIPICIC URSIC","familyGroup":"Carrasco Stipicic"},{"id":"u_hart_monica","name":"Mónica","firstSurname":"Stipicic","secondSurname":"Hartley","fullName":"Mónica Stipicic Hartley","generation":6,"generationName":"Gen VI (Bisnietos)","branchId":"ursic","isDescendant":true,"spouses":[{"name":"Martín Karich","role":"Esposo"}],"parentId":"u_bon_jorge","motherName":"Cony Hartley","childrenIds":["u_kar_vicente","u_kar_elisa"],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 3 STIPICIC URSIC","familyGroup":"Karich Stipicic"},{"id":"u_kar_vicente","name":"Vicente","firstSurname":"Karich","secondSurname":"Stipicic","fullName":"Vicente Karich Stipicic","generation":7,"generationName":"Gen VII (Tataranietos)","branchId":"ursic","isDescendant":true,"spouses":[],"parentId":"u_hart_monica","motherName":"Mónica Stipicic Hartley","childrenIds":[],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 3 STIPICIC URSIC","familyGroup":"Karich Stipicic"},{"id":"u_kar_elisa","name":"Elisa","firstSurname":"Karich","secondSurname":"Stipicic","fullName":"Elisa Karich Stipicic","generation":7,"generationName":"Gen VII (Tataranietos)","branchId":"ursic","isDescendant":true,"spouses":[],"parentId":"u_hart_monica","motherName":"Mónica Stipicic Hartley","childrenIds":[],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 3 STIPICIC URSIC","familyGroup":"Karich Stipicic"},{"id":"u_hart_francisco","name":"Francisco","firstSurname":"Stipicic","secondSurname":"Hartley","fullName":"Francisco Stipicic Hartley","generation":6,"generationName":"Gen VI (Bisnietos)","branchId":"ursic","isDescendant":true,"spouses":[{"name":"Alejandra García","role":"Esposa"}],"parentId":"u_bon_jorge","motherName":"Cony Hartley","childrenIds":["u_garc_mila"],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 3 STIPICIC URSIC","familyGroup":"Stipicic García"},{"id":"u_garc_mila","name":"Mila","firstSurname":"Stipicic","secondSurname":"García","fullName":"Mila Stipicic García","generation":7,"generationName":"Gen VII (Tataranietos)","branchId":"ursic","isDescendant":true,"spouses":[],"parentId":"u_hart_francisco","motherName":"Alejandra García","childrenIds":[],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 3 STIPICIC URSIC","familyGroup":"Stipicic García"},{"id":"u_mat_pamela_mia","name":"Pamela Mía","firstSurname":"Stipicic","secondSurname":"Maturana","fullName":"Pamela Mía Stipicic Maturana","generation":6,"generationName":"Gen VI (Bisnietos)","branchId":"ursic","isDescendant":true,"spouses":[],"parentId":"u_bon_jorge","motherName":"Pamela Maturana","childrenIds":[],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 3 STIPICIC URSIC","familyGroup":"Stipicic Maturana"},{"id":"u_bon_carlos","name":"Carlos","firstSurname":"Stipicic","secondSurname":"Bon","fullName":"Carlos Stipicic Bon","generation":5,"generationName":"Gen V (Nietos)","branchId":"ursic","isDescendant":true,"spouses":[{"name":"Isabel Margarita Vial","role":"1ra Pareja"},{"name":"María Cristina Viancos","role":"2da Pareja"}],"parentId":"u_jose_maria","motherName":"Eliana Bon Guzmán","childrenIds":["u_vial_carlos","u_vial_pablo","u_vial_sofia"],"unions":[{"unionId":"carlos_vial","partner":"Isabel Margarita Vial","type":"1ra Unión","groupName":"Stipicic Vial","childrenIds":["u_vial_carlos","u_vial_pablo","u_vial_sofia"]}],"status":"registered","dates":"","notes":"","sheet":"HOJA 3 STIPICIC URSIC","familyGroup":""},{"id":"u_vial_carlos","name":"Carlos","firstSurname":"Stipicic","secondSurname":"Vial","fullName":"Carlos Stipicic Vial","generation":6,"generationName":"Gen VI (Bisnietos)","branchId":"ursic","isDescendant":true,"spouses":[{"name":"Margarita Dittborn","role":"1ra Pareja"},{"name":"María José Valenzuela","role":"2da Pareja"}],"parentId":"u_bon_carlos","motherName":"Isabel Margarita Vial","childrenIds":["u_ditt_amador"],"unions":[{"unionId":"carlos_dittborn","partner":"Margarita Dittborn","type":"1ra Unión","childrenIds":["u_ditt_amador"]}],"status":"registered","dates":"","notes":"","sheet":"HOJA 3 STIPICIC URSIC","familyGroup":"Stipicic Dittborn"},{"id":"u_ditt_amador","name":"Amador","firstSurname":"Stipicic","secondSurname":"Dittborn","fullName":"Amador Stipicic Dittborn","generation":7,"generationName":"Gen VII (Tataranietos)","branchId":"ursic","isDescendant":true,"spouses":[],"parentId":"u_vial_carlos","motherName":"Margarita Dittborn","childrenIds":[],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 3 STIPICIC URSIC","familyGroup":"Stipicic Dittborn"},{"id":"u_vial_pablo","name":"Pablo","firstSurname":"Stipicic","secondSurname":"Vial","fullName":"Pablo Stipicic Vial","generation":6,"generationName":"Gen VI (Bisnietos)","branchId":"ursic","isDescendant":true,"spouses":[{"name":"Javiera Amengual","role":"Esposa"}],"parentId":"u_bon_carlos","motherName":"Isabel Margarita Vial","childrenIds":["u_amen_geronimo"],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 3 STIPICIC URSIC","familyGroup":"Stipicic Amengual"},{"id":"u_amen_geronimo","name":"Gerónimo","firstSurname":"Stipicic","secondSurname":"Amengual","fullName":"Gerónimo Stipicic Amengual","generation":7,"generationName":"Gen VII (Tataranietos)","branchId":"ursic","isDescendant":true,"spouses":[],"parentId":"u_vial_pablo","motherName":"Javiera Amengual","childrenIds":[],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 3 STIPICIC URSIC","familyGroup":"Stipicic Amengual"},{"id":"u_vial_sofia","name":"Sofía","firstSurname":"Stipicic","secondSurname":"Vial","fullName":"Sofía Stipicic Vial","generation":6,"generationName":"Gen VI (Bisnietos)","branchId":"ursic","isDescendant":true,"spouses":[],"parentId":"u_bon_carlos","motherName":"Isabel Margarita Vial","childrenIds":[],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 3 STIPICIC URSIC","familyGroup":""},{"id":"mart_juan","name":"Juan","firstSurname":"Stipicic","secondSurname":"Martinovic","fullName":"Juan Stipicic Martinovic","generation":4,"generationName":"Gen IV (Hijos)","branchId":"martinovic","isDescendant":true,"spouses":[{"name":"Alice Knight","role":"Esposa"}],"parentId":"gen3_jeronimo","motherName":"Francisca Martinovic","childrenIds":["mart_knight_marjory"],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA4 STIPICIC MARTINOVIC","familyGroup":""},{"id":"mart_knight_marjory","name":"Marjory","firstSurname":"Stipicic","secondSurname":"Knight","fullName":"Marjory Stipicic Knight","generation":5,"generationName":"Gen V (Nietos)","branchId":"martinovic","isDescendant":true,"spouses":[],"parentId":"mart_juan","motherName":"Alice Knight","childrenIds":[],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA4 STIPICIC MARTINOVIC","familyGroup":""},{"id":"mart_aurelia","name":"Aurelia","firstSurname":"Stipicic","secondSurname":"Martinovic","fullName":"Aurelia Stipicic Martinovic","generation":4,"generationName":"Gen IV (Hijos)","branchId":"martinovic","isDescendant":true,"spouses":[{"name":"Jerónimo Trutanic","role":"Esposo"}],"parentId":"gen3_jeronimo","motherName":"Francisca Martinovic","childrenIds":["mart_trut_alejandro","mart_trut_danilo","mart_trut_jeronimo","mart_trut_sergio"],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA4 STIPICIC MARTINOVIC","familyGroup":""},{"id":"mart_trut_alejandro","name":"Alejandro","firstSurname":"Trutanic","secondSurname":"Stipicic","fullName":"Alejandro Trutanic Stipicic","generation":5,"generationName":"Gen V (Nietos)","branchId":"martinovic","isDescendant":true,"spouses":[],"parentId":"mart_aurelia","motherName":"Aurelia Stipicic Martinovic","childrenIds":[],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA4 STIPICIC MARTINOVIC","familyGroup":""},{"id":"mart_trut_danilo","name":"Danilo","firstSurname":"Trutanic","secondSurname":"Stipicic","fullName":"Danilo Trutanic Stipicic","generation":5,"generationName":"Gen V (Nietos)","branchId":"martinovic","isDescendant":true,"spouses":[],"parentId":"mart_aurelia","motherName":"Aurelia Stipicic Martinovic","childrenIds":[],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA4 STIPICIC MARTINOVIC","familyGroup":""},{"id":"mart_trut_jeronimo","name":"Jerónimo","firstSurname":"Trutanic","secondSurname":"Stipicic","fullName":"Jerónimo Trutanic Stipicic","generation":5,"generationName":"Gen V (Nietos)","branchId":"martinovic","isDescendant":true,"spouses":[],"parentId":"mart_aurelia","motherName":"Aurelia Stipicic Martinovic","childrenIds":[],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA4 STIPICIC MARTINOVIC","familyGroup":""},{"id":"mart_trut_sergio","name":"Sergio","firstSurname":"Trutanic","secondSurname":"Stipicic","fullName":"Sergio Trutanic Stipicic","generation":5,"generationName":"Gen V (Nietos)","branchId":"martinovic","isDescendant":true,"spouses":[],"parentId":"mart_aurelia","motherName":"Aurelia Stipicic Martinovic","childrenIds":[],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA4 STIPICIC MARTINOVIC","familyGroup":""},{"id":"mart_jerka","name":"Jerka","firstSurname":"Stipicic","secondSurname":"Martinovic","fullName":"Jerka Stipicic Martinovic","generation":4,"generationName":"Gen IV (Hijos)","branchId":"martinovic","isDescendant":true,"spouses":[],"parentId":"gen3_jeronimo","motherName":"Francisca Martinovic","childrenIds":[],"unions":[],"status":"no_data","dates":"","notes":"","sheet":"HOJA4 STIPICIC MARTINOVIC","familyGroup":""},{"id":"mart_maria","name":"María","firstSurname":"Stipicic","secondSurname":"Martinovic","fullName":"María Stipicic Martinovic","generation":4,"generationName":"Gen IV (Hijos)","branchId":"martinovic","isDescendant":true,"spouses":[{"name":"Juan Garafulic","role":"Esposo"}],"parentId":"gen3_jeronimo","motherName":"Francisca Martinovic","childrenIds":["mart_gara_boris"],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA4 STIPICIC MARTINOVIC","familyGroup":""},{"id":"mart_gara_boris","name":"Boris","firstSurname":"Garafulic","secondSurname":"Stipicic","fullName":"Boris Garafulic Stipicic","generation":5,"generationName":"Gen V (Nietos)","branchId":"martinovic","isDescendant":true,"spouses":[{"name":"Adriana Litvak","role":"1ra Pareja"},{"name":"Alison Campbell","role":"2da Pareja"}],"parentId":"mart_maria","motherName":"María Stipicic Martinovic","childrenIds":["mart_litv_boris","mart_litv_juan_pablo","mart_litv_maria_paz"],"unions":[{"unionId":"boris_litvak","partner":"Adriana Litvak","type":"1ra Unión","groupName":"Garafulic Litvak","childrenIds":["mart_litv_boris","mart_litv_juan_pablo","mart_litv_maria_paz"]}],"status":"registered","dates":"","notes":"","sheet":"HOJA4 STIPICIC MARTINOVIC","familyGroup":""},{"id":"mart_litv_boris","name":"Boris","firstSurname":"Garafulic","secondSurname":"Litvak","fullName":"Boris Garafulic Litvak","generation":6,"generationName":"Gen VI (Bisnietos)","branchId":"martinovic","isDescendant":true,"spouses":[],"parentId":"mart_gara_boris","motherName":"Adriana Litvak","childrenIds":[],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA4 STIPICIC MARTINOVIC","familyGroup":""},{"id":"mart_litv_juan_pablo","name":"Juan Pablo","firstSurname":"Garafulic","secondSurname":"Litvak","fullName":"Juan Pablo Garafulic Litvak","generation":6,"generationName":"Gen VI (Bisnietos)","branchId":"martinovic","isDescendant":true,"spouses":[],"parentId":"mart_gara_boris","motherName":"Adriana Litvak","childrenIds":[],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA4 STIPICIC MARTINOVIC","familyGroup":""},{"id":"mart_litv_maria_paz","name":"María Paz","firstSurname":"Garafulic","secondSurname":"Litvak","fullName":"María Paz Garafulic Litvak","generation":6,"generationName":"Gen VI (Bisnietos)","branchId":"martinovic","isDescendant":true,"spouses":[],"parentId":"mart_gara_boris","motherName":"Adriana Litvak","childrenIds":[],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA4 STIPICIC MARTINOVIC","familyGroup":""},{"id":"mlad_ivo","name":"Ivo","firstSurname":"Stipicic","secondSurname":"Mladineo","fullName":"Ivo Stipicic Mladineo","generation":4,"generationName":"Gen IV (Hijos)","branchId":"mladineo","isDescendant":true,"spouses":[{"name":"Erminda Villanueva","role":"Esposa"}],"parentId":"gen3_josip","motherName":"Catalina Mladineo","childrenIds":["mlad_vill_juan_jose","mlad_vill_rita","mlad_vill_milan"],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 5 STIPICIC MLADINEO","familyGroup":""},{"id":"mlad_vill_juan_jose","name":"Juan José","firstSurname":"Stipicic","secondSurname":"Villanueva","fullName":"Juan José Stipicic Villanueva","generation":5,"generationName":"Gen V (Nietos)","branchId":"mladineo","isDescendant":true,"spouses":[],"parentId":"mlad_ivo","motherName":"Erminda Villanueva","childrenIds":[],"unions":[],"status":"deceased","dates":"1913 – 1989","notes":"","sheet":"HOJA 5 STIPICIC MLADINEO","familyGroup":""},{"id":"mlad_vill_rita","name":"Rita Catalina","firstSurname":"Stipicic","secondSurname":"Villanueva","fullName":"Rita Catalina Stipicic Villanueva","generation":5,"generationName":"Gen V (Nietos)","branchId":"mladineo","isDescendant":true,"spouses":[{"name":"José Domingo García","role":"Esposo"}],"parentId":"mlad_ivo","motherName":"Erminda Villanueva","childrenIds":["mlad_garc_kathia","mlad_garc_milena"],"unions":[],"status":"deceased","dates":"1914 – 2006","notes":"","sheet":"HOJA 5 STIPICIC MLADINEO","familyGroup":""},{"id":"mlad_garc_kathia","name":"Kathia","firstSurname":"García","secondSurname":"Stipicic","fullName":"Kathia García Stipicic","generation":6,"generationName":"Gen VI (Bisnietos)","branchId":"mladineo","isDescendant":true,"spouses":[{"name":"Robert Wallace","role":"Esposo"}],"parentId":"mlad_vill_rita","motherName":"Rita Catalina Stipicic Villanueva","childrenIds":["mlad_wall_paul","mlad_wall_stephan"],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 5 STIPICIC MLADINEO","familyGroup":""},{"id":"mlad_wall_paul","name":"Paul","firstSurname":"Wallace","secondSurname":"García","fullName":"Paul Wallace García","generation":7,"generationName":"Gen VII (Tataranietos)","branchId":"mladineo","isDescendant":true,"spouses":[],"parentId":"mlad_garc_kathia","motherName":"Kathia García Stipicic","childrenIds":[],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 5 STIPICIC MLADINEO","familyGroup":""},{"id":"mlad_wall_stephan","name":"Stephan","firstSurname":"Wallace","secondSurname":"García","fullName":"Stephan Wallace García","generation":7,"generationName":"Gen VII (Tataranietos)","branchId":"mladineo","isDescendant":true,"spouses":[],"parentId":"mlad_garc_kathia","motherName":"Kathia García Stipicic","childrenIds":[],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 5 STIPICIC MLADINEO","familyGroup":""},{"id":"mlad_garc_milena","name":"Milena Pasto","firstSurname":"García","secondSurname":"Stipicic","fullName":"Milena Pasto García Stipicic","generation":6,"generationName":"Gen VI (Bisnietos)","branchId":"mladineo","isDescendant":true,"spouses":[{"name":"José Abel García","role":"Esposo"}],"parentId":"mlad_vill_rita","motherName":"Rita Catalina Stipicic Villanueva","childrenIds":["mlad_garc2_carolina"],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 5 STIPICIC MLADINEO","familyGroup":""},{"id":"mlad_garc2_carolina","name":"Carolina","firstSurname":"García","secondSurname":"García","fullName":"Carolina García García","generation":7,"generationName":"Gen VII (Tataranietos)","branchId":"mladineo","isDescendant":true,"spouses":[],"parentId":"mlad_garc_milena","motherName":"Milena Pasto García Stipicic","childrenIds":[],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 5 STIPICIC MLADINEO","familyGroup":""},{"id":"mlad_vill_milan","name":"Milan Marco","firstSurname":"Stipicic","secondSurname":"Villanueva","fullName":"Milan Marco Stipicic Villanueva","generation":5,"generationName":"Gen V (Nietos)","branchId":"mladineo","isDescendant":true,"spouses":[],"parentId":"mlad_ivo","motherName":"Erminda Villanueva","childrenIds":[],"unions":[],"status":"deceased","dates":"1916 – 1972","notes":"","sheet":"HOJA 5 STIPICIC MLADINEO","familyGroup":""},{"id":"urs_doimo","name":"Doimo","firstSurname":"Ursic","secondSurname":"Stipicic","fullName":"Doimo Ursic Stipicic","generation":4,"generationName":"Gen IV (Hijos)","branchId":"ursic_stipicic","isDescendant":true,"spouses":[{"name":"Juana Leal","role":"Esposa"}],"parentId":"gen3_jeronima","motherName":"Jerónima Stipicic Martinic","childrenIds":["urs_leal_juan","urs_leal_yerka","urs_leal_carmen","urs_leal_cristina","urs_leal_patricio"],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 6 URSIC STIPICIC","familyGroup":""},{"id":"urs_leal_juan","name":"Juan","firstSurname":"Ursic","secondSurname":"Leal","fullName":"Juan Ursic Leal","generation":5,"generationName":"Gen V (Nietos)","branchId":"ursic_stipicic","isDescendant":true,"spouses":[{"name":"Isabel Olivos","role":"Esposa"}],"parentId":"urs_doimo","motherName":"Juana Leal","childrenIds":["urs_oliv_pablo","urs_oliv_ivo","urs_oliv_jose"],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 6 URSIC STIPICIC","familyGroup":""},{"id":"urs_oliv_pablo","name":"Pablo","firstSurname":"Ursic","secondSurname":"Olivos","fullName":"Pablo Ursic Olivos","generation":6,"generationName":"Gen VI (Bisnietos)","branchId":"ursic_stipicic","isDescendant":true,"spouses":[],"parentId":"urs_leal_juan","motherName":"Isabel Olivos","childrenIds":[],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 6 URSIC STIPICIC","familyGroup":""},{"id":"urs_oliv_ivo","name":"Ivo","firstSurname":"Ursic","secondSurname":"Olivos","fullName":"Ivo Ursic Olivos","generation":6,"generationName":"Gen VI (Bisnietos)","branchId":"ursic_stipicic","isDescendant":true,"spouses":[],"parentId":"urs_leal_juan","motherName":"Isabel Olivos","childrenIds":[],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 6 URSIC STIPICIC","familyGroup":""},{"id":"urs_oliv_jose","name":"José","firstSurname":"Ursic","secondSurname":"Olivos","fullName":"José Ursic Olivos","generation":6,"generationName":"Gen VI (Bisnietos)","branchId":"ursic_stipicic","isDescendant":true,"spouses":[],"parentId":"urs_leal_juan","motherName":"Isabel Olivos","childrenIds":[],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 6 URSIC STIPICIC","familyGroup":""},{"id":"urs_leal_yerka","name":"Yerka","firstSurname":"Ursic","secondSurname":"Leal","fullName":"Yerka Ursic Leal","generation":5,"generationName":"Gen V (Nietos)","branchId":"ursic_stipicic","isDescendant":true,"spouses":[{"name":"Ernesto Núñez","role":"Esposo"}],"parentId":"urs_doimo","motherName":"Juana Leal","childrenIds":["urs_nunez_inti","urs_nunez_porota","urs_nunez_manina","urs_nunez_laura"],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 6 URSIC STIPICIC","familyGroup":""},{"id":"urs_nunez_inti","name":"Inti","firstSurname":"Núñez","secondSurname":"Ursic","fullName":"Inti Núñez Ursic","generation":6,"generationName":"Gen VI (Bisnietos)","branchId":"ursic_stipicic","isDescendant":true,"spouses":[{"name":"Paola Sapunar","role":"Esposa"}],"parentId":"urs_leal_yerka","motherName":"Yerka Ursic Leal","childrenIds":["urs_sap_colombina"],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 6 URSIC STIPICIC","familyGroup":""},{"id":"urs_sap_colombina","name":"Colombina","firstSurname":"Núñez","secondSurname":"Sapunar","fullName":"Colombina Núñez Sapunar","generation":7,"generationName":"Gen VII (Tataranietos)","branchId":"ursic_stipicic","isDescendant":true,"spouses":[],"parentId":"urs_nunez_inti","motherName":"Paola Sapunar","childrenIds":[],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 6 URSIC STIPICIC","familyGroup":""},{"id":"urs_nunez_porota","name":"Porota","firstSurname":"Núñez","secondSurname":"Ursic","fullName":"Porota Núñez Ursic","generation":6,"generationName":"Gen VI (Bisnietos)","branchId":"ursic_stipicic","isDescendant":true,"spouses":[],"parentId":"urs_leal_yerka","motherName":"Yerka Ursic Leal","childrenIds":[],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 6 URSIC STIPICIC","familyGroup":""},{"id":"urs_nunez_manina","name":"Manina","firstSurname":"Núñez","secondSurname":"Ursic","fullName":"Manina Núñez Ursic","generation":6,"generationName":"Gen VI (Bisnietos)","branchId":"ursic_stipicic","isDescendant":true,"spouses":[],"parentId":"urs_leal_yerka","motherName":"Yerka Ursic Leal","childrenIds":[],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 6 URSIC STIPICIC","familyGroup":""},{"id":"urs_nunez_laura","name":"Laura","firstSurname":"Núñez","secondSurname":"Ursic","fullName":"Laura Núñez Ursic","generation":6,"generationName":"Gen VI (Bisnietos)","branchId":"ursic_stipicic","isDescendant":true,"spouses":[],"parentId":"urs_leal_yerka","motherName":"Yerka Ursic Leal","childrenIds":[],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 6 URSIC STIPICIC","familyGroup":""},{"id":"urs_leal_carmen","name":"Carmen","firstSurname":"Ursic","secondSurname":"Leal","fullName":"Carmen Ursic Leal","generation":5,"generationName":"Gen V (Nietos)","branchId":"ursic_stipicic","isDescendant":true,"spouses":[],"parentId":"urs_doimo","motherName":"Juana Leal","childrenIds":[],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 6 URSIC STIPICIC","familyGroup":""},{"id":"urs_leal_cristina","name":"María Cristina","firstSurname":"Ursic","secondSurname":"Leal","fullName":"María Cristina Ursic Leal","generation":5,"generationName":"Gen V (Nietos)","branchId":"ursic_stipicic","isDescendant":true,"spouses":[],"parentId":"urs_doimo","motherName":"Juana Leal","childrenIds":[],"unions":[],"status":"single","dates":"","notes":"Soltera.","sheet":"HOJA 6 URSIC STIPICIC","familyGroup":""},{"id":"urs_leal_patricio","name":"Patricio","firstSurname":"Ursic","secondSurname":"Leal","fullName":"Patricio Ursic Leal","generation":5,"generationName":"Gen V (Nietos)","branchId":"ursic_stipicic","isDescendant":true,"spouses":[{"name":"Magdalena Giglio","role":"Esposa"}],"parentId":"urs_doimo","motherName":"Juana Leal","childrenIds":["urs_gigl_yerko","urs_gigl_darinka","urs_gigl_doimo"],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 6 URSIC STIPICIC","familyGroup":""},{"id":"urs_gigl_yerko","name":"Yerko","firstSurname":"Ursic","secondSurname":"Giglio","fullName":"Yerko Ursic Giglio","generation":6,"generationName":"Gen VI (Bisnietos)","branchId":"ursic_stipicic","isDescendant":true,"spouses":[],"parentId":"urs_leal_patricio","motherName":"Magdalena Giglio","childrenIds":[],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 6 URSIC STIPICIC","familyGroup":""},{"id":"urs_gigl_darinka","name":"Darinka","firstSurname":"Ursic","secondSurname":"Giglio","fullName":"Darinka Ursic Giglio","generation":6,"generationName":"Gen VI (Bisnietos)","branchId":"ursic_stipicic","isDescendant":true,"spouses":[],"parentId":"urs_leal_patricio","motherName":"Magdalena Giglio","childrenIds":[],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 6 URSIC STIPICIC","familyGroup":""},{"id":"urs_gigl_doimo","name":"Doimo","firstSurname":"Ursic","secondSurname":"Giglio","fullName":"Doimo Ursic Giglio","generation":6,"generationName":"Gen VI (Bisnietos)","branchId":"ursic_stipicic","isDescendant":true,"spouses":[],"parentId":"urs_leal_patricio","motherName":"Magdalena Giglio","childrenIds":[],"unions":[],"status":"registered","dates":"","notes":"","sheet":"HOJA 6 URSIC STIPICIC","familyGroup":""},{"id":"urs_catalina","name":"Catalina","firstSurname":"Ursic","secondSurname":"Stipicic","fullName":"Catalina Ursic Stipicic","generation":4,"generationName":"Gen IV (Hijos)","branchId":"ursic_stipicic","isDescendant":true,"spouses":[],"parentId":"gen3_jeronima","motherName":"Jerónima Stipicic Martinic","childrenIds":[],"unions":[],"status":"single","dates":"","notes":"Soltera.","sheet":"HOJA 6 URSIC STIPICIC","familyGroup":""}]};
+
+/* Dirección del receptor de datos: el script de Google que anota cada envío en una
+   planilla y guarda la foto en Drive (pasos en RECEPTOR-GOOGLE.md).
+   Vacío: el formulario se ve pero avisa que el envío no está conectado. */
+const ENVIO_URL = 'https://script.google.com/macros/s/AKfycbwVg0_-Eo5j__AhLNCJ-GgoRVnp-IeiNOV7L8Wllo7lhzP8su37oPqn1ufCMs4F-7aLpg/exec';
+
+const FOTO_LADO_MAX = 1280;   // píxeles del lado más largo después de achicar
+const FOTO_CALIDAD = 0.82;    // compresión JPEG
+const CAMPO_MAX = 200;
+const NOTA_MAX = 2000;
+
+/* ================= Utilidades ================= */
+const $ = (sel, el = document) => el.querySelector(sel);
+const TAU = Math.PI * 2;
+const ROMAN = ['', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'];
+const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const desktopMQ = matchMedia('(min-width: 900px)');
+const coarseMQ = matchMedia('(pointer: coarse)');
+const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+const lerp = (a, b, t) => a + (b - a) * t;
+const ease = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+const wrapPi = a => Math.atan2(Math.sin(a), Math.cos(a));
+const norm = s => (s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+
+function h(tag, attrs, ...kids) {
+  const el = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs || {})) {
+    if (v == null || v === false) continue;
+    if (k === 'class') el.className = v;
+    else if (k === 'style') el.style.cssText = v;
+    else if (k.startsWith('on')) el.addEventListener(k.slice(2), v);
+    else el.setAttribute(k, v === true ? '' : v);
+  }
+  for (const kid of kids.flat()) {
+    if (kid == null || kid === false) continue;
+    el.append(kid.nodeType ? kid : document.createTextNode(String(kid)));
+  }
+  return el;
+}
+const SVGNS = 'http://www.w3.org/2000/svg';
+function sv(tag, attrs = {}) {
+  const el = document.createElementNS(SVGNS, tag);
+  for (const k in attrs) el.setAttribute(k, attrs[k]);
+  return el;
+}
+function icon(path) {
+  const s = sv('svg', { class: 'i', viewBox: '0 0 24 24', 'aria-hidden': 'true' });
+  s.innerHTML = path; // solo trazados fijos de este archivo, nunca datos
+  return s;
+}
+const ICON = {
+  fan: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.5"/><path d="M12 3v5.5M12 15.5V21M3 12h5.5M15.5 12H21"/>',
+  tree: '<path d="M5 5h6M9 12h10M9 19h10M7 5v14M7 12h2M7 19h2"/>',
+  chat: '<path d="M4 20l1.3-3.9A8 8 0 1 1 8 19.3L4 20z"/>',
+  close: '<path d="M6 6l12 12M18 6 6 18"/>',
+  chev: '<path d="m9 6 6 6-6 6"/>'
+};
+const store = {
+  get(k) { try { return localStorage.getItem(k); } catch { return null; } },
+  set(k, v) { try { localStorage.setItem(k, v); } catch { /* sin almacenamiento: no pasa nada */ } }
+};
+
+/* ================= Datos ================= */
+const persons = DATA.persons;
+const byId = new Map(persons.map(p => [p.id, p]));
+const branches = new Map(DATA.branches.map(b => [b.id, b]));
+const root = persons.find(p => !p.parentId);
+
+function prep(p, depth) {
+  p.depth = depth;
+  p.kids = (p.childrenIds || []).map(id => byId.get(id)).filter(Boolean);
+  p.kids.forEach(c => { c.parent = p; });
+  p.leaves = p.kids.length ? p.kids.reduce((s, c) => s + prep(c, depth + 1), 0) : 1;
+  p.height = p.kids.length ? 1 + Math.max(...p.kids.map(c => c.height)) : 0;
+  return p.leaves;
+}
+function assign(p, a0, a1) {
+  p.a0 = a0; p.a1 = a1;
+  let cur = a0;
+  for (const c of p.kids) {
+    const span = (a1 - a0) * c.leaves / p.leaves;
+    assign(c, cur, cur + span);
+    cur += span;
+  }
+}
+prep(root, 0);
+assign(root, 0, 1);
+const maxDepth = Math.max(...persons.map(p => p.depth));
+persons.forEach(p => {
+  p.search = norm([p.fullName, ...(p.spouses || []).map(s => s.name), ...(p.unions || []).map(u => u.partner), p.familyGroup, p.livesIn].join(' '));
+});
+
+const isUnknown = n => !n || /^\?+$/.test(n.trim());
+const branchOf = p => branches.get(p.branchId) || branches.get(root.branchId);
+const colorOf = p => branchOf(p)?.color || '#7aa2f7';
+const genLabel = p => 'Gen ' + (ROMAN[p.generation] || p.generation);
+const firstName = p => (p.name || p.fullName).split(/\s+/)[0];
+const surnames = p => [p.firstSurname, p.secondSurname].filter(Boolean).join(' ');
+function ancestors(p) { const a = []; for (let c = p; c; c = c.parent) a.unshift(c); return a; }
+function isWithin(p, anc) { for (let c = p; c; c = c.parent) if (c === anc) return true; return false; }
+function partnerNames(p) {
+  const names = (p.unions || []).map(u => u.partner).concat((p.spouses || []).map(s => s.name));
+  return [...new Set(names.filter(n => !isUnknown(n)))];
+}
+function statusText(p) {
+  return { deceased: '†', single: 'Soltero/a', no_data: 'Sin datos en la planilla' }[p.status] || null;
+}
+
+/* ================= Color ================= */
+const BG = [11, 13, 18];
+function hex2rgb(hex) { const x = hex.replace('#', ''); return [0, 2, 4].map(i => parseInt(x.slice(i, i + 2), 16)); }
+function mix(hex, t) { const c = hex2rgb(hex); return c.map((v, i) => Math.round(v * (1 - t) + BG[i] * t)); }
+function lum(c) { const f = v => { v /= 255; return v <= .03928 ? v / 12.92 : ((v + .055) / 1.055) ** 2.4; }; return .2126 * f(c[0]) + .7152 * f(c[1]) + .0722 * f(c[2]); }
+const rgb = c => `rgb(${c[0]},${c[1]},${c[2]})`;
+function inkFor(c) { const L = lum(c); return (1.05 / (L + .05)) >= ((L + .05) / .0567) ? '#ffffff' : '#0b0d12'; }
+const tone = new Map();
+function toneFor(p, ring) {
+  const key = p.branchId + ring;
+  if (!tone.has(key)) {
+    const c = mix(colorOf(p), Math.min(.64, .06 + .14 * (ring - 1)));
+    tone.set(key, { fill: rgb(c), ink: inkFor(c) });
+  }
+  return tone.get(key);
+}
+
+/* ================= Estado ================= */
+let selected = null;
+let currentView = 'fan';
+
+/* ================= Abanico ================= */
+const svg = $('#fan');
+const wrap = $('#fan-wrap');
+const fan = {
+  W: 0, H: 0, cx: 0, cy: 0, rc: 40, Rd: 100, L: 3, rings: 3,
+  rot: 0, s: 1, tx: 0, ty: 0,
+  view: { a0: 0, a1: 1, d: 0 }, focus: root,
+  animating: false, anim: 0, spin: 0
+};
+const gWorld = sv('g');
+const gBand = sv('g');
+const gSect = sv('g');
+const gLbl = sv('g');
+const gCenter = sv('g', { class: 'center-disk' });
+const cDisk = sv('circle');
+const cName = sv('text', { 'font-weight': '700', 'font-size': '13', fill: '#fff' });
+const cSurn = sv('text', { 'font-size': '11', fill: '#c9cfdb' });
+const cSub = sv('text', { 'font-size': '10.5', fill: '#8cc8ff', 'font-weight': '600' });
+gCenter.append(cDisk, cName, cSurn, cSub);
+gWorld.append(gBand, gSect, gLbl, gCenter);
+svg.append(gWorld);
+
+for (const p of persons) {
+  if (p === root) continue;
+  p.el = sv('path', { class: 'sector', 'data-id': p.id });
+  const t = sv('title'); t.textContent = p.fullName; p.el.append(t);
+  p.band = sv('path', { class: 'band' });
+  p.lbl = sv('text', { class: 'lbl' });
+  gSect.append(p.el); gBand.append(p.band); gLbl.append(p.lbl);
+}
+
+function arcPath(r0, r1, t0, t1) {
+  const { cx, cy } = fan;
+  if (t1 - t0 >= TAU - 1e-4) {
+    // anillo completo: dos círculos, sin costura radial
+    const ring = r => `M${cx + r},${cy}A${r},${r} 0 1 1 ${cx - r},${cy}A${r},${r} 0 1 1 ${cx + r},${cy}Z`;
+    return r0 < .5 ? ring(r1) : ring(r1) + ring(r0);
+  }
+  const large = (t1 - t0) > Math.PI ? 1 : 0;
+  const X = (r, t) => (cx + r * Math.cos(t)).toFixed(2);
+  const Y = (r, t) => (cy + r * Math.sin(t)).toFixed(2);
+  if (r0 < .5) return `M${cx},${cy}L${X(r1, t0)},${Y(r1, t0)}A${r1},${r1} 0 ${large} 1 ${X(r1, t1)},${Y(r1, t1)}Z`;
+  return `M${X(r0, t0)},${Y(r0, t0)}L${X(r1, t0)},${Y(r1, t0)}A${r1},${r1} 0 ${large} 1 ${X(r1, t1)},${Y(r1, t1)}L${X(r0, t1)},${Y(r0, t1)}A${r0},${r0} 0 ${large} 0 ${X(r0, t0)},${Y(r0, t0)}Z`;
+}
+
+function layoutFan() {
+  const r = wrap.getBoundingClientRect();
+  if (!r.width || !r.height) return;
+  fan.W = r.width; fan.H = r.height;
+  svg.setAttribute('viewBox', `0 0 ${fan.W} ${fan.H}`);
+  // en celular, con la ficha asomada, el abanico se centra en el espacio que queda libre
+  const covered = !desktopMQ.matches && sheet.dataset.state === 'peek'
+    ? $('#sheet-head').offsetHeight + 24 : 0;
+  const availH = Math.max(200, fan.H - covered);
+  fan.cx = fan.W / 2; fan.cy = availH / 2;
+  const R = Math.min(fan.W, availH) / 2 - 10;
+  fan.Rd = R - 10;
+  fan.rc = clamp(R * .2, 40, 84);
+  fan.L = clamp(Math.floor((fan.Rd - fan.rc) / 40), 2, 4);
+  if (!fan.animating) fan.rings = ringsFor(fan.focus);
+  clampPan();
+  render();
+}
+
+// anillos que ocupa la rama enfocada: si tiene pocas generaciones, cada anillo es más ancho
+const ringsFor = p => clamp(p.height, 1, fan.L);
+const ringW = () => (fan.Rd - fan.rc) / fan.rings;
+
+function placeLabel(p, r0, r1, th0, th1, ink, dim) {
+  const s = fan.s, rm = (r0 + r1) / 2;
+  const arc = rm * (th1 - th0) * s, thick = (r1 - r0) * s;
+  const fs = clamp(thick * .3, 11, 14), CH = fs * .58; // ancho aproximado de un carácter
+  const full = p.name || firstName(p), first = firstName(p);
+  let txt = null, mode = null;
+  for (const c of [full, first]) if (thick >= 18 && arc - 12 >= c.length * CH) { txt = c; mode = 't'; break; }
+  if (!txt) for (const c of [full, first]) if (arc >= 14 && thick - 10 >= c.length * CH) { txt = c; mode = 'r'; break; }
+  if (!txt) {
+    const nT = thick >= 18 ? Math.floor((arc - 12) / CH) : 0;
+    const nR = arc >= 14 ? Math.floor((thick - 10) / CH) : 0;
+    const n = Math.max(nT, nR);
+    if (n >= 3) { txt = first.length > n ? first.slice(0, n - 1) + '…' : first; mode = nT >= nR ? 't' : 'r'; }
+  }
+  if (!txt) { p.lbl.style.display = 'none'; return; }
+  const th = (th0 + th1) / 2;
+  const x = fan.cx + rm * Math.cos(th), y = fan.cy + rm * Math.sin(th);
+  let deg = th * 180 / Math.PI + (mode === 't' ? 90 : 0);
+  const nd = ((deg % 360) + 360) % 360;
+  if (nd > 90 && nd < 270) deg += 180;
+  p.lbl.style.display = '';
+  p.lbl.textContent = txt;
+  p.lbl.setAttribute('x', x.toFixed(1));
+  p.lbl.setAttribute('y', y.toFixed(1));
+  p.lbl.setAttribute('transform', `rotate(${deg.toFixed(1)} ${x.toFixed(1)} ${y.toFixed(1)})`);
+  p.lbl.setAttribute('font-size', (fs / s).toFixed(2));
+  p.lbl.setAttribute('fill', ink);
+  p.lbl.style.opacity = dim ? .5 : 1;
+}
+
+function render() {
+  if (!fan.W) return;
+  const { a0, a1, d } = fan.view, span = a1 - a0, L = fan.L, w = ringW();
+  const lineage = selected ? new Set(ancestors(selected)) : null;
+  for (const p of persons) {
+    if (p === root) continue;
+    const k = p.depth - d;
+    const vis = k > .02 && k <= L + 1 && p.a1 > a0 + 1e-9 && p.a0 < a1 - 1e-9;
+    if (!vis) { p.el.style.display = p.band.style.display = p.lbl.style.display = 'none'; continue; }
+    const t0 = Math.max(0, (p.a0 - a0) / span), t1 = Math.min(1, (p.a1 - a0) / span);
+    const th0 = fan.rot - Math.PI / 2 + t0 * TAU, th1 = fan.rot - Math.PI / 2 + t1 * TAU;
+    const dim = lineage && !lineage.has(p) && !isWithin(p, selected);
+    if (k > L) {
+      p.el.style.display = p.lbl.style.display = 'none';
+      p.band.style.display = '';
+      p.band.setAttribute('d', arcPath(fan.Rd + 3, fan.Rd + 8, th0, th1));
+      p.band.setAttribute('fill', toneFor(p, 4).fill);
+      p.band.style.opacity = dim ? .3 : .9;
+      continue;
+    }
+    p.band.style.display = 'none';
+    const r0 = Math.max(0, fan.rc + (k - 1) * w), r1 = Math.min(fan.Rd, fan.rc + k * w);
+    if (r1 - r0 < .5) { p.el.style.display = p.lbl.style.display = 'none'; continue; }
+    const tn = toneFor(p, Math.max(1, Math.round(k)));
+    p.el.style.display = '';
+    p.el.setAttribute('d', arcPath(r0, r1, th0, th1));
+    p.el.setAttribute('fill', tn.fill);
+    p.el.style.opacity = Math.min(1, k) * (dim ? .3 : 1);
+    p.el.classList.toggle('sel', p === selected);
+    if (fan.animating || k < .95) p.lbl.style.display = 'none';
+    else placeLabel(p, r0, r1, th0, th1, tn.ink, dim);
+  }
+  renderCenter();
+  gWorld.setAttribute('transform', `translate(${fan.tx.toFixed(2)} ${fan.ty.toFixed(2)}) scale(${fan.s.toFixed(4)})`);
+}
+
+function renderCenter() {
+  const f = fan.focus, { cx, cy, rc } = fan;
+  const fit = (t, n) => t.length > n ? t.slice(0, Math.max(1, n - 1)) + '…' : t;
+  cDisk.setAttribute('cx', cx); cDisk.setAttribute('cy', cy); cDisk.setAttribute('r', Math.max(10, rc - 2));
+  cDisk.setAttribute('fill', rgb(mix(colorOf(f), .5)));
+  const gap = rc > 56 ? 15 : 13;
+  cName.textContent = fit(f.name || firstName(f), Math.floor(rc * 1.65 / 7.6));
+  cSurn.textContent = fit(surnames(f), Math.floor(rc * 1.65 / 6.2));
+  cSub.textContent = f.parent ? '↑ subir' : 'raíz';
+  cName.setAttribute('x', cx); cName.setAttribute('y', cy - gap * .75);
+  cSurn.setAttribute('x', cx); cSurn.setAttribute('y', cy + gap * .3);
+  cSub.setAttribute('x', cx); cSub.setAttribute('y', cy + gap * 1.35);
+  gCenter.setAttribute('aria-label', f.parent ? `Subir a ${f.parent.fullName}` : f.fullName);
+}
+
+function focusTo(p, animate = true) {
+  if (!p) return;
+  if (!p.kids.length) p = p.parent || root;
+  fan.focus = p;
+  renderCrumbs();
+  const target = { a0: p.a0, a1: p.a1, d: p.depth };
+  fan.s = 1; fan.tx = 0; fan.ty = 0;
+  cancelAnimationFrame(fan.anim);
+  const ringsTo = ringsFor(p);
+  if (REDUCED || !animate || !fan.W) { fan.view = target; fan.rings = ringsTo; fan.animating = false; render(); return; }
+  const from = { ...fan.view }, ringsFrom = fan.rings, t0 = performance.now(), dur = 620;
+  fan.animating = true;
+  const step = now => {
+    const t = Math.min(1, (now - t0) / dur), e = ease(t);
+    fan.view = { a0: lerp(from.a0, target.a0, e), a1: lerp(from.a1, target.a1, e), d: lerp(from.d, target.d, e) };
+    fan.rings = lerp(ringsFrom, ringsTo, e);
+    if (t < 1) { render(); fan.anim = requestAnimationFrame(step); }
+    else { fan.animating = false; fan.view = target; fan.rings = ringsTo; render(); }
+  };
+  fan.anim = requestAnimationFrame(step);
+}
+
+function clampPan() {
+  if (fan.s <= 1.001) { fan.s = 1; fan.tx = 0; fan.ty = 0; return; }
+  fan.tx = clamp(fan.tx, fan.W * (1 - fan.s), 0);
+  fan.ty = clamp(fan.ty, fan.H * (1 - fan.s), 0);
+}
+function zoomAt(px, py, factor) {
+  const ns = clamp(fan.s * factor, 1, 4);
+  const wx = (px - fan.tx) / fan.s, wy = (py - fan.ty) / fan.s;
+  fan.s = ns; fan.tx = px - wx * ns; fan.ty = py - wy * ns;
+  clampPan(); render();
+}
+function animateRot(target) {
+  cancelAnimationFrame(fan.spin);
+  if (REDUCED) { fan.rot = target; render(); return; }
+  const from = fan.rot, t0 = performance.now();
+  const step = now => {
+    const t = Math.min(1, (now - t0) / 450);
+    fan.rot = lerp(from, target, ease(t)); render();
+    if (t < 1) fan.spin = requestAnimationFrame(step);
+  };
+  fan.spin = requestAnimationFrame(step);
+}
+
+/* ---- Gestos: un dedo gira, dos dedos acercan, tocar entra ---- */
+const ptrs = new Map();
+let gest = null;
+const pt = e => { const r = svg.getBoundingClientRect(); return { x: e.clientX - r.left, y: e.clientY - r.top }; };
+const dist = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
+const mid = (a, b) => ({ x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 });
+const angleAt = p => Math.atan2(p.y - (fan.cy * fan.s + fan.ty), p.x - (fan.cx * fan.s + fan.tx));
+
+function startRotate(p) { return { type: 'rotate', start: p, ang: angleAt(p), t: performance.now(), vel: 0 }; }
+svg.addEventListener('pointerdown', e => {
+  if (e.button > 0) return;
+  try { svg.setPointerCapture(e.pointerId); } catch { /* puntero sintético: se sigue sin captura */ }
+  const p = pt(e);
+  ptrs.set(e.pointerId, p);
+  cancelAnimationFrame(fan.spin);
+  dismissHint();
+  if (ptrs.size === 1) gest = { type: 'tap', start: p, ang: angleAt(p), t: performance.now(), vel: 0, target: e.target };
+  else if (ptrs.size === 2) {
+    const [a, b] = [...ptrs.values()];
+    gest = { type: 'pinch', d0: dist(a, b), m0: mid(a, b), s0: fan.s, tx0: fan.tx, ty0: fan.ty };
+  }
+});
+svg.addEventListener('pointermove', e => {
+  if (!ptrs.has(e.pointerId) || !gest) return;
+  const p = pt(e);
+  ptrs.set(e.pointerId, p);
+  if (gest.type === 'tap' && dist(p, gest.start) > 7) { gest.type = 'rotate'; svg.classList.add('dragging'); }
+  if (gest.type === 'rotate') {
+    const a = angleAt(p), da = wrapPi(a - gest.ang), now = performance.now();
+    gest.ang = a;
+    fan.rot += da;
+    gest.vel = .75 * (da / Math.max(1, now - gest.t) * 16) + .25 * gest.vel;
+    gest.t = now;
+    render();
+  } else if (gest.type === 'pinch' && ptrs.size === 2) {
+    const [a, b] = [...ptrs.values()], m = mid(a, b);
+    const ns = clamp(gest.s0 * dist(a, b) / gest.d0, 1, 4);
+    const wx = (gest.m0.x - gest.tx0) / gest.s0, wy = (gest.m0.y - gest.ty0) / gest.s0;
+    fan.s = ns; fan.tx = m.x - wx * ns; fan.ty = m.y - wy * ns;
+    clampPan(); render();
+  }
+});
+function endPointer(e) {
+  if (!ptrs.has(e.pointerId)) return;
+  ptrs.delete(e.pointerId);
+  if (!gest) return;
+  if (gest.type === 'tap' && e.type === 'pointerup' && ptrs.size === 0) handleTap(gest.target);
+  else if (gest.type === 'rotate' && ptrs.size === 0 && performance.now() - gest.t < 90 && Math.abs(gest.vel) > .002) spinFree(gest.vel);
+  if (ptrs.size === 0) { gest = null; svg.classList.remove('dragging'); }
+  else if (ptrs.size === 1 && gest.type === 'pinch') gest = startRotate([...ptrs.values()][0]);
+}
+svg.addEventListener('pointerup', endPointer);
+svg.addEventListener('pointercancel', endPointer);
+svg.addEventListener('wheel', e => {
+  e.preventDefault();
+  dismissHint();
+  if (e.shiftKey) { fan.rot += e.deltaY * .003; render(); return; }
+  const p = pt(e);
+  zoomAt(p.x, p.y, Math.exp(-e.deltaY * .0016));
+}, { passive: false });
+
+function spinFree(v) {
+  if (REDUCED) return;
+  let vel = clamp(v, -.35, .35);
+  const step = () => {
+    vel *= .94; fan.rot += vel; render();
+    if (Math.abs(vel) > .0008) fan.spin = requestAnimationFrame(step);
+  };
+  fan.spin = requestAnimationFrame(step);
+}
+
+function handleTap(target) {
+  const sec = target.closest && target.closest('[data-id]');
+  if (sec) {
+    const p = byId.get(sec.dataset.id);
+    select(p);
+    if (p.kids.length) focusTo(p);
+    return;
+  }
+  if (target.closest && target.closest('.center-disk')) {
+    if (fan.focus.parent) { select(fan.focus.parent); focusTo(fan.focus.parent); }
+    else select(root);
+  }
+}
+
+wrap.addEventListener('keydown', e => {
+  const k = e.key;
+  if (k === 'ArrowLeft') { fan.rot -= Math.PI / 12; render(); }
+  else if (k === 'ArrowRight') { fan.rot += Math.PI / 12; render(); }
+  else if (k === '+' || k === '=') zoomAt(fan.W / 2, fan.H / 2, 1.25);
+  else if (k === '-' || k === '_') zoomAt(fan.W / 2, fan.H / 2, .8);
+  else if ((k === 'Escape' || k === 'Backspace') && fan.focus.parent) focusTo(fan.focus.parent);
+  else if (k === 'Home') focusTo(root);
+  else return;
+  e.preventDefault();
+});
+$('#t-in').onclick = () => zoomAt(fan.W / 2, fan.H / 2, 1.35);
+$('#t-out').onclick = () => zoomAt(fan.W / 2, fan.H / 2, 1 / 1.35);
+$('#t-straight').onclick = () => animateRot(Math.round(fan.rot / TAU) * TAU);
+$('#t-root').onclick = () => { focusTo(root); animateRot(Math.round(fan.rot / TAU) * TAU); };
+
+function renderCrumbs() {
+  const el = $('#crumbs');
+  el.replaceChildren();
+  ancestors(fan.focus).forEach((p, i, arr) => {
+    if (i) el.append(h('span', { class: 'sep', 'aria-hidden': 'true' }, '›'));
+    el.append(h('button', {
+      type: 'button', title: p.fullName,
+      'aria-current': i === arr.length - 1 ? 'location' : null,
+      onclick: () => { select(p); focusTo(p); }
+    }, firstName(p)));
+  });
+  el.scrollLeft = el.scrollWidth;
+}
+
+function renderLegend() {
+  const el = $('#legend');
+  for (const b of DATA.branches) {
+    const head = b.id === root.branchId ? root
+      : persons.filter(p => p.branchId === b.id).sort((x, y) => x.depth - y.depth)[0];
+    if (!head) continue;
+    const label = b.id === root.branchId ? 'Tronco' : b.badge.replace(/^Rama\s+/, '').replace(/\s*-\s*/, ' · ');
+    el.append(h('button', {
+      class: 'chip', type: 'button', title: b.name,
+      onclick: () => { select(head); focusTo(head); }
+    }, h('span', { class: 'dot', style: `background:${b.color}` }), label));
+  }
+}
+
+const hint = $('#hint');
+function showHint() {
+  if (store.get('arbol-pista-vista')) { hint.hidden = true; return; }
+  hint.textContent = coarseMQ.matches
+    ? 'Deslizá para girar · Tocá para entrar'
+    : 'Arrastrá para girar · Clic para entrar · Rueda para acercar';
+  setTimeout(dismissHint, 7000);
+}
+function dismissHint() {
+  if (hint.classList.contains('off')) return;
+  hint.classList.add('off');
+  store.set('arbol-pista-vista', '1');
+}
+
+/* ================= Selección y ficha ================= */
+function select(p, { open = true } = {}) {
+  selected = p;
+  render();
+  renderSheet(p);
+  if (open) openSheet('peek');
+  markTreeSelection();
+}
+
+function personBtn(q, extra) {
+  return h('button', {
+    class: 'person', type: 'button',
+    onclick: () => { select(q); if (currentView === 'fan') focusTo(q.kids.length ? q : q.parent || root); else revealInTree(q); }
+  }, h('span', { class: 'dot', style: `background:${colorOf(q)}` }), q.fullName, extra ? h('em', {}, extra) : null);
+}
+const staticPerson = (name, extra) => h('span', { class: 'person static' }, name, extra ? h('em', {}, extra) : null);
+const section = (title, ...kids) => h('section', { class: 'sec' }, h('h3', {}, title), ...kids);
+function ibtn(label, path, onclick, cls = 'btn') { return h('button', { class: cls, type: 'button', onclick }, icon(path), label); }
+
+function renderSheet(p) {
+  const head = $('#sheet-head'), body = $('#sheet-body');
+  head.replaceChildren(); body.replaceChildren();
+  if (!p) { renderIntro(head, body); return; }
+  const b = branchOf(p), st = statusText(p);
+  head.append(
+    h('button', { class: 'x', type: 'button', 'aria-label': 'Cerrar ficha', onclick: () => openSheet('closed') }, icon(ICON.close)),
+    h('div', { class: 'badges' },
+      h('span', { class: 'badge', style: `color:${colorOf(p)}` }, h('span', { class: 'dot', style: `background:${colorOf(p)}` }), b.badge),
+      h('span', { class: 'badge' }, genLabel(p)),
+      st ? h('span', { class: 'badge' }, st) : null),
+    h('h2', { id: 'sheet-title' }, p.fullName),
+    h('div', { class: 'actions' },
+      currentView === 'fan'
+        ? ibtn('Ver en árbol', ICON.tree, () => { showView('tree'); revealInTree(p); })
+        : ibtn('Ver en abanico', ICON.fan, () => { showView('fan'); focusTo(p.kids.length ? p : p.parent || root); }),
+      ibtn('Corregir o agregar dato', ICON.chat, goToEdit, 'btn primary'))
+  );
+
+  if (p.photo) body.append(h('img', { class: 'portrait', src: p.photo, alt: `Foto de ${p.fullName}`, width: 96, height: 96, loading: 'lazy' }));
+  if (p.livesIn) body.append(section('Vive en', h('p', { class: 'note' }, p.livesIn)));
+
+  if (p.parent) {
+    const other = !isUnknown(p.motherName) && p.motherName ? staticPerson(p.motherName) : null;
+    body.append(section('Hijo/a de', h('div', { class: 'people' }, personBtn(p.parent), other)));
+  } else {
+    body.append(section('Origen', h('p', { class: 'note' }, 'Raíz del árbol: el tronco Barbun.')));
+  }
+
+  const inUnion = new Set();
+  if (p.unions && p.unions.length) {
+    body.append(section(p.unions.length > 1 ? 'Uniones' : 'Unión', ...p.unions.map(u => {
+      const kids = (u.childrenIds || []).map(id => byId.get(id)).filter(Boolean);
+      kids.forEach(k => inUnion.add(k));
+      return h('div', { class: 'union' },
+        h('div', { class: 'union-who' }, h('strong', {}, isUnknown(u.partner) ? 'Pareja sin registrar' : u.partner), h('span', {}, u.type || u.relationType || '')),
+        kids.length ? h('div', { class: 'people' }, kids.map(k => personBtn(k))) : h('p', { class: 'note' }, 'Sin hijos registrados en esta unión.'));
+    })));
+  } else if (p.spouses && p.spouses.length) {
+    body.append(section(p.spouses.length > 1 ? 'Parejas' : 'Pareja', h('div', { class: 'people' },
+      p.spouses.map(s => isUnknown(s.name) ? staticPerson('Sin registrar') : staticPerson(s.name, s.role && s.role !== 'Cónyuge' ? s.role : null)))));
+  }
+
+  const rest = p.kids.filter(k => !inUnion.has(k));
+  if (rest.length) body.append(section(inUnion.size ? 'Otros hijos' : `Hijos (${rest.length})`, h('div', { class: 'people' }, rest.map(k => personBtn(k)))));
+
+  const sibs = p.parent ? p.parent.kids.filter(k => k !== p) : [];
+  if (sibs.length) body.append(section(`Hermanos (${sibs.length})`, h('div', { class: 'people' }, sibs.map(k => personBtn(k)))));
+
+  if (p.notes || p.dates) body.append(section('Notas', p.dates ? h('p', { class: 'note' }, p.dates) : null, p.notes ? h('p', { class: 'note' }, p.notes) : null));
+
+  const edit = section('Completar o corregir',
+    h('p', { class: 'lead' }, 'Escribí lo que sepas. Se revisa antes de publicarse.'));
+  edit.id = 'sec-edit';
+  edit.append(buildForm(p, text => { edit.replaceChildren(h('h3', {}, 'Gracias'), h('p', { class: 'note' }, text)); }));
+  body.append(edit);
+  body.scrollTop = 0;
+  updatePeek();
+}
+
+function goToEdit() {
+  const edit = $('#sec-edit');
+  if (!edit) return;
+  openSheet('full');
+  edit.scrollIntoView({ behavior: REDUCED ? 'auto' : 'smooth', block: 'start' });
+  const first = $('input.inp', edit);
+  if (first) first.focus({ preventScroll: true });
+}
+
+function renderIntro(head, body) {
+  const withDates = persons.filter(p => p.dates).length;
+  head.append(
+    h('button', { class: 'x', type: 'button', 'aria-label': 'Cerrar ficha', onclick: () => openSheet('closed') }, icon(ICON.close)),
+    h('div', { class: 'badges' }, h('span', { class: 'badge' }, 'Brač → Magallanes')),
+    h('h2', { id: 'sheet-title' }, 'Tronco Barbun'),
+    h('p', { class: 'lead' }, 'Tocá una persona del abanico o buscala por nombre para ver su ficha.'));
+  body.append(
+    h('div', { class: 'stats' },
+      h('div', { class: 'stat' }, h('b', {}, persons.length), h('span', {}, 'personas')),
+      h('div', { class: 'stat' }, h('b', {}, maxDepth + 1), h('span', {}, 'generaciones')),
+      h('div', { class: 'stat' }, h('b', {}, DATA.branches.length - 1), h('span', {}, 'ramas desde los hermanos de Gen III')),
+      h('div', { class: 'stat' }, h('b', {}, `${withDates} de ${persons.length}`), h('span', {}, 'con fechas registradas'))),
+    section('Ayudá a completarlo',
+      h('p', { class: 'note' }, 'Casi no hay fechas ni lugares. Si sabés algo de alguien, mandalo: se suma en la próxima versión.'),
+      h('div', { class: 'actions' }, ibtn('Mandar un dato', ICON.chat, openForm, 'btn primary'))),
+    h('p', { class: 'src' }, `Fuente: planilla familiar ${DATA.metadata.sourceFile || ''}${DATA.metadata.revision ? ' · ' + DATA.metadata.revision.split('(')[0].trim() : ''}.`));
+}
+
+/* ---- Ficha deslizable en celular ---- */
+const sheet = $('#sheet');
+/* ================= Formulario de datos ================= */
+const dlg = $('#dlg');
+const CLAVE_ENVIA = 'arbol.envia';
+
+function loadImage(file) {
+  return new Promise((resolve, reject) => {
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+    img.onload = () => { URL.revokeObjectURL(url); resolve(img); };
+    img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('No se pudo leer la foto. Probá con otra (JPG o PNG).')); };
+    img.src = url;
+  });
+}
+/* Achica la foto en el teléfono antes de mandarla: una foto de cámara pesa varios MB
+   y el receptor de Google rechaza envíos grandes. Devuelve un JPEG como texto. */
+async function shrinkPhoto(file) {
+  if (!file.type.startsWith('image/')) throw new Error('Ese archivo no es una imagen.');
+  const img = await loadImage(file);
+  const k = Math.min(1, FOTO_LADO_MAX / Math.max(img.naturalWidth, img.naturalHeight));
+  const canvas = document.createElement('canvas');
+  canvas.width = Math.max(1, Math.round(img.naturalWidth * k));
+  canvas.height = Math.max(1, Math.round(img.naturalHeight * k));
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = '#fff';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+  return canvas.toDataURL('image/jpeg', FOTO_CALIDAD);
+}
+
+function field(label, hint, control) {
+  return h('label', { class: 'field' }, h('span', {}, label, hint ? h('small', {}, ` · ${hint}`) : null), control);
+}
+function textInput(name, attrs = {}) {
+  return h('input', { class: 'inp', type: 'text', name, maxlength: CAMPO_MAX, autocomplete: 'off', ...attrs });
+}
+
+/* Arma el formulario de datos. Con persona va dentro de su ficha; sin persona, en la
+   ventana de "Mandar un dato". onDone recibe el texto de agradecimiento. */
+function buildForm(p, onDone) {
+  let photo = '';
+  const initial = { viveEn: (p && p.livesIn) || '' };
+  const msg = h('p', { class: 'dlg-msg', role: 'status' });
+  const say = (text, isError = false) => { msg.textContent = text; msg.classList.toggle('err', isError); };
+  const preview = h('img', { class: 'photo-prev', alt: 'Vista previa de la foto', hidden: true });
+  const removeBtn = h('button', { class: 'btn', type: 'button', hidden: true, onclick: () => { photo = ''; preview.hidden = true; removeBtn.hidden = true; file.value = ''; } }, 'Quitar');
+  const file = h('input', { type: 'file', accept: 'image/*', hidden: true, onchange: async () => {
+    const chosen = file.files[0];
+    if (!chosen) return;
+    try {
+      photo = await shrinkPhoto(chosen);
+      preview.src = photo; preview.hidden = false; removeBtn.hidden = false;
+      say('');
+    } catch (err) {
+      photo = ''; preview.hidden = true; removeBtn.hidden = true;
+      say(err.message, true);
+    }
+  } });
+  const submit = h('button', { class: 'btn primary', type: 'submit' }, 'Enviar para revisión');
+  const isDeceased = p && p.status === 'deceased';
+
+  const form = h('form', { class: 'edit', onsubmit: e => { e.preventDefault(); sendForm(form, p, photo, initial, say, submit, onDone); } },
+    p ? null : field('¿Sobre quién?', null, textInput('persona', { required: true, placeholder: 'Nombre y apellidos' })),
+    field('Fecha de nacimiento', p && p.dates ? `registrado: ${p.dates}` : null, textInput('nacimiento', { placeholder: '12 de marzo de 1948' })),
+    field('Lugar de nacimiento', null, textInput('lugarNacimiento', { placeholder: 'Porvenir, Chile' })),
+    field('Fecha de fallecimiento', 'si corresponde', textInput('fallecimiento')),
+    isDeceased ? null : field('Vive en', 'ciudad, país', textInput('viveEn', { value: initial.viveEn, placeholder: 'Punta Arenas, Chile' })),
+    h('div', { class: 'field' }, h('span', {}, 'Foto'),
+      h('div', { class: 'photo-pick' }, preview, h('button', { class: 'btn', type: 'button', onclick: () => file.click() }, p && p.photo ? 'Cambiar foto' : 'Elegir foto'), removeBtn, file)),
+    field('Otro dato o corrección', null, h('textarea', { class: 'inp', name: 'nota', maxlength: NOTA_MAX, placeholder: 'Pareja, hijos, oficio, una historia, un nombre mal escrito…' })),
+    field('Tu nombre', 'para saber quién lo manda', textInput('envia', { required: true, value: store.get(CLAVE_ENVIA) || '', autocomplete: 'name' })),
+    h('div', { class: 'edit-foot' }, msg, submit));
+  return form;
+}
+
+function openForm() {
+  dlg.replaceChildren(
+    h('div', { class: 'dlg-head' },
+      h('button', { class: 'x', type: 'button', 'aria-label': 'Cerrar formulario', onclick: () => dlg.close() }, icon(ICON.close)),
+      h('h2', { id: 'dlg-title' }, 'Mandar un dato'),
+      h('p', {}, 'Completá solo lo que sepas.')),
+    h('div', { class: 'dlg-body' }, buildForm(null, showDone)));
+  if (!dlg.open) dlg.showModal();
+}
+
+async function sendForm(form, p, photo, initial, say, submit, onDone) {
+  const raw = new FormData(form);
+  const val = k => String(raw.get(k) || '').trim();
+  const data = {
+    personaId: p ? p.id : '',
+    persona: p ? p.fullName : val('persona'),
+    nacimiento: val('nacimiento'), lugarNacimiento: val('lugarNacimiento'), fallecimiento: val('fallecimiento'),
+    viveEn: val('viveEn'), nota: val('nota'), envia: val('envia'), foto: photo
+  };
+  const changed = [data.nacimiento, data.lugarNacimiento, data.fallecimiento, data.nota, data.foto].some(Boolean)
+    || data.viveEn !== initial.viveEn;
+  if (!changed) { say('Completá o cambiá al menos un dato, o sumá una foto.', true); return; }
+  store.set(CLAVE_ENVIA, data.envia);
+  if (!ENVIO_URL) { say('El envío todavía no está conectado. Lo que escribiste sigue acá.', true); return; }
+
+  submit.disabled = true;
+  say('Enviando…');
+  try {
+    // Sin cabecera de tipo: el navegador lo manda como texto plano y así no hace la
+    // consulta previa (preflight) que el script de Google no sabe responder.
+    const res = await fetch(ENVIO_URL, { method: 'POST', body: JSON.stringify(data) });
+    const out = await res.json();
+    if (!out.ok) throw new Error(out.error || 'respuesta inesperada del receptor');
+    onDone('Queda para revisión y se suma en la próxima versión del árbol.');
+  } catch (err) {
+    submit.disabled = false;
+    say('No se pudo enviar. Revisá la conexión y probá de nuevo: lo que escribiste sigue acá.', true);
+  }
+}
+
+function showDone(text) {
+  dlg.replaceChildren(h('div', { class: 'done' },
+    h('h2', { id: 'dlg-title' }, 'Gracias'),
+    h('p', {}, text),
+    h('button', { class: 'btn primary', type: 'button', onclick: () => dlg.close() }, 'Cerrar')));
+}
+
+function openSheet(state) {
+  if (desktopMQ.matches) return;
+  const before = sheet.dataset.state;
+  sheet.dataset.state = state;
+  updatePeek();
+  if ((before === 'peek') !== (state === 'peek')) layoutFan();
+}
+function updatePeek() {
+  const hd = $('#sheet-head');
+  sheet.style.setProperty('--peek', (hd.offsetHeight + 24) + 'px');
+}
+(function sheetDrag() {
+  let y0 = null, base = 0, moved = false;
+  const offsetFor = st => {
+    const H = sheet.offsetHeight;
+    return st === 'full' ? 0 : st === 'peek' ? H - ($('#sheet-head').offsetHeight + 24) : H + 80;
+  };
+  const down = e => {
+    if (desktopMQ.matches || e.target.closest('button:not(#grab),a')) return;
+    y0 = e.clientY; base = offsetFor(sheet.dataset.state); moved = false;
+    sheet.classList.add('drag');
+    e.currentTarget.setPointerCapture(e.pointerId);
+  };
+  const move = e => {
+    if (y0 == null) return;
+    const dy = e.clientY - y0;
+    if (Math.abs(dy) > 4) moved = true;
+    sheet.style.transform = `translateY(${Math.max(0, base + dy)}px)`;
+  };
+  const up = e => {
+    if (y0 == null) return;
+    const dy = e.clientY - y0, st = sheet.dataset.state;
+    y0 = null;
+    sheet.classList.remove('drag');
+    sheet.style.transform = '';
+    if (!moved) { openSheet(st === 'full' ? 'peek' : 'full'); return; }
+    if (dy < -50) openSheet('full');
+    else if (dy > 50) openSheet(st === 'full' ? 'peek' : 'closed');
+  };
+  for (const el of [$('#grab'), $('#sheet-head')]) {
+    el.addEventListener('pointerdown', down);
+    el.addEventListener('pointermove', move);
+    el.addEventListener('pointerup', up);
+    el.addEventListener('pointercancel', up);
+  }
+  $('#grab').addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openSheet(sheet.dataset.state === 'full' ? 'peek' : 'full'); }
+  });
+})();
+
+/* ================= Organigrama 2D ================= */
+const osvg = $('#org');
+const owrap = $('#org-wrap');
+const org = {
+  W: 0, H: 0, s: 1, tx: 0, ty: 0, fitted: false, anim: 0,
+  dir: store.get('arbol-org-dir') || (desktopMQ.matches ? 'v' : 'h'),
+  pos: new Map()
+};
+// tamaño de cada ficha y separaciones, según orientación
+const DIMS = { h: { w: 188, h: 58, gapD: 60, gapB: 12 }, v: { w: 152, h: 66, gapD: 56, gapB: 14 } };
+const oWorld = sv('g'), oLinks = sv('g'), oNodes = sv('g');
+oWorld.append(oLinks, oNodes);
+osvg.append(oWorld);
+const expanded = new Set(persons.filter(p => p.depth < 2).map(p => p.id));
+// primer punto donde el árbol se abre en varias ramas (salta la cadena de un solo hijo)
+const pivot = (() => { let p = root; while (p.kids.length === 1) p = p.kids[0]; return p; })();
+
+function orgLayout() {
+  const D = DIMS[org.dir], horiz = org.dir === 'h';
+  const bStep = horiz ? D.h + D.gapB : D.w + D.gapB;
+  const dStep = horiz ? D.w + D.gapD : D.h + D.gapD;
+  org.pos.clear();
+  let next = 0;
+  const place = p => {
+    const kids = expanded.has(p.id) ? p.kids : [];
+    let b;
+    if (!kids.length) { b = next; next += bStep; }
+    else { const bs = kids.map(place); b = (bs[0] + bs[bs.length - 1]) / 2; }
+    const d = p.depth * dStep;
+    org.pos.set(p.id, horiz ? { x: d, y: b } : { x: b, y: d });
+    return b;
+  };
+  place(root);
+  $('#tree-count').textContent = `${org.pos.size} de ${persons.length} a la vista`;
+}
+
+function fitText(t, max) { return t.length > max ? t.slice(0, Math.max(1, max - 1)) + '…' : t; }
+function orgRender() {
+  const D = DIMS[org.dir], horiz = org.dir === 'h';
+  oLinks.replaceChildren(); oNodes.replaceChildren();
+  const lineage = selected ? new Set(ancestors(selected)) : null;
+  for (const [id, a] of org.pos) {
+    const p = byId.get(id);
+    if (!p.parent) continue;
+    const b = org.pos.get(p.parent.id);
+    let d;
+    if (horiz) {
+      const x1 = b.x + D.w + 12, y1 = b.y + D.h / 2, x2 = a.x, y2 = a.y + D.h / 2, m = (x1 + x2) / 2;
+      d = `M${x1},${y1}C${m},${y1} ${m},${y2} ${x2},${y2}`;
+    } else {
+      const x1 = b.x + D.w / 2, y1 = b.y + D.h + 12, x2 = a.x + D.w / 2, y2 = a.y, m = (y1 + y2) / 2;
+      d = `M${x1},${y1}C${x1},${m} ${x2},${m} ${x2},${y2}`;
+    }
+    oLinks.append(sv('path', { d, class: 'olink' + (lineage && lineage.has(p) ? ' on' : '') }));
+  }
+  for (const [id, a] of org.pos) {
+    const p = byId.get(id);
+    const dim = lineage && !lineage.has(p) && !isWithin(p, selected);
+    const g = sv('g', { class: 'onode' + (p === selected ? ' sel' : '') + (dim ? ' dim' : ''), 'data-id': id, transform: `translate(${a.x} ${a.y})` });
+    const t = sv('title'); t.textContent = p.fullName; g.append(t);
+    g.append(sv('rect', { class: 'card', width: D.w, height: D.h, rx: 10 }));
+    g.append(horiz
+      ? sv('rect', { x: 0, y: 8, width: 4, height: D.h - 16, rx: 2, fill: colorOf(p) })
+      : sv('rect', { x: 10, y: 0, width: D.w - 20, height: 3.5, rx: 1.75, fill: colorOf(p) }));
+    const maxC = Math.floor((D.w - 26) / 7.1);
+    const nm = sv('text', { class: 'nm', x: 14, y: horiz ? 24 : 26 });
+    nm.textContent = fitText(p.fullName + (p.status === 'deceased' ? ' †' : ''), maxC);
+    const partners = partnerNames(p);
+    const mt = sv('text', { class: 'mt', x: 14, y: horiz ? 42 : 46 });
+    mt.textContent = fitText(partners.length ? `${genLabel(p)} · ⚭ ${partners[0]}` : genLabel(p), Math.floor((D.w - 26) / 6));
+    g.append(nm, mt);
+    if (p.kids.length) {
+      const open = expanded.has(id);
+      const tg = sv('g', { class: 'otg', 'data-toggle': id, transform: horiz ? `translate(${D.w} ${D.h / 2})` : `translate(${D.w / 2} ${D.h})` });
+      tg.append(sv('circle', { r: 12 }));
+      const tt = sv('text'); tt.textContent = open ? '−' : '+' + p.kids.length;
+      const tl = sv('title'); tl.textContent = `${open ? 'Cerrar' : 'Abrir'} hijos de ${p.fullName}`;
+      tg.append(tt, tl);
+      g.append(tg);
+    }
+    oNodes.append(g);
+  }
+  orgApply();
+}
+const orgApply = () => oWorld.setAttribute('transform', `translate(${org.tx.toFixed(1)} ${org.ty.toFixed(1)}) scale(${org.s.toFixed(4)})`);
+
+function orgSize() {
+  const r = owrap.getBoundingClientRect();
+  org.W = r.width; org.H = r.height;
+  osvg.setAttribute('viewBox', `0 0 ${org.W} ${org.H}`);
+}
+function orgBounds() {
+  const D = DIMS[org.dir];
+  let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+  for (const a of org.pos.values()) { x0 = Math.min(x0, a.x); y0 = Math.min(y0, a.y); x1 = Math.max(x1, a.x + D.w); y1 = Math.max(y1, a.y + D.h); }
+  return { x0, y0, x1: x1 + 14, y1: y1 + 14 };
+}
+const TOP_BAR = 56; // espacio de la barra de botones
+function orgFit(animate = true) {
+  const b = orgBounds(), padX = 24, availH = org.H - TOP_BAR - 16;
+  let s = clamp(Math.min((org.W - padX * 2) / (b.x1 - b.x0), availH / (b.y1 - b.y0)), .3, 1.1);
+  if (s < .55) {
+    // todo junto no se leería: tamaño legible, encuadrando donde el árbol se abre en ramas
+    s = .75;
+    const D = DIMS[org.dir], r = org.pos.get(pivot.id) || org.pos.get(root.id);
+    const tx = org.dir === 'h' ? padX - r.x * s : org.W / 2 - (r.x + D.w / 2) * s;
+    const ty = org.dir === 'h' ? TOP_BAR + availH / 2 - (r.y + D.h / 2) * s : TOP_BAR + 8 - r.y * s;
+    orgTween(s, tx, ty, animate);
+    return;
+  }
+  // si no entra a lo ancho o a lo alto, se alinea al comienzo (donde está la raíz); si entra, se centra
+  const bw = (b.x1 - b.x0) * s, bh = (b.y1 - b.y0) * s;
+  const tx = bw > org.W - padX * 2 ? padX - b.x0 * s : (org.W - bw) / 2 - b.x0 * s;
+  const ty = bh > availH ? TOP_BAR - b.y0 * s : TOP_BAR + (availH - bh) / 2 - b.y0 * s;
+  orgTween(s, tx, ty, animate);
+}
+function orgTween(s, tx, ty, animate = true) {
+  cancelAnimationFrame(org.anim);
+  if (REDUCED || !animate) { org.s = s; org.tx = tx; org.ty = ty; orgApply(); return; }
+  const f = { s: org.s, tx: org.tx, ty: org.ty }, t0 = performance.now();
+  const step = now => {
+    const t = Math.min(1, (now - t0) / 420), e = ease(t);
+    org.s = lerp(f.s, s, e); org.tx = lerp(f.tx, tx, e); org.ty = lerp(f.ty, ty, e); orgApply();
+    if (t < 1) org.anim = requestAnimationFrame(step);
+  };
+  org.anim = requestAnimationFrame(step);
+}
+function orgCenterOn(p, animate = true) {
+  const a = org.pos.get(p.id); if (!a) return;
+  const D = DIMS[org.dir], s = Math.max(org.s, .8);
+  const visibleH = org.H - (desktopMQ.matches ? 0 : ($('#sheet-head').offsetHeight + 24));
+  orgTween(s, org.W / 2 - (a.x + D.w / 2) * s, TOP_BAR / 2 + visibleH / 2 - (a.y + D.h / 2) * s, animate);
+}
+function orgZoomAt(px, py, f) {
+  const ns = clamp(org.s * f, .25, 2);
+  org.tx = px - (px - org.tx) * ns / org.s; org.ty = py - (py - org.ty) * ns / org.s; org.s = ns;
+  orgApply();
+}
+function orgToggle(id) {
+  // la ficha tocada queda quieta en pantalla mientras el resto se reacomoda
+  const before = org.pos.get(id), sx = before.x * org.s + org.tx, sy = before.y * org.s + org.ty;
+  expanded.has(id) ? expanded.delete(id) : expanded.add(id);
+  orgLayout();
+  const after = org.pos.get(id);
+  org.tx = sx - after.x * org.s; org.ty = sy - after.y * org.s;
+  orgRender();
+}
+function setOrgDir(dir) {
+  org.dir = dir; store.set('arbol-org-dir', dir);
+  document.querySelectorAll('[data-dir]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.dir === dir)));
+  orgLayout(); orgRender();
+  if (selected && org.pos.has(selected.id)) orgCenterOn(selected, false); else orgFit(false);
+}
+function showOrg() {
+  orgSize(); orgLayout(); orgRender();
+  if (!org.fitted) { org.fitted = true; orgFit(false); }
+}
+function markTreeSelection() { if (currentView === 'tree') orgRender(); }
+function revealInTree(p) {
+  ancestors(p).slice(0, -1).forEach(a => expanded.add(a.id));
+  orgLayout(); orgRender(); orgCenterOn(p);
+}
+
+/* ---- Gestos del organigrama: un dedo mueve, dos dedos acercan, tocar abre ---- */
+(function orgGestures() {
+  const ps = new Map();
+  let g = null;
+  const at = e => { const r = osvg.getBoundingClientRect(); return { x: e.clientX - r.left, y: e.clientY - r.top }; };
+  osvg.addEventListener('pointerdown', e => {
+    if (e.button > 0) return;
+    try { osvg.setPointerCapture(e.pointerId); } catch { /* puntero sintético */ }
+    cancelAnimationFrame(org.anim);
+    const p = at(e); ps.set(e.pointerId, p);
+    if (ps.size === 1) g = { type: 'tap', start: p, last: p, target: e.target };
+    else if (ps.size === 2) { const [a, b] = [...ps.values()]; g = { type: 'pinch', d0: dist(a, b), m0: mid(a, b), s0: org.s, tx0: org.tx, ty0: org.ty }; }
+  });
+  osvg.addEventListener('pointermove', e => {
+    if (!ps.has(e.pointerId) || !g) return;
+    const p = at(e); ps.set(e.pointerId, p);
+    if (g.type === 'tap' && dist(p, g.start) > 6) { g.type = 'pan'; osvg.classList.add('dragging'); }
+    if (g.type === 'pan') { org.tx += p.x - g.last.x; org.ty += p.y - g.last.y; g.last = p; orgApply(); }
+    else if (g.type === 'pinch' && ps.size === 2) {
+      const [a, b] = [...ps.values()], m = mid(a, b), ns = clamp(g.s0 * dist(a, b) / g.d0, .25, 2);
+      const wx = (g.m0.x - g.tx0) / g.s0, wy = (g.m0.y - g.ty0) / g.s0;
+      org.s = ns; org.tx = m.x - wx * ns; org.ty = m.y - wy * ns; orgApply();
+    }
+  });
+  const end = e => {
+    if (!ps.has(e.pointerId)) return;
+    ps.delete(e.pointerId);
+    if (g && g.type === 'tap' && e.type === 'pointerup' && ps.size === 0) {
+      const t = g.target.closest && g.target.closest('[data-toggle]');
+      const n = g.target.closest && g.target.closest('.onode');
+      if (t) orgToggle(t.dataset.toggle);
+      else if (n) select(byId.get(n.dataset.id));
+    }
+    if (ps.size === 0) { g = null; osvg.classList.remove('dragging'); }
+    else if (ps.size === 1) { const p = [...ps.values()][0]; g = { type: 'pan', start: p, last: p }; }
+  };
+  osvg.addEventListener('pointerup', end);
+  osvg.addEventListener('pointercancel', end);
+  osvg.addEventListener('wheel', e => {
+    e.preventDefault();
+    const p = at(e);
+    // rueda = acercar (igual que en el abanico); Mayús + rueda = mover de costado
+    if (e.shiftKey) { org.tx -= e.deltaY || e.deltaX; orgApply(); }
+    else orgZoomAt(p.x, p.y, Math.exp(-e.deltaY * .0016));
+  }, { passive: false });
+  owrap.addEventListener('keydown', e => {
+    const k = e.key, st = 60;
+    if (k === 'ArrowLeft') org.tx += st; else if (k === 'ArrowRight') org.tx -= st;
+    else if (k === 'ArrowUp') org.ty += st; else if (k === 'ArrowDown') org.ty -= st;
+    else if (k === '+' || k === '=') { orgZoomAt(org.W / 2, org.H / 2, 1.25); e.preventDefault(); return; }
+    else if (k === '-' || k === '_') { orgZoomAt(org.W / 2, org.H / 2, .8); e.preventDefault(); return; }
+    else return;
+    e.preventDefault(); orgApply();
+  });
+})();
+document.querySelectorAll('[data-dir]').forEach(b => b.addEventListener('click', () => setOrgDir(b.dataset.dir)));
+$('#o-in').onclick = () => orgZoomAt(org.W / 2, org.H / 2, 1.3);
+$('#o-out').onclick = () => orgZoomAt(org.W / 2, org.H / 2, 1 / 1.3);
+$('#o-fit').onclick = () => orgFit();
+$('#t-expand').onclick = () => { persons.forEach(p => p.kids.length && expanded.add(p.id)); orgLayout(); orgRender(); orgFit(); };
+$('#t-collapse').onclick = () => { expanded.clear(); persons.filter(p => p.depth < 2).forEach(p => expanded.add(p.id)); orgLayout(); orgRender(); orgFit(); };
+
+document.querySelectorAll('[data-dir]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.dir === org.dir)));
+
+/* ================= Vistas ================= */
+function showView(v) {
+  currentView = v;
+  $('#v-fan').hidden = v !== 'fan';
+  $('#v-tree').hidden = v !== 'tree';
+  document.querySelectorAll('[data-view]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.view === v)));
+  if (v === 'fan') requestAnimationFrame(layoutFan);
+  if (v === 'tree') showOrg();
+  if (selected) renderSheet(selected);
+}
+document.querySelectorAll('[data-view]').forEach(b => b.addEventListener('click', () => showView(b.dataset.view)));
+
+/* ================= Búsqueda ================= */
+function findPeople(q) {
+  const n = norm(q).trim();
+  if (n.length < 2) return null;
+  const terms = n.split(/\s+/);
+  return persons
+    .filter(p => terms.every(t => p.search.includes(t)))
+    .sort((a, b) => (norm(a.fullName).startsWith(n) ? 0 : 1) - (norm(b.fullName).startsWith(n) ? 0 : 1) || a.depth - b.depth)
+    .slice(0, 40);
+}
+function highlight(text, q) {
+  const n = norm(q).trim(), t = norm(text), i = n ? t.indexOf(n.split(/\s+/)[0]) : -1;
+  if (i < 0) return [text];
+  const len = n.split(/\s+/)[0].length;
+  return [text.slice(0, i), h('mark', {}, text.slice(i, i + len)), text.slice(i + len)];
+}
+function renderResults(q, ul, onPick) {
+  ul.replaceChildren();
+  const list = findPeople(q);
+  if (list === null) { ul.append(h('li', { class: 'res-empty' }, 'Escribí al menos dos letras de un nombre, un apellido o una pareja.')); return []; }
+  if (!list.length) { ul.append(h('li', { class: 'res-empty' }, `No hay nadie con «${q.trim()}».`)); return []; }
+  const nq = norm(q).trim();
+  list.forEach((p, i) => {
+    const viaPartner = !norm(p.fullName).includes(nq.split(/\s+/)[0]) ? partnerNames(p).find(n => norm(n).includes(nq.split(/\s+/)[0])) : null;
+    ul.append(h('li', { role: 'option', id: ul.id + '-' + i },
+      h('button', { class: 'res', type: 'button', tabindex: '-1', onclick: () => onPick(p) },
+        h('span', { class: 'dot', style: `background:${colorOf(p)}` }),
+        h('span', {}, h('strong', {}, highlight(p.fullName, q)),
+          h('small', {}, `${genLabel(p)} · ${branchOf(p).badge}`),
+          viaPartner ? h('small', {}, '⚭ ', highlight(viaPartner, q)) : null))));
+  });
+  return list;
+}
+function pick(p) {
+  closeSearch();
+  select(p);
+  if (currentView === 'fan') focusTo(p.kids.length ? p : p.parent || root);
+  else revealInTree(p);
+}
+// Escritorio: lista desplegable
+(function deskSearch() {
+  const input = $('#q-desk'), drop = $('#drop'), ul = $('#res-desk');
+  let list = [], active = -1;
+  const setActive = i => {
+    active = i;
+    [...ul.children].forEach((li, j) => li.setAttribute('aria-selected', String(j === i)));
+    ul.children[i]?.scrollIntoView({ block: 'nearest' });
+  };
+  const open = () => { drop.hidden = false; input.setAttribute('aria-expanded', 'true'); };
+  input.addEventListener('input', () => { list = renderResults(input.value, ul, pick); open(); setActive(list.length ? 0 : -1); });
+  input.addEventListener('focus', () => { if (input.value.trim()) open(); });
+  input.addEventListener('keydown', e => {
+    if (e.key === 'ArrowDown') { e.preventDefault(); setActive(Math.min(list.length - 1, active + 1)); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); setActive(Math.max(0, active - 1)); }
+    else if (e.key === 'Enter' && list[active]) { e.preventDefault(); pick(list[active]); input.blur(); }
+    else if (e.key === 'Escape') { closeSearch(); input.blur(); }
+  });
+  document.addEventListener('pointerdown', e => { if (!e.target.closest('.search-desk')) closeSearch(); });
+})();
+// Celular: pantalla completa
+$('#tab-search').addEventListener('click', () => {
+  $('#ss').hidden = false;
+  $('#tab-search').setAttribute('aria-pressed', 'true');
+  renderResults($('#q-mob').value, $('#res-mob'), pick);
+  setTimeout(() => $('#q-mob').focus(), 30);
+});
+$('#q-mob').addEventListener('input', e => renderResults(e.target.value, $('#res-mob'), pick));
+$('#ss-close').addEventListener('click', closeSearch);
+function closeSearch() {
+  $('#drop').hidden = true;
+  $('#q-desk').setAttribute('aria-expanded', 'false');
+  $('#ss').hidden = true;
+  $('#tab-search').setAttribute('aria-pressed', 'false');
+}
+document.addEventListener('keydown', e => {
+  if (e.key !== 'Escape' || dlg.open) return;
+  if (!$('#ss').hidden) closeSearch();
+  else if (sheet.dataset.state !== 'closed' && !desktopMQ.matches && !wrap.contains(document.activeElement)) openSheet('closed');
+});
+
+/* ================= Inicio ================= */
+$('#stats-line').textContent = `Tronco Barbun · ${persons.length} personas · ${maxDepth + 1} generaciones`;
+renderLegend();
+renderCrumbs();
+renderSheet(null);
+new ResizeObserver(() => { if (currentView === 'fan') layoutFan(); }).observe(wrap);
+new ResizeObserver(() => { if (currentView === 'tree') { orgSize(); orgApply(); } }).observe(owrap);
+desktopMQ.addEventListener('change', () => { sheet.dataset.state = 'closed'; sheet.style.transform = ''; });
+layoutFan();
+showHint();
+</script>
+</body>
+</html>

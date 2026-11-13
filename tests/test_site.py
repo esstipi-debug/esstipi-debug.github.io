@@ -162,3 +162,30 @@ def test_front_matter_errors_are_explicit(tmp_path):
     bad.write_text("no front matter here\n", encoding="utf-8")
     with pytest.raises(ValueError, match="missing front matter"):
         build.load_page(bad)
+
+
+def test_site_builds_under_landpage_with_neutral_root_404(tmp_path):
+    host_dir = tmp_path / "host"
+    out_dir = host_dir / build.SITE_DIR
+    pages = build.load_site()
+    build.write_site(pages, out_dir, tmp_path / "generated.json", host_root=host_dir)
+
+    assert build.SITE_DIR == "landpage"
+    assert build.SITE_URL == "https://esstipi-debug.github.io/landpage"
+    assert build.OUT == build.ROOT / "landpage"
+    assert not (host_dir / "index.html").exists()
+    assert (out_dir / "index.html").is_file()
+    assert (out_dir / "sitemap.xml").is_file()
+    assert not (out_dir / "robots.txt").exists()
+    assert not (out_dir / "404.html").exists()
+
+    assert (host_dir / "robots.txt").is_file()
+    assert (host_dir / ".nojekyll").is_file()
+    robots = (host_dir / "robots.txt").read_text(encoding="utf-8")
+    assert "Sitemap: https://esstipi-debug.github.io/landpage/sitemap.xml" in robots
+
+    not_found = (host_dir / "404.html").read_text(encoding="utf-8")
+    assert build.AUTHOR not in not_found
+    assert build.SITE_DIR not in not_found
+    assert 'href="/' not in not_found
+    assert '<meta name="robots" content="noindex">' in not_found
