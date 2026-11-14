@@ -86,25 +86,25 @@ def test_a_tile_near_the_edge_stays_inside_the_picture(tmp_path):
 
 
 def test_details_are_cut_where_the_marks_say(tmp_path):
-    marks = {"chart": (40.0, 40.0, 20.0, 20.0), "yard": (0.0, 0.0, 20.0, 30.0)}
-    written = desk.details(photo(tmp_path / "escritorio.png"), tmp_path / "out", marks)
-    assert [path.name for path in written] == [build.detail_name(name) for name in build.DESK_DETAILS]
-    chart, yard = (Image.open(path).convert("RGB") for path in written)
-    assert chart.size == build.DETAIL_SIZES["chart"] and yard.size == build.DETAIL_SIZES["yard"]
     centre = lambda image: image.getpixel((image.width // 2, image.height // 2))  # noqa: E731
-    assert all(abs(a - b) <= TOLERANCE for a, b in zip(centre(chart), LAMPLIT))       # cut on the lamplit patch
-    assert not all(abs(a - b) <= TOLERANCE for a, b in zip(centre(yard), LAMPLIT))    # cut away from it
+    for box, lamplit in (((40.0, 40.0, 20.0, 20.0), True), ((0.0, 0.0, 20.0, 30.0), False)):
+        written = desk.details(photo(tmp_path / "escritorio.png"), tmp_path / "out", {"yard": box})
+        assert [path.name for path in written] == [build.detail_name(name) for name in build.DESK_DETAILS]
+        yard = Image.open(written[0]).convert("RGB")
+        assert yard.size == build.DETAIL_SIZES["yard"]
+        on_patch = all(abs(a - b) <= TOLERANCE for a, b in zip(centre(yard), LAMPLIT))
+        assert on_patch == lamplit   # cut where the mark says, on the lamplit patch or away from it
 
 
 def test_a_detail_left_unmarked_is_an_error(tmp_path):
     with pytest.raises(ValueError, match="no mark for the detail yard"):
-        desk.details(photo(tmp_path / "escritorio.png"), tmp_path / "out", {"chart": (40.0, 40.0, 20.0, 20.0)})
+        desk.details(photo(tmp_path / "escritorio.png"), tmp_path / "out", {})
 
 
 def test_the_script_writes_every_file_the_home_page_waits_for(tmp_path, monkeypatch, capsys):
     marks = tmp_path / "desk.json"
     marks.write_text(json.dumps({"spots": {key: list(box) for key, box in all_spots().items()},
-                                 "details": {"chart": [40, 40, 20, 20], "yard": [0, 0, 20, 30]}}), encoding="utf-8")
+                                 "details": {"yard": [0, 0, 20, 30]}}), encoding="utf-8")
     monkeypatch.setattr(build, "DESK_SPOTS", marks)
     out = tmp_path / "out"
     assert desk.main([str(photo(tmp_path / "escritorio.png")), "--out", str(out)]) == 0
@@ -140,7 +140,8 @@ def test_a_new_picture_without_marks_takes_the_old_tiles_away(tmp_path, monkeypa
     assert desk.main([str(photo(tmp_path / "escritorio.png")), "--out", str(out)]) == 1
     assert sorted(path.name for path in out.iterdir()) == [build.desk_name(small=True), build.desk_name()]
     assert Image.open(out / build.desk_name()).size == build.DESK_SIZE   # and the picture is the new one
-    assert "removed 11 files cut from an earlier picture" in capsys.readouterr().out
+    cut = len(build.desk_files()) - 2   # every tile and detail; the two sizes of the picture stay
+    assert f"removed {cut} files cut from an earlier picture" in capsys.readouterr().out
 
 
 def test_a_failed_write_is_not_blamed_on_the_picture(tmp_path, monkeypatch, capsys):

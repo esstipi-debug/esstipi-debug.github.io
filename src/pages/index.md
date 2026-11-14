@@ -5,13 +5,13 @@ slug: index
 title: Marcos Stipicich · Supply chain operations and system deployment
 kicker: Supply Chain & Operations × Deployment Strategy
 headline: Your operation loses money between the record and the floor. I find it and take it out.
-lede: I count it first, so you can check the result against a number, and I stay until the fix holds.
+lede: The symptom shows in one department. The cause usually sits in another. I measure the whole chain before I cut.
 symptom: Stock the books show and the floor does not hold.
 symptom: Write-offs nobody can explain.
 symptom: Orders shipped wrong, and the overtime to put them right.
 base_line: Based in Santiago, Chile. I take on work in English and in USD in the United States, Australia, Canada, the United Kingdom and Europe.
 secondary: See a sample audit | not-received-but-delivered
-subject: What's breaking
+subject: What we're seeing
 description: I find the money an operation loses between its records and its floor, and take it out at the cause. US, Australia, Canada, UK, Europe.
 published: 2026-11-09
 updated: 2026-11-09

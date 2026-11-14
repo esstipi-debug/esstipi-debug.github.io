@@ -16,6 +16,10 @@ DESK_ALT = ("Illustration: a desk at night by a window over a warehouse yard, wi
             "a knife, a chest camera, a recorder, a notebook of tally marks and a laptop.")
 DESK_CREDIT = "Illustration"  # under the picture: it is not a photograph, and the page says so
 FIGURES_TITLE = "What you can check"
+FIGURES_NOTE = ("Each number says where it comes from: a study, a company filing, my own data, "
+                "or my own field work.")
+DEPLOYMENT_LINE = "For technology teams, the same work runs in five steps, from the first audit to the handback."
+DEPLOYMENT_LINK = "How a deployment runs"
 METHOD_TITLE = "How the work goes"
 KIT_TITLE = "The desk the night before a visit"
 KIT_NOTE = "Every object says one thing about how I work: pick one."
@@ -88,27 +92,40 @@ def situations(page: Page, pages: list[Page], depth: int) -> str:
 </section>"""
 
 
+def claims_bar() -> str:
+    """The audit's 2,708 claims as one bar split three ways, drawn from the published counts."""
+    total = sum(count for _, _, count in build.CLAIMS_TRIAGE)
+    x, rects, legend = 0.0, [], []
+    for key, words, count in build.CLAIMS_TRIAGE:
+        width = 300 * count / total
+        rects.append(f'<rect class="seg-{key}" x="{x:.1f}" y="0" width="{width:.1f}" height="14"/>')
+        legend.append(f'<span class="leg leg-{key}">{count:,} {esc(words)}</span>')
+        x += width
+    summary = "; ".join(f"{count:,} {words}" for _, words, count in build.CLAIMS_TRIAGE)
+    return (f'<span class="fig-chart"><svg viewBox="0 0 300 14" preserveAspectRatio="none" role="img" '
+            f'aria-label="{total:,} claims: {esc(summary)}">{"".join(rects)}</svg>'
+            f'<span class="fig-legend">{"".join(legend)}</span></span>')
+
+
 def figure_item(figure: build.HomeFigure, pages: list[Page], depth: int, lead: bool) -> str:
-    art = ""
-    if lead and build.desk_ready():
-        width, height = build.DETAIL_SIZES["chart"]
-        source = href(f"files/desk/{build.detail_name('chart')}", depth)
-        art = (f'\n<img class="fig-art" src="{source}" width="{width}" height="{height}" alt="" '
-               f'loading="lazy" decoding="async">')
+    chart = f"\n{claims_bar()}" if figure.slug == "not-received-but-delivered" else ""
     return f"""<a class="fig{' fig-lead' if lead else ''}" href="{href(build.find(pages, figure.slug).path, depth)}">
+<span class="fig-g">{esc(figure.grade)}</span>
 <span class="fig-n">{esc(figure.number)}</span>
-<span class="fig-t">{esc(figure.caption)}</span>
-<span class="fig-go">{esc(figure.label)}</span>{art}
+<span class="fig-t">{esc(figure.caption)}</span>{chart}
+<span class="fig-go">{esc(figure.label)}</span>
 </a>"""
 
 
 def figures(pages: list[Page], depth: int) -> str:
-    """Three numbers, large, each with what it measures and the page where it can be checked."""
+    """Four numbers in a chain, each with what it measures, where it comes from and the page where it can be
+    checked."""
     items = "\n".join(figure_item(figure, pages, depth, lead=index == 0)
                       for index, figure in enumerate(build.HOME_FIGURES))
     return f"""<section id="proof" class="figures">
 <div class="wrap">
 <h2>{FIGURES_TITLE}</h2>
+<p class="fig-note">{esc(FIGURES_NOTE)}</p>
 <div class="fig-grid">
 {items}
 </div>
@@ -116,16 +133,19 @@ def figures(pages: list[Page], depth: int) -> str:
 </section>"""
 
 
-def method() -> str:
-    """The three steps of the work, as panels that stack while the page is read."""
+def method(pages: list[Page], depth: int) -> str:
+    """The three steps of the work, as panels that stack while the page is read, and where the five steps of
+    a deployment are written out."""
     steps = "\n".join(f'<li><div class="wrap step"><div class="step-rule" aria-hidden="true"></div>'
                       f'<div class="step-body"><h3>{esc(title)}</h3>\n<p>{esc(text)}</p></div></div></li>'
                       for title, text in build.METHOD_STEPS)
+    deployment = href(build.find(pages, "for-technology-vendors").path, depth) + "#how-we-would-start"
     return f"""<section id="method" class="method">
 <div class="wrap"><h2>{METHOD_TITLE}</h2></div>
 <ol class="stack">
 {steps}
 </ol>
+<div class="wrap"><p class="method-more">{esc(DEPLOYMENT_LINE)} <a href="{deployment}">{esc(DEPLOYMENT_LINK)}</a></p></div>
 </section>"""
 
 
@@ -224,7 +244,7 @@ def main(page: Page, pages: list[Page], depth: int) -> str:
         hero(page, depth),
         situations(page, pages, depth),
         figures(pages, depth),
-        method(),
+        method(pages, depth),
         kit(pages, depth),
         page.body_html,
         doors(pages, depth),

@@ -108,11 +108,12 @@ DESK_SPOTS = SRC / "desk.json"  # where each object lies on the picture: left, t
 SERVICES_SLUG = "engagements"
 HERO_SIZES = "(min-width: 62rem) 56vw, 100vw"  # the width the picture of the desk takes beside the headline
 TILE_SIZE = (480, 384)  # the picture of one object on the desk, 5:4
-DETAIL_SIZES = {"chart": (800, 536), "yard": (800, 668)}  # two more cuts of the picture the home page uses
+DETAIL_SIZES = {"yard": (800, 668)}  # one more cut of the picture the home page uses
 DESK_DETAILS = tuple(DETAIL_SIZES)
 FONT_FILES = ("archivo-latin-variable.woff2", "jetbrains-mono-latin-variable.woff2")  # in src/files/fonts/
 NEXT_LINKS = (("Engagements and fees", SERVICES_SLUG), ("Proof", "proof"), ("Working terms", "working-terms"))
-DEFAULT_CTA = "Tell me what's breaking"
+# The button asks for what the reader sees. Naming what is broken is my work, not theirs.
+DEFAULT_CTA = "Tell me what you're seeing"
 OFFER_UNITS = ("project", "month", "hour", "day")
 FROM_PRICE_UNITS = ("project", "month")  # quoted as "from"; hours and days are flat rates
 AREA_SERVED = ("United States", "Australia", "Canada", "United Kingdom", "Europe")
@@ -226,20 +227,38 @@ DESK = (
 
 @dataclass(frozen=True)
 class HomeFigure:
-    """A number the home page prints large: what it measures, and the page where it can be checked."""
+    """A number the home page prints large: what it measures, where it comes from, and the page where it
+    can be checked."""
     number: str
     caption: str
     label: str
     slug: str
+    grade: str  # one of FIGURE_GRADES: what kind of source stands behind the number
 
 
+# What stands behind a number, in the words the page shows: a study, a company filing, my own data
+# (published and re-runnable) or my own field work (lived, and stated as my estimate).
+FIGURE_GRADES = ("Study", "Company filing", "My data", "My field work")
+
+# The triage behind the 57%, as published in the demo's README (Which Record Lies?, Olist dataset):
+# 2,708 "not received" claims on delivered orders, split by what the records say.
+CLAIMS_TRIAGE = (
+    ("late", "late orders", 1542),
+    ("flag", "at flagged sellers", 73),
+    ("open", "with no clear cause", 1093),
+)
+
+# A chain: the record is wrong, a go-live costs, what I measure, what I did.
 HOME_FIGURES = (
     HomeFigure("65%", "of about 370,000 inventory records were inaccurate, in one retailer’s audit.",
-               "Why records drift", "why-inventory-records-do-not-match-the-shelf"),
+               "Why records drift", "why-inventory-records-do-not-match-the-shelf", "Study"),
+    HomeFigure("USD 64M", "of sales a US cosmetics maker could not ship in the year it switched on a new ERP, "
+               "by its own estimate.", "Before your go-live", "a-new-system-goes-live", "Company filing"),
     HomeFigure("57%", "of “not received” reviews on delivered orders were written on or before the "
-               "delivery day, in a public marketplace dataset.", "See a sample audit", "not-received-but-delivered"),
+               "delivery day, in a public marketplace dataset.", "See the audit", "not-received-but-delivered",
+               "My data"),
     HomeFigure("50,000", "SKU distribution centre, taken through its warehouse-system changeover. "
-               "Order processing time fell 20%.", "Proof", "proof"),
+               "By my estimate, order processing time fell about 20%.", "Proof", "proof", "My field work"),
 )
 
 
@@ -760,7 +779,7 @@ def detail_name(name: str) -> str:
 
 def desk_files() -> tuple[str, ...]:
     """Every file desk.py writes and the home page waits for: the picture in two sizes, a tile for each
-    object and the two details."""
+    object and the detail."""
     return (desk_name(), desk_name(small=True), *(tile_name(item.key) for item in DESK),
             *(detail_name(name) for name in DESK_DETAILS))
 

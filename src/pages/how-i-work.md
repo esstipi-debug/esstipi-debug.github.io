@@ -5,7 +5,7 @@ slug: how-i-work
 title: How I diagnose an operation
 kicker: How I work
 description: How I diagnose an operation: walk the floor first, ask what happened, put the record and the floor on one timeline, and write the working down.
-subject: What's breaking
+subject: What we're seeing
 published: 2026-11-09
 updated: 2026-11-09
 ---
@@ -15,7 +15,7 @@ updated: 2026-11-09
 
 **I put the record and the floor on one timeline.** Five columns: case, activity, timestamp, who, where.
 
-**I write the working down.** I usually see the shape of the problem early. The SQL, the process map and the one-page spec are there so finance, the floor and engineering can check it instead of trusting me.
+**I write the working down.** I usually see the shape of the problem early. The SQL, the process map and the one-page spec are there so finance, the floor and engineering can check it instead of trusting me. For an engineering team that includes the data contract: which fields the system will read, who writes them, and how far each one can be trusted.
 
 **Mise en place before go-live.** No kitchen opens for service before everything is weighed, portioned and checked. No system should go live before its data is staged, checked and signed, with a way back.
 

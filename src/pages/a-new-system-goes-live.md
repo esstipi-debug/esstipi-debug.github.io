@@ -14,13 +14,18 @@ updated: 2026-11-12
 ---
 The new system goes live on a Monday. By Thursday the night shift is back on the spreadsheet, and the orders still have to ship.
 
+It is not a small risk. After a US cosmetics maker switched on a new ERP, it could not ship about USD 64 million of sales that year, by its own estimate, and booked USD 53.6 million of extra charges, mostly to restore service to its customers.
+
+Source: [Revlon, Inc., annual report on Form 10-K for 2018](https://www.sec.gov/Archives/edgar/data/887921/000088792119000004/rev201810-k.htm).
+{: .src }
+
 ## What I check first
 
 Whether the record matches the shelf, by blind count. Where the floor already works around the current system, and why. What each shift is paid for, because people follow the pay before they follow the screen.
 
 ## Where I have stood
 
-I closed one warehouse system and opened the next in a 50,000-SKU distribution centre, with a team of 20 and 23 operators trained on RF scanning. I stayed on the floor until the old shortcuts died. Order processing time came down 20%.
+I closed one warehouse system and opened the next in a 50,000-SKU distribution centre, with a team of 20 and 23 operators trained on RF scanning. I stayed on the floor until the old shortcuts died. By my estimate, order processing time came down about 20%.
 
 ## What I don't claim
 
