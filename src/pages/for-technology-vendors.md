@@ -10,7 +10,7 @@ door_text: Applied AI, warehouse robotics, WMS and ERP teams.
 description: For applied-AI, robotics and WMS teams: read the customer's record before go-live, stage the cutover with a way back, and check adoption at 90 days.
 subject: Deployment into physical operations
 published: 2026-11-09
-updated: 2026-11-09
+updated: 2026-11-14
 ---
 A pilot can pass every acceptance test and still be bypassed on the night shift. Not out of malice: when the dock is full, the old way is faster.
 
@@ -25,7 +25,7 @@ Your customer's record, read the way your system will read it: how much of it is
 
 ## Where I have stood
 
-I have lived the record your agent will read, and the people who write it: thirteen years in planning, inventory and distribution, and a 50,000-SKU warehouse-system changeover where I stayed on the floor until the shortcuts died ([the record](../proof/#track-record)). I learned to code in C, so I read a warehouse the way a C programmer reads memory: every location is an address, a stockout is a pointer to an empty one, and excess stock is memory nobody freed. Today I build with AI coding agents, keeping the math and the rollback in my hands.
+I have lived the record your agent will read, and the people who write it: thirteen years in planning, inventory and distribution, and a 50,000-SKU warehouse-system changeover where I stayed on the floor until the shortcuts died ([the record](../proof/#track-record)). I learned to code in C, so I read a warehouse the way a C programmer reads memory: every location is an address, a stockout is a pointer to an empty one, and excess stock is memory nobody freed. Today I use AI coding and review agents to ship faster and audit my own blind spots, while keeping the deterministic math, the staging boundary and the rollback in my hands.
 
 ## What I don't claim
 

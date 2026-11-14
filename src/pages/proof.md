@@ -8,7 +8,7 @@ kicker: Proof
 description: A warehouse-system changeover, an audit anyone can re-run, the bonus that made broken orders, the systems I build and a one-page plan.
 subject: What we're seeing
 published: 2026-11-09
-updated: 2026-11-09
+updated: 2026-11-14
 ---
 ## Track record {: #track-record }
 
@@ -28,7 +28,8 @@ On a gemba walk I traced mixed, short and damaged orders to a per-operator produ
 
 Prototypes: none of them runs a client's operation yet.
 
-- A deterministic inventory-planning engine, with 9,689 automated tests counted on 31 October 2026.
+- A deterministic inventory-planning engine, with 9,966 automated tests counted on 14 November 2026. Its decision cards set the engine's options beside the operator's own play and the cost of doing nothing, and it takes a stock spreadsheet from intake to a change that waits for a named person's signature and can be undone.
+- A weightlifting-periodisation app, a TypeScript monorepo with about 1,332 unit tests, 31 integration tests on an embedded PostgreSQL database and an adversarial review agent written into the repository. Building it for a coach taught me adoption from the builder's side: even when software leaves the expert full editorial control, measuring exactly what they used to judge by eye can make them refuse it.
 - A warehouse-receiving kit, open source under the MIT licence, with 1,079 tests counted on 25 October 2026.
 - A field kit for deployment work, with 1,187 passing tests on 20 October 2026.
 

@@ -3,7 +3,7 @@ type: question
 order: 80
 slug: why-inventory-records-do-not-match-the-shelf
 title: Why don't inventory records match the shelf, and what does that do to a model?
-description: In one retailer's audit, 65% of nearly 370,000 records did not match the shelf. A model trained on them is wrong exactly where the record is.
+description: In one retailer’s audit, 65% of nearly 370,000 records did not match the shelf. A model trained on them is wrong exactly where the record is.
 published: 2026-11-09
 updated: 2026-11-09
 origin: nobody-pays-for-being-wrong

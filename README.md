@@ -16,7 +16,7 @@ python -m pytest
 
 | `type` | What it is | Keys beyond the required ones |
 |---|---|---|
-| `home` | The home page: the headline with the desk beside it, the symptoms and the three situations, three figures, the method, the nine objects of the desk, the argument, the doors, then the field notes | `headline`, `lede` (twenty words at most), repeated `symptom`, optional `kicker`, `base_line`, `secondary: label \| slug`, `subject` |
+| `home` | The home page: the headline with the desk beside it, the symptoms and the three situations, four figures each with its source, the method, the nine objects of the desk, the argument, the doors, then the field notes | `headline`, `lede` (twenty words at most), repeated `symptom`, optional `kicker` (the role: one line under the two actions of the hero, never above the headline), `base_line`, `secondary: label \| slug`, `subject` |
 | `landing` | An entry page for one situation, one floor or one kind of buyer, shown as a door on the home page | `group: situation`, `floor` or `buyer`, `door`, `door_text`, `kicker`, `subject` |
 | `page` | Engagements, how I work, proof, working terms, contact | optional `headline`, `kicker`, `subject`, `cta`, repeated `offer: name \| amount in USD \| unit` |
 | `question`, `note`, `author`, `book` | The field notes, the author page and the manuscript | see the existing pages |
@@ -29,6 +29,15 @@ The desk is a picture of the kit laid out the night before a visit, with nine ob
 
 The method section of the home page is three panels, *Measure*, *Cut* and *Stitch* (`METHOD_STEPS` in `build.py`), that stack as the page is read. It needs no picture. `plates.py` still turns generated scenes into two-colour plates (`python plates.py <folder>`, from images named `escena-1.png` to `escena-4.png`), but the home page does not show them at present. Pillow is needed only by `plates.py`, `desk.py` and their tests.
 
-`build.py` holds the pages, the data and the helpers; `home.py` lays the home page out. `src/style.css` is the whole site and `src/home.css` only the home page. Both are dark only, with one accent and no rounded corners; what moves does so with CSS and stops under `prefers-reduced-motion`. The two typefaces, Archivo and JetBrains Mono (both under the SIL Open Font License), are in `src/files/fonts/`: no page asks another host for a font.
+`build.py` holds the pages, the data and the helpers; `home.py` lays the home page out. `src/style.css` is the whole site and `src/home.css` only the home page. Both are dark only, with one accent and no rounded corners; what moves does so with CSS and stops under `prefers-reduced-motion`. Every colour is a token in `:root` of `style.css` and is used by name. Labels (table heads, captions, the line over a card) are the body face in sentence case, without letter-spacing; the mono face is kept for figures and prices. No link carries an arrow, and nothing small stands above a headline on the home page.
 
-`tests/test_commercial.py` holds the rules for the commercial pages: prices only on the engagements page and only in USD, the employer named once and only on the proof page, no banned words, one voice (the site speaks as "I", never as a firm's "we"), the *Who to hire for what* table on the engagements page, the home page from top to bottom (a hero that fits a first screen, three figures each with its page, the desk: every object has a tile that leads to its page, no maker is named), no script on any page, fonts served by the site itself, and `FIGURES`, the list of every number a commercial page may print with its source. A new number fails the tests until it is added there.
+Both style sheets open with the stamp of the linter that checked them, `sloplint` from the Hallmark skill. It reads the built files, so build first:
+
+```bash
+python build.py
+node <hallmark>/scripts/sloplint.mjs landpage/index.html landpage/style.css landpage/home.css
+```
+
+The stamp says what was checked (the home page and the two style sheets), what was set aside and why. The other pages were not swept: they still carry a small line above their headline and links joined by middle dots. With `--render` the linter writes screenshots to a `.hallmark/` folder next to the page: that folder is ignored by git and must stay out of `landpage/`. The two typefaces, Archivo and JetBrains Mono (both under the SIL Open Font License), are in `src/files/fonts/`: no page asks another host for a font.
+
+`tests/test_commercial.py` holds the rules for the commercial pages: prices only on the engagements page and only in USD, the employer named once and only on the proof page, no banned words, one voice (the site speaks as "I", never as a firm's "we"), the *Who to hire for what* table on the engagements page, the home page from top to bottom (a hero that fits a first screen, four figures each with its source and its page, the desk: every object has a tile that leads to its page, no maker is named), no script on any page, fonts served by the site itself, the look (every colour a token, no label in capitals or with spread letters, no arrow in a link, one email address, every file a style sheet points to exists), and `FIGURES`, the list of every number a commercial page may print with its source. A new number fails the tests until it is added there.

@@ -1,3 +1,5 @@
+/* Hallmark · checked: 2026-11-14 · the stamp, with what was set aside and why, opens style.css · redesign: polish */
+
 /* The home page only, on top of style.css: the hero with the desk, the symptoms and the three
    situations, the four figures in a chain, the method as three stacked panels, the nine objects, the argument, the
    pillars, the doors, the library and the closing call. Sections run the full width; .wrap or a
@@ -5,8 +7,8 @@
 
 :where(.kind-home) { --band: clamp(4rem, 8vw, 7rem); --edge: max(1.25rem, calc((100% - 84rem) / 2)); }
 :where(.kind-home) h2 { font-stretch: 76%; font-size: clamp(1.75rem, 2.9vw, 2.75rem); line-height: 1.06; letter-spacing: -.012em; }
-.text-link, .thesis-body a, .pillar a, .short a, #library .next a { color: var(--ink); box-shadow: inset 0 -1px 0 var(--accent); transition: color .2s; }
-.text-link:hover, .thesis-body a:hover, .pillar a:hover, .short a:hover, #library .next a:hover { color: var(--accent); }
+.text-link, .thesis-body a, .pillar a, .short a, .method-more a, .note-item .meta a, #library .next a { color: var(--ink); box-shadow: inset 0 -1px 0 var(--accent); transition: color .2s; }
+.text-link:hover, .thesis-body a:hover, .pillar a:hover, .short a:hover, .method-more a:hover, .note-item .meta a:hover, #library .next a:hover { color: var(--accent); }
 
 /* ---------------------------------------------------------------- hero */
 .hero { padding-block: clamp(1.75rem, 3.2vw, 3rem) clamp(2.5rem, 5vw, 4.5rem); }
@@ -17,30 +19,30 @@
 .hero-body { display: grid; gap: 2rem; margin-top: clamp(1.5rem, 3cqi, 2.5rem); }
 .hero .lede { max-width: 34ch; margin: 0; font-size: clamp(1.125rem, 1.6cqi, 1.3125rem); }
 .hero .actions { margin: 1.5rem 0 0; }
+.hero-role { margin-top: 1.25rem; font-weight: 500; font-stretch: 88%; font-size: .875rem; line-height: 1.3; color: var(--muted); }
 .hero-figure img {
   width: 100%;
   aspect-ratio: 16 / 9;
   min-height: 13rem;
   object-fit: cover;
   object-position: 50% 60%;
-  -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 90%, transparent), linear-gradient(180deg, transparent, #000 12%, #000 78%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, var(--mask) 12%, var(--mask) 90%, transparent), linear-gradient(180deg, transparent, var(--mask) 12%, var(--mask) 78%, transparent);
   -webkit-mask-composite: source-in;
-  mask-image: linear-gradient(90deg, transparent, #000 12%, #000 90%, transparent), linear-gradient(180deg, transparent, #000 12%, #000 78%, transparent);
+  mask-image: linear-gradient(90deg, transparent, var(--mask) 12%, var(--mask) 90%, transparent), linear-gradient(180deg, transparent, var(--mask) 12%, var(--mask) 78%, transparent);
   mask-composite: intersect;
 }
-.hero-figure figcaption { margin-top: -.4rem; padding-right: 10%; font: 400 .6875rem/1 var(--mono); color: var(--muted); text-align: right; }
+.hero-figure figcaption { margin-top: .25rem; padding-right: 10%; font-size: .75rem; line-height: 1.3; color: var(--muted); text-align: right; }
 @media (min-width: 62rem) {
   .hero-body { grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); align-items: end; gap: 2.5rem; }
   .hero-copy { padding-bottom: 2.25rem; }
-  .hero-figure img { max-height: calc(100dvh - 20.5rem); }
+  .hero-figure img { max-height: calc(100dvh - 19.5rem); }
 }
 /* Short laptop screens: the whole hero, picture included, stays in the first screen. */
 @media (min-width: 62rem) and (max-height: 51rem) {
   .hero { padding-block: 1.25rem 1.5rem; }
-  .hero .kicker { margin-bottom: .6rem; }
   .hero-body { margin-top: 1.5rem; }
   .hero-copy { padding-bottom: 1.25rem; }
-  .hero-figure img { max-height: calc(100dvh - 20.75rem); }
+  .hero-figure img { max-height: calc(100dvh - 20rem); }
 }
 
 /* ---------------------------------------------------------------- the symptoms and the three situations */
@@ -69,18 +71,17 @@
 .fig-n { font-weight: 660; font-stretch: 66%; font-size: clamp(3.25rem, 6.6vw, 5.75rem); line-height: .9; letter-spacing: -.02em; font-variant-numeric: lining-nums tabular-nums; }
 .fig-lead .fig-n { font-size: clamp(4rem, 9vw, 7.5rem); color: var(--accent); }
 .fig-note { max-width: 52ch; margin-top: .75rem; font-size: .9375rem; color: var(--muted); }
-.fig-g { font: 500 .6875rem/1.3 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.fig-g { font-weight: 500; font-stretch: 88%; font-size: .8125rem; line-height: 1.3; color: var(--muted); }
 .fig-chart { display: block; max-width: 26rem; margin-top: .35rem; }
 .fig-chart svg { display: block; width: 100%; height: .875rem; }
 .fig-chart rect { stroke: var(--ground-deep); stroke-width: 2; vector-effect: non-scaling-stroke; }
 .seg-late, .leg-late::before { fill: var(--accent); background: var(--accent); }
 .seg-flag, .leg-flag::before { fill: var(--ink); background: var(--ink); }
-.seg-open, .leg-open::before { fill: #4d4b47; background: #4d4b47; }
-.fig-legend { display: flex; flex-wrap: wrap; gap: .3rem 1.1rem; margin-top: .6rem; font: 500 .75rem/1.4 var(--mono); color: var(--ink-2); }
+.seg-open, .leg-open::before { fill: var(--bar-rest); background: var(--bar-rest); }
+.fig-legend { display: grid; gap: .2rem; margin-top: .6rem; font-weight: 500; font-size: .8125rem; line-height: 1.4; font-variant-numeric: lining-nums tabular-nums; color: var(--ink-2); }
 .leg::before { content: ""; display: inline-block; width: .6rem; height: .6rem; margin-right: .45rem; vertical-align: -.03rem; }
-.fig-t { max-width: 34ch; color: var(--ink-2); }
-.fig-go { margin-top: auto; padding-top: 1rem; font-weight: 620; font-stretch: 88%; transition: color .2s; }
-.fig-go::after { content: " \2192"; color: var(--accent); }
+.fig-t { max-width: 34ch; color: var(--ink-2); text-wrap: pretty; }
+.fig-go { align-self: flex-start; margin-top: auto; padding-top: 1rem; font-weight: 620; font-stretch: 88%; box-shadow: inset 0 -1px 0 var(--accent); transition: color .2s; }
 .fig:hover .fig-go { color: var(--accent); }
 @media (min-width: 56rem) {
   .fig-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -92,7 +93,6 @@
 .method { padding-top: var(--band); }
 .method h2 { margin-bottom: 2rem; }
 .method-more { max-width: 60ch; margin-top: 2.5rem; color: var(--ink-2); }
-.method-more a { color: var(--accent); text-decoration: underline; text-underline-offset: .2em; }
 .stack li { position: sticky; top: calc(var(--nav) + 8px); z-index: 1; background: var(--ground); }
 .stack li:nth-child(1) { --to: 33.4%; }
 .stack li:nth-child(2) { --to: 66.7%; background: var(--panel); }
@@ -108,7 +108,7 @@
 }
 .step-body { display: grid; gap: 1rem; align-items: end; }
 .step h3 { font-weight: 700; font-stretch: 62%; font-size: clamp(4.5rem, 15vw, 13rem); line-height: .86; letter-spacing: -.02em; }
-.step p { max-width: 26ch; font-size: clamp(1.125rem, 1.7vw, 1.5rem); line-height: 1.35; color: var(--ink-2); }
+.step p { max-width: 32ch; font-size: clamp(1.125rem, 1.7vw, 1.5rem); line-height: 1.35; color: var(--ink-2); text-wrap: balance; }
 @media (max-width: 51.99rem) { .step { min-height: min(38vh, 19rem); } }
 @media (min-width: 52rem) {
   .step-body { grid-template-columns: minmax(0, 8fr) minmax(0, 4fr); }
@@ -123,8 +123,8 @@
   grid-auto-flow: column;
   grid-auto-columns: clamp(15.5rem, 23vw, 19rem);
   gap: 1.25rem;
-  margin-top: calc(2rem - 6px);
-  padding: 6px var(--edge) 1rem; /* 6px on top: room for the focus ring, which the scroller would cut */
+  margin-top: calc(2rem - 8px);
+  padding: 8px var(--edge) 1rem; /* 8px on top: room for the focus ring, which the scroller would cut */
   overflow-x: auto;
   scroll-snap-type: x proximity;
   scroll-padding-inline: var(--edge);
@@ -134,14 +134,13 @@
 .strip li { scroll-snap-align: start; }
 .tile { display: grid; gap: .5rem; align-content: start; }
 .tile-frame { display: block; overflow: hidden; background: var(--ground-deep); }
-.tile img { width: 100%; aspect-ratio: 5 / 4; object-fit: cover; transition: transform .6s var(--ease); }
+.tile img { width: 100%; aspect-ratio: 5 / 4; object-fit: cover; }
 .tile h3 { margin-top: .4rem; transition: color .2s; }
 .tile p { font-size: .9688rem; line-height: 1.5; color: var(--ink-2); }
 .tile .tile-limit { font-size: .875rem; color: var(--muted); }
-.tile:hover img { transform: scale(1.04); }
 .tile:hover h3 { color: var(--accent); }
 .kit-foot { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: .75rem 2rem; margin-top: 1rem; }
-.kit-credit { font: 400 .75rem/1.4 var(--mono); color: var(--muted); }
+.kit-credit { font-size: .8125rem; line-height: 1.4; color: var(--muted); }
 
 /* ---------------------------------------------------------------- the argument */
 .home-thesis { display: grid; gap: 2.5rem; padding: var(--band) var(--edge); background: var(--panel); }
@@ -166,7 +165,7 @@
 /* The yard at night stands behind the first pillar once the desk's files exist. */
 .has-desk .pillar:first-child {
   background:
-    linear-gradient(180deg, rgba(16, 18, 23, .12) 0%, rgba(16, 18, 23, .78) 46%, var(--ground) 88%),
+    linear-gradient(180deg, var(--veil-1) 0%, var(--veil-3) 46%, var(--ground) 88%),
     url("files/desk/yard.webp") center / cover no-repeat var(--ground);
 }
 @media (min-width: 58rem) {
@@ -193,19 +192,18 @@
 .note-item h3 a { transition: color .2s; }
 .note-item h3 a:hover { color: var(--accent); }
 .note-item p { max-width: 46ch; margin-top: .75rem; color: var(--ink-2); }
-.note-item .meta { margin-top: .9rem; font: 500 .8125rem/1.2 var(--mono); }
-.note-item .meta a { color: var(--accent); transition: color .2s; }
-.note-item .meta a:hover { color: var(--accent-up); }
+.note-item .meta { margin-top: .9rem; font-weight: 500; font-stretch: 88%; font-size: .8125rem; line-height: 1.3; }
 #questions { margin-top: clamp(3rem, 6vw, 5rem); }
 .qa { display: grid; gap: 0 4rem; margin-top: 1.25rem; }
 .qa details { margin: 0; padding-block: .7rem; border: 0; }
-.qa summary { display: grid; grid-template-columns: 1.4rem minmax(0, 1fr); gap: .4rem; list-style: none; line-height: 1.35; transition: color .2s; }
+.qa summary { display: grid; grid-template-columns: 1.4rem minmax(0, 1fr); gap: .4rem; list-style: none; line-height: 1.35; text-wrap: pretty; transition: color .2s; }
 .qa summary::-webkit-details-marker { display: none; }
 .qa summary::before { content: "+"; font-family: var(--mono); color: var(--accent); }
 .qa details[open] summary { margin-bottom: 0; }
 .qa details[open] summary::before { content: "-"; }
 .qa summary:hover { color: var(--accent); }
 .qa .short { margin: .5rem 0 .4rem 1.8rem; font-size: .9688rem; color: var(--ink-2); }
+.qa .short a { white-space: nowrap; }
 #library .next { margin-top: 2.5rem; }
 @media (min-width: 52rem) {
   .notes { grid-template-columns: 1fr 1fr; gap: 4rem; }
@@ -214,10 +212,8 @@
 
 /* ---------------------------------------------------------------- the closing call */
 .close { padding-block: clamp(5rem, 10vw, 9rem); }
-.close-link { display: inline-block; font-weight: 660; font-stretch: 66%; font-size: clamp(2.6rem, 8.5vw, 8rem); line-height: .95; letter-spacing: -.02em; transition: color .25s; }
-.close-link span { display: inline-block; color: var(--accent); transition: transform .35s var(--ease); }
+.close-link { display: inline-block; font-weight: 660; font-stretch: 66%; font-size: clamp(2.6rem, 8.5vw, 8rem); line-height: .95; letter-spacing: -.02em; text-decoration: underline; text-decoration-color: var(--accent); text-decoration-thickness: 2px; text-underline-offset: .12em; transition: color .25s; }
 .close-link:hover { color: var(--accent); }
-.close-link:hover span { transform: translateX(.12em); }
 .close p { max-width: 52ch; margin-top: 1.5rem; color: var(--ink-2); }
 
 /* ---------------------------------------------------------------- motion */
@@ -228,11 +224,12 @@
 
 @media (prefers-reduced-motion: no-preference) {
   /* On load: the headline, then the line and the buttons, while the lamp comes on. */
-  .hero .kicker, .h1-a, .h1-b, .hero .lede, .hero .actions { animation: rise .8s var(--ease) both; }
+  .h1-a, .h1-b, .hero .lede, .hero .actions, .hero-role { animation: rise .8s var(--ease) both; }
   .h1-a { animation-delay: .05s; }
   .h1-b { animation-delay: .14s; }
   .hero .lede { animation-delay: .24s; }
   .hero .actions { animation-delay: .32s; }
+  .hero-role { animation-delay: .4s; }
   .hero-figure img { animation: lamp 1.4s var(--ease) .1s both; }
 
   @supports (animation-timeline: view()) {

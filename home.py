@@ -50,19 +50,20 @@ def desk_picture(depth: int) -> str:
 
 
 def hero(page: Page, depth: int) -> str:
-    """The first screen: the headline, one line under it, the contact button and one more link."""
+    """The first screen: the headline, one line under it, the contact button and one more link. Nothing
+    small stands above the headline to announce it: the role signs the block, under the two actions."""
     secondary = ""
     if page.secondary:
         label, slug = page.secondary
         secondary = f'\n<a class="btn btn-ghost" href="{href(slug + "/", depth)}">{esc(label)}</a>'
     return f"""<section id="hero" class="hero">
 <div class="wrap hero-in">
-<p class="kicker">{esc(page.kicker or build.AUTHOR_ROLE)}</p>
 <h1>{headline(page)}</h1>
 <div class="hero-body">
 <div class="hero-copy">
 <p class="lede">{build.render_inline(page.lede or "")}</p>
 <p class="actions">{build.contact_button(page)}{secondary}</p>
+<p class="hero-role">{esc(page.kicker or build.AUTHOR_ROLE)}</p>
 </div>
 {desk_picture(depth)}
 </div>
@@ -229,12 +230,13 @@ def library(pages: list[Page], depth: int) -> str:
 
 
 def closing(page: Page) -> str:
-    """The page ends on the call it opened with: the same words, the same address, and where I work."""
+    """The page ends on the call it opened with: the same words, the same address, and where I work.
+    The words are the link: no arrow follows them."""
     base = f"\n<p>{build.render_inline(page.base_line)}</p>" if page.base_line else ""
     label = esc(page.cta or build.DEFAULT_CTA)
     return f"""<section id="contact" class="close">
 <div class="wrap">
-<a class="close-link" href="{build.contact_href(page)}">{label} <span aria-hidden="true">→</span></a>{base}
+<a class="close-link" href="{build.contact_href(page)}">{label}</a>{base}
 </div>
 </section>"""
 

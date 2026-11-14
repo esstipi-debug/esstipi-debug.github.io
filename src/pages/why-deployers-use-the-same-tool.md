@@ -3,7 +3,7 @@ type: question
 order: 20
 slug: why-deployers-use-the-same-tool
 title: Why do deployers apply the same tool to every problem?
-description: Because knowing a tool shapes what you see, even for experts. The safeguard is a rule set before kickoff, not the deployer's open mind.
+description: Because knowing a tool shapes what you see, even for experts. The safeguard is a rule set before kickoff, not the deployer’s open mind.
 published: 2026-11-09
 updated: 2026-11-09
 origin: the-smith-and-the-tailor

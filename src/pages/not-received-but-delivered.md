@@ -3,7 +3,7 @@ type: question
 order: 90
 slug: not-received-but-delivered
 title: A customer says "not received" and the system says "delivered": which record is wrong?
-description: Often neither. In a public marketplace dataset, 57% of "not received" reviews on delivered orders were written on or before the delivery day.
+description: Often neither. In a public marketplace dataset, 57% of “not received” reviews on delivered orders were written on or before the delivery day.
 published: 2026-11-09
 updated: 2026-11-09
 origin_label: the demo Which Record Lies? (code, tests and method)

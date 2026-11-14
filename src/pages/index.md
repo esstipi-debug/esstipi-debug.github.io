@@ -14,7 +14,7 @@ secondary: See a sample audit | not-received-but-delivered
 subject: What we're seeing
 description: I find the money an operation loses between its records and its floor, and take it out at the cause. US, Australia, Canada, UK, Europe.
 published: 2026-11-09
-updated: 2026-11-09
+updated: 2026-11-14
 ---
 <div class="home-thesis" markdown="1">
 <div class="thesis-head" markdown="1">
@@ -28,7 +28,7 @@ Rarely the algorithm. Usually one of three things that were there before the sys
 
 1. **The record was already wrong.** In one retailer's audit, 65% of about 370,000 inventory records were inaccurate. A new system, or an AI agent, reads that record as the truth. [Why records drift](why-inventory-records-do-not-match-the-shelf/)
 2. **The incentive pays for the wrong thing.** On one floor I walked, mixed, short and damaged orders led back to a productivity bonus paid per operator. The fix was the bonus, not the software.
-3. **Nobody owns it after go-live.** The vendor leaves, the project team dissolves, and the floor goes back to what worked. [Who should own adoption](who-owns-adoption-after-go-live/) · [The 90-day check](90-day-check-after-go-live/)
+3. **Nobody owns it after go-live.** The vendor leaves, the project team dissolves, and the floor goes back to what worked. [Who should own adoption](who-owns-adoption-after-go-live/) and [the 90-day check](90-day-check-after-go-live/)
 
 The number people quote, 95%, comes from a 2025 MIT NANDA report, *The GenAI Divide*: 95% of organisations saw no measurable P&L impact from generative-AI pilots. It is a preliminary industry report, and it covers AI pilots, not ERP or WMS projects. The cause it names is older than AI: brittle workflows and missing context.
 {: .note }
@@ -59,7 +59,7 @@ A 50,000-SKU warehouse-system changeover, an audit anyone can re-run, and the sy
 <div class="pillar" markdown="1">
 ## Working terms
 
-An independent contractor invoicing in USD from Chile, on site on business-visitor entry. [Working terms](working-terms/)
+An independent contractor invoicing in USD from Chile, with remote execution and short business-visitor visits for alignment. [Working terms](working-terms/)
 </div>
 
 </div>

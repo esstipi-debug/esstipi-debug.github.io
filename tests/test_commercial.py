@@ -54,6 +54,7 @@ FIGURES = {
     "02:30": "the night shift, a time of day used as a scene, not a measurement",
     "12": "best fit: a system change in the last or next 12 months (plan C); 12 months of the returning-client "
           "rate (owner decision 2026-11-13, content plan §3 A)",
+    "14": "14 November 2026, date of the engine count (HECHOS, kern)",
     "15": "15 planners (HECHOS, Trayectoria 2016-2017); 15 to 20 hours a week (plan B5)",
     "20": "team of 20 (HECHOS, AGCO row); 15 to 20 hours a week; 20 October 2026 (HECHOS, fdekit)",
     "20%": "order processing time down about 20%, by his estimate (HECHOS, AGCO row; book l.6921); returning "
@@ -62,7 +63,7 @@ FIGURES = {
     "25": "25 October 2026, date of the receiving-kit count (HECHOS, mellon)",
     "30": "30-60-90-day plan; measures that hold 30 days after go-live (plan B5)",
     "30%": "30% at the start and 30% after 30 days (plan B5)",
-    "31": "31 October 2026, date of the engine count (HECHOS, kern)",
+    "31": "31 integration tests on an embedded PostgreSQL in the weightlifting app (HECHOS, Holy Oly)",
     "40%": "40% at go-live (plan B5)",
     "50%": "50% at the start and 50% on delivery (plan B5)",
     "57%": "Olist triage, published page not-received-but-delivered",
@@ -80,6 +81,7 @@ FIGURES = {
     "1,079": "receiving-kit test count (HECHOS, mellon)",
     "1,187": "field-kit passing tests (HECHOS, fdekit)",
     "1,200": "on-site day fee in USD (plan C, option A)",
+    "1,332": "about 1,332 unit test cases in the weightlifting app (HECHOS, Holy Oly)",
     "2022": "start of the Melbourne role (HECHOS, AGCO row)",
     "2024": "end of the Melbourne role (HECHOS, AGCO row); year of tau-bench (Yao et al., arXiv 2406.12045)",
     "2015": "year of Sculley et al., Hidden Technical Debt in Machine Learning Systems (NeurIPS)",
@@ -88,7 +90,8 @@ FIGURES = {
     "2026": "year of the test counts (HECHOS, Sistemas construidos)",
     "6,000": "fractional lead fee in USD per month (plan C, option A)",
     "8,500": "field audit fee in USD (plan C, option A)",
-    "9,689": "engine test count, CLM_TESTS_KERN_ACTUAL (HECHOS, kern)",
+    "9,966": "engine test count, CLM_TESTS_KERN_ACTUAL: collected at commit 7757fb1 on 14 November 2026 "
+             "(HECHOS, kern)",
     "15,000": "cutover leadership fee in USD (plan C, option A)",
     "50,000": "50,000-SKU distribution centre (HECHOS, AGCO row)",
     "2M": "about USD 2M a year of savings identified (HECHOS, Trayectoria 2013-2014)",
@@ -699,4 +702,156 @@ def test_figures_from_the_manuscript_name_their_source(site):
     assert "arxiv.org/abs/2406.12045" in vendors and "papers.nips.cc" in vendors
     for slug in ("a-new-system-goes-live", "proof", "marcos-stipicich"):
         assert "about 20%" in main_text(read(root, build.find(pages, slug))), slug   # as the manuscript states it
+
+
+# ---------------------------------------------------------------- the look, as rules the build keeps
+# From the polish of 2026-11-14 (Hallmark, sloplint): what the linter named on the home page and the two
+# style sheets, kept here so that a later edit cannot bring it back unnoticed.
+
+STYLE_SHEETS = ("style.css", "home.css")
+CSS_COMMENT = re.compile(r"/\*.*?\*/", re.S)
+TOKEN_BLOCK = re.compile(r":root\s*\{[^{}]*\}")
+DECLARATIONS = re.compile(r"\{([^{}]*)\}")
+RULE = re.compile(r"([^{}]+)\{([^{}]*)\}")   # a selector list and its declarations, inside @media or not
+COLOUR_LITERAL = re.compile(r"#[0-9a-fA-F]{3,8}\b|\b(?:rgb|hsl|hwb|lab|lch|oklab|oklch)a?\(")
+LETTER_SPACING = re.compile(r"letter-spacing:\s*([^;}]+)")
+CSS_URL = re.compile(r"""url\(\s*["']?([^"')\s]+)""")
+MAIL_LINK = re.compile(r'href="mailto:([^"?]+)')
+LINK_LABEL = re.compile(r"<a\b[^>]*>(.*?)</a>", re.S)
+ARROWS = frozenset("→↗↘›»")
+MAX_TRACKING = 0.03   # in em: past this a small label reads as set by a template
+
+
+def style_sheets(root: Path) -> dict[str, str]:
+    """The two style sheets as built, without their comments."""
+    return {name: CSS_COMMENT.sub("", (root / name).read_text(encoding="utf-8")) for name in STYLE_SHEETS}
+
+
+def test_every_colour_is_a_token(site):
+    """A colour is written once, in :root, and used by name: nothing below the token block spells one out."""
+    root, _ = site
+    for name, css in style_sheets(root).items():
+        rules = TOKEN_BLOCK.sub("", css)
+        for block in DECLARATIONS.findall(rules):
+            literal = COLOUR_LITERAL.search(block)
+            assert not literal, (name, literal.group(0), block.strip()[:80])
+    assert TOKEN_BLOCK.search(style_sheets(root)["style.css"])
+
+
+def test_no_label_is_set_in_tracked_capitals(site):
+    """Labels are the body face in sentence case: no rule turns text to capitals or spreads its letters."""
+    root, _ = site
+    for name, css in style_sheets(root).items():
+        assert "uppercase" not in css and "small-caps" not in css, name
+        for value in (found.strip() for found in LETTER_SPACING.findall(css)):
+            if value in ("normal", "0"):
+                continue
+            # Written in em, so that it can be read against the limit whatever the size of the type.
+            assert re.fullmatch(r"-?\d*\.?\d+em", value), (name, value)
+            assert float(value[:-2]) <= MAX_TRACKING, (name, value)
+
+
+def test_the_page_clips_sideways_overflow_without_a_scroll_box(site):
+    """On html and on body: clip, never hidden. Hidden makes a scroll box, and the sticky parts stop sticking."""
+    root, _ = site
+    set_on = {"html": "", "body": ""}
+    for selector, block in RULE.findall(style_sheets(root)["style.css"]):
+        for name in (part.strip() for part in selector.split(",")):
+            if name in set_on:
+                set_on[name] += block
+    for element, declarations in set_on.items():
+        assert "overflow-x: clip" in declarations, element
+        assert "overflow-x: hidden" not in declarations and "overflow: hidden" not in declarations, element
+
+
+def test_every_file_a_style_sheet_points_to_exists(site):
+    root, _ = site
+    seen = 0
+    for name, css in style_sheets(root).items():
+        for target in CSS_URL.findall(css):
+            if target.startswith("data:"):
+                continue
+            seen += 1
+            assert (root / target).is_file(), (name, target)
+    assert seen >= len(build.FONT_FILES)
+
+
+def test_every_engagement_card_reads_unless_another_is_picked(site):
+    """The cards open and close with radio buttons and CSS alone. The text of a card is never hidden at
+    rest: the only rule that hides it names the pick of another card, and every card has its rules."""
+    root, pages = site
+    page_html = read(root, build.find(pages, "engagements"))
+    cards = re.findall(r'<article class="eng-card" data-card="(\d+)">', page_html)
+    picks = re.findall(r'<input class="eng-pick" type="radio" name="eng-deck" id="eng-(\d+)"', page_html)
+    assert cards == picks and len(cards) >= 2
+    assert len(re.findall(r'<input class="eng-pick"[^>]*\schecked>', page_html)) == 1   # one card opens the page
+    css = style_sheets(root)["style.css"]
+    for number in cards:
+        opens = f':where(#eng-{number}:checked) ~ .eng-cards .eng-card[data-card="{number}"] .eng-body'
+        gives_way = f':where(#eng-{number}:checked) ~ .eng-cards .eng-card:not([data-card="{number}"]) .eng-body'
+        assert opens in css, number        # narrow screens: the picked card shows its text
+        assert gives_way in css, number    # wide screens: the other cards give way to it
+    at_rest = [block for selector, block in RULE.findall(css)
+               if ".eng-body" in (part.strip() for part in selector.split(","))]
+    assert at_rest
+    for block in at_rest:
+        assert "opacity: 0" not in block and "visibility: hidden" not in block, block.strip()
+
+
+def test_every_mail_link_goes_to_the_site_address(site):
+    """One address, the one in build.py. A card written by hand in a page must not carry another."""
+    root, _ = site
+    seen = 0
+    for path in root.rglob("*.html"):
+        for address in MAIL_LINK.findall(path.read_text(encoding="utf-8")):
+            seen += 1
+            assert address == build.EMAIL, (path.relative_to(root).as_posix(), address)
+    assert seen
+
+
+def test_no_link_carries_an_arrow(site):
+    """A link says where it goes in words. An arrow glued to the label adds nothing a link does not say."""
+    root, pages = site
+    for page in pages:
+        for label in LINK_LABEL.findall(read(root, page)):
+            text = html.unescape(re.sub(r"<[^>]+>", "", label))
+            assert not ARROWS & set(text), (page.slug, " ".join(text.split()))
+
+
+def test_the_hero_opens_with_the_headline_and_signs_with_the_role(site):
+    """Nothing small announces the headline. The role is said once in the hero, under the two actions."""
+    root, pages = site
+    home = build.find(pages, "index")
+    hero = section_of(read(root, home), "hero")
+    assert 'class="kicker"' not in hero
+    assert "<p" not in hero.split("<h1", 1)[0]
+    role = re.search(r'<p class="hero-role">(.*?)</p>', hero, re.S)
+    assert role and html.unescape(role.group(1)) == (home.kicker or build.AUTHOR_ROLE)
+    assert hero.index('class="actions"') < hero.index('class="hero-role"')
+    assert hero.index('class="hero-role"') < hero.index("</div>", hero.index('class="actions"'))   # in the same block
+
+
+def test_no_page_says_its_headline_twice(site):
+    """The small line above a headline names the section. Where it would only repeat the headline, it is left out."""
+    root, pages = site
+    above_headline = re.compile(r'<p class="kicker">(.*?)</p>\s*<h1[^>]*>(.*?)</h1>', re.S)
+    seen = 0
+    for page in pages:
+        match = above_headline.search(read(root, page))
+        if match:
+            seen += 1
+            line, headline = (html.unescape(re.sub(r"<[^>]+>", "", part)).strip().lower() for part in match.groups())
+            assert line != headline, page.slug
+    assert seen   # the pages that name their section still do
+
+
+def test_the_home_page_prints_typographic_quotes(site):
+    """Front matter is plain text and is printed as typed: an apostrophe typed straight shows straight.
+    On the home page, where a door or a description is set large, every quote is a typographic one."""
+    root, pages = site
+    body = read(root, build.find(pages, "index")).split("<main", 1)[1].split("</main>", 1)[0]
+    text = html.unescape(re.sub(r"<[^>]+>", " ", body.split(">", 1)[1]))   # after the opening tag of <main>
+    straight = [" ".join(text[max(0, found.start() - 24): found.start() + 12].split())
+                for found in re.finditer(r"['\"]", text)]
+    assert not straight, straight
 

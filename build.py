@@ -113,7 +113,7 @@ DESK_DETAILS = tuple(DETAIL_SIZES)
 FONT_FILES = ("archivo-latin-variable.woff2", "jetbrains-mono-latin-variable.woff2")  # in src/files/fonts/
 NEXT_LINKS = (("Engagements and fees", SERVICES_SLUG), ("Proof", "proof"), ("Working terms", "working-terms"))
 # The button asks for what the reader sees. Naming what is broken is my work, not theirs.
-DEFAULT_CTA = "Tell me what you're seeing"
+DEFAULT_CTA = "Tell me what you’re seeing"  # a typographic apostrophe: the closing call sets these words very large
 OFFER_UNITS = ("project", "month", "hour", "day")
 FROM_PRICE_UNITS = ("project", "month")  # quoted as "from"; hours and days are flat rates
 AREA_SERVED = ("United States", "Australia", "Canada", "United Kingdom", "Europe")
@@ -873,10 +873,18 @@ def landing_main(page: Page, pages: list[Page], depth: int) -> str:
 </article>"""
 
 
+def section_line(page: Page) -> str:
+    """The small line above a page's headline, naming its section. Left out where it would only say the
+    headline again (a page with no headline of its own, such as the working terms)."""
+    line = page.kicker or page.title
+    if line.strip().lower() == (page.headline or page.title).strip().lower():
+        return ""
+    return f'<p class="kicker">{esc(line)}</p>\n'
+
+
 def page_main(page: Page, pages: list[Page], depth: int) -> str:
     return f"""<article class="page">
-<p class="kicker">{esc(page.kicker or page.title)}</p>
-<h1>{heading(page)}</h1>
+{section_line(page)}<h1>{heading(page)}</h1>
 {page.body_html}
 <p class="actions">{contact_button(page)}</p>
 </article>"""

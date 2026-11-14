@@ -13,7 +13,7 @@ offer: Fractional Operations / Deployment Lead | 6000 | month
 offer: Advisory & Operational Due Diligence | 250 | hour
 offer: On-site days | 1200 | day
 published: 2026-11-09
-updated: 2026-11-09
+updated: 2026-11-14
 ---
 Each one starts from the same place: what your records say against what your floor does.
 
@@ -41,7 +41,7 @@ Each one starts from the same place: what your records say against what your flo
 <li><strong>Week three, the baseline and the list.</strong> Every loss in the order of what it costs, with the count and the arithmetic shown on pages you can forward, and a 30-60-90-day plan, presented to whoever signs.</li>
 </ul>
 <p>Paid 50% at the start and 50% on delivery. On-site days are billed separately. Your team keeps the count sheets and the queries.</p>
-<p class="eng-foot"><a class="eng-cta" href="mailto:marcos.stipicich@gmail.com?subject=Diagnostic%20Field%20Audit">Enquire <span aria-hidden="true">↗</span></a></p>
+<p class="eng-foot"><a class="eng-cta" href="mailto:marcos.stipicic@gmail.com?subject=Diagnostic%20Field%20Audit">Enquire</a></p>
 </div>
 </article>
 
@@ -62,7 +62,7 @@ Each one starts from the same place: what your records say against what your flo
 <li>Go-live and hypercare on the floor, until the old shortcuts die.</li>
 </ul>
 <p>Paid 30% at the start, 40% at go-live and 30% when the agreed measures hold 30 days later.</p>
-<p class="eng-foot"><a class="eng-cta" href="mailto:marcos.stipicich@gmail.com?subject=Deployment%20%26%20Cutover%20Leadership">Enquire <span aria-hidden="true">↗</span></a></p>
+<p class="eng-foot"><a class="eng-cta" href="mailto:marcos.stipicic@gmail.com?subject=Deployment%20%26%20Cutover%20Leadership">Enquire</a></p>
 </div>
 </article>
 
@@ -77,7 +77,7 @@ Each one starts from the same place: what your records say against what your flo
 <div class="eng-head"><span class="eng-idx">III · Three to six months</span><span class="eng-price">from USD 6,000 per month</span></div>
 <h2>Fractional Operations / Deployment Lead</h2>
 <p>For a team that needs a senior operations or deployment lead for 15 to 20 hours a week: stock accuracy and shrink, the flow from purchasing to the warehouse, and the deployment calendar, with two or three working sessions a week with your leadership.</p>
-<p class="eng-foot"><a class="eng-cta" href="mailto:marcos.stipicich@gmail.com?subject=Fractional%20Operations%20%2F%20Deployment%20Lead">Enquire <span aria-hidden="true">↗</span></a></p>
+<p class="eng-foot"><a class="eng-cta" href="mailto:marcos.stipicic@gmail.com?subject=Fractional%20Operations%20%2F%20Deployment%20Lead">Enquire</a></p>
 </div>
 </article>
 
@@ -92,7 +92,7 @@ Each one starts from the same place: what your records say against what your flo
 <div class="eng-head"><span class="eng-idx">IV · Per hour</span><span class="eng-price">USD 250 per hour</span></div>
 <h2>Advisory &amp; Operational Due Diligence</h2>
 <p>For boards and investors: 60-minute sessions, or a short review of the data before a decision.</p>
-<p class="eng-foot"><a class="eng-cta" href="mailto:marcos.stipicich@gmail.com?subject=Advisory%20%26%20Operational%20Due%20Diligence">Enquire <span aria-hidden="true">↗</span></a></p>
+<p class="eng-foot"><a class="eng-cta" href="mailto:marcos.stipicic@gmail.com?subject=Advisory%20%26%20Operational%20Due%20Diligence">Enquire</a></p>
 </div>
 </article>
 

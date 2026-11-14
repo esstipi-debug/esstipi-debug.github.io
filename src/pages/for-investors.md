@@ -5,7 +5,7 @@ slug: for-investors
 title: For investors buying or backing a physical operation
 kicker: Investors
 group: buyer
-door: I'm buying or backing one
+door: I’m buying or backing one
 door_text: Private equity, search funds and expert calls.
 description: For private equity and search funds: an operational due diligence that counts a sample of the inventory before the price is set.
 subject: Operational due diligence
