@@ -236,9 +236,10 @@ class HomeFigure:
     grade: str  # one of FIGURE_GRADES: what kind of source stands behind the number
 
 
-# What stands behind a number, in the words the page shows: a study, a company filing, my own data
-# (published and re-runnable) or my own field work (lived, and stated as my estimate).
-FIGURE_GRADES = ("Study", "Company filing", "My data", "My field work")
+# What stands behind a number, in the words the page shows: a study, a company filing, my own analysis
+# (of public data, published and re-runnable) or my own field work (lived, and stated as my estimate).
+# "My analysis", not "My data": the dataset is public, and only the reading of it is mine.
+FIGURE_GRADES = ("Study", "Company filing", "My analysis", "My field work")
 
 # The triage behind the 57%, as published in the demo's README (Which Record Lies?, Olist dataset):
 # 2,708 "not received" claims on delivered orders, split by what the records say.
@@ -256,7 +257,7 @@ HOME_FIGURES = (
                "by its own estimate.", "Before your go-live", "a-new-system-goes-live", "Company filing"),
     HomeFigure("57%", "of “not received” reviews on delivered orders were written on or before the "
                "delivery day, in a public marketplace dataset.", "See the audit", "not-received-but-delivered",
-               "My data"),
+               "My analysis"),
     HomeFigure("50,000", "SKU distribution centre, taken through its warehouse-system changeover. "
                "By my estimate, order processing time fell about 20%.", "Proof", "proof", "My field work"),
 )

@@ -16,7 +16,7 @@ DESK_ALT = ("Illustration: a desk at night by a window over a warehouse yard, wi
             "a knife, a chest camera, a recorder, a notebook of tally marks and a laptop.")
 DESK_CREDIT = "Illustration"  # under the picture: it is not a photograph, and the page says so
 FIGURES_TITLE = "What you can check"
-FIGURES_NOTE = ("Each number says where it comes from: a study, a company filing, my own data, "
+FIGURES_NOTE = ("Each number says where it comes from: a study, a company filing, my own analysis, "
                 "or my own field work.")
 DEPLOYMENT_LINE = "For technology teams, the same work runs in five steps, from the first audit to the handback."
 DEPLOYMENT_LINK = "How a deployment runs"

@@ -370,6 +370,18 @@ def test_home_shows_four_figures_each_with_its_source_and_page(site):
         assert caption.strip() and label.strip(), number
 
 
+def test_a_public_dataset_is_not_called_my_data(site):
+    """The 57% is read from a public marketplace dataset: the analysis is mine, the data is not, and the
+    page says which of the two it is."""
+    root, pages = site
+    borrowed = [figure for figure in build.HOME_FIGURES if "public" in figure.caption]
+    assert borrowed
+    for figure in borrowed:
+        assert "data" not in figure.grade.lower(), figure.grade
+    section = html.unescape(section_of(read(root, build.find(pages, "index")), "proof")).lower()
+    assert "my data" not in section and "my own data" not in section
+
+
 def test_the_method_is_three_steps_that_need_no_picture(site):
     root, pages = site
     method = section_of(read(root, build.find(pages, "index")), "method")
