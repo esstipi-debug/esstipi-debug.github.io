@@ -65,7 +65,8 @@ FIGURES = {
     "30%": "30% at the start and 30% after 30 days (plan B5)",
     "31": "31 integration tests on an embedded PostgreSQL in the weightlifting app (HECHOS, Holy Oly)",
     "40%": "40% at go-live (plan B5)",
-    "50%": "50% at the start and 50% on delivery (plan B5)",
+    "50%": "50% at the start and 50% on delivery (plan B5); fewer than 50% of tau-bench tasks solved "
+           "(Yao et al. 2024, abstract)",
     "57%": "Olist triage, published page not-received-but-delivered",
     "60": "30-60-90-day plan; 60-minute sessions (plan B5)",
     "65%": "DeHoratius and Raman 2008, published page why-inventory-records-do-not-match-the-shelf",
@@ -82,10 +83,18 @@ FIGURES = {
     "1,187": "field-kit passing tests (HECHOS, fdekit)",
     "1,200": "on-site day fee in USD (plan C, option A)",
     "1,332": "about 1,332 unit test cases in the weightlifting app (HECHOS, Holy Oly)",
-    "2022": "start of the Melbourne role (HECHOS, AGCO row)",
+    "2013": "start of the first planning role, June 2013 (HECHOS, Trayectoria)",
+    "2016": "end of the analyst role, February 2016, and start of the retail planning role, March 2016 "
+            "(HECHOS, Trayectoria)",
+    "2017": "end of the retail planning role, December 2017 (HECHOS, Trayectoria)",
+    "2020": "end of the three-site role, April 2020, and start of the e-commerce role, May 2020 "
+            "(HECHOS, Trayectoria)",
+    "2022": "start of the Melbourne role, August 2022, and end of the e-commerce role, July 2022 "
+            "(HECHOS, Trayectoria)",
     "2024": "end of the Melbourne role (HECHOS, AGCO row); year of tau-bench (Yao et al., arXiv 2406.12045)",
     "2015": "year of Sculley et al., Hidden Technical Debt in Machine Learning Systems (NeurIPS)",
-    "2018": "year of the ERP launch (Revlon, Inc., Form 10-K for 2018, verified 2026-11-13)",
+    "2018": "year of the ERP launch (Revlon, Inc., Form 10-K for 2018, verified 2026-11-13); start of the "
+            "three-site logistics role, January 2018 (HECHOS, Trayectoria)",
     "2025": "year of the MIT NANDA report",
     "2026": "year of the test counts (HECHOS, Sistemas construidos)",
     "6,000": "fractional lead fee in USD per month (plan C, option A)",
@@ -844,15 +853,15 @@ def test_the_hero_opens_with_the_headline_and_signs_with_the_role(site):
 
 
 def test_no_page_says_its_headline_twice(site):
-    """The small line above a headline names the section. Where it would only repeat the headline, it is left out."""
+    """The small line under a headline names the section. Where it would only repeat the headline, it is left out."""
     root, pages = site
-    above_headline = re.compile(r'<p class="kicker">(.*?)</p>\s*<h1[^>]*>(.*?)</h1>', re.S)
+    under_headline = re.compile(r'<h1[^>]*>(.*?)</h1>\s*<p class="kicker">(.*?)</p>', re.S)
     seen = 0
     for page in pages:
-        match = above_headline.search(read(root, page))
+        match = under_headline.search(read(root, page))
         if match:
             seen += 1
-            line, headline = (html.unescape(re.sub(r"<[^>]+>", "", part)).strip().lower() for part in match.groups())
+            headline, line = (html.unescape(re.sub(r"<[^>]+>", "", part)).strip().lower() for part in match.groups())
             assert line != headline, page.slug
     assert seen   # the pages that name their section still do
 
@@ -866,4 +875,60 @@ def test_the_home_page_prints_typographic_quotes(site):
     straight = [" ".join(text[max(0, found.start() - 24): found.start() + 12].split())
                 for found in re.finditer(r"['\"]", text)]
     assert not straight, straight
+
+
+# ---------------------------------------------------------------- every page, as the linter reads it
+# Plan Maestro v2.0 of 2026-11-14: what the home page already keeps, now kept on every page the build writes.
+
+TEXT_ELEMENT = re.compile(r"<(p|li|span|a|h[1-6]|td|th|figcaption|div)\b[^>]*>(.*?)</\1>", re.S)
+BLOCK_INSIDE = re.compile(r"<(?:p|div|ul|ol|li|h[1-6]|table|section|article|hgroup)\b")
+DASHES = re.compile("[–—]")   # an en dash or an em dash
+
+
+def visible_text(page_html: str) -> str:
+    """Every word a reader can see, the head's title included; scripts and styles left out."""
+    without_code = re.sub(r"<(script|style)\b.*?</\1>", " ", page_html, flags=re.S)
+    return html.unescape(re.sub(r"<[^>]+>", " ", without_code))
+
+
+def test_no_page_opens_its_headline_with_a_small_line(site):
+    """Nothing small stands above a headline to announce it: the line that names the section goes under it."""
+    root, pages = site
+    for page in pages:
+        text = read(root, page)
+        if "<h1" in text:
+            assert 'class="kicker"' not in text.split("<h1", 1)[0], page.slug
+
+
+def test_no_headline_sets_part_of_itself_in_italics(site):
+    root, pages = site
+    for page in pages:
+        for headline in re.findall(r"<h1[^>]*>(.*?)</h1>", read(root, page), re.S):
+            assert not re.search(r"<(?:em|i)\b", headline), (page.slug, headline)
+
+
+def test_no_line_joins_three_items_with_middle_dots(site):
+    """One middle dot can join two things, a name and a date. Three things in a row of dots read as a template."""
+    root, pages = site
+    for page in pages:
+        for _, inner in TEXT_ELEMENT.findall(read(root, page)):
+            if BLOCK_INSIDE.search(inner):
+                continue
+            text = " ".join(html.unescape(re.sub(r"<[^>]+>", " ", inner)).split())
+            assert text.count("·") < 2, (page.slug, text[:90])
+
+
+def test_no_page_prints_a_dash(site):
+    """A comma, a colon, a full stop or parentheses do a dash's work; a page range takes a hyphen."""
+    root, pages = site
+    for page in pages:
+        found = DASHES.search(visible_text(read(root, page)))
+        assert not found, (page.slug, visible_text(read(root, page))[max(0, found.start() - 40): found.start() + 20])
+
+
+def test_disabled_controls_have_a_style(site):
+    """The engagements page has radio buttons: a control that can be disabled shows it, and not by fading alone."""
+    root, _ = site
+    rule = re.search(r"([^{}]*:disabled[^{}]*)\{([^{}]*)\}", style_sheets(root)["style.css"])
+    assert rule and "cursor: not-allowed" in rule.group(2)
 

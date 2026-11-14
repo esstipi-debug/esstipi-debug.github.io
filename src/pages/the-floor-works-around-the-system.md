@@ -10,13 +10,13 @@ door_text: You paid for it. The spreadsheet is still beside it.
 description: When a system is live and the floor still keeps a spreadsheet beside it: find why people go around it and make it the fast way.
 subject: A system the floor works around
 published: 2026-11-12
-updated: 2026-11-12
+updated: 2026-11-14
 ---
 You paid for the system. The vendor installed it and left. Nobody in the contract was paid to make the floor use it, and the spreadsheet is still beside the terminal.
 
 ## What I check first
 
-Where people go around the system, shift by shift, and what the workaround saves them. Whether the records the system reads are right. What each shift is paid for. Who owns the system now that the vendor has gone.
+Where people go around the system, shift by shift, and what the workaround saves them. Whether the records the system reads are right. What each shift is paid for. Who owns the system now that the vendor has gone. Then, instead of banning the spreadsheet, I put the system's recommendation, the planner's own play and the status quo side by side in a draft stage, and record the reason for each override before the order goes out. What the floor knows ends up in the rules, or is corrected with evidence.
 
 ## Where I have stood
 

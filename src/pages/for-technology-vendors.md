@@ -1,48 +1,50 @@
 ---
 type: landing
-order: 40
+order: 37
 slug: for-technology-vendors
-title: For teams that deploy AI, robots or a WMS into physical operations
-kicker: Technology vendors
 group: buyer
-door: I sell technology into these floors
-door_text: Applied AI, warehouse robotics, WMS and ERP teams.
-description: For applied-AI, robotics and WMS teams: read the customer's record before go-live, stage the cutover with a way back, and check adoption at 90 days.
-subject: Deployment into physical operations
+door: A technology vendor whose rollouts stall on the customer’s floor
+door_text: The software works in the demo. Three months after go-live, the customer’s planners are back on their spreadsheet.
+title: For Technology Vendors Whose Rollouts Stall on the Customer’s Floor
+kicker: For technology vendors
+headline: Your software works. Their floor routed around it.
+description: Deployment strategy and field diagnosis for WMS, ERP and supply-chain software vendors whose rollouts stall after go-live.
+subject: Rollout stalling on the customer's floor
+cta: Tell me which rollout is stalling
 published: 2026-11-09
 updated: 2026-11-14
 ---
-A pilot can pass every acceptance test and still be bypassed on the night shift. Not out of malice: when the dock is full, the old way is faster.
+In the sales demo, the data was clean and the workflow was linear. Sixty days after go-live at the customer's site, the receiving clerk is typing dummy quantities to clear the dock, the planner has exported your screen back into Excel, and the executive sponsor is asking why the promised ROI has not shown up before renewal.
 
-Passing once is not holding. In τ-bench, a public test of AI agents handling retail customer requests, even the strongest agents tested in 2024 solved fewer than half of the tasks, and the chance of getting the same task right eight times in a row was under a quarter. And the model is the small part: a mature machine-learning system might end up at most 5% model code and at least 95% glue, the code that connects it to the operation.
+Most rollouts do not fail in the model or the core code. In a 2015 NeurIPS paper, Sculley and colleagues noted that a mature machine-learning system might end up at most 5% model code and at least 95% glue code; on tau-bench (Yao et al., 2024), even frontier language-model agents pass fewer than 50% of multi-step retail and airline workflows when they must follow domain rules across turns. In the field, that 95% is where the customer's dirty master data, local incentives and shift shortcuts quietly break your product.
 
-Sources: Yao and others, [τ-bench](https://arxiv.org/abs/2406.12045), 2024. Sculley and others, [Hidden Technical Debt in Machine Learning Systems](https://papers.nips.cc/paper_files/paper/2015/file/86df7dcfd896fcaf2674f757a2463eba-Paper.pdf), 2015.
-{: .src }
+<p class="src">Sources: Sculley et al., <a href="https://papers.nips.cc/paper_files/paper/2015/hash/86df7dcfd896fcaf2674f757a2463eba-Abstract.html">Hidden Technical Debt in Machine Learning Systems</a> (NeurIPS, 2015); Yao et al., <a href="https://arxiv.org/abs/2406.12045">tau-bench</a> (2024).</p>
 
 ## What I check first
 
-Your customer's record, read the way your system will read it: how much of it is true. What the crew is paid for, and whether your system measures the same thing. Where your screen is slower than the workaround.
+- **Silent corruption in the customer's feed:** before your engine runs a single calculation, I check whether one-to-many purchase-order schedule joins, un-netted in-transit inventory, or quarantined dock lots are inflating the stock numbers your ingestion pipeline reads.
+- **The shadow spreadsheet beside the terminal:** what the buyer or supervisor calculates outside your tool, and which real physical constraint your configuration left out: minimum order multiples, dock staging limits, supplier lead-time variance, or shift cutoffs.
+- **The incentive collision:** whether the customer's floor KPIs punish operators for following your workflow, turning every exception into an unrecorded bypass.
 
 ## Where I have stood
 
-I have lived the record your agent will read, and the people who write it: thirteen years in planning, inventory and distribution, and a 50,000-SKU warehouse-system changeover where I stayed on the floor until the shortcuts died ([the record](../proof/#track-record)). I learned to code in C, so I read a warehouse the way a C programmer reads memory: every location is an address, a stockout is a pointer to an empty one, and excess stock is memory nobody freed. Today I use AI coding and review agents to ship faster and audit my own blind spots, while keeping the deterministic math, the staging boundary and the rollback in my hands.
+- **On the customer's floor:** thirteen years in Chile, Argentina and Australia across retail planning for more than 200 stores, a three-site logistics network of about 100 people, a USD 30M cross-border e-commerce P&L, and the warehouse-system cutover of a 50,000-SKU distribution centre where I stayed on the floor until the workarounds died and order processing time fell about 20%.
+- **At the keyboard building deterministic guardrails:** I learned to code in C and build in Python and TypeScript with AI coding agents. I have built an inventory and replenishment engine with 9,966 automated tests, receiving and field-audit kits (1,079 and 1,187 tests), and a weightlifting planning application (about 1,332 unit tests and 31 PostgreSQL integration tests), staging recommendations in draft beside the operator's own play with cryptographic sign-off and rollback, so a bad upstream record never writes directly to production.
 
 ## What I don't claim
 
-I have not deployed AI agents for a vendor, and none of the systems I have built runs a client's operation yet.
+- I have not served as a vendor's commercial account executive, and my own diagnostic engines are pre-revenue tools rather than a competing SaaS product. What I bring to a vendor team is thirteen years on the buyer's side of the table plus the engineering discipline to turn messy floor exceptions into a clean data contract.
+- I use AI to accelerate specification drafting, boilerplate and adversarial code review; floor discovery, causal diagnosis, the mathematical invariants and the sign-off stay in my hands.
+- Hands-on engineering, data-contract work and forensic analysis are performed remotely from Santiago, Chile; short on-site visits focus on floor observation, blind counts and stakeholder alignment under standard business-visitor rules.
 
 ## How we would start {: #how-we-would-start }
 
-Five steps, from the first audit to the handback.
-
-<div class="steps" markdown="1">
-
-1. **Discover on the floor.** Before go-live, at one customer site, I walk every shift beside the crew, so engineering does not build on a flow that exists only on paper. *Out: a map of the decisions, checked on the floor, and the first use cases.*
-2. **Tune.** A baseline from your customer's own data, and a blind count of a sample of SKUs to measure how much of the recorded stock is really there, repeated every cycle. *Out: the baseline, and a map of where the record holds.*
-3. **Orchestrate.** Through go-live: one steering meeting on one number, use cases in sequence starting where the record holds, floor instruction in the crew's own terms and a staged go-live with a way back. *Out: live use cases, each with an owner and measured adoption.*
-4. **Value case.** After go-live, the impact against the baseline, and the 90-day check: who still uses it, who went around it, and why. *Out: the value story for the renewal and the next use cases.*
-5. **Let go.** Handback with your engineers to customer success: success criteria met, value documented, and a map of the next use cases, sites and teams. *Out: a clean handback.*
-
+<div class="steps">
+<ol>
+<li><strong>Discover on the floor.</strong> Walk the customer’s receiving dock, aisles and planning desk alongside your team; reconcile a blind sample of physical stock against the ingested feed. <em>Out: floor-to-schema gap log and baseline discrepancy count.</em></li>
+<li><strong>Tune.</strong> Translate the customer’s real physical constraints and exception rules into a tested data contract: field tolerances, join invariants, unit-of-measure rules and fallback behavior. <em>Out: executable data contract and edge-case test fixtures for your engineering team.</em></li>
+<li><strong>Orchestrate.</strong> Run your system in a safe draft stage where the operator’s play, your engine’s recommendation and the status quo sit side by side before write-back goes live. <em>Out: signed-off cutover checklist, rollback triggers and shift playbook.</em></li>
+<li><strong>Value case.</strong> Measure the operational baseline before cutover and re-measure 30 and 90 days after go-live in metrics the customer’s CFO and COO both accept. <em>Out: before-and-after operational ledger for renewal and expansion.</em></li>
+<li><strong>Let go.</strong> Train the customer’s floor leads on the exception loop and hand your deployment engineers a repeatable onboarding runbook. <em>Out: customer sign-off and the <a href="../files/client-onboarding-plan.pdf">one-page onboarding plan (PDF)</a>.</em></li>
+</ol>
 </div>
-
-At every step your engineers get it in writing: a one-page spec, the data contract (which fields the system will read, who writes them, and how far each one can be trusted) and success criteria signed before kickoff. [The one-page plan](../files/client-onboarding-plan.pdf) (PDF) puts it on a page.

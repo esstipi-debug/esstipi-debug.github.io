@@ -237,7 +237,7 @@ class HomeFigure:
 
 
 # What stands behind a number, in the words the page shows: a study, a company filing, my own analysis
-# (of public data, published and re-runnable) or my own field work (lived, and stated as my estimate).
+# (of public data, published and re-runnable) or my own field work (lived, as HECHOS records it).
 # "My analysis", not "My data": the dataset is public, and only the reading of it is mine.
 FIGURE_GRADES = ("Study", "Company filing", "My analysis", "My field work")
 
@@ -259,7 +259,8 @@ HOME_FIGURES = (
                "delivery day, in a public marketplace dataset.", "See the audit", "not-received-but-delivered",
                "My analysis"),
     HomeFigure("50,000", "SKU distribution centre, taken through its warehouse-system changeover. "
-               "By my estimate, order processing time fell about 20%.", "Proof", "proof", "My field work"),
+               "Order processing time fell about 20% once the floor workarounds were retired.", "Proof", "proof",
+               "My field work"),
 )
 
 
@@ -436,7 +437,8 @@ def link_label(url: str) -> str:
 
 
 def citation_html(citation: Citation) -> str:
-    text = render_inline(citation.text)
+    """A source as the page prints it. A page range takes a hyphen: the site prints no dash."""
+    text = render_inline(citation.text.replace("–", "-"))
     if not citation.url:
         return text
     return f'{text} <a href="{esc(citation.url)}">{esc(link_label(citation.url))}</a>'
@@ -651,13 +653,12 @@ def site_footer(depth: int) -> str:
 
 
 def byline(page: Page, depth: int) -> str:
-    parts = [
-        f'By <a href="{href(AUTHOR_SLUG + "/", depth)}">{AUTHOR}</a>',
-        f'<time datetime="{page.published.isoformat()}">{human_date(page.published)}</time>',
-    ]
+    """The author and the dates: one middle dot at most, between the name and the dates."""
+    author = f'By <a href="{href(AUTHOR_SLUG + "/", depth)}">{AUTHOR}</a>'
+    dates = [f'<time datetime="{page.published.isoformat()}">{human_date(page.published)}</time>']
     if page.updated != page.published:
-        parts.append(f'updated <time datetime="{page.updated.isoformat()}">{human_date(page.updated)}</time>')
-    return f'<p class="byline">{" · ".join(parts)}</p>'
+        dates.append(f'updated <time datetime="{page.updated.isoformat()}">{human_date(page.updated)}</time>')
+    return f'<p class="byline">{author} · {", ".join(dates)}</p>'
 
 
 def mark_first_paragraph(body_html: str, css_class: str) -> str:
@@ -680,6 +681,14 @@ def heading(page: Page) -> str:
     return render_inline(page.headline or page.title)
 
 
+def headline_group(headline: str, line: str = "") -> str:
+    """The headline and, under it, the small line that names the page's section, in one heading group:
+    the line labels the headline above it, never the section that follows (proof opens on a section head)."""
+    if not line:
+        return f"<h1>{headline}</h1>"
+    return f'<hgroup>\n<h1>{headline}</h1>\n<p class="kicker">{line}</p>\n</hgroup>'
+
+
 def contact_href(page: Page) -> str:
     """An email to the author with the page's subject line."""
     return f'mailto:{EMAIL}?subject={quote(page.subject or page.title, safe="")}'
@@ -691,7 +700,7 @@ def contact_button(page: Page) -> str:
 
 
 def next_links(depth: int) -> str:
-    links = " · ".join(f'<a href="{href(slug + "/", depth)}">{esc(label)}</a>' for label, slug in NEXT_LINKS)
+    links = ", ".join(f'<a href="{href(slug + "/", depth)}">{esc(label)}</a>' for label, slug in NEXT_LINKS)
     return f'<p class="next">{links}</p>'
 
 
@@ -716,8 +725,7 @@ def note_main(page: Page, pages: list[Page], depth: int) -> str:
     items = "\n".join(f'<li><a href="{href(question.path, depth)}">{render_inline(question.title)}</a></li>'
                       for question in questions_of(pages, page.slug))
     return f"""<article>
-<p class="kicker">{esc(page.kicker or "Field notes")}</p>
-<h1>{esc(page.title)}</h1>
+{headline_group(esc(page.title), esc(page.kicker or "Field notes"))}
 {byline(page, depth)}
 {lead_with_answer(page.body_html)}
 <p class="cta"><a href="{esc(page.pdf or "")}">Read the field notes</a> (PDF, {page.pdf_pages} pages)</p>
@@ -736,21 +744,20 @@ def author_main(page: Page, pages: list[Page], depth: int) -> str:
     items = "\n".join(writing)
     return f"""<article>
 <h1>{AUTHOR}</h1>
-<p class="lede">{AUTHOR_ROLE} · {LOCATION}</p>
+<p class="lede">{AUTHOR_ROLE}, {LOCATION}</p>
 {page.body_html}
 <h2>Writing</h2>
 <ul>
 {items}
 </ul>
 <h2>Contact</h2>
-<p><a href="{LINKEDIN}">LinkedIn</a> · <a href="{GITHUB}">GitHub</a> · <a href="mailto:{EMAIL}">{EMAIL}</a></p>
+<p><a href="{LINKEDIN}">LinkedIn</a>, <a href="{GITHUB}">GitHub</a>, <a href="mailto:{EMAIL}">{EMAIL}</a></p>
 </article>"""
 
 
 def book_main(page: Page, pages: list[Page], depth: int) -> str:
     return f"""<article>
-<p class="kicker">{esc(page.kicker or "Manuscript")}</p>
-<h1><em>{esc(page.title)}</em></h1>
+{headline_group(esc(page.title), esc(page.kicker or "Manuscript"))}
 <p class="byline">By <a href="{href(AUTHOR_SLUG + '/', depth)}">{AUTHOR}</a></p>
 {page.body_html}
 </article>"""
@@ -866,8 +873,7 @@ def home_main(page: Page, pages: list[Page], depth: int) -> str:
 
 def landing_main(page: Page, pages: list[Page], depth: int) -> str:
     return f"""<article class="landing">
-<p class="kicker">{esc(page.kicker or "Industry")}</p>
-<h1>{heading(page)}</h1>
+{headline_group(heading(page), esc(page.kicker or "Industry"))}
 {mark_first_paragraph(page.body_html, "scene")}
 <p class="actions">{contact_button(page)}</p>
 {next_links(depth)}
@@ -875,17 +881,17 @@ def landing_main(page: Page, pages: list[Page], depth: int) -> str:
 
 
 def section_line(page: Page) -> str:
-    """The small line above a page's headline, naming its section. Left out where it would only say the
+    """The small line under a page's headline, naming its section. Empty where it would only say the
     headline again (a page with no headline of its own, such as the working terms)."""
     line = page.kicker or page.title
     if line.strip().lower() == (page.headline or page.title).strip().lower():
         return ""
-    return f'<p class="kicker">{esc(line)}</p>\n'
+    return esc(line)
 
 
 def page_main(page: Page, pages: list[Page], depth: int) -> str:
     return f"""<article class="page">
-{section_line(page)}<h1>{heading(page)}</h1>
+{headline_group(heading(page), section_line(page))}
 {page.body_html}
 <p class="actions">{contact_button(page)}</p>
 </article>"""

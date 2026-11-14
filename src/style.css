@@ -1,6 +1,7 @@
-/* Hallmark · checked: 2026-11-14 · genre: editorial (inferred) · scope: the home page, style.css and home.css
- * floor: 0 FAIL · fixed: 17 (11, 20, 24b, 25, 34, 41, 48, 50, 54, 62, 63, 64, 67, 73, F1, F20, F26) · structural: 3 printed (58, 59, 77)
+/* Hallmark · checked: 2026-11-14 · genre: editorial (inferred) · scope: all 27 pages of landpage/, style.css and home.css (static tier; with --render the home and vendors pages pass, and 44b, 25 and 39b stay open on the reading pages)
+ * floor: 0 FAIL · fixed: 20 (11, 19, 20, 24b, 25, 26b, 34, 38i, 41, 48, 50, 54, 62, 63, 64, 67, 73, F1, F20, F26) · structural: 3 printed (58, 59, 77)
  * built: the project · redesign: polish · v2.0.0 */
+/* Hallmark · dismissed 46a · "20% less" is the owner's own rate for returning clients, decided on 2026-11-13, a price term and not a measured result */
 /* Hallmark · waive 38iii · one accented phrase, the whole second sentence of the h1, in the hero · the headline is two sentences, the money the operation loses and then what I do about it, and the accent marks the turn */
 /* Hallmark · waive 49b · two links, each a real phrase, on two lines at most at 320px · a field note's title and the closing call are set at display size, so on a phone they break once and no further */
 /* Hallmark · answered F8 · the tape under the header is the page's measuring device, and the lines that light up and the blocks that arrive are one entrance; all three stop under reduced motion */
@@ -75,6 +76,7 @@ img { display: block; max-width: 100%; height: auto; }
 a { color: inherit; text-decoration: none; }
 strong { font-weight: 640; }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+:disabled, [aria-disabled="true"] { opacity: .48; cursor: not-allowed; }
 ::selection { background: var(--selection); color: var(--ink); }
 
 .wrap { width: min(100% - 2.5rem, 84rem); margin-inline: auto; }
@@ -150,6 +152,7 @@ h1, h2, h3 { overflow-wrap: break-word; min-width: 0; } /* a long word in a head
 main.wrap { padding-block: clamp(2.5rem, 5vw, 4.5rem) clamp(4rem, 8vw, 6rem); }
 main.wrap > article, main.wrap > h1, main.wrap > p { max-width: 44rem; }
 :where(main.wrap) h1 { margin-bottom: 1rem; }
+hgroup > h1 { margin-bottom: .5rem; } /* the line that names the section sits close under its headline */
 :where(main.wrap) h2 { margin: 2.75rem 0 .75rem; }
 :where(main.wrap) p { margin-bottom: 1.15rem; }
 :where(main.wrap) :is(ul, ol) { margin-bottom: 1.15rem; padding-left: 1.25rem; list-style: revert; }

@@ -32,7 +32,7 @@ Each one starts from the same place: what your records say against what your flo
 <span class="eng-rail-copy"><span class="eng-rail-title">Diagnostic Field Audit</span><span class="eng-rail-price">from USD 8,500</span></span>
 </div>
 <div class="eng-body">
-<div class="eng-head"><span class="eng-idx">I · Three weeks · fixed price</span><span class="eng-price">from USD 8,500</span></div>
+<div class="eng-head"><span class="eng-idx">I · Three weeks, fixed price</span><span class="eng-price">from USD 8,500</span></div>
 <h2>Diagnostic Field Audit</h2>
 <p>For stock that does not reconcile, write-offs nobody can explain, or a deployment that has stalled.</p>
 <ul>
@@ -53,7 +53,7 @@ Each one starts from the same place: what your records say against what your flo
 <span class="eng-rail-copy"><span class="eng-rail-title">Deployment &amp; Cutover Leadership</span><span class="eng-rail-price">from USD 15,000</span></span>
 </div>
 <div class="eng-body">
-<div class="eng-head"><span class="eng-idx">II · Two to three months · by milestone</span><span class="eng-price">from USD 15,000</span></div>
+<div class="eng-head"><span class="eng-idx">II · Through go-live, project fee</span><span class="eng-price">from USD 15,000</span></div>
 <h2>Deployment &amp; Cutover Leadership</h2>
 <p>For a WMS, ERP, hotel, farm or AI system going live where a bad start stops dispatch or service.</p>
 <ul>
@@ -74,7 +74,7 @@ Each one starts from the same place: what your records say against what your flo
 <span class="eng-rail-copy"><span class="eng-rail-title">Fractional Operations / Deployment Lead</span><span class="eng-rail-price">from USD 6,000 per month</span></span>
 </div>
 <div class="eng-body">
-<div class="eng-head"><span class="eng-idx">III · Three to six months</span><span class="eng-price">from USD 6,000 per month</span></div>
+<div class="eng-head"><span class="eng-idx">III · Retainer, fifteen to twenty hours a week</span><span class="eng-price">from USD 6,000 per month</span></div>
 <h2>Fractional Operations / Deployment Lead</h2>
 <p>For a team that needs a senior operations or deployment lead for 15 to 20 hours a week: stock accuracy and shrink, the flow from purchasing to the warehouse, and the deployment calendar, with two or three working sessions a week with your leadership.</p>
 <p class="eng-foot"><a class="eng-cta" href="mailto:marcos.stipicic@gmail.com?subject=Fractional%20Operations%20%2F%20Deployment%20Lead">Enquire</a></p>
@@ -89,7 +89,7 @@ Each one starts from the same place: what your records say against what your flo
 <span class="eng-rail-copy"><span class="eng-rail-title">Advisory &amp; Operational Due Diligence</span><span class="eng-rail-price">USD 250 per hour</span></span>
 </div>
 <div class="eng-body">
-<div class="eng-head"><span class="eng-idx">IV · Per hour</span><span class="eng-price">USD 250 per hour</span></div>
+<div class="eng-head"><span class="eng-idx">IV · By the hour, or on your floor</span><span class="eng-price">USD 250 per hour</span></div>
 <h2>Advisory &amp; Operational Due Diligence</h2>
 <p>For boards and investors: 60-minute sessions, or a short review of the data before a decision.</p>
 <p class="eng-foot"><a class="eng-cta" href="mailto:marcos.stipicic@gmail.com?subject=Advisory%20%26%20Operational%20Due%20Diligence">Enquire</a></p>
@@ -105,6 +105,8 @@ USD 1,200 per day, plus travel at cost
 {: .price }
 
 For any engagement that needs me on the floor. [How travel works](../working-terms/).
+
+Hands-on data analysis, diagnostic tooling and specification work are delivered remotely from Chile; on-site days are used for floor walks, blind counts and leadership alignment under standard business-visitor rules.
 
 ## After the work
 

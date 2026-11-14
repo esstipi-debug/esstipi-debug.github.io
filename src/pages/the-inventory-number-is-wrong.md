@@ -10,13 +10,13 @@ door_text: The books say one number and the floor holds another.
 description: When the books and the floor disagree on stock: a blind count, the losses listed by what they cost, and the cash they hold.
 subject: The inventory number
 published: 2026-11-12
-updated: 2026-11-12
+updated: 2026-11-14
 ---
 The balance sheet carries the inventory at one number. The floor holds another, and the gap is cash.
 
 ## What I check first
 
-Record accuracy, by blind count. Stock that has not moved and still sits on the books. Shrink, spoilage and damage: whether they are written off when they happen or at period end. Orders shipped wrong, and what each one costs to put right.
+Record accuracy, by blind count. Stock that has not moved and still sits on the books. Shrink, spoilage and damage: whether they are written off when they happen or at period end. Orders shipped wrong, and what each one costs to put right. The drift has two halves. On the floor: receipts nobody scanned at the dock, short picks nobody reported, and locations that mix eaches and cases. In the data: a one-to-many join between order headers and delivery lines that counts stock in transit more than once, and lots held in quality control that a report adds to stock available for sale.
 
 ## Where I have stood
 

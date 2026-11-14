@@ -3,15 +3,15 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>For teams that deploy AI, robots or a WMS into physical operations · Marcos Stipicich</title>
-<meta name="description" content="For applied-AI, robotics and WMS teams: read the customer&#x27;s record before go-live, stage the cutover with a way back, and check adoption at 90 days.">
+<title>For Technology Vendors Whose Rollouts Stall on the Customer’s Floor · Marcos Stipicich</title>
+<meta name="description" content="Deployment strategy and field diagnosis for WMS, ERP and supply-chain software vendors whose rollouts stall after go-live.">
 <meta name="author" content="Marcos Stipicich">
 <link rel="canonical" href="https://esstipi-debug.github.io/landpage/for-technology-vendors/">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#101217">
 <meta property="og:type" content="website">
-<meta property="og:title" content="For teams that deploy AI, robots or a WMS into physical operations">
-<meta property="og:description" content="For applied-AI, robotics and WMS teams: read the customer&#x27;s record before go-live, stage the cutover with a way back, and check adoption at 90 days.">
+<meta property="og:title" content="For Technology Vendors Whose Rollouts Stall on the Customer’s Floor">
+<meta property="og:description" content="Deployment strategy and field diagnosis for WMS, ERP and supply-chain software vendors whose rollouts stall after go-live.">
 <meta property="og:url" content="https://esstipi-debug.github.io/landpage/for-technology-vendors/">
 <meta property="og:site_name" content="Marcos Stipicich">
 <meta name="twitter:card" content="summary">
@@ -19,7 +19,7 @@
 <link rel="icon" href="../favicon.svg" type="image/svg+xml">
 <link rel="preload" href="../files/fonts/archivo-latin-variable.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="../style.css">
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebPage", "name": "For teams that deploy AI, robots or a WMS into physical operations", "description": "For applied-AI, robotics and WMS teams: read the customer's record before go-live, stage the cutover with a way back, and check adoption at 90 days.", "url": "https://esstipi-debug.github.io/landpage/for-technology-vendors/", "inLanguage": "en", "dateModified": "2026-11-14", "isPartOf": {"@type": "WebSite", "url": "https://esstipi-debug.github.io/landpage/"}, "author": {"@type": "Person", "@id": "https://esstipi-debug.github.io/landpage/marcos-stipicich/#person", "name": "Marcos Stipicich", "url": "https://esstipi-debug.github.io/landpage/marcos-stipicich/", "sameAs": ["https://www.linkedin.com/in/marcos-stipicich", "https://github.com/esstipi-debug"]}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebPage", "name": "For Technology Vendors Whose Rollouts Stall on the Customer’s Floor", "description": "Deployment strategy and field diagnosis for WMS, ERP and supply-chain software vendors whose rollouts stall after go-live.", "url": "https://esstipi-debug.github.io/landpage/for-technology-vendors/", "inLanguage": "en", "dateModified": "2026-11-14", "isPartOf": {"@type": "WebSite", "url": "https://esstipi-debug.github.io/landpage/"}, "author": {"@type": "Person", "@id": "https://esstipi-debug.github.io/landpage/marcos-stipicich/#person", "name": "Marcos Stipicich", "url": "https://esstipi-debug.github.io/landpage/marcos-stipicich/", "sameAs": ["https://www.linkedin.com/in/marcos-stipicich", "https://github.com/esstipi-debug"]}}</script>
 </head>
 <body class="kind-landing">
 <a class="skip" href="#main">Skip to content</a>
@@ -36,31 +36,43 @@
 </header>
 <main id="main" class="wrap">
 <article class="landing">
-<p class="kicker">Technology vendors</p>
-<h1>For teams that deploy AI, robots or a WMS into physical operations</h1>
-<p class="scene">A pilot can pass every acceptance test and still be bypassed on the night shift. Not out of malice: when the dock is full, the old way is faster.</p>
-<p>Passing once is not holding. In τ-bench, a public test of AI agents handling retail customer requests, even the strongest agents tested in 2024 solved fewer than half of the tasks, and the chance of getting the same task right eight times in a row was under a quarter. And the model is the small part: a mature machine-learning system might end up at most 5% model code and at least 95% glue, the code that connects it to the operation.</p>
-<p class="src">Sources: Yao and others, <a href="https://arxiv.org/abs/2406.12045">τ-bench</a>, 2024. Sculley and others, <a href="https://papers.nips.cc/paper_files/paper/2015/file/86df7dcfd896fcaf2674f757a2463eba-Paper.pdf">Hidden Technical Debt in Machine Learning Systems</a>, 2015.</p>
+<hgroup>
+<h1>Your software works. Their floor routed around it.</h1>
+<p class="kicker">For technology vendors</p>
+</hgroup>
+<p class="scene">In the sales demo, the data was clean and the workflow was linear. Sixty days after go-live at the customer&rsquo;s site, the receiving clerk is typing dummy quantities to clear the dock, the planner has exported your screen back into Excel, and the executive sponsor is asking why the promised ROI has not shown up before renewal.</p>
+<p>Most rollouts do not fail in the model or the core code. In a 2015 NeurIPS paper, Sculley and colleagues noted that a mature machine-learning system might end up at most 5% model code and at least 95% glue code; on tau-bench (Yao et al., 2024), even frontier language-model agents pass fewer than 50% of multi-step retail and airline workflows when they must follow domain rules across turns. In the field, that 95% is where the customer&rsquo;s dirty master data, local incentives and shift shortcuts quietly break your product.</p>
+<p class="src">Sources: Sculley et al., <a href="https://papers.nips.cc/paper_files/paper/2015/hash/86df7dcfd896fcaf2674f757a2463eba-Abstract.html">Hidden Technical Debt in Machine Learning Systems</a> (NeurIPS, 2015); Yao et al., <a href="https://arxiv.org/abs/2406.12045">tau-bench</a> (2024).</p>
+
 <h2>What I check first</h2>
-<p>Your customer&rsquo;s record, read the way your system will read it: how much of it is true. What the crew is paid for, and whether your system measures the same thing. Where your screen is slower than the workaround.</p>
+<ul>
+<li><strong>Silent corruption in the customer&rsquo;s feed:</strong> before your engine runs a single calculation, I check whether one-to-many purchase-order schedule joins, un-netted in-transit inventory, or quarantined dock lots are inflating the stock numbers your ingestion pipeline reads.</li>
+<li><strong>The shadow spreadsheet beside the terminal:</strong> what the buyer or supervisor calculates outside your tool, and which real physical constraint your configuration left out: minimum order multiples, dock staging limits, supplier lead-time variance, or shift cutoffs.</li>
+<li><strong>The incentive collision:</strong> whether the customer&rsquo;s floor KPIs punish operators for following your workflow, turning every exception into an unrecorded bypass.</li>
+</ul>
 <h2>Where I have stood</h2>
-<p>I have lived the record your agent will read, and the people who write it: thirteen years in planning, inventory and distribution, and a 50,000-SKU warehouse-system changeover where I stayed on the floor until the shortcuts died (<a href="../proof/#track-record">the record</a>). I learned to code in C, so I read a warehouse the way a C programmer reads memory: every location is an address, a stockout is a pointer to an empty one, and excess stock is memory nobody freed. Today I use AI coding and review agents to ship faster and audit my own blind spots, while keeping the deterministic math, the staging boundary and the rollback in my hands.</p>
+<ul>
+<li><strong>On the customer&rsquo;s floor:</strong> thirteen years in Chile, Argentina and Australia across retail planning for more than 200 stores, a three-site logistics network of about 100 people, a USD 30M cross-border e-commerce P&amp;L, and the warehouse-system cutover of a 50,000-SKU distribution centre where I stayed on the floor until the workarounds died and order processing time fell about 20%.</li>
+<li><strong>At the keyboard building deterministic guardrails:</strong> I learned to code in C and build in Python and TypeScript with AI coding agents. I have built an inventory and replenishment engine with 9,966 automated tests, receiving and field-audit kits (1,079 and 1,187 tests), and a weightlifting planning application (about 1,332 unit tests and 31 PostgreSQL integration tests), staging recommendations in draft beside the operator&rsquo;s own play with cryptographic sign-off and rollback, so a bad upstream record never writes directly to production.</li>
+</ul>
 <h2>What I don&rsquo;t claim</h2>
-<p>I have not deployed AI agents for a vendor, and none of the systems I have built runs a client&rsquo;s operation yet.</p>
+<ul>
+<li>I have not served as a vendor&rsquo;s commercial account executive, and my own diagnostic engines are pre-revenue tools rather than a competing SaaS product. What I bring to a vendor team is thirteen years on the buyer&rsquo;s side of the table plus the engineering discipline to turn messy floor exceptions into a clean data contract.</li>
+<li>I use AI to accelerate specification drafting, boilerplate and adversarial code review; floor discovery, causal diagnosis, the mathematical invariants and the sign-off stay in my hands.</li>
+<li>Hands-on engineering, data-contract work and forensic analysis are performed remotely from Santiago, Chile; short on-site visits focus on floor observation, blind counts and stakeholder alignment under standard business-visitor rules.</li>
+</ul>
 <h2 id="how-we-would-start">How we would start</h2>
-<p>Five steps, from the first audit to the handback.</p>
 <div class="steps">
 <ol>
-<li><strong>Discover on the floor.</strong> Before go-live, at one customer site, I walk every shift beside the crew, so engineering does not build on a flow that exists only on paper. <em>Out: a map of the decisions, checked on the floor, and the first use cases.</em></li>
-<li><strong>Tune.</strong> A baseline from your customer&rsquo;s own data, and a blind count of a sample of SKUs to measure how much of the recorded stock is really there, repeated every cycle. <em>Out: the baseline, and a map of where the record holds.</em></li>
-<li><strong>Orchestrate.</strong> Through go-live: one steering meeting on one number, use cases in sequence starting where the record holds, floor instruction in the crew&rsquo;s own terms and a staged go-live with a way back. <em>Out: live use cases, each with an owner and measured adoption.</em></li>
-<li><strong>Value case.</strong> After go-live, the impact against the baseline, and the 90-day check: who still uses it, who went around it, and why. <em>Out: the value story for the renewal and the next use cases.</em></li>
-<li><strong>Let go.</strong> Handback with your engineers to customer success: success criteria met, value documented, and a map of the next use cases, sites and teams. <em>Out: a clean handback.</em></li>
+<li><strong>Discover on the floor.</strong> Walk the customer’s receiving dock, aisles and planning desk alongside your team; reconcile a blind sample of physical stock against the ingested feed. <em>Out: floor-to-schema gap log and baseline discrepancy count.</em></li>
+<li><strong>Tune.</strong> Translate the customer’s real physical constraints and exception rules into a tested data contract: field tolerances, join invariants, unit-of-measure rules and fallback behavior. <em>Out: executable data contract and edge-case test fixtures for your engineering team.</em></li>
+<li><strong>Orchestrate.</strong> Run your system in a safe draft stage where the operator’s play, your engine’s recommendation and the status quo sit side by side before write-back goes live. <em>Out: signed-off cutover checklist, rollback triggers and shift playbook.</em></li>
+<li><strong>Value case.</strong> Measure the operational baseline before cutover and re-measure 30 and 90 days after go-live in metrics the customer’s CFO and COO both accept. <em>Out: before-and-after operational ledger for renewal and expansion.</em></li>
+<li><strong>Let go.</strong> Train the customer’s floor leads on the exception loop and hand your deployment engineers a repeatable onboarding runbook. <em>Out: customer sign-off and the <a href="../files/client-onboarding-plan.pdf">one-page onboarding plan (PDF)</a>.</em></li>
 </ol>
 </div>
-<p>At every step your engineers get it in writing: a one-page spec, the data contract (which fields the system will read, who writes them, and how far each one can be trusted) and success criteria signed before kickoff. <a href="../files/client-onboarding-plan.pdf">The one-page plan</a> (PDF) puts it on a page.</p>
-<p class="actions"><a class="btn btn-contact" href="mailto:marcos.stipicic@gmail.com?subject=Deployment%20into%20physical%20operations">Tell me what you’re seeing</a></p>
-<p class="next"><a href="../engagements/">Engagements and fees</a> · <a href="../proof/">Proof</a> · <a href="../working-terms/">Working terms</a></p>
+<p class="actions"><a class="btn btn-contact" href="mailto:marcos.stipicic@gmail.com?subject=Rollout%20stalling%20on%20the%20customer%27s%20floor">Tell me which rollout is stalling</a></p>
+<p class="next"><a href="../engagements/">Engagements and fees</a>, <a href="../proof/">Proof</a>, <a href="../working-terms/">Working terms</a></p>
 </article>
 </main>
 <footer class="site-footer"><div class="wrap">

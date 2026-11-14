@@ -50,10 +50,10 @@ I walk the floor first, the 02:30 shift included, and ask what happened rather t
 A three-week field audit, cutover leadership, a fractional operations or deployment lead, and advisory by the hour. [Engagements and fees](engagements/)
 </div>
 
-<div class="pillar" markdown="1">
-## Proof
-
-A 50,000-SKU warehouse-system changeover, an audit anyone can re-run, and the systems I build. [What you can check](proof/)
+<div class="pillar">
+<h2>Proof</h2>
+<p>A 50,000-SKU distribution-centre cutover in Melbourne, a USD 30M cross-border P&amp;L, a re-runnable triage of 2,708 marketplace claims, and a 9,966-test inventory and replenishment engine that stages every decision in draft before write-back.</p>
+<p><a href="proof/">See the proof</a></p>
 </div>
 
 <div class="pillar" markdown="1">

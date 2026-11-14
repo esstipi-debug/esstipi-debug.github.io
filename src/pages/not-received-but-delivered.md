@@ -2,10 +2,10 @@
 type: question
 order: 90
 slug: not-received-but-delivered
-title: A customer says "not received" and the system says "delivered": which record is wrong?
+title: A customer says “not received” and the system says “delivered”: which record is wrong?
 description: Often neither. In a public marketplace dataset, 57% of “not received” reviews on delivered orders were written on or before the delivery day.
 published: 2026-11-09
-updated: 2026-11-09
+updated: 2026-11-14
 origin_label: the demo Which Record Lies? (code, tests and method)
 origin_url: https://github.com/esstipi-debug/esstipi-debug/tree/main/demos/which-record-lies
 cite: Olist. *Brazilian E-Commerce Public Dataset by Olist*. Kaggle. Licence CC BY-NC-SA 4.0. | https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce

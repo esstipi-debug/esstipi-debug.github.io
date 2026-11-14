@@ -10,7 +10,7 @@ door_text: A warehouse, ERP or AI system, and the orders still have to ship.
 description: When a warehouse, ERP or AI system is about to go live: a changeover led on the floor, so the operation keeps shipping through it.
 subject: System go-live
 published: 2026-11-12
-updated: 2026-11-12
+updated: 2026-11-14
 ---
 The new system goes live on a Monday. By Thursday the night shift is back on the spreadsheet, and the orders still have to ship.
 
@@ -21,11 +21,11 @@ Source: [Revlon, Inc., annual report on Form 10-K for 2018](https://www.sec.gov/
 
 ## What I check first
 
-Whether the record matches the shelf, by blind count. Where the floor already works around the current system, and why. What each shift is paid for, because people follow the pay before they follow the screen.
+Whether the record matches the shelf, by blind count. Where the floor already works around the current system, and why. What each shift is paid for, because people follow the pay before they follow the screen. Whether the extracts from the old system to the new one keep one line per order line, so a one-to-many join does not count open orders twice, and whether the replenishment rules run first in a draft stage, with a way back, before the dock opens.
 
 ## Where I have stood
 
-I closed one warehouse system and opened the next in a 50,000-SKU distribution centre, with a team of 20 and 23 operators trained on RF scanning. I stayed on the floor until the old shortcuts died. By my estimate, order processing time came down about 20%.
+I closed one warehouse system and opened the next in a 50,000-SKU distribution centre, with a team of 20 and 23 operators trained on RF scanning. I stayed on the floor until the old shortcuts died, and order processing time fell about 20% once the parallel spreadsheets and paper tallies were retired.
 
 ## What I don't claim
 
