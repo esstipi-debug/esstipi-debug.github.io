@@ -1,0 +1,731 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What a deployment strategist should own</title>
+<meta name="color-scheme" content="dark">
+<style>
+@font-face { font-family: "Archivo"; src: url("../landpage/files/fonts/archivo-latin-variable.woff2") format("woff2"); font-weight: 100 900; font-stretch: 62% 125%; font-display: swap; }
+@font-face { font-family: "JetBrains Mono"; src: url("../landpage/files/fonts/jetbrains-mono-latin-variable.woff2") format("woff2"); font-weight: 100 800; font-display: swap; }
+:root {
+  --ground: #101217; --panel: #151821; --panel-2: #1c202b; --ink: #eee9de; --ink-2: #c8c3b7; --muted: #9a958a;
+  --accent: #e3a27e; --accent-soft: rgba(227, 162, 126, .16);
+  --fde: #7fb4e6; --fde-soft: rgba(127, 180, 230, .09);
+  --market: #d8b45a; --market-soft: rgba(216, 180, 90, .07);
+  --pair: #62c79b;
+  --rule: rgba(238, 233, 222, .12); --rule-strong: rgba(238, 233, 222, .28);
+  --mono: "JetBrains Mono", ui-monospace, monospace; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; background: var(--ground); color: var(--ink); font-family: "Archivo", system-ui, sans-serif; overflow-x: clip; }
+body { padding: 22px 16px 40px; }
+.wrap { max-width: 1360px; margin: 0 auto; }
+header { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 16px; padding-bottom: 18px; border-bottom: 1px solid var(--rule); }
+.kicker { font: 500 .76rem/1.4 var(--mono); color: var(--muted); margin: 0 0 8px; }
+h1 { margin: 0; font-weight: 660; font-stretch: 86%; font-size: clamp(1.5rem, 3vw, 2.25rem); line-height: 1.1; }
+.sub { margin: 10px 0 0; color: var(--ink-2); max-width: 46rem; font-size: 1rem; line-height: 1.5; }
+.controls { display: flex; flex-wrap: wrap; gap: 8px; }
+.seg { display: inline-flex; gap: 3px; padding: 4px; border: 1px solid var(--rule); border-radius: 11px; background: var(--panel); }
+.seg button { font: 560 .86rem/1 "Archivo", sans-serif; color: var(--ink-2); background: transparent; border: 0; border-radius: 8px; padding: 10px 13px; cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--panel-2); color: var(--ink); box-shadow: inset 0 0 0 1px var(--rule-strong); }
+.seg button.tab[aria-pressed="true"] { color: var(--ground); background: var(--accent); box-shadow: none; }
+button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+main { margin-top: 20px; }
+.view { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr); gap: 18px; align-items: start; }
+.view[hidden] { display: none; }
+#view-fde { grid-template-columns: 1fr; }
+.card { background: var(--panel); border: 1px solid var(--rule); border-radius: 16px; padding: 20px; min-width: 0; }
+.lead { font-weight: 640; font-stretch: 90%; font-size: 1.12rem; line-height: 1.38; margin: 0 0 14px; max-width: 54rem; }
+.toggles { display: flex; flex-wrap: wrap; gap: 6px; }
+.tog { display: inline-flex; align-items: center; gap: 8px; font: 560 .84rem/1.2 "Archivo", sans-serif; color: var(--muted); background: var(--ground); border: 1px solid var(--rule); border-radius: 999px; padding: 8px 12px; cursor: pointer; }
+.tog[aria-pressed="true"] { color: var(--ink); border-color: var(--rule-strong); }
+.tog[aria-pressed="false"] .sw { opacity: .3; }
+.legend { display: flex; flex-wrap: wrap; gap: 8px 16px; font-size: .84rem; color: var(--ink-2); }
+.key { display: inline-flex; align-items: center; gap: 8px; }
+.sw { width: 22px; height: 0; display: inline-block; flex: none; }
+.sw-fde { border-top: 2.5px solid var(--fde); }
+.sw-market { border-top: 2.5px dashed var(--market); }
+.sw-pair { border-top: 2.5px dashed var(--pair); }
+.sw-tailor, .sw-me { border-top: 3px solid var(--accent); }
+.sw-bar { border-top: 2.5px dashed var(--accent); }
+.sw-check { border-top: 2.5px dotted var(--ink); }
+.note { display: flex; align-items: center; gap: 8px; font-size: .8rem; color: var(--muted); margin: 10px 0 0; }
+.dot-hollow { width: 11px; height: 11px; border-radius: 50%; border: 2px solid var(--ink-2); display: inline-block; flex: none; }
+.chart { width: 100%; height: auto; display: block; margin: 4px auto 0; max-width: 860px; }
+.chart text { font-family: "Archivo", sans-serif; }
+.ring { fill: none; stroke: var(--rule); stroke-width: 1; }
+.ring.outer { stroke: var(--rule-strong); }
+.spoke { stroke: var(--rule); stroke-width: 1; }
+.spoke.on { stroke: var(--ink-2); stroke-width: 1.6; }
+.ring-label { fill: var(--muted); font-size: 13px; paint-order: stroke; stroke: var(--panel); stroke-width: 4px; stroke-linejoin: round; }
+.axis-label, .axis-num { cursor: pointer; }
+.axis-label .nm { fill: var(--ink-2); font-size: 17px; font-weight: 640; }
+.axis-label.gap .nm, .axis-num.gap { fill: var(--accent); }
+.axis-label.on .nm, .axis-num.on { fill: var(--ink); text-decoration: underline; text-underline-offset: 4px; }
+.axis-label .sc { font-size: 13.5px; font-weight: 560; }
+.axis-num { font-size: 30px; font-weight: 700; fill: var(--ink-2); }
+.s-fde { fill: var(--fde); }
+.s-market { fill: var(--market); }
+.s-tailor { fill: var(--accent); }
+.s-check { fill: var(--ink); }
+.s-muted { fill: var(--muted); }
+.p-fde { fill: var(--fde-soft); stroke: var(--fde); stroke-width: 2; stroke-linejoin: round; }
+.p-market { fill: var(--market-soft); stroke: var(--market); stroke-width: 2; stroke-dasharray: 7 5; stroke-linejoin: round; }
+.p-pair { fill: none; stroke: var(--pair); stroke-width: 2.6; stroke-dasharray: 10 6; stroke-linejoin: round; }
+.p-tailor, .p-me { fill: var(--accent-soft); stroke: var(--accent); stroke-width: 2.8; stroke-linejoin: round; }
+.p-bar { fill: none; stroke: var(--accent); stroke-width: 2; stroke-dasharray: 7 5; stroke-linejoin: round; }
+.p-check { fill: none; stroke: var(--ink); stroke-width: 2; stroke-dasharray: 2 5; stroke-linecap: round; }
+.v { stroke-width: 2.2; }
+.v-fde { fill: var(--fde); stroke: var(--fde); }
+.v-market { fill: var(--market); stroke: var(--market); }
+.v-tailor, .v-me { fill: var(--accent); stroke: var(--accent); }
+.v-bar { fill: var(--panel); stroke: var(--accent); }
+.v-check { fill: var(--ink); stroke: var(--ink); }
+.v.hollow { fill: var(--panel); }
+.hit { fill: transparent; cursor: pointer; }
+.pills { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
+.pill { font: 560 .8rem/1.2 "Archivo", sans-serif; color: var(--ink-2); background: var(--ground); border: 1px solid var(--rule); border-radius: 999px; padding: 8px 12px; cursor: pointer; }
+.pill.gap { color: var(--accent); border-color: rgba(227, 162, 126, .45); }
+.pill[aria-pressed="true"] { color: var(--ground); background: var(--accent); border-color: var(--accent); }
+.src { font: 500 .72rem/1.6 var(--mono); color: var(--muted); margin: 16px 0 0; }
+.ins .eyebrow { font: 500 .74rem/1.4 var(--mono); color: var(--muted); margin: 0; }
+.ins h2 { margin: 6px 0 4px; font-size: 1.28rem; font-weight: 650; font-stretch: 90%; line-height: 1.22; }
+.pays { font: 600 .74rem/1 var(--mono); color: var(--accent); }
+.verdict { display: inline-block; font: 600 .74rem/1 var(--mono); padding: 6px 9px; border-radius: 6px; margin-top: 10px; }
+.verdict.gap { color: var(--ground); background: var(--accent); }
+.verdict.over { color: var(--ground); background: var(--market); }
+.verdict.covered { color: var(--ink-2); box-shadow: inset 0 0 0 1px var(--rule-strong); }
+.verdict-text { margin: 12px 0 0; color: var(--ink-2); font-size: .9rem; line-height: 1.5; }
+.block { border-top: 1px solid var(--rule); padding-top: 13px; margin-top: 13px; }
+.block h3 { margin: 0 0 8px; font: 600 .76rem/1.3 var(--mono); color: var(--muted); }
+.block p { margin: 0; color: var(--ink-2); line-height: 1.55; font-size: .95rem; }
+.rows { display: grid; gap: 11px; }
+.row { display: grid; grid-template-columns: 22px minmax(0, 1fr); column-gap: 10px; align-items: center; }
+.row-name { font-weight: 620; font-size: .92rem; color: var(--ink); }
+.row-level { grid-column: 2; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; color: var(--ink-2); font-size: .88rem; margin-top: 4px; }
+.tag-sm { font: 600 .66rem/1 var(--mono); padding: 4px 6px; border-radius: 5px; border: 1px solid var(--rule-strong); color: var(--muted); }
+.tag-sm.coded { color: var(--ink); border-color: var(--ink-2); }
+.lvl { display: flex; align-items: center; gap: 10px; margin: 0 0 8px; color: var(--ink); font-size: .95rem; font-weight: 600; }
+.marks { display: inline-flex; gap: 4px; }
+.marks i { width: 10px; height: 10px; border: 1px solid var(--muted); display: inline-block; border-radius: 2px; }
+.marks.c-fde i.on { background: var(--fde); border-color: var(--fde); }
+.marks.c-market i.on { background: var(--market); border-color: var(--market); }
+.marks.c-pair i.on { background: var(--pair); border-color: var(--pair); }
+.marks.c-tailor i.on { background: var(--accent); border-color: var(--accent); }
+.marks.c-check i.on { background: var(--ink-2); border-color: var(--ink-2); }
+.dist { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 10px; }
+.dist span { width: 28px; height: 28px; border-radius: 7px; display: grid; place-items: center; font: 600 .78rem/1 var(--mono); background: var(--ground); border: 1px solid var(--rule); color: var(--muted); }
+.dist span.l2 { color: var(--ink-2); border-color: var(--rule-strong); }
+.dist span.l3 { color: var(--ground); background: var(--market); border-color: var(--market); }
+.dist.fde span.l3 { background: var(--fde); border-color: var(--fde); }
+.block p.who-line { display: flex; align-items: center; gap: 8px; margin: 12px 0 6px; color: var(--ink); font-weight: 620; font-size: .88rem; }
+.block p.who-line:first-of-type { margin-top: 0; }
+.tag { display: inline-block; font: 600 .72rem/1 var(--mono); padding: 5px 8px; border-radius: 6px; border: 1px solid var(--rule-strong); color: var(--ink-2); margin-top: 8px; }
+.lanes-wrap { overflow-x: auto; margin-top: 6px; }
+.lanes { display: grid; grid-template-columns: 8.5rem repeat(5, minmax(8.5rem, 1fr)); gap: 6px; min-width: 52rem; }
+.step-btn { font: 600 .76rem/1.3 var(--mono); color: var(--muted); background: none; border: 0; border-bottom: 2px solid var(--rule); text-align: left; padding: 8px 4px; cursor: pointer; }
+.step-btn[aria-pressed="true"] { color: var(--accent); border-bottom-color: var(--accent); }
+.who { font-weight: 640; font-size: .88rem; padding: 10px 6px 10px 0; color: var(--ink); display: flex; align-items: center; line-height: 1.3; }
+.who.tailor { color: var(--accent); }
+.cell { background: var(--ground); border: 1px solid var(--rule); border-radius: 11px; padding: 11px; font-size: .83rem; line-height: 1.45; color: var(--ink-2); cursor: pointer; text-align: left; font-family: inherit; }
+.cell.fde { border-style: dashed; }
+.cell.tailor { border-color: rgba(227, 162, 126, .5); color: var(--ink); }
+.cell.on { box-shadow: inset 0 0 0 2px var(--accent); }
+footer { margin-top: 18px; padding-top: 13px; border-top: 1px solid var(--rule); color: var(--muted); font-size: .8rem; line-height: 1.55; }
+@media (max-width: 980px) { .view { grid-template-columns: 1fr; } }
+@media (max-width: 560px) { body { padding: 16px 12px 32px; } .card { padding: 16px; } .ring-label { font-size: 22px; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div>
+    <p class="kicker" id="t-kicker"></p>
+    <h1 id="t-title"></h1>
+    <p class="sub" id="t-sub"></p>
+  </div>
+  <div class="controls">
+    <div class="seg" role="group" aria-label="Views" id="tabs"></div>
+    <div class="seg" role="group" aria-label="Language">
+      <button type="button" data-lang="en" aria-pressed="true">EN</button>
+      <button type="button" data-lang="es" aria-pressed="false">ES</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="view" id="view-bar" aria-labelledby="lead-bar">
+    <div class="card">
+      <p class="lead" id="lead-bar"></p>
+      <div class="toggles" role="group" aria-label="Series" id="series"></div>
+      <p class="note"><span id="note-bar"></span></p>
+      <svg class="chart" id="chart-bar" viewBox="0 0 940 780" role="img"></svg>
+      <div class="pills" id="pills-bar"></div>
+      <p class="src" id="src-bar"></p>
+    </div>
+    <aside class="card ins" id="ins-bar" aria-live="polite"></aside>
+  </section>
+
+  <section class="view" id="view-me" aria-labelledby="lead-me" hidden>
+    <div class="card">
+      <p class="lead" id="lead-me"></p>
+      <div class="legend" id="legend-me"></div>
+      <p class="note"><span class="dot-hollow" aria-hidden="true"></span><span id="note-me"></span></p>
+      <svg class="chart" id="chart-me" viewBox="0 0 940 780" role="img"></svg>
+      <div class="pills" id="pills-me"></div>
+      <p class="src" id="src-me"></p>
+    </div>
+    <aside class="card ins" id="ins-me" aria-live="polite"></aside>
+  </section>
+
+  <section class="view" id="view-fde" aria-labelledby="lead-fde" hidden>
+    <div class="card">
+      <p class="lead" id="lead-fde"></p>
+      <div class="lanes-wrap"><div class="lanes" id="lanes"></div></div>
+      <p class="src" id="src-fde"></p>
+    </div>
+  </section>
+</main>
+<footer id="t-foot"></footer>
+</div>
+
+<!-- Levels coded from job postings with one pre-registered rubric: 0 not in the role, 1 mentioned,
+     2 built or tested before go-live, 3 owned in the live operation. One object per posting; companies stay out of the page.
+     C code, S system, V presales, L legacy, E evals, K compliance and scale, T screens, A adversarial,
+     W write, R record, F floor, I incentive, P value, U shift; O adoption (strategist only). -->
+<script type="application/json" id="atlas-data">
+{"strategist": [
+  {"C": 0, "S": 3, "V": 2, "L": 0, "E": 0, "K": 0, "T": 0, "A": 0, "W": 0, "R": 0, "F": 3, "I": 0, "P": 3, "U": 1, "O": 3},
+  {"C": 0, "S": 3, "V": 1, "L": 0, "E": 0, "K": 0, "T": 0, "A": 2, "W": 2, "R": 0, "F": 3, "I": 0, "P": 0, "U": 3, "O": 3},
+  {"C": 0, "S": 3, "V": 2, "L": 0, "E": 0, "K": 0, "T": 0, "A": 0, "W": 2, "R": 0, "F": 1, "I": 0, "P": 0, "U": 0, "O": 1},
+  {"C": 0, "S": 3, "V": 2, "L": 0, "E": 0, "K": 0, "T": 0, "A": 0, "W": 0, "R": 0, "F": 1, "I": 0, "P": 3, "U": 0, "O": 3},
+  {"C": 1, "S": 3, "V": 0, "L": 1, "E": 0, "K": 0, "T": 0, "A": 0, "W": 0, "R": 0, "F": 0, "I": 0, "P": 3, "U": 0, "O": 3},
+  {"C": 0, "S": 3, "V": 1, "L": 1, "E": 0, "K": 0, "T": 0, "A": 0, "W": 0, "R": 0, "F": 3, "I": 0, "P": 0, "U": 3, "O": 3},
+  {"C": 1, "S": 3, "V": 2, "L": 0, "E": 0, "K": 0, "T": 0, "A": 0, "W": 0, "R": 0, "F": 1, "I": 0, "P": 3, "U": 0, "O": 3},
+  {"C": 2, "S": 3, "V": 2, "L": 0, "E": 0, "K": 0, "T": 0, "A": 1, "W": 0, "R": 0, "F": 3, "I": 0, "P": 3, "U": 1, "O": 0},
+  {"C": 2, "S": 3, "V": 1, "L": 1, "E": 2, "K": 1, "T": 3, "A": 1, "W": 2, "R": 2, "F": 3, "I": 0, "P": 1, "U": 0, "O": 3}
+],
+"engineer": [
+  {"C": 2, "S": 3, "V": 0, "L": 0, "E": 2, "K": 0, "T": 0, "A": 0, "W": 0, "R": 2, "F": 0, "I": 0, "P": 3, "U": 0},
+  {"C": 3, "S": 3, "V": 0, "L": 0, "E": 0, "K": 1, "T": 0, "A": 0, "W": 0, "R": 0, "F": 3, "I": 0, "P": 0, "U": 0},
+  {"C": 2, "S": 2, "V": 0, "L": 0, "E": 0, "K": 0, "T": 0, "A": 0, "W": 0, "R": 0, "F": 0, "I": 0, "P": 0, "U": 0},
+  {"C": 3, "S": 3, "V": 0, "L": 0, "E": 3, "K": 2, "T": 1, "A": 0, "W": 2, "R": 0, "F": 0, "I": 0, "P": 2, "U": 1},
+  {"C": 2, "S": 3, "V": 3, "L": 0, "E": 1, "K": 2, "T": 0, "A": 0, "W": 0, "R": 0, "F": 1, "I": 0, "P": 3, "U": 0},
+  {"C": 2, "S": 2, "V": 3, "L": 0, "E": 0, "K": 2, "T": 1, "A": 1, "W": 0, "R": 0, "F": 0, "I": 0, "P": 1, "U": 0},
+  {"C": 3, "S": 3, "V": 2, "L": 0, "E": 0, "K": 2, "T": 3, "A": 0, "W": 2, "R": 0, "F": 0, "I": 0, "P": 0, "U": 0},
+  {"C": 2, "S": 3, "V": 2, "L": 0, "E": 0, "K": 0, "T": 0, "A": 2, "W": 2, "R": 0, "F": 3, "I": 0, "P": 1, "U": 0},
+  {"C": 3, "S": 3, "V": 0, "L": 0, "E": 0, "K": 2, "T": 0, "A": 2, "W": 0, "R": 0, "F": 0, "I": 0, "P": 0, "U": 0}
+]}
+</script>
+<script>
+(() => {
+  const DATA = JSON.parse(document.getElementById("atlas-data").textContent);
+  const ROLES = DATA.strategist, ENGINEERS = DATA.engineer;
+  const N = ROLES.length, M = ENGINEERS.length;
+  const count = (key, test, rows = ROLES) => rows.filter(role => test(role[key])).length;
+  const WORDS = {
+    en: ["none", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen"],
+    es: ["ninguno", "uno", "dos", "tres", "cuatro", "cinco", "seis", "siete", "ocho", "nueve", "diez", "once", "doce", "trece", "catorce"]
+  };
+  const word = (n, lang) => WORDS[lang][n] ?? String(n);
+  const capital = text => text.charAt(0).toUpperCase() + text.slice(1);
+  const median = values => { const s = [...values].sort((a, b) => a - b); return s[Math.floor(s.length / 2)]; };
+  const some = (n, lang) => n === 0 ? (lang === "en" ? "None" : "Ninguno") : String(n);
+
+  const LEVELS = {
+    en: ["Not in the role", "Mentioned", "Tested before go-live", "Owned in the live operation"],
+    es: ["Fuera del rol", "Mencionado", "Probado antes del go-live", "Responde en la operación viva"]
+  };
+  const RING_SHORT = { en: ["", "Mentioned", "Tested", "Owned live"], es: ["", "Mencionado", "Probado", "Responde en vivo"] };
+  const GRADE = {
+    field: { en: "My field work", es: "Mi trabajo de campo" },
+    private: { en: "Tested, private repository", es: "Probado, repositorio privado" },
+    public: { en: "Public and re-runnable", es: "Público y re-ejecutable" }
+  };
+
+  // Fourteen axes, by family: technology and the sale run down the right, the operation up the left.
+  // fde and market without `code` are provisional estimates; `code` names the rubric column the market level is coded from.
+  // tailor is the role I propose; me and check are my record and what a stranger can run without me.
+  const AXES = [
+    { key: "C", tailor: 2, me: 2, grade: "private", check: 2, pays: "COO",
+      short: { en: "Production\nPython and SQL", es: "Python y SQL\nen producción" },
+      why: { en: "Connectors and transforms that fail in production stop the rollout, whatever the strategy.",
+             es: "Conectores y transformaciones que fallan en producción frenan el despliegue, sea cual sea la estrategia." },
+      own: { en: "Reads and tests the code that touches the record; the engineer writes it and answers for it in production.",
+             es: "Lee y prueba el código que toca el registro; el ingeniero lo escribe y responde por él en producción." },
+      mine: { en: "I build my own tools in Python, SQL and TypeScript, among them an engine with 10,483 passing tests.",
+              es: "Construyo mis herramientas en Python, SQL y TypeScript, entre ellas un motor con 10.483 tests que pasan." },
+      checkText: { en: "The receiving kit is open source, with its tests, and so is the code of the claims audit.",
+                   es: "El kit de recepción es de código abierto, con sus tests, y también el código de la auditoría de reclamos." } },
+    { key: "S", tailor: 1, me: null, check: 0, pays: "COO",
+      short: { en: "Cloud, APIs\nand ERP", es: "Cloud, APIs\ny ERP" },
+      why: { en: "If the product never connects to the customer's ERP, nothing reaches the floor.",
+             es: "Si el producto nunca se conecta al ERP del cliente, nada llega al piso." },
+      note: l => l === "en"
+        ? `Coded as owning the product's deployment: ${count("S", v => v === 3)} of ${N} postings ask for it.`
+        : `Codificado como hacerse cargo del despliegue del producto: ${count("S", v => v === 3)} de ${N} avisos lo piden.`,
+      own: { en: "Names what the ERP must receive and what it must refuse; the engineer and the integrator build the connection.",
+             es: "Define qué debe recibir el ERP y qué debe rechazar; el ingeniero y el integrador construyen la conexión." } },
+    { key: "V", tailor: 1, me: null, check: 0, pays: "CEO",
+      short: { en: "Presales\nand SOW", es: "Preventa\ny SOW" },
+      why: { en: "When the person who scopes the rollout also sells it, the scope bends to close the deal and the floor pays later.",
+             es: "Cuando quien define el alcance también lo vende, el alcance se dobla para cerrar el trato y el piso paga después." },
+      own: { en: "Scopes the work and says what not to promise. Selling is someone else's job.",
+             es: "Define el alcance y dice qué no prometer. Vender es trabajo de otro." } },
+    { key: "L", tailor: 2, me: null, check: 0, pays: "CFO",
+      short: { en: "Speed vs.\nstrangler fig", es: "Velocidad vs.\nstrangler fig" },
+      why: { en: "Build on top of the legacy system or replace it piece by piece: the wrong call leaves the customer paying for two systems.",
+             es: "Montarse sobre el sistema heredado o reemplazarlo por partes: la decisión equivocada deja al cliente pagando dos sistemas." },
+      own: { en: "Weighs the trade-off against the floor and the record before the engineer commits to a path.",
+             es: "Pesa la disyuntiva contra el piso y el registro antes de que el ingeniero elija camino." } },
+    { key: "E", tailor: 2, me: null, check: 0, pays: "CFO",
+      short: { en: "AI evals\nand CPVT", es: "Evals de IA\ny CPVT" },
+      why: { en: "A model never tested on the customer's own cases, or one that costs more per valid transaction (CPVT) than it saves, burns the budget quietly.",
+             es: "Un modelo que nunca se probó con los casos del cliente, o que cuesta más por transacción válida (CPVT) de lo que ahorra, quema el presupuesto en silencio." },
+      own: { en: "Writes the floor cases the evaluation must pass, and prices each valid transaction before anything is automated.",
+             es: "Escribe los casos del piso que la evaluación debe pasar, y pone precio a cada transacción válida antes de automatizar." } },
+    { key: "K", tailor: 1, me: null, check: 0, pays: "CEO",
+      short: { en: "Compliance\nand scale", es: "Compliance\ny escala" },
+      why: { en: "A pilot that cannot pass the security review or reach the next site never becomes a contract.",
+             es: "Un piloto que no pasa la revisión de seguridad o no llega al siguiente sitio nunca se vuelve contrato." },
+      own: { en: "Flags what the operation needs before it scales; security and the platform team own the rest.",
+             es: "Señala lo que la operación necesita antes de escalar; seguridad y el equipo de plataforma responden por el resto." } },
+    { key: "T", tailor: 2, me: 2, grade: "private", check: 0, pays: "COO",
+      short: { en: "UI and BI\ndashboards", es: "UI y tableros\nde BI" },
+      why: { en: "A dashboard nobody acts on is a cost, not a control.",
+             es: "Un tablero sobre el que nadie actúa es un costo, no un control." },
+      own: { en: "Designs each screen around the decision it must change, not around the data it can show.",
+             es: "Diseña cada pantalla alrededor de la decisión que debe cambiar, no de los datos que puede mostrar." },
+      mine: { en: "My engine's decision cards set its recommendation beside the operator's own play and the status quo.",
+              es: "Las tarjetas de decisión de mi motor ponen su recomendación junto a la jugada del operador y al statu quo." } },
+    { key: "A", tailor: 3, me: 2, grade: "public", check: 2, pays: "CFO",
+      short: { en: "Adversarial\nmodelling", es: "Modelado\nadversarial" },
+      why: { en: "Every rule gets gamed: by a crew under pressure, by a bad record, by a supplier. Nobody models it before go-live.",
+             es: "Toda regla se trampea: un equipo bajo presión, un registro malo, un proveedor. Nadie lo modela antes del go-live." },
+      own: { en: "Lists how each rule will be gamed, tests the system against that list before go-live and keeps the list alive after it.",
+             es: "Lista cómo se va a trampear cada regla, prueba el sistema contra esa lista antes del go-live y la mantiene viva después." },
+      mine: { en: "My public audit reads 2,708 'not received' claims against the delivery record: 1,542 were written on or before the recorded delivery day.",
+              es: "Mi auditoría pública lee 2.708 reclamos de «no recibido» contra el registro de entrega: 1.542 se escribieron el día de entrega registrado o antes." },
+      checkText: { en: "The audit's code and tests are public and re-runnable.",
+                   es: "El código y los tests de la auditoría son públicos y se pueden volver a correr." } },
+    { key: "W", tailor: 3, me: 2, grade: "private", check: 0, pays: "CFO",
+      short: { en: "Guardrails\non the write", es: "Guardarraíles\nen la escritura" },
+      why: { en: "A recommendation goes straight into the ERP. Nobody can say who approved it, and nobody can undo it.",
+             es: "Una recomendación entra directo al ERP. Nadie puede decir quién la aprobó ni deshacerla." },
+      note: l => l === "en"
+        ? `${count("W", v => v === 2)} of ${N} ask for a test or readiness stage before go-live. None makes the strategist own what is written in the live system.`
+        : `${count("W", v => v === 2)} de ${N} piden una etapa de prueba o de preparación antes del go-live. Ninguno hace al estratega responsable de lo que se escribe en vivo.`,
+      own: { en: "Draft first; a signed approval; a threshold set on the server, not by whoever signs; a way back for every change.",
+             es: "Primero borrador; aprobación firmada; umbral fijado en el servidor, no por quien firma; vuelta atrás para cada cambio." },
+      mine: { en: "My engine stages every decision in draft before write-back, waits for a signed approval and can roll each change back. No client runs it in production yet.",
+              es: "Mi motor deja cada decisión en borrador antes de escribir, espera una aprobación firmada y puede revertir cada cambio. Todavía no lo corre ningún cliente en producción." } },
+    { key: "R", tailor: 3, me: 3, grade: "field", check: 2, pays: "CFO",
+      short: { en: "Raw-data\nhygiene", es: "Higiene del\ndato crudo" },
+      why: { en: "One-to-many joins, stock in transit left un-netted and blocked lots inflate the numbers the system reads. The math is right on a wrong record.",
+             es: "Joins de uno a muchos, stock en tránsito sin netear y lotes bloqueados inflan los números que lee el sistema. La cuenta está bien sobre un registro malo." },
+      note: l => l === "en"
+        ? `${some(count("R", v => v >= 2), l)} of ${N} asks to validate the customer's data before go-live; ${count("R", v => v === 0)} do not mention it.`
+        : `${some(count("R", v => v >= 2), l)} de ${N} pide validar los datos del cliente antes del go-live; ${count("R", v => v === 0)} no lo mencionan.`,
+      own: { en: "Checks the raw extract before any calculation. If a number fails, nothing is written.",
+             es: "Revisa el extracto crudo antes de cualquier cálculo. Si un número falla, no se escribe nada." },
+      mine: { en: "I ran the inventory accuracy and cycle-count programs across a distribution network.",
+              es: "Llevé los programas de exactitud de inventario y de conteo cíclico en una red de distribución." },
+      checkText: { en: "A re-runnable audit of 2,708 marketplace claims, and the integrity guards of the open-source kit.",
+                   es: "Una auditoría re-ejecutable de 2.708 reclamos de un marketplace, y las guardas de integridad del kit de código abierto." } },
+    { key: "F", tailor: 3, me: 3, grade: "field", check: 0, pays: "COO",
+      short: { en: "The floor\nat 02:30", es: "El piso\na las 02:30" },
+      why: { en: "Configured to the manual, the system meets another floor at night: the crew keeps a sheet beside the terminal and the data goes stale.",
+             es: "Configurado según el manual, el sistema se encuentra con otro piso de noche: el equipo lleva una planilla al lado del terminal y el dato envejece." },
+      note: l => l === "en"
+        ? `${count("F", v => v === 3)} of ${N} send the strategist on site to see the real work and own the fit; ${count("F", v => v === 1)} ask to understand workflows from a distance; ${count("F", v => v === 0)} does not mention it.`
+        : `${count("F", v => v === 3)} de ${N} mandan al estratega al lugar a ver el trabajo real y responder por el ajuste; ${count("F", v => v === 1)} piden entender los flujos a distancia; ${count("F", v => v === 0)} no lo menciona.`,
+      own: { en: "Walks every shift before configuring, the night one included, and owns the fit until the workarounds die.",
+             es: "Camina todos los turnos antes de configurar, el nocturno incluido, y responde por el ajuste hasta que mueren los atajos." },
+      mine: { en: "In the Melbourne cutover I mapped how stock and dispatch actually ran, and stayed on shift until the workarounds died.",
+              es: "En el cutover de Melbourne mapeé cómo corrían de verdad el stock y el despacho, y me quedé en el turno hasta que murieron los atajos." } },
+    { key: "I", tailor: 3, me: 3, grade: "field", check: 0, pays: "COO",
+      short: { en: "Incentives\nand friction", es: "Incentivos\ny fricción" },
+      why: { en: "A bonus per operator pays for the shortcut that breaks the order, and the software takes the blame.",
+             es: "Un bono por operador paga el atajo que rompe el pedido, y la culpa se la lleva el software." },
+      note: l => l === "en"
+        ? `${some(count("I", v => v >= 1), l)} of the ${N} postings mention the customer's incentives.`
+        : `${some(count("I", v => v >= 1), l)} de los ${N} avisos menciona los incentivos del cliente.`,
+      own: { en: "Audits KPIs and bonuses on the floor before go-live, and changes what pays for the bypass.",
+             es: "Audita KPI y bonos en el piso antes del go-live, y cambia lo que paga el atajo." },
+      mine: { en: "In one of my consulting engagements I retired a per-operator bonus that was producing mixed, short and damaged orders, and replaced it with customer satisfaction: zero claims and response time.",
+              es: "En una de mis consultorías retiré un bono por operador que producía pedidos mezclados, faltantes y dañados, y lo reemplacé por satisfacción del cliente: cero reclamos y tiempo de respuesta." } },
+    { key: "P", tailor: 3, me: 3, grade: "field", check: 0, pays: "CFO",
+      short: { en: "P&L and the\n90-day check", es: "P&L y control\na 90 días" },
+      why: { en: "Three months after go-live nobody can show the saving, because nobody measured the baseline.",
+             es: "Tres meses después del go-live nadie puede mostrar el ahorro, porque nadie midió la línea base." },
+      note: l => {
+        const value = count("P", v => v === 3), both = ROLES.filter(role => Math.min(role.O, role.P) === 3).length;
+        return l === "en"
+          ? `${value} of ${N} make the strategist own the measured value; ${both} of ${N} own the adoption as well.`
+          : `${value} de ${N} hacen al estratega responsable del valor medido; ${both} de ${N} también de la adopción.`;
+      },
+      own: { en: "A baseline before cutover, re-measured at 30 and 90 days in figures the CFO accepts.",
+             es: "Línea base antes del corte, medida de nuevo a los 30 y 90 días en cifras que el CFO acepta." },
+      mine: { en: "I owned a USD 30M cross-border P&L where about USD 5M of inventory was freed.",
+              es: "Respondí por un P&L transfronterizo de USD 30M donde se liberaron cerca de USD 5M de inventario." } },
+    { key: "U", tailor: 3, me: 3, grade: "field", check: 0, pays: "COO",
+      short: { en: "Shift-level\nUX", es: "UX del\nturno" },
+      why: { en: "If the screen does not work with gloves, a scanner and a queue at 02:30, the crew goes back to paper.",
+             es: "Si la pantalla no sirve con guantes, escáner y una cola a las 02:30, el equipo vuelve al papel." },
+      own: { en: "Tests every screen on shift with the crew and owns the change until the paper is gone.",
+             es: "Prueba cada pantalla en el turno con el equipo y responde por el cambio hasta que desaparece el papel." },
+      mine: { en: "In the Melbourne cutover I trained 23 operators on RF scanning and stayed on the floor until the old shortcuts died.",
+              es: "En el cutover de Melbourne capacité a 23 operadores en escaneo RF y me quedé en el piso hasta que murieron los atajos." } }
+  ];
+  const marketLevel = axis => median(ROLES.map(role => role[axis.key]));
+  const fdeLevel = axis => median(ENGINEERS.map(role => role[axis.key]));
+  const pairLevel = axis => Math.max(fdeLevel(axis), marketLevel(axis));
+  const describe = (rows, key, lang) => {
+    const n = level => rows.filter(row => row[key] === level).length;
+    return lang === "en"
+      ? `Owned live in ${n(3)}, built or tested in ${n(2)}, mentioned in ${n(1)}, absent from ${n(0)}.`
+      : `Responden en vivo ${n(3)}, lo construyen o prueban ${n(2)}, lo mencionan ${n(1)}, no lo incluyen ${n(0)}.`;
+  };
+  const verdictOf = axis => pairLevel(axis) < axis.tailor ? "gap" : marketLevel(axis) > axis.tailor ? "over" : "covered";
+  const label = (axis, lang) => axis.short[lang].replace("\n", " ");
+
+  const STEPS = [
+    { label: { en: "1. Discover", es: "1. Descubrir" },
+      fde: { en: "Technical discovery: access, APIs, integration feasibility.", es: "Descubrimiento técnico: accesos, APIs, factibilidad de integración." },
+      market: { en: "Use cases and success criteria, agreed with executives.", es: "Casos de uso y criterios de éxito, acordados con ejecutivos." },
+      tailor: { en: "A floor-to-schema gap log, and a blind count against the feed.", es: "Registro de brechas entre el piso y el esquema, y conteo ciego contra el feed." } },
+    { label: { en: "2. Tune", es: "2. Ajustar" },
+      fde: { en: "Configures the product and writes the connectors, in SQL and Python.", es: "Configura el producto y escribe los conectores, en SQL y Python." },
+      market: { en: "Requirements and priorities.", es: "Requerimientos y prioridades." },
+      tailor: { en: "A tested data contract: field tolerances, join rules, edge cases the engineer can reproduce.", es: "Un contrato de datos probado: tolerancias por campo, reglas de join, casos borde que el ingeniero puede reproducir." } },
+    { label: { en: "3. Orchestrate", es: "3. Orquestar" },
+      fde: { en: "Integrations into production.", es: "Integraciones a producción." },
+      market: { en: "Plan, milestones and escalations.", es: "Plan, hitos y escalamientos." },
+      tailor: { en: "The write gate: draft stage, sign-off, rollback triggers, and the shift playbook.", es: "La compuerta de escritura: etapa borrador, firma, gatillos de reversión y el manual del turno." } },
+    { label: { en: "4. Value case", es: "4. Caso de valor" },
+      fde: { en: "Instrumentation and dashboards.", es: "Instrumentación y tableros." },
+      market: { en: "The ROI story and the expansion case.", es: "El relato de ROI y el caso de expansión." },
+      tailor: { en: "A baseline before cutover, re-measured at 30 and 90 days in figures the CFO accepts.", es: "Línea base antes del corte, medida de nuevo a los 30 y 90 días en cifras que el CFO acepta." } },
+    { label: { en: "5. Let go", es: "5. Soltar" },
+      fde: { en: "Hands over the code.", es: "Entrega el código." },
+      market: { en: "Handover to customer success.", es: "Traspaso a customer success." },
+      tailor: { en: "Floor leads trained on the exception loop, and the 90-day check.", es: "Líderes de piso entrenados en el circuito de excepciones, y la revisión a los 90 días." } }
+  ];
+
+  const UI = {
+    en: {
+      kicker: "Deployment strategy. A draft for discussion",
+      title: "What should a deployment strategist own?",
+      sub: "Fourteen things a rollout needs, coded from job postings for the forward deployed engineer and for the strategist the industry hires, and set against the role I propose: the Industrial Tailor.",
+      tabs: ["1. The bar", "2. Where I stand", "3. With the FDE"],
+      leadBar: c => `${capital(word(c.presales, "en"))} of ${word(N, "en")} strategist postings ask for presales; ${c.platform === N ? `all ${word(N, "en")}` : word(c.platform, "en")} make them own the platform. Put the engineer beside them and ${word(c.gaps, "en")} of these fourteen are still nobody's, from the record and the write to the incentive and the shift. That is where a rollout loses money.`,
+      leadMe: "On the operating half I stand closer to the role I propose than the industry does. The technical half I have tested in my own tools, and five axes I have not placed yet.",
+      leadFde: "The engineer builds on what the strategist hands over. The industry strategist hands over intentions; the Industrial Tailor hands over contracts the engineer can test.",
+      series: { fde: "Engineer (FDE)", market: "Industry strategist (FDS)", pair: "Both together", tailor: "Industrial Tailor" },
+      noteBar: "No verdict changes if each doubtful posting takes its other reading, higher or lower.",
+      noteMe: "Hollow point: not placed yet",
+      lgBar: "The bar: Industrial Tailor", lgMe: "Where I am", lgCheck: "What a stranger can check without me",
+      srcBar: `Strategist: ${N} deployment strategist postings on startup.jobs, 3 to 13 November 2026. Engineer: ${M} forward deployed engineer postings on startup.jobs, 13 and 14 November 2026. Every posting is coded on all fourteen axes with one rubric written before reading them, and each point is the middle value of its group. The Industrial Tailor is the role I propose, not a coding. The axes run by family: technology and the sale on the right, the operation on the left.`,
+      srcMe: "The bar is the role I propose. My levels come from the record of my work; the dotted line is what you can check without calling me.",
+      srcFde: "FDE: forward deployed engineer. The strategist's column is what the engineer receives at each step.",
+      foot: "Prototype. No level on this page is a self-rating: the industry's are coded from postings, and mine are tied to the record of my work.",
+      scenario: (i, n) => `Scenario ${i} of ${n}`, pays: "Who pays first", why: "Why it costs", levels: "Who reaches what",
+      market: "What the postings write", own: "What the Industrial Tailor owns", dist: `The ${N} postings, one box each`,
+      bar: "The bar", me: "Where I am", check: "What a stranger can check",
+      tags: { codedDs: `coded, ${N} postings`, codedFde: `coded, ${M} postings`, proposal: "proposal", pair: "best of the two" },
+      verdict: { gap: "Nobody's today", over: "Over-asked of the strategist", covered: "Covered by the pair" },
+      verdictText: {
+        gap: "Even together, the strategist and the engineer stop below the bar.",
+        over: "Postings put this on the strategist; the Industrial Tailor leaves it to the engineer, the platform or sales.",
+        covered: "Between them, the strategist and the engineer reach the bar."
+      },
+      notPlaced: "Not placed yet: no verified evidence in this draft.",
+      noCheck: { field: "Nothing a stranger can run: it rests on my account.", private: "Nothing a stranger can run: the repository is private.", none: "Nothing to check yet." },
+      sBar: "Bar", sMe: "Me", sCheck: "Check",
+      step: (i, n) => `Step ${i} of ${n}`, whoFde: "Forward deployed engineer", whoMarket: "Industry strategist", whoTailor: "Industrial Tailor",
+      chartBar: "Radar: fourteen things a rollout needs, coded from postings for the engineer and the industry strategist, with both together and the Industrial Tailor",
+      chartMe: "Radar: the Industrial Tailor against my record on fourteen axes"
+    },
+    es: {
+      kicker: "Estrategia de despliegue. Borrador para discutir",
+      title: "¿De qué debería hacerse cargo un deployment strategist?",
+      sub: "Catorce cosas que necesita un despliegue, codificadas desde avisos para el forward deployed engineer y para el estratega que contrata la industria, contra el rol que propongo: el Industrial Tailor.",
+      tabs: ["1. La vara", "2. Dónde estoy", "3. Con el FDE"],
+      leadBar: c => `${capital(word(c.presales, "es"))} de ${word(N, "es")} avisos de estratega piden preventa; ${c.platform === N ? `los ${word(N, "es")}` : word(c.platform, "es")}, hacerse cargo de la plataforma. Aun con el ingeniero al lado, ${word(c.gaps, "es")} de estos catorce no son de nadie, del registro y la escritura al incentivo y el turno. Ahí es donde un despliegue pierde la plata.`,
+      leadMe: "En la mitad operativa estoy más cerca del rol que propongo que la industria. La mitad técnica la probé en mis propias herramientas, y cinco ejes todavía no los ubico.",
+      leadFde: "El ingeniero construye sobre lo que le entrega el estratega. El de la industria entrega intenciones; el Industrial Tailor entrega contratos que el ingeniero puede probar.",
+      series: { fde: "Ingeniero (FDE)", market: "Estratega de la industria (FDS)", pair: "Los dos juntos", tailor: "Industrial Tailor" },
+      noteBar: "Ningún veredicto cambia si cada aviso dudoso toma su otra lectura, más alta o más baja.",
+      noteMe: "Punto hueco: todavía sin ubicar",
+      lgBar: "La vara: Industrial Tailor", lgMe: "Dónde estoy", lgCheck: "Lo que un tercero comprueba sin mí",
+      srcBar: `Estratega: ${N} avisos de deployment strategist en startup.jobs, del 3 al 13 de noviembre de 2026. Ingeniero: ${M} avisos de forward deployed engineer en startup.jobs, 13 y 14 de noviembre de 2026. Cada aviso está codificado en los catorce ejes con una rúbrica escrita antes de leerlos, y cada punto es la mediana de su grupo. El Industrial Tailor es el rol que propongo, no una codificación. Los ejes van por familia: tecnología y venta a la derecha, operación a la izquierda.`,
+      srcMe: "La vara es el rol que propongo. Mis niveles salen del registro de mi trabajo; la línea punteada es lo que se puede comprobar sin llamarme.",
+      srcFde: "FDE: forward deployed engineer. La columna del estratega es lo que recibe el ingeniero en cada paso.",
+      foot: "Prototipo. Ningún nivel de esta página es una autoevaluación: los de la industria salen de avisos codificados, y los míos, del registro de mi trabajo.",
+      scenario: (i, n) => `Escenario ${i} de ${n}`, pays: "Quién paga primero", why: "Por qué cuesta", levels: "Quién llega a qué",
+      market: "Lo que escriben los avisos", own: "De qué se hace cargo el Industrial Tailor", dist: `Los ${N} avisos, uno por casilla`,
+      bar: "La vara", me: "Dónde estoy", check: "Lo que comprueba un tercero",
+      tags: { codedDs: `codificado, ${N} avisos`, codedFde: `codificado, ${M} avisos`, proposal: "propuesta", pair: "lo mejor de los dos" },
+      verdict: { gap: "Hoy no es de nadie", over: "Sobrepedido al estratega", covered: "Lo cubre la pareja" },
+      verdictText: {
+        gap: "Aun juntos, el estratega y el ingeniero quedan bajo la vara.",
+        over: "Los avisos se lo cargan al estratega; el Industrial Tailor se lo deja al ingeniero, a la plataforma o a ventas.",
+        covered: "Entre los dos, el estratega y el ingeniero llegan a la vara."
+      },
+      notPlaced: "Todavía sin ubicar: no hay evidencia verificada en este borrador.",
+      noCheck: { field: "Nada que un tercero pueda correr: se sostiene en mi relato.", private: "Nada que un tercero pueda correr: el repositorio es privado.", none: "Todavía nada que comprobar." },
+      sBar: "Vara", sMe: "Yo", sCheck: "Comprobable",
+      step: (i, n) => `Paso ${i} de ${n}`, whoFde: "Forward deployed engineer", whoMarket: "Estratega de la industria", whoTailor: "Industrial Tailor",
+      chartBar: "Radar: catorce cosas que necesita un despliegue, codificadas desde avisos para el ingeniero y el estratega de la industria, con los dos juntos y el Industrial Tailor",
+      chartMe: "Radar: el Industrial Tailor contra mi registro en catorce ejes"
+    }
+  };
+
+  const state = { lang: "en", view: "bar", axis: 9, step: 1, show: { fde: true, market: true, pair: true, tailor: true } };
+  const $ = id => document.getElementById(id);
+  const NS = "http://www.w3.org/2000/svg";
+  const el = (tag, attrs = {}, text) => {
+    const node = document.createElementNS(NS, tag);
+    for (const [key, value] of Object.entries(attrs)) node.setAttribute(key, value);
+    if (text !== undefined) node.textContent = text;
+    return node;
+  };
+  const esc = text => String(text).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+  // ---------------------------------------------------------------- the radar
+  const CX = 470, CY = 392;
+  // On a phone the chart draws at a third of its size: the axes show their number only, and the pills below name them.
+  const NARROW = window.matchMedia("(max-width: 560px)");
+  const geometry = () => NARROW.matches
+    ? { R: 300, gap: 40, vertex: 9, compact: true }
+    : { R: 245, gap: 24, vertex: 5.5, line: 19, compact: false };
+  let R = geometry().R;
+  const angle = i => (-90 + i * 360 / AXES.length) * Math.PI / 180;
+  const point = (i, level) => [CX + R * level / 3 * Math.cos(angle(i)), CY + R * level / 3 * Math.sin(angle(i))];
+  const points = levels => levels.map((level, i) => point(i, level).map(n => n.toFixed(1)).join(",")).join(" ");
+
+  function radar(svg, { layers, title, highlight, scores }) {
+    const g = geometry();
+    R = g.R;
+    svg.replaceChildren();
+    svg.setAttribute("aria-label", title);
+    for (let k = 1; k <= 3; k++) svg.append(el("polygon", { class: "ring" + (k === 3 ? " outer" : ""), points: points(Array(AXES.length).fill(k)) }));
+    AXES.forEach((axis, i) => {
+      const [x, y] = point(i, 3);
+      svg.append(el("line", { class: "spoke" + (i === state.axis ? " on" : ""), x1: CX, y1: CY, x2: x.toFixed(1), y2: y.toFixed(1) }));
+    });
+    for (const layer of layers) {
+      svg.append(el("polygon", { class: layer.poly, points: points(layer.levels) }));
+      if (!layer.vertex) continue;
+      layer.levels.forEach((level, i) => {
+        const [x, y] = point(i, level);
+        const hollow = layer.hollow && layer.hollow(i) ? " hollow" : "";
+        svg.append(el("circle", { class: `v ${layer.vertex}${hollow}`, cx: x.toFixed(1), cy: y.toFixed(1), r: (g.vertex * (layer.scale || 1)).toFixed(1) }));
+      });
+    }
+    // Ring names go after the polygons, on a halo, so no line or vertex covers them.
+    for (let k = 1; k <= 3; k++) {
+      svg.append(el("text", { class: "ring-label", x: CX + 10, y: (CY - R * k / 3 + (g.compact ? 26 : 17)).toFixed(1) }, RING_SHORT[state.lang][k]));
+    }
+    AXES.forEach((axis, i) => {
+      const a = angle(i), cos = Math.cos(a), sin = Math.sin(a);
+      const lx = CX + (R + g.gap) * cos, ly = CY + (R + g.gap) * sin;
+      const classes = (highlight(i) ? " gap" : "") + (i === state.axis ? " on" : "");
+      let text;
+      if (g.compact) {
+        text = el("text", { class: "axis-num" + classes, x: lx.toFixed(1), y: (ly + 10).toFixed(1), "text-anchor": "middle" }, String(i + 1));
+      } else {
+        const anchor = Math.abs(cos) < .2 ? "middle" : cos > 0 ? "start" : "end";
+        const names = axis.short[state.lang].split("\n");
+        names[0] = `${i + 1}. ${names[0]}`;
+        const lines = names.length + 1;
+        const top = ly + (sin < -.5 ? -(lines - 1) * g.line - 4 : sin > .5 ? g.line * .8 : -(lines - 1) * g.line / 2 + 5);
+        text = el("text", { class: "axis-label" + classes, x: lx.toFixed(1), y: top.toFixed(1), "text-anchor": anchor });
+        names.forEach((line, n) => text.append(el("tspan", { class: "nm", x: lx.toFixed(1), dy: n === 0 ? 0 : g.line }, line)));
+        const scoreLine = el("tspan", { class: "sc", x: lx.toFixed(1), dy: g.line });
+        scores(i).forEach(([cls, value], n) => scoreLine.append(el("tspan", { class: cls, dx: n ? 11 : 0 }, value)));
+        text.append(scoreLine);
+      }
+      text.addEventListener("click", () => pickAxis(i));
+      svg.append(text);
+      const [hx, hy] = point(i, 3);
+      const hit = el("circle", { class: "hit", cx: hx.toFixed(1), cy: hy.toFixed(1), r: 22 });
+      hit.addEventListener("click", () => pickAxis(i));
+      svg.append(hit);
+    });
+  }
+
+  function pills(container, highlight) {
+    container.replaceChildren(...AXES.map((axis, i) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "pill" + (highlight(i) ? " gap" : "");
+      button.textContent = `${i + 1}. ${label(axis, state.lang)}`;
+      button.setAttribute("aria-pressed", String(i === state.axis));
+      button.addEventListener("click", () => pickAxis(i));
+      return button;
+    }));
+  }
+
+  const marks = (level, color) => `<span class="marks ${color}" aria-hidden="true">${[1, 2, 3].map(k => `<i class="${k <= level ? "on" : ""}"></i>`).join("")}</span>`;
+  const levelLine = (level, color) => `<div class="lvl">${marks(level, color)}<span>${esc(LEVELS[state.lang][level])}</span></div>`;
+  const isGap = i => verdictOf(AXES[i]) === "gap";
+
+  function inspectBar() {
+    const t = UI[state.lang], l = state.lang, axis = AXES[state.axis];
+    const market = marketLevel(axis), pair = pairLevel(axis), verdict = verdictOf(axis);
+    const row = (key, level, tag, tagClass) => `
+      <div class="row"><span class="sw sw-${key}"></span><span class="row-name">${esc(t.series[key])}</span>
+        <div class="row-level">${marks(level, "c-" + key)}<span>${esc(LEVELS[l][level])}</span><span class="tag-sm ${tagClass}">${esc(tag)}</span></div></div>`;
+    const dist = (rows, cls) => `<div class="dist ${cls}" aria-label="${esc(t.dist)}">${rows.map(role => role[axis.key]).map(v => `<span class="l${v}" title="${esc(LEVELS[l][v])}">${v}</span>`).join("")}</div>`;
+    const postings = `
+      <p class="who-line"><span class="sw sw-market"></span>${esc(t.series.market)}</p>
+      <p>${esc(axis.note ? axis.note(l) : describe(ROLES, axis.key, l))}</p>${dist(ROLES, "market")}
+      <p class="who-line"><span class="sw sw-fde"></span>${esc(t.series.fde)}</p>
+      <p>${esc(describe(ENGINEERS, axis.key, l))}</p>${dist(ENGINEERS, "fde")}`;
+    $("ins-bar").innerHTML = `
+      <p class="eyebrow">${esc(t.scenario(state.axis + 1, AXES.length))}</p>
+      <h2>${esc(label(axis, l))}</h2>
+      <span class="pays">${esc(t.pays)}: ${esc(axis.pays)}</span>
+      <div><span class="verdict ${verdict}">${esc(t.verdict[verdict])}</span></div>
+      <div class="block"><h3>${esc(t.why)}</h3><p>${esc(axis.why[l])}</p></div>
+      <div class="block"><h3>${esc(t.levels)}</h3><div class="rows">
+        ${row("fde", fdeLevel(axis), t.tags.codedFde, "coded")}
+        ${row("market", market, t.tags.codedDs, "coded")}
+        ${row("pair", pair, t.tags.pair, "")}
+        ${row("tailor", axis.tailor, t.tags.proposal, "")}
+      </div><p class="verdict-text">${esc(t.verdictText[verdict])}</p></div>
+      <div class="block"><h3>${esc(t.market)}</h3>${postings}</div>
+      <div class="block"><h3>${esc(t.own)}</h3><p>${esc(axis.own[l])}</p></div>`;
+  }
+
+  function inspectMe() {
+    const t = UI[state.lang], l = state.lang, axis = AXES[state.axis];
+    const placed = axis.me !== null;
+    const checkText = axis.checkText ? axis.checkText[l] : t.noCheck[axis.grade && axis.grade !== "public" ? axis.grade : "none"];
+    $("ins-me").innerHTML = `
+      <p class="eyebrow">${esc(t.scenario(state.axis + 1, AXES.length))}</p>
+      <h2>${esc(label(axis, l))}</h2>
+      <div class="block"><h3>${esc(t.bar)}</h3>${levelLine(axis.tailor, "c-tailor")}<p>${esc(axis.own[l])}</p></div>
+      <div class="block"><h3>${esc(t.me)}</h3>${placed
+        ? `${levelLine(axis.me, "c-tailor")}<p>${esc(axis.mine[l])}</p><span class="tag">${esc(GRADE[axis.grade][l])}</span>`
+        : `<p>${esc(t.notPlaced)}</p>`}</div>
+      <div class="block"><h3>${esc(t.check)}</h3>${levelLine(axis.check, "c-check")}<p>${esc(checkText)}</p>
+        ${axis.check ? `<span class="tag">${esc(GRADE.public[l])}</span>` : ""}</div>`;
+  }
+
+  function drawBar() {
+    const t = UI[state.lang];
+    const layers = [];
+    if (state.show.fde) layers.push({ poly: "p-fde", vertex: "v-fde", levels: AXES.map(fdeLevel) });
+    if (state.show.market) layers.push({ poly: "p-market", vertex: "v-market", levels: AXES.map(marketLevel) });
+    if (state.show.tailor) layers.push({ poly: "p-tailor", vertex: "v-tailor", levels: AXES.map(a => a.tailor) });
+    if (state.show.pair) layers.push({ poly: "p-pair", levels: AXES.map(pairLevel) });
+    radar($("chart-bar"), {
+      layers, title: t.chartBar, highlight: isGap,
+      scores: i => [["s-fde", `FDE ${fdeLevel(AXES[i])}`], ["s-market", `FDS ${marketLevel(AXES[i])}`], ["s-tailor", `Tailor ${AXES[i].tailor}`]]
+    });
+    pills($("pills-bar"), isGap);
+    inspectBar();
+  }
+
+  function drawMe() {
+    const t = UI[state.lang];
+    radar($("chart-me"), {
+      layers: [
+        { poly: "p-bar", vertex: "v-bar", levels: AXES.map(a => a.tailor), scale: .8 },
+        { poly: "p-me", vertex: "v-me", levels: AXES.map(a => a.me ?? 0), hollow: i => AXES[i].me === null },
+        { poly: "p-check", vertex: "v-check", levels: AXES.map(a => a.check), scale: .6 }
+      ],
+      title: t.chartMe, highlight: () => false,
+      scores: i => [["s-muted", `${t.sBar} ${AXES[i].tailor}`], ["s-tailor", `${t.sMe} ${AXES[i].me ?? "?"}`], ["s-check", `${t.sCheck} ${AXES[i].check}`]]
+    });
+    pills($("pills-me"), () => false);
+    inspectMe();
+  }
+
+  // ---------------------------------------------------------------- the lanes
+  function drawLanes() {
+    const t = UI[state.lang], l = state.lang, lanes = $("lanes");
+    lanes.replaceChildren();
+    lanes.append(document.createElement("div"));
+    STEPS.forEach((step, i) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "step-btn";
+      button.textContent = step.label[l];
+      button.setAttribute("aria-pressed", String(i === state.step));
+      button.addEventListener("click", () => { state.step = i; render(); });
+      lanes.append(button);
+    });
+    for (const [who, key] of [[t.whoFde, "fde"], [t.whoMarket, "market"], [t.whoTailor, "tailor"]]) {
+      const head = document.createElement("div");
+      head.className = "who" + (key === "tailor" ? " tailor" : "");
+      head.textContent = who;
+      lanes.append(head);
+      STEPS.forEach((step, i) => {
+        const cell = document.createElement("button");
+        cell.type = "button";
+        cell.className = `cell ${key}${i === state.step ? " on" : ""}`;
+        cell.textContent = step[key][l];
+        cell.addEventListener("click", () => { state.step = i; render(); });
+        lanes.append(cell);
+      });
+    }
+  }
+
+  // ---------------------------------------------------------------- wiring
+  function texts() {
+    const t = UI[state.lang];
+    document.documentElement.lang = state.lang;
+    for (const [id, key] of [["t-kicker", "kicker"], ["t-title", "title"], ["t-sub", "sub"], ["lead-me", "leadMe"],
+      ["lead-fde", "leadFde"], ["src-bar", "srcBar"], ["src-me", "srcMe"], ["src-fde", "srcFde"], ["t-foot", "foot"], ["note-bar", "noteBar"], ["note-me", "noteMe"]]) {
+      $(id).textContent = t[key];
+    }
+    $("lead-bar").textContent = t.leadBar({
+      presales: count("V", v => v >= 2), platform: count("S", v => v === 3), gaps: AXES.filter((_, i) => isGap(i)).length
+    });
+    $("legend-me").innerHTML = `<span class="key"><span class="sw sw-bar"></span>${esc(t.lgBar)}</span><span class="key"><span class="sw sw-me"></span>${esc(t.lgMe)}</span><span class="key"><span class="sw sw-check"></span>${esc(t.lgCheck)}</span>`;
+    $("tabs").replaceChildren(...["bar", "me", "fde"].map((view, i) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "tab";
+      button.textContent = t.tabs[i];
+      button.setAttribute("aria-pressed", String(view === state.view));
+      button.addEventListener("click", () => { state.view = view; render(); });
+      return button;
+    }));
+    $("series").replaceChildren(...["fde", "market", "pair", "tailor"].map(key => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "tog";
+      button.innerHTML = `<span class="sw sw-${key}" aria-hidden="true"></span>${esc(t.series[key])}`;
+      button.setAttribute("aria-pressed", String(state.show[key]));
+      button.addEventListener("click", () => { state.show[key] = !state.show[key]; render(); });
+      return button;
+    }));
+    document.querySelectorAll("[data-lang]").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.lang === state.lang)));
+  }
+
+  function render() {
+    texts();
+    for (const view of ["bar", "me", "fde"]) $(`view-${view}`).hidden = view !== state.view;
+    if (state.view === "bar") drawBar();
+    if (state.view === "me") drawMe();
+    if (state.view === "fde") drawLanes();
+  }
+  function pickAxis(i) { state.axis = i; render(); }
+
+  document.querySelectorAll("[data-lang]").forEach(b => b.addEventListener("click", () => { state.lang = b.dataset.lang; render(); }));
+  NARROW.addEventListener("change", render);
+  document.addEventListener("keydown", event => {
+    if (state.view === "fde" || !["ArrowLeft", "ArrowRight"].includes(event.key)) return;
+    state.axis = (state.axis + (event.key === "ArrowRight" ? 1 : AXES.length - 1)) % AXES.length;
+    render();
+  });
+  render();
+})();
+</script>
+</body>
+</html>
