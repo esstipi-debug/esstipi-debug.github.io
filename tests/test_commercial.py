@@ -54,13 +54,13 @@ FIGURES = {
     "02:30": "the night shift, a time of day used as a scene, not a measurement",
     "12": "best fit: a system change in the last or next 12 months (plan C); 12 months of the returning-client "
           "rate (owner decision 2026-11-13, content plan §3 A)",
-    "14": "14 November 2026, date of the engine count (HECHOS, kern)",
-    "15": "15 planners (HECHOS, Trayectoria 2016-2017); 15 to 20 hours a week (plan B5)",
+    "14": "14 November 2026, date of the receiving-kit count (HECHOS, mellon)",
+    "15": "15 planners (HECHOS, Trayectoria 2016-2017); 15 to 20 hours a week (plan B5); 15 November 2026, "
+          "date of the engine count (HECHOS, kern)",
     "20": "team of 20 (HECHOS, AGCO row); 15 to 20 hours a week; 20 October 2026 (HECHOS, fdekit)",
     "20%": "order processing time down about 20%, by his estimate (HECHOS, AGCO row; book l.6921); returning "
            "clients pay 20% less (owner decision 2026-11-13, content plan §3 A)",
     "23": "23 operators trained on RF (HECHOS, AGCO row)",
-    "25": "25 October 2026, date of the receiving-kit count (HECHOS, mellon)",
     "30": "30-60-90-day plan; measures that hold 30 days after go-live (plan B5)",
     "30%": "30% at the start and 30% after 30 days (plan B5)",
     "31": "31 integration tests on an embedded PostgreSQL in the weightlifting app (HECHOS, Holy Oly)",
@@ -79,7 +79,8 @@ FIGURES = {
     "250": "advisory fee in USD per hour (plan C, option A)",
     "370,000": "DeHoratius and Raman 2008, published page why-inventory-records-do-not-match-the-shelf",
     "600": "Australian Visitor visa, subclass 600 (Home Affairs)",
-    "1,079": "receiving-kit test count (HECHOS, mellon)",
+    "1,141": "receiving-kit passing tests at commit 89c01cb, clean install on 14 November 2026 "
+             "(HECHOS, mellon)",
     "1,187": "field-kit passing tests (HECHOS, fdekit)",
     "1,200": "on-site day fee in USD (plan C, option A)",
     "1,332": "about 1,332 unit test cases in the weightlifting app (HECHOS, Holy Oly)",
@@ -99,8 +100,8 @@ FIGURES = {
     "2026": "year of the test counts (HECHOS, Sistemas construidos)",
     "6,000": "fractional lead fee in USD per month (plan C, option A)",
     "8,500": "field audit fee in USD (plan C, option A)",
-    "9,966": "engine test count, CLM_TESTS_KERN_ACTUAL: collected at commit 7757fb1 on 14 November 2026 "
-             "(HECHOS, kern)",
+    "10,483": "engine passing tests, CLM_TESTS_KERN_ACTUAL: at commit e2159ed on a clean install on "
+              "15 November 2026 (HECHOS, kern)",
     "15,000": "cutover leadership fee in USD (plan C, option A)",
     "50,000": "50,000-SKU distribution centre (HECHOS, AGCO row)",
     "2M": "about USD 2M a year of savings identified (HECHOS, Trayectoria 2013-2014)",

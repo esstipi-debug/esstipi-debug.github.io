@@ -29,7 +29,7 @@ Most rollouts do not fail in the model or the core code. In a 2015 NeurIPS paper
 ## Where I have stood
 
 - **On the customer's floor:** thirteen years in Chile, Argentina and Australia across retail planning for more than 200 stores, a three-site logistics network of about 100 people, a USD 30M cross-border e-commerce P&L, and the warehouse-system cutover of a 50,000-SKU distribution centre where I stayed on the floor until the workarounds died and order processing time fell about 20%.
-- **At the keyboard building deterministic guardrails:** I learned to code in C and build in Python and TypeScript with AI coding agents. I have built an inventory and replenishment engine with 9,966 automated tests, receiving and field-audit kits (1,079 and 1,187 tests), and a weightlifting planning application (about 1,332 unit tests and 31 PostgreSQL integration tests), staging recommendations in draft beside the operator's own play with cryptographic sign-off and rollback, so a bad upstream record never writes directly to production.
+- **At the keyboard building deterministic guardrails:** I learned to code in C and build in Python and TypeScript with AI coding agents. I have built an inventory and replenishment engine with 10,483 passing tests, receiving and field-audit kits (1,141 and 1,187 passing tests), and a weightlifting planning application (about 1,332 unit tests and 31 PostgreSQL integration tests), staging recommendations in draft beside the operator's own play with cryptographic sign-off and rollback, so a bad upstream record never writes directly to production.
 
 ## What I don't claim
 

@@ -5,7 +5,7 @@ slug: proof
 title: Proof
 kicker: Proof
 headline: What I changed, checkable before we talk.
-description: Field work from thirteen years in operations, a published audit of 2,708 marketplace claims, and deterministic diagnostic software with 9,966 automated tests.
+description: Field work from thirteen years in operations, a published audit of 2,708 marketplace claims, and deterministic diagnostic software with 10,483 passing tests.
 subject: Question on the proof
 cta: Ask for a walk-through
 published: 2026-11-09
@@ -31,8 +31,8 @@ The Melbourne employer is named once and verifiable. Earlier 2013 to 2022 engage
 
 I build my own diagnostic and planning tools so I do not arrive on a client's floor with a blank spreadsheet. None of them is in commercial production at a client yet; what they prove is how I translate operational physics into tested software before touching a live system:
 
-- **Inventory and replenishment engine:** 9,966 automated tests in Python, counted on 14 November 2026. Its decision cards set the engine's recommendation beside the operator's own play and the status quo, and a stock spreadsheet goes from intake to a change that waits for a cryptographically signed approval and can be rolled back.
-- **Receiving kit:** open source under the MIT licence, with 1,079 tests counted on 25 October 2026.
+- **Inventory and replenishment engine:** 10,483 passing tests in Python and none failing, run on a clean install on 15 November 2026 (private repository). Its decision cards set the engine's recommendation beside the operator's own play and the status quo, and a stock spreadsheet goes from intake to a change that waits for a cryptographically signed approval and can be rolled back.
+- **Receiving kit:** open source under the MIT licence, with 1,141 passing tests and none failing, run on a clean install on 14 November 2026.
 - **Field kit:** 1,187 passing tests on 20 October 2026. It checks an event log against the five-column contract (case, activity, timestamp, who, where) before any analysis runs, and its integrity guards catch a purchase-order line repeated by a one-to-many join, receipts held in blocked stock that do not balance, and negative stock; each guard is tested against a planted defect.
 - **Weightlifting planning application:** a full-stack TypeScript monorepo with about 1,332 unit tests, 31 integration tests on an embedded PostgreSQL database and an adversarial review agent written into the repository. Building it for a coach left me a field postmortem on adoption from the builder's side: even when software leaves the expert full editorial control, measuring exactly what they used to judge by eye can make them refuse it.
 
