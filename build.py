@@ -20,8 +20,8 @@ three floors and two kinds of buyer); "page" the other commercial pages
 
 The method section of the home page shows four plates once they all exist in
 src/files/plates/ (plates.py writes them); until then it shows three drawn tools.
-The home page opens with the desk once its picture is in src/files/desk/ (desk.py writes
-it) and every object on it is marked in src/desk.json: each object opens a card.
+The hero desk picture (desk.webp and desk-800.webp) and the yard background detail
+(yard.webp) are prepared by desk.py in src/files/desk/ and gated independently on the home page.
 """
 from __future__ import annotations
 
@@ -100,15 +100,13 @@ METHOD_STEPS = (
     ("Cut", "Take out the loss the count exposes, at its cause."),
     ("Stitch", "Stay through go-live until the new way of working holds."),
 )
-# The desk: a picture of the kit laid out the night before a visit. desk.py prepares it and cuts a tile
-# around each object. The home page shows it beside the headline, and the objects in a strip lower down.
+# The desk hero picture and detail cuts: desk.py prepares them independently in src/files/desk/.
 DESK_SIZE = (1600, 900)
 DESK_SMALL = 800  # width of the second file, for narrow screens
-DESK_SPOTS = SRC / "desk.json"  # where each object lies on the picture: left, top, width and height, in percent
+DESK_SPOTS = SRC / "desk.json"  # detail marks in percent of the picture
 SERVICES_SLUG = "engagements"
 HERO_SIZES = "(min-width: 62rem) 56vw, 100vw"  # the width the picture of the desk takes beside the headline
-TILE_SIZE = (480, 384)  # the picture of one object on the desk, 5:4
-DETAIL_SIZES = {"yard": (800, 668)}  # one more cut of the picture the home page uses
+DETAIL_SIZES = {"yard": (800, 668)}  # detail cut of the picture used behind the How I work pillar
 DESK_DETAILS = tuple(DETAIL_SIZES)
 FONT_FILES = ("archivo-latin-variable.woff2", "jetbrains-mono-latin-variable.woff2")  # in src/files/fonts/
 NEXT_LINKS = (("Engagements and fees", SERVICES_SLUG), ("Proof", "proof"), ("Working terms", "working-terms"))
@@ -180,51 +178,6 @@ class Page:
     @property
     def url(self) -> str:
         return f"{SITE_URL}/{self.path}"
-
-
-@dataclass(frozen=True)
-class DeskObject:
-    """One object on the desk of the home page. Picking it opens a card."""
-    key: str
-    name: str
-    text: str  # what the object says about the work
-    rule: str  # the limit it works under on a client's site, or ""
-    slug: str  # the page its card leads to
-    anchor: str = ""  # a place on that page, when the card leads to one part of it
-
-
-# From left to right on the picture. No maker is named, and the picture carries no mark.
-DESK = (
-    DeskObject("passport", "Passport and boarding pass",
-               "I come to you. The work starts on your floor, and how the visit is contracted, paid and "
-               "travelled fits on one page.", "", "working-terms"),
-    DeskObject("boots", "Safety boots",
-               "I walk the floor first, off shifts included. Dust on a rack is stock that has not moved; "
-               "a sheet taped beside a terminal is a gap the software left.", "",
-               "the-floor-works-around-the-system"),
-    DeskObject("vest", "Vest and gloves",
-               "On your floor I follow your site rules, induction included.",
-               "On a site visit I observe and count; I do not operate your machinery.", "how-i-work"),
-    DeskObject("tape", "Steel tape",
-               "I measure before I trust the record: the rack, the aisle, the pallet, and a blind count "
-               "of a sample of locations.", "", "the-inventory-number-is-wrong"),
-    DeskObject("knife", "Knife",
-               "Go-live is one cut: the old system closes, the new one opens, and there is a way back.",
-               "On your site I use the blade you issue.", "a-new-system-goes-live"),
-    DeskObject("camera", "Chest camera",
-               "What I report, you can check: I record what the screen, the label and the rack show.",
-               "In plain sight, with notice on your site. Short clips, never of faces.", "proof"),
-    DeskObject("recorder", "Recorder",
-               "I dictate what I see while I am still standing in front of it.",
-               "My own notes only. An operator is recorded only if they say yes.", "how-i-work"),
-    DeskObject("notebook", "Notebook",
-               "The count goes on paper before it meets the system. Your team keeps the sheets.", "",
-               "the-inventory-number-is-wrong"),
-    DeskObject("laptop", "Laptop",
-               "At night I put the record and the floor on one timeline, with tools I build in Python, SQL "
-               "and TypeScript. You get the baseline and the list of losses, in the order to fix them.", "",
-               "proof", "decision-card"),
-)
 
 
 @dataclass(frozen=True)
@@ -585,7 +538,7 @@ def home_links(page: Page, prefix: str) -> str:
     if not page.is_home:
         return ""
     links = [f'<link rel="stylesheet" href="{prefix}home.css">']
-    if desk_ready():
+    if hero_desk_ready():
         large, small = f"{prefix}files/desk/{desk_name()}", f"{prefix}files/desk/{desk_name(small=True)}"
         links.append(f'<link rel="preload" as="image" href="{large}" '
                      f'imagesrcset="{small} {DESK_SMALL}w, {large} {DESK_SIZE[0]}w" imagesizes="{HERO_SIZES}" '
@@ -779,25 +732,29 @@ def desk_name(small: bool = False) -> str:
     return f"desk{f'-{DESK_SMALL}' if small else ''}.webp"
 
 
-def tile_name(key: str) -> str:
-    return f"kit-{key}.webp"
-
-
 def detail_name(name: str) -> str:
     return f"{name}.webp"
 
 
-def desk_files() -> tuple[str, ...]:
-    """Every file desk.py writes and the home page waits for: the picture in two sizes, a tile for each
-    object and the detail."""
-    return (desk_name(), desk_name(small=True), *(tile_name(item.key) for item in DESK),
-            *(detail_name(name) for name in DESK_DETAILS))
+def hero_desk_files() -> tuple[str, ...]:
+    """The hero desk image in both sizes."""
+    return (desk_name(), desk_name(small=True))
 
 
-def desk_ready() -> bool:
-    """True once every file of the desk is in src/files/desk/. Until then the home page shows no picture."""
+def detail_files() -> tuple[str, ...]:
+    """Detail cuts prepared from the desk picture."""
+    return tuple(detail_name(name) for name in DESK_DETAILS)
+
+
+def hero_desk_ready() -> bool:
+    """True once both hero desk sizes exist in src/files/desk/."""
     folder = desk_dir()
-    return all((folder / name).is_file() for name in desk_files())
+    return all((folder / name).is_file() for name in hero_desk_files())
+
+
+def detail_ready(name: str = "yard") -> bool:
+    """True once the named detail cut exists in src/files/desk/."""
+    return (desk_dir() / detail_name(name)).is_file()
 
 
 def is_number(value: object) -> bool:
@@ -826,28 +783,14 @@ def checked_box(file_name: str, key: str, box: object) -> tuple[float, ...]:
     return (left, top, wide, high)
 
 
-def load_spots(path: Path) -> dict[str, tuple[float, ...]]:
-    """Where each object lies on the picture of the desk. {} while the file does not exist.
-    A file that cannot be used is an error that names it and the fault."""
+def load_details(path: Path) -> dict[str, tuple[float, ...]]:
+    """Where the details lie on the picture: under "details" in desk.json, left, top, width and height in percent."""
     marks = read_marks(path)
     if marks is None:
         return {}
-    raw = marks.get("spots") if isinstance(marks, dict) else None
-    if not isinstance(raw, dict):
-        raise ValueError(f'{path.name}: needs a "spots" object')
-    known = {item.key for item in DESK}
-    spots = {}
-    for key, box in raw.items():
-        if key not in known:
-            raise ValueError(f"{path.name}: unknown object '{key}'")
-        spots[key] = checked_box(path.name, key, box)
-    return spots
-
-
-def load_details(path: Path) -> dict[str, tuple[float, ...]]:
-    """Where the details lie on the picture: under "details" in the same file, marked like the objects."""
-    marks = read_marks(path)
-    raw = marks.get("details", {}) if isinstance(marks, dict) else {}
+    if not isinstance(marks, dict):
+        raise ValueError(f"{path.name}: needs a JSON object")
+    raw = marks.get("details", {})
     if not isinstance(raw, dict):
         raise ValueError(f'{path.name}: "details" must be an object')
     details = {}
@@ -856,16 +799,6 @@ def load_details(path: Path) -> dict[str, tuple[float, ...]]:
             raise ValueError(f"{path.name}: unknown detail '{name}'")
         details[name] = checked_box(path.name, name, box)
     return details
-
-
-def desk_spots() -> dict[str, tuple[float, ...]]:
-    """The mark of every object on the desk, for desk.py to cut a tile around each. {} while nothing is
-    marked. Marks that leave an object out are an error."""
-    spots = load_spots(DESK_SPOTS)
-    missing = [item.key for item in DESK if item.key not in spots]
-    if spots and missing:
-        raise ValueError(f"{DESK_SPOTS.name}: no mark for {', '.join(missing)}")
-    return spots
 
 
 def home_main(page: Page, pages: list[Page], depth: int) -> str:
@@ -913,7 +846,7 @@ MAIN_BUILDERS = {
 def render_page(page: Page, pages: list[Page]) -> str:
     depth = 0 if page.is_home else 1
     main = MAIN_BUILDERS[page.kind](page, pages, depth)
-    body_class = f"kind-{page.kind}{' has-desk' if page.is_home and desk_ready() else ''}"
+    body_class = f"kind-{page.kind}{' has-yard' if page.is_home and detail_ready('yard') else ''}"
     main_class = "" if page.is_home else ' class="wrap"'  # the home page lays out its own full-width sections
     return f"""{head(page, pages, depth)}
 <body class="{body_class}">

@@ -61,30 +61,6 @@ def test_a_file_that_is_not_a_picture_is_an_error(tmp_path, capsys):
     assert "notes.png is not a picture" in capsys.readouterr().out
 
 
-def all_spots() -> dict[str, tuple[float, ...]]:
-    """Every object marked, side by side; the tape lies on the lamplit patch of the test picture."""
-    spots = {item.key: (4.0 + 10 * index, 70.0, 8.0, 12.0) for index, item in enumerate(build.DESK)}
-    return spots | {"tape": (42.0, 42.0, 16.0, 16.0)}
-
-
-def test_every_marked_object_becomes_a_tile(tmp_path):
-    written = desk.tiles(photo(tmp_path / "escritorio.png"), tmp_path / "out", all_spots())
-    assert [path.name for path in written] == [build.tile_name(item.key) for item in build.DESK]
-    for path in written:
-        assert Image.open(path).size == build.TILE_SIZE
-    tape = Image.open(tmp_path / "out" / build.tile_name("tape")).convert("RGB")
-    centre = tape.getpixel((tape.width // 2, tape.height // 2))
-    assert all(abs(a - b) <= TOLERANCE for a, b in zip(centre, LAMPLIT))   # the tile is cut around its object
-    corner = tape.getpixel((4, 4))
-    assert not all(abs(a - b) <= TOLERANCE for a, b in zip(corner, LAMPLIT))   # with some of the desk around it
-
-
-def test_a_tile_near_the_edge_stays_inside_the_picture(tmp_path):
-    spots = all_spots() | {"passport": (0.0, 90.0, 6.0, 10.0)}
-    written = desk.tiles(photo(tmp_path / "escritorio.png"), tmp_path / "out", spots)
-    assert Image.open(written[0]).size == build.TILE_SIZE
-
-
 def test_details_are_cut_where_the_marks_say(tmp_path):
     centre = lambda image: image.getpixel((image.width // 2, image.height // 2))  # noqa: E731
     for box, lamplit in (((40.0, 40.0, 20.0, 20.0), True), ((0.0, 0.0, 20.0, 30.0), False)):
@@ -101,47 +77,67 @@ def test_a_detail_left_unmarked_is_an_error(tmp_path):
         desk.details(photo(tmp_path / "escritorio.png"), tmp_path / "out", {})
 
 
-def test_the_script_writes_every_file_the_home_page_waits_for(tmp_path, monkeypatch, capsys):
+def test_the_script_writes_every_desk_and_detail_file_and_clears_stale_tiles(tmp_path, monkeypatch, capsys):
     marks = tmp_path / "desk.json"
-    marks.write_text(json.dumps({"spots": {key: list(box) for key, box in all_spots().items()},
-                                 "details": {"yard": [0, 0, 20, 30]}}), encoding="utf-8")
+    marks.write_text(json.dumps({"details": {"yard": [0, 0, 20, 30]}}), encoding="utf-8")
     monkeypatch.setattr(build, "DESK_SPOTS", marks)
     out = tmp_path / "out"
+    out.mkdir()
+    (out / "kit-tape.webp").write_bytes(b"stale")
+    (out / "kit-boots.webp").write_bytes(b"stale")
     assert desk.main([str(photo(tmp_path / "escritorio.png")), "--out", str(out)]) == 0
-    assert sorted(path.name for path in out.iterdir()) == sorted(build.desk_files())
-    assert "wrote" in capsys.readouterr().out
+    expected = build.hero_desk_files() + build.detail_files()
+    assert sorted(path.name for path in out.iterdir()) == sorted(expected)
+    said = capsys.readouterr().out
+    assert "wrote" in said
+    assert "removed 2 stale kit tile(s)" in said
 
 
-def test_without_marks_the_script_writes_the_picture_and_says_what_is_missing(tmp_path, monkeypatch, capsys):
+def test_only_details_writes_yard_without_creating_hero_desk(tmp_path, monkeypatch, capsys):
+    marks = tmp_path / "desk.json"
+    marks.write_text(json.dumps({"details": {"yard": [40, 40, 20, 20]}}), encoding="utf-8")
+    monkeypatch.setattr(build, "DESK_SPOTS", marks)
+    out = tmp_path / "out"
+    out.mkdir()
+    (out / "kit-camera.webp").write_bytes(b"stale")
+    assert desk.main([str(photo(tmp_path / "escritorio.png")), "--out", str(out), "--only", "details"]) == 0
+    assert sorted(path.name for path in out.iterdir()) == sorted(build.detail_files())
+    said = capsys.readouterr().out
+    assert "yard.webp" in said
+    assert "removed 1 stale kit tile(s)" in said
+
+
+def test_only_hero_works_without_detail_marks(tmp_path, monkeypatch, capsys):
     monkeypatch.setattr(build, "DESK_SPOTS", tmp_path / "desk.json")
     out = tmp_path / "out"
+    assert desk.main([str(photo(tmp_path / "escritorio.png")), "--out", str(out), "--only", "hero"]) == 0
+    assert sorted(path.name for path in out.iterdir()) == sorted(build.hero_desk_files())
+    assert "ready; now run: python build.py" in capsys.readouterr().out
+
+
+def test_without_marks_the_script_writes_hero_and_clears_stale_details(tmp_path, monkeypatch, capsys):
+    monkeypatch.setattr(build, "DESK_SPOTS", tmp_path / "desk.json")
+    out = tmp_path / "out"
+    out.mkdir()
+    (out / "yard.webp").write_bytes(b"old")
+    (out / "kit-passport.webp").write_bytes(b"old")
     assert desk.main([str(photo(tmp_path / "escritorio.png")), "--out", str(out)]) == 1
-    assert sorted(path.name for path in out.iterdir()) == [build.desk_name(small=True), build.desk_name()]
-    assert "mark where each object lies" in capsys.readouterr().out
+    assert sorted(path.name for path in out.iterdir()) == sorted(build.hero_desk_files())
+    assert Image.open(out / build.desk_name()).size == build.DESK_SIZE
+    said = capsys.readouterr().out
+    assert "removed 1 stale kit tile(s)" in said
+    assert "removed 1 stale detail file(s)" in said
+    assert "now mark the details" in said
 
 
 def test_marks_are_checked_before_anything_is_written(tmp_path, monkeypatch, capsys):
     marks = tmp_path / "desk.json"
-    marks.write_text('{"spots": {"hammer": [1, 2, 3, 4]}}', encoding="utf-8")
+    marks.write_text('{"details": {"window": [1, 2, 3, 4]}}', encoding="utf-8")
     monkeypatch.setattr(build, "DESK_SPOTS", marks)
     out = tmp_path / "out"
     assert desk.main([str(photo(tmp_path / "escritorio.png")), "--out", str(out)]) == 2
-    assert not out.exists() or not list(out.iterdir())   # the picture on the site is not replaced
-    assert "desk.json: unknown object 'hammer'" in capsys.readouterr().out
-
-
-def test_a_new_picture_without_marks_takes_the_old_tiles_away(tmp_path, monkeypatch, capsys):
-    """Tiles cut from an earlier picture must not be published beside a new one."""
-    monkeypatch.setattr(build, "DESK_SPOTS", tmp_path / "desk.json")
-    out = tmp_path / "out"
-    out.mkdir()
-    for name in build.desk_files():
-        (out / name).write_bytes(b"old")
-    assert desk.main([str(photo(tmp_path / "escritorio.png")), "--out", str(out)]) == 1
-    assert sorted(path.name for path in out.iterdir()) == [build.desk_name(small=True), build.desk_name()]
-    assert Image.open(out / build.desk_name()).size == build.DESK_SIZE   # and the picture is the new one
-    cut = len(build.desk_files()) - 2   # every tile and detail; the two sizes of the picture stay
-    assert f"removed {cut} files cut from an earlier picture" in capsys.readouterr().out
+    assert not out.exists() or not list(out.iterdir())   # existing site assets stay untouched
+    assert "desk.json: unknown detail 'window'" in capsys.readouterr().out
 
 
 def test_a_failed_write_is_not_blamed_on_the_picture(tmp_path, monkeypatch, capsys):

@@ -113,6 +113,7 @@ FIGURES = {
     "1,542": "late orders: claims written on or before the delivery day (Which Record Lies?, Olist)",
     "2,708": "\"not received\" claims on delivered orders (Which Record Lies?, Olist)",
     "5M": "about USD 5M of inventory freed (HECHOS, Trayectoria 2020-2022)",
+    "300%": "300% annual growth on the USD 30M cross-border P&L (HECHOS, Trayectoria 2020-2022)",
     "10M": "best-fit revenue floor (plan C)",
     "15M": "USD 15M budget (HECHOS, Trayectoria 2018-2020)",
     "30M": "USD 30M P&L (HECHOS, Trayectoria 2020-2022)",
@@ -329,7 +330,6 @@ def test_removed_files_are_not_kept(tmp_path):
 HOME_FIGURE = re.compile(r'<a class="fig[^"]*" href="([^"]+)">\s*<span class="fig-g">(.*?)</span>\s*'
                          r'<span class="fig-n">(.*?)</span>\s*<span class="fig-t">(.*?)</span>.*?'
                          r'<span class="fig-go">(.*?)</span>', re.S)
-KIT_TILE = re.compile(r'<li><a class="tile" href="([^"]+)">(.*?)</a></li>', re.S)
 MAKERS = re.compile(r"\b(?:Stanley|FatMax|Insta360|DJI|Ironclad)\b", re.I)  # who made the real objects
 SCRIPT = re.compile(r'<script(?! type="application/ld\+json")')
 HERO_WORDS = 20  # the line under the headline is read in one breath
@@ -338,10 +338,6 @@ HERO_WORDS = 20  # the line under the headline is read in one breath
 def section_of(text: str, anchor: str) -> str:
     """The markup of the section that carries this id, up to where it closes."""
     return text.split(f'id="{anchor}"', 1)[1].split("</section>", 1)[0]
-
-
-def desk_keys() -> list[str]:
-    return [item.key for item in build.DESK]
 
 
 def test_the_hero_fits_a_first_screen(site):
@@ -469,33 +465,55 @@ def test_every_class_a_page_carries_has_a_rule(site):
 
 # ---------------------------------------------------------------- the desk
 
-def home_with_desk(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, missing: tuple[str, ...] = ()) -> tuple[Path, str]:
-    """Builds the site as if desk.py had written the files of the desk in src/files/desk/, but for `missing`."""
+def home_with_desk(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    files_present: tuple[str, ...] | None = None,
+) -> tuple[Path, str]:
+    """Builds the site with the requested desk assets present in a temporary src/files/desk/."""
     files = tmp_path / "files-src"
     (files / "desk").mkdir(parents=True)
-    for name in build.desk_files():
-        if name not in missing:
-            (files / "desk" / name).write_bytes(b"RIFF")
+    if files_present is None:
+        files_present = build.hero_desk_files() + build.detail_files()
+    for name in files_present:
+        (files / "desk" / name).write_bytes(b"RIFF")
     monkeypatch.setattr(build, "FILES_DIR", files)
     root = tmp_path / "out"
     build.write_site(build.load_site(), root, root / "generated.json")
     return root, (root / "index.html").read_text(encoding="utf-8")
 
 
-@pytest.mark.parametrize("missing", ["desk.webp", "desk-800.webp", "kit-tape.webp", "yard.webp"])
-def test_home_shows_no_picture_of_the_desk_until_every_file_exists(tmp_path, monkeypatch, missing):
-    assert missing in build.desk_files()
-    _, text = home_with_desk(tmp_path, monkeypatch, missing=(missing,))
-    assert 'class="hero-figure"' not in text
-    assert 'id="kit"' not in text
-    assert "files/desk/" not in text
-    assert "has-desk" not in text
-    assert len(CONTACT_BUTTON.findall(text)) == 1   # the page still stands without it
+def test_hero_desk_and_yard_detail_gate_independently(tmp_path, monkeypatch):
+    _, empty = home_with_desk(tmp_path / "none", monkeypatch, files_present=())
+    assert 'class="hero-figure"' not in empty
+    assert "hero-with-figure" not in empty
+    assert "has-yard" not in empty
+    assert "files/desk/" not in empty
+    assert 'id="kit"' not in empty
+    assert "kit-" not in empty
+    assert len(CONTACT_BUTTON.findall(empty)) == 1   # the page still stands without any image
+
+    _, partial_hero = home_with_desk(tmp_path / "half-hero", monkeypatch, files_present=(build.desk_name(),))
+    assert 'class="hero-figure"' not in partial_hero
+    assert "hero-with-figure" not in partial_hero
+
+    _, hero_only = home_with_desk(tmp_path / "hero-only", monkeypatch, files_present=build.hero_desk_files())
+    assert 'class="hero-figure"' in hero_only
+    assert "hero-with-figure" in hero_only
+    assert "has-yard" not in hero_only
+    assert 'id="kit"' not in hero_only
+
+    _, yard_only = home_with_desk(tmp_path / "yard-only", monkeypatch, files_present=build.detail_files())
+    assert 'class="hero-figure"' not in yard_only
+    assert "hero-with-figure" not in yard_only
+    assert 'class="kind-home has-yard"' in yard_only
+    assert 'id="kit"' not in yard_only
 
 
 def test_the_desk_stands_beside_the_headline(tmp_path, monkeypatch):
     root, text = home_with_desk(tmp_path, monkeypatch)
     assert text.index("<h1") < text.index('class="hero-figure"') < text.index('id="situations"')
+    assert 'class="hero-body hero-with-figure"' in text
     figure = text.split('class="hero-figure"', 1)[1].split("</figure>", 1)[0]
     width, height = build.DESK_SIZE
     picture = re.search(r'<img src="files/desk/desk\.webp"[^>]*>', figure).group(0)
@@ -505,102 +523,68 @@ def test_the_desk_stands_beside_the_headline(tmp_path, monkeypatch):
     assert 'loading="lazy"' not in picture           # it is in the first screen
     assert "<figcaption>Illustration</figcaption>" in figure   # it is not a photograph, and the page says so
     assert (root / "files" / "desk" / "desk.webp").is_file()
-    assert 'class="kind-home has-desk"' in text
+    assert 'class="kind-home has-yard"' in text
 
 
-def test_every_object_on_the_desk_has_a_tile_that_leads_to_its_page(tmp_path, monkeypatch):
-    root, text = home_with_desk(tmp_path, monkeypatch)
-    tiles = KIT_TILE.findall(section_of(text, "kit"))
-    assert [link for link, _ in tiles] == [f"{item.slug}/" + (f"#{item.anchor}" if item.anchor else "")
-                                           for item in build.DESK]
-    assert len(set(desk_keys())) == len(desk_keys()) == 9
-    width, height = build.TILE_SIZE
-    for (link, body), item in zip(tiles, build.DESK):
-        key = item.key
-        assert re.fullmatch(r"[a-z]+(?:-[a-z]+)*", key)   # a key is also part of a file name
-        assert f'<img src="files/desk/{build.tile_name(key)}" width="{width}" height="{height}" alt=""' in body, key
-        assert 'loading="lazy"' in body, key
-        assert f"<h3>{build.esc(item.name)}</h3>" in body, key
-        assert f"<p>{build.esc(item.text)}</p>" in body, key
-        assert ('class="tile-limit"' in body) == bool(item.rule), key
-        assert not item.rule or f'<p class="tile-limit">{build.esc(item.rule)}</p>' in body, key
-        target = root / link.split("#", 1)[0] / "index.html"
-        assert target.is_file(), link
-        assert not item.anchor or f'id="{item.anchor}"' in target.read_text(encoding="utf-8"), link
-        assert (root / "files" / "desk" / build.tile_name(key)).is_file(), key
+def test_home_preserves_floor_boundaries_without_kit(tmp_path, monkeypatch):
+    _, text = home_with_desk(tmp_path, monkeypatch, files_present=build.detail_files())
+    visible = main_text(text)
+    assert 'id="kit"' not in text
+    assert "kit-" not in text
+    for phrase in (
+        "recorded only if they say yes",
+        "never faces",
+        "blade you issue",
+        "do not operate your machinery or fill a post",
+    ):
+        assert phrase in visible
 
 
 def test_the_desk_follows_the_rules_of_the_commercial_pages(tmp_path, monkeypatch):
     _, text = home_with_desk(tmp_path, monkeypatch)
     visible = main_text(text)
+    hero_html = section_of(text, "hero").lower()
     assert not BANNED.search(visible)
     assert not SPANISH.search(visible)
     assert not COMPANY_VOICE.search(visible)
     assert not MAKERS.search(text)   # no maker is named: not in the text, not in a file name
+    assert not any(banned_item in hero_html for banned_item in ("notebook", "laptop", "boots"))
     assert not set(NUMBER.findall(FORM_NAMES.sub(" ", visible))) - FIGURES.keys()
     assert not SCRIPT.search(text)
     assert len(CONTACT_BUTTON.findall(text)) == 1
 
 
-def write_marks(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, marks: dict) -> Path:
-    path = tmp_path / "desk.json"
-    path.write_text(json.dumps(marks), encoding="utf-8")
-    monkeypatch.setattr(build, "DESK_SPOTS", path)
-    return path
-
-
-def test_an_object_left_unmarked_is_an_error(tmp_path, monkeypatch):
-    first, second, *rest = desk_keys()
-    write_marks(tmp_path, monkeypatch, {"spots": {key: [5, 40, 8, 20] for key in rest}})
-    with pytest.raises(ValueError, match=rf"desk\.json: no mark for {first}, {second}$"):
-        build.desk_spots()
-
-
-def test_a_mark_for_an_unknown_object_is_an_error(tmp_path, monkeypatch):
-    spots = {key: [5, 40, 8, 20] for key in desk_keys()} | {"hammer": [5, 5, 5, 5]}
-    write_marks(tmp_path, monkeypatch, {"spots": spots})
-    with pytest.raises(ValueError, match="unknown object 'hammer'"):
-        build.desk_spots()
-
-
-def test_no_marks_file_means_no_marks(tmp_path):
-    assert build.load_spots(tmp_path / "desk.json") == {}
+def test_no_marks_file_means_no_details(tmp_path):
     assert build.load_details(tmp_path / "desk.json") == {}
 
 
-def test_details_are_marked_like_objects(tmp_path, monkeypatch):
-    spots = {key: [5, 40, 8, 20] for key in desk_keys()}
-    path = write_marks(tmp_path, monkeypatch, {"spots": spots, "details": {"yard": [70, 30, 20, 25]}})
-    assert build.load_details(path) == {"yard": (70, 30, 20, 25)}
-    assert build.load_spots(path).keys() == set(desk_keys())
-    path.write_text(json.dumps({"spots": spots, "details": {"window": [1, 1, 5, 5]}}), encoding="utf-8")
-    with pytest.raises(ValueError, match=r"desk\.json: unknown detail 'window'"):
-        build.load_details(path)
-    path.write_text(json.dumps({"spots": spots, "details": {"yard": [90, 1, 20, 5]}}), encoding="utf-8")
-    with pytest.raises(ValueError, match=r"desk\.json: yard lies outside the picture"):
-        build.load_details(path)
+def test_valid_details_are_loaded(tmp_path):
+    path = tmp_path / "desk.json"
+    path.write_text(json.dumps({"details": {"yard": [27.5, 1.5, 21.0, 27.5]}}), encoding="utf-8")
+    assert build.load_details(path) == {"yard": (27.5, 1.5, 21.0, 27.5)}
 
 
 @pytest.mark.parametrize("content, fault", [
     ("{not json", "is not valid JSON"),
-    ('{"marks": {}}', 'needs a "spots" object'),
-    ('{"spots": []}', 'needs a "spots" object'),
-    ('{"spots": {"tape": 5}}', "tape needs four numbers: left, top, width and height"),
-    ('{"spots": {"tape": [1, 2, 3]}}', "tape needs four numbers: left, top, width and height"),
-    ('{"spots": {"tape": [1, 2, "3", 4]}}', "tape needs four numbers: left, top, width and height"),
-    ('{"spots": {"tape": [true, 2, 3, 4]}}', "tape needs four numbers: left, top, width and height"),
-    ('{"spots": {"tape": [NaN, 2, 3, 4]}}', "tape needs four numbers: left, top, width and height"),
-    ('{"spots": {"tape": [10, 20, 0, 5]}}', "tape has no width or no height"),
-    ('{"spots": {"tape": [10, 20, 5, -5]}}', "tape has no width or no height"),
-    ('{"spots": {"tape": [96, 20, 5, 5]}}', "tape lies outside the picture"),
-    ('{"spots": {"tape": [10, 90, 5, 20]}}', "tape lies outside the picture"),
-    ('{"spots": {"tape": [-1, 20, 5, 5]}}', "tape lies outside the picture"),
+    ("[]", "needs a JSON object"),
+    ('{"details": []}', '"details" must be an object'),
+    ('{"details": {"window": [1, 1, 5, 5]}}', "unknown detail 'window'"),
+    ('{"details": {"yard": 5}}', "yard needs four numbers: left, top, width and height"),
+    ('{"details": {"yard": [1, 2, 3]}}', "yard needs four numbers: left, top, width and height"),
+    ('{"details": {"yard": [1, 2, "3", 4]}}', "yard needs four numbers: left, top, width and height"),
+    ('{"details": {"yard": [true, 2, 3, 4]}}', "yard needs four numbers: left, top, width and height"),
+    ('{"details": {"yard": [NaN, 2, 3, 4]}}', "yard needs four numbers: left, top, width and height"),
+    ('{"details": {"yard": [10, 20, 0, 5]}}', "yard has no width or no height"),
+    ('{"details": {"yard": [10, 20, 5, -5]}}', "yard has no width or no height"),
+    ('{"details": {"yard": [90, 1, 20, 5]}}', "yard lies outside the picture"),
+    ('{"details": {"yard": [10, 90, 5, 20]}}', "yard lies outside the picture"),
+    ('{"details": {"yard": [-1, 20, 5, 5]}}', "yard lies outside the picture"),
 ])
-def test_marks_that_cannot_be_used_name_the_file_and_the_fault(tmp_path, content, fault):
+def test_detail_marks_that_cannot_be_used_name_the_file_and_the_fault(tmp_path, content, fault):
     path = tmp_path / "desk.json"
     path.write_text(content, encoding="utf-8")
     with pytest.raises(ValueError, match=re.escape(f"desk.json: {fault}")):
-        build.load_spots(path)
+        build.load_details(path)
 
 
 # ---------------------------------------------------------------- front matter errors

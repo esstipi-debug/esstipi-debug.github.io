@@ -1,19 +1,19 @@
 """The home page of the site: its sections, from the headline down to the closing call.
 
-build.py owns the pages, the data (the desk's objects, the figures, the steps of the method) and the
-helpers; this module only lays the home page out. It imports build, so build imports it late, when it
-renders a page. No script anywhere: what opens, opens with <details>; what moves, moves with CSS.
+build.py owns the pages, the data (the figures, the steps of the method) and the helpers; this
+module only lays the home page out. It imports build, so build imports it late, when it renders
+a page. No script anywhere: what opens, opens with <details>; what moves, moves with CSS.
 """
 from __future__ import annotations
 
 import re
 
 import build
-from build import DeskObject, Page, esc, href
+from build import Page, esc, href
 
 DESK_ALT = ("Illustration: a desk at night by a window over a warehouse yard, with a field kit laid out on it: "
-            "a passport and a boarding pass, safety boots, a high-visibility vest and gloves, a steel tape, "
-            "a knife, a chest camera, a recorder, a notebook of tally marks and a laptop.")
+            "a passport and a boarding pass, a high-visibility vest and gloves, a steel tape, "
+            "a knife, a chest camera and a two-piece recorder.")
 DESK_CREDIT = "Illustration"  # under the picture: it is not a photograph, and the page says so
 FIGURES_TITLE = "What you can check"
 FIGURES_NOTE = ("Each number says where it comes from: a study, a company filing, my own analysis, "
@@ -21,9 +21,6 @@ FIGURES_NOTE = ("Each number says where it comes from: a study, a company filing
 DEPLOYMENT_LINE = "For technology teams, the same work runs in five steps, from the first audit to the handback."
 DEPLOYMENT_LINK = "How a deployment runs"
 METHOD_TITLE = "How the work goes"
-KIT_TITLE = "The desk the night before a visit"
-KIT_NOTE = "Every object says one thing about how I work: pick one."
-KIT_CREDIT = "The desk is an illustration."
 ANSWER_LINK = "Full answer"
 FIRST_SENTENCE = re.compile(r"(?<=[.!?])\s+")
 
@@ -36,8 +33,8 @@ def headline(page: Page) -> str:
 
 
 def desk_picture(depth: int) -> str:
-    """The desk beside the headline. Empty until desk.py has written every file of the desk."""
-    if not build.desk_ready():
+    """The desk beside the headline. Empty until hero_desk_ready() is True."""
+    if not build.hero_desk_ready():
         return ""
     large = href(f"files/desk/{build.desk_name()}", depth)
     small = href(f"files/desk/{build.desk_name(small=True)}", depth)
@@ -56,16 +53,18 @@ def hero(page: Page, depth: int) -> str:
     if page.secondary:
         label, slug = page.secondary
         secondary = f'\n<a class="btn btn-ghost" href="{href(slug + "/", depth)}">{esc(label)}</a>'
+    picture = desk_picture(depth)
+    body_class = "hero-body hero-with-figure" if picture else "hero-body"
+    figure_html = f"\n{picture}" if picture else ""
     return f"""<section id="hero" class="hero">
 <div class="wrap hero-in">
 <h1>{headline(page)}</h1>
-<div class="hero-body">
+<div class="{body_class}">
 <div class="hero-copy">
 <p class="lede">{build.render_inline(page.lede or "")}</p>
 <p class="actions">{build.contact_button(page)}{secondary}</p>
 <p class="hero-role">{esc(page.kicker or build.AUTHOR_ROLE)}</p>
-</div>
-{desk_picture(depth)}
+</div>{figure_html}
 </div>
 </div>
 </section>"""
@@ -150,37 +149,6 @@ def method(pages: list[Page], depth: int) -> str:
 </section>"""
 
 
-def tile(item: DeskObject, pages: list[Page], depth: int) -> str:
-    width, height = build.TILE_SIZE
-    picture = href(f"files/desk/{build.tile_name(item.key)}", depth)
-    limit = f'\n<p class="tile-limit">{esc(item.rule)}</p>' if item.rule else ""
-    return f"""<li><a class="tile" href="{href(build.find(pages, item.slug).path, depth)}{"#" + item.anchor if item.anchor else ""}">\
-<span class="tile-frame"><img src="{picture}" width="{width}" height="{height}" alt="" loading="lazy" decoding="async"></span>
-<h3>{esc(item.name)}</h3>
-<p>{esc(item.text)}</p>{limit}</a></li>"""
-
-
-def kit(pages: list[Page], depth: int) -> str:
-    """The nine objects on the desk, each with what it says about the work and the page it leads to.
-    From the objects, on to the services. Empty until desk.py has written every file of the desk."""
-    if not build.desk_ready():
-        return ""
-    tiles = "\n".join(tile(item, pages, depth) for item in build.DESK)
-    return f"""<section id="kit" class="kit">
-<div class="wrap">
-<h2>{KIT_TITLE}</h2>
-<p class="kit-note">{KIT_NOTE}</p>
-</div>
-<ul class="strip">
-{tiles}
-</ul>
-<div class="wrap kit-foot">
-<p class="kit-credit">{KIT_CREDIT}</p>
-<a class="text-link" href="{href(build.find(pages, build.SERVICES_SLUG).path, depth)}">{esc(build.NEXT_LINKS[0][0])}</a>
-</div>
-</section>"""
-
-
 def doors(pages: list[Page], depth: int) -> str:
     """The doors by floor and by kind of buyer, lower on the page than the three situations."""
     groups = "\n".join(f"<div>\n{door_group(pages, depth, group, question)}\n</div>"
@@ -247,7 +215,6 @@ def main(page: Page, pages: list[Page], depth: int) -> str:
         situations(page, pages, depth),
         figures(pages, depth),
         method(pages, depth),
-        kit(pages, depth),
         page.body_html,
         doors(pages, depth),
         library(pages, depth),

@@ -228,10 +228,31 @@ main.wrap > article.page:has(.eng-deck) > :not(.eng-deck) { max-width: 44rem; }
   inset: 0;
   background: linear-gradient(180deg, var(--veil-2) 0%, var(--veil-3) 45%, var(--veil-4) 100%);
 }
-.eng-card[data-card="1"] .eng-art { background-image: url("files/desk/kit-notebook.webp"); }
-.eng-card[data-card="2"] .eng-art { background-image: url("files/desk/kit-vest.webp"); }
-.eng-card[data-card="3"] .eng-art { background-image: url("files/desk/kit-laptop.webp"); }
-.eng-card[data-card="4"] .eng-art { background-image: url("files/desk/kit-tape.webp"); }
+.eng-card[data-card="1"] .eng-art {
+  background-image:
+    radial-gradient(circle at 85% 20%, var(--selection) 0%, transparent 55%),
+    linear-gradient(90deg, var(--rule) 1px, transparent 1px);
+  background-size: auto, 3.5rem 100%;
+}
+.eng-card[data-card="2"] .eng-art {
+  background-image:
+    radial-gradient(circle at 80% 30%, var(--selection) 0%, transparent 52%),
+    repeating-linear-gradient(90deg, var(--rule) 0 1px, transparent 1px 14px);
+}
+.eng-card[data-card="3"] .eng-art {
+  background-image:
+    radial-gradient(circle at 85% 25%, var(--selection) 0%, transparent 55%),
+    linear-gradient(180deg, var(--rule) 1px, transparent 1px);
+  background-size: auto, 100% 3rem;
+}
+.eng-card[data-card="4"] .eng-art {
+  background-image:
+    radial-gradient(circle at 82% 24%, var(--selection) 0%, transparent 50%),
+    linear-gradient(90deg, var(--rule-strong) 1px, transparent 1px),
+    linear-gradient(90deg, var(--rule) 1px, transparent 1px);
+  background-size: auto, 60px 10px, 12px 5px;
+  background-repeat: no-repeat, repeat-x, repeat-x;
+}
 
 .eng-hit { position: absolute; inset: 0; z-index: 3; cursor: pointer; }
 .eng-num { font: 500 .75rem/1 var(--mono); color: var(--accent); }

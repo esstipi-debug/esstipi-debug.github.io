@@ -14,7 +14,7 @@ secondary: See a sample audit | not-received-but-delivered
 subject: What we're seeing
 description: I find the money an operation loses between its records and its floor, and take it out at the cause. US, Australia, Canada, UK, Europe.
 published: 2026-11-09
-updated: 2026-11-14
+updated: 2026-11-15
 ---
 <div class="home-thesis" markdown="1">
 <div class="thesis-head" markdown="1">
@@ -41,7 +41,7 @@ The number people quote, 95%, comes from a 2025 MIT NANDA report, *The GenAI Div
 <div class="pillar" markdown="1">
 ## How I work
 
-I walk the floor first, the 02:30 shift included, and ask what happened rather than what people think. Then I put the record and the floor on one timeline and write the working down, so finance, the floor and engineering can check it. [How I diagnose](how-i-work/)
+I walk the floor first, the 02:30 shift included, and ask what happened rather than what people think. Then I put the record and the floor on one timeline and write the working down, so finance, the floor and engineering can check it. Captures of screens, labels and racks run in plain sight with notice, never faces; an operator is recorded only if they say yes. [How I diagnose](how-i-work/)
 </div>
 
 <div class="pillar" markdown="1">
@@ -59,7 +59,7 @@ A three-week field audit, cutover leadership, a fractional operations or deploym
 <div class="pillar" markdown="1">
 ## Working terms
 
-Open to full-time or embedded Deployment Strategist roles with technology vendors and enterprise teams, and to fixed-scope audits and cutovers invoiced in USD from Chile. [Working terms](working-terms/) or [if you are hiring](marcos-stipicich/#if-you-are-hiring)
+Open to full-time or embedded Deployment Strategist roles with technology vendors and enterprise teams, and to fixed-scope audits and cutovers invoiced in USD from Chile. On a site visit I observe and count using the blade you issue; I do not operate your machinery or fill a post. [Working terms](working-terms/) or [if you are hiring](marcos-stipicich/#if-you-are-hiring)
 </div>
 
 </div>
