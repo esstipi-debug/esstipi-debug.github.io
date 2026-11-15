@@ -439,6 +439,62 @@ main.wrap > article.page:has(.eng-deck) > :not(.eng-deck) { max-width: 44rem; }
 .flow li { position: relative; padding: .9rem 1.1rem; border: 1px solid var(--rule-strong); background: var(--panel); }
 .flow li + li::before { content: "\2193"; position: absolute; top: -1.55rem; left: 1.1rem; color: var(--accent); line-height: 1; }
 .flow-stop { display: block; margin-top: .6rem; padding-left: .75rem; border-left: 2px solid var(--accent); color: var(--ink-2); }
+/* A sample decision card on the proof page. Three radio buttons pick a play and a checkbox takes the lead
+   time away; the selectors below do the rest, with no script. Every play stays readable whatever is picked. */
+.card-demo { position: relative; max-width: 52rem; margin: 1.75rem 0 2.25rem; border: 1px solid var(--rule-strong); background: var(--panel); color: var(--ink-2); }
+.card-demo-pick { position: absolute; opacity: 0; pointer-events: none; }
+.card-demo-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: .35rem 1rem; padding: .9rem 1.1rem; border-bottom: 1px solid var(--rule); }
+.card-demo-title { font-weight: 620; font-stretch: 88%; color: var(--ink); }
+.card-demo-state { padding: .2rem .55rem; border: 1px solid var(--accent); font: 500 .8125rem/1.3 var(--mono); color: var(--accent); }
+.card-demo-note { padding: .75rem 1.1rem; border-bottom: 1px solid var(--rule); font-size: .875rem; line-height: 1.55; color: var(--muted); }
+.card-demo-note strong { color: var(--ink-2); }
+.card-demo-step { padding: 1.1rem; border-bottom: 1px solid var(--rule); font-size: .9375rem; line-height: 1.55; color: var(--ink-2); }
+.card-demo-step:last-child { border-bottom: 0; }
+.card-demo-step h3 { margin-bottom: .6rem; font-size: 1.0625rem; color: var(--ink); }
+.card-demo-step > p + p, .card-demo-step > ul + p { margin-top: .75rem; }
+.card-demo-probes, .card-demo-record { display: grid; gap: .45rem; margin: .6rem 0 0; padding-left: 1.1rem; }
+.card-demo-pass { padding-left: .75rem; border-left: 2px solid var(--accent); }
+.card-demo-plays { display: grid; gap: .625rem; margin-top: .9rem; }
+.card-demo-play { display: flex; flex-direction: column; gap: .35rem; padding: .85rem .9rem; border: 1px solid var(--rule); background: var(--ground); color: var(--ink-2); cursor: pointer; transition: border-color .2s; }
+.card-demo-play:hover { border-color: var(--rule-strong); }
+.card-demo-name { font-weight: 620; font-stretch: 88%; color: var(--ink); }
+.card-demo-what { margin-bottom: .2rem; font-size: .875rem; color: var(--muted); }
+.card-demo-row { display: grid; gap: .1rem; padding-top: .35rem; border-top: 1px solid var(--rule); }
+.card-demo-k { font-size: .875rem; }
+.card-demo-v { font: 500 .875rem/1.55 var(--mono); color: var(--ink); font-variant-numeric: tabular-nums; }
+.card-demo-rank { margin-top: auto; padding-top: .45rem; font: 500 .8125rem/1.45 var(--mono); color: var(--muted); }
+.card-demo-lead { display: inline-block; margin-top: .9rem; padding: .45rem .8rem; border: 1px solid var(--rule-strong); font-size: .875rem; color: var(--ink); cursor: pointer; transition: border-color .2s, color .2s; }
+.card-demo-lead:hover { border-color: var(--accent); color: var(--accent); }
+.card-demo-gap { margin-top: .75rem; padding-left: .75rem; border-left: 2px solid var(--accent); }
+.card-demo-unmeasured, .card-demo-if { display: none; }
+
+#card-play-a:checked ~ .card-demo-step .card-demo-play[data-play="a"],
+#card-play-b:checked ~ .card-demo-step .card-demo-play[data-play="b"],
+#card-play-c:checked ~ .card-demo-step .card-demo-play[data-play="c"] {
+  border-color: var(--accent);
+  box-shadow: inset 0 2px 0 var(--accent);
+}
+#card-play-a:checked ~ .card-demo-step .card-demo-if[data-play="a"],
+#card-play-b:checked ~ .card-demo-step .card-demo-if[data-play="b"],
+#card-play-c:checked ~ .card-demo-step .card-demo-if[data-play="c"] {
+  display: block;
+  margin-bottom: .75rem;
+  color: var(--ink);
+}
+#card-no-lead:checked ~ .card-demo-step .card-demo-measured { display: none; }
+#card-no-lead:checked ~ .card-demo-step .card-demo-unmeasured { display: revert; }
+#card-no-lead:checked ~ .card-demo-step .card-demo-v .card-demo-unmeasured { color: var(--accent); }
+#card-play-a:focus-visible ~ .card-demo-step .card-demo-play[data-play="a"],
+#card-play-b:focus-visible ~ .card-demo-step .card-demo-play[data-play="b"],
+#card-play-c:focus-visible ~ .card-demo-step .card-demo-play[data-play="c"],
+#card-no-lead:focus-visible ~ .card-demo-step .card-demo-lead {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+@media (min-width: 44rem) {
+  .card-demo-plays { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }

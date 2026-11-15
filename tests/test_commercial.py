@@ -256,9 +256,10 @@ def test_commercial_pages_avoid_banned_words_and_spanish(site):
 
 
 def test_every_figure_has_a_source(site):
+    """The sample decision card is read apart: its invented figures answer to SAMPLE_FIGURES, never to FIGURES."""
     root, pages = site
     for page in commercial(pages):
-        figures = set(NUMBER.findall(FORM_NAMES.sub(" ", main_text(read(root, page)))))
+        figures = set(NUMBER.findall(FORM_NAMES.sub(" ", main_text(CARD.sub(" ", read(root, page))))))
         assert not sorted(figures - FIGURES.keys()), (page.slug, sorted(figures - FIGURES.keys()))
 
 
@@ -932,3 +933,86 @@ def test_disabled_controls_have_a_style(site):
     rule = re.search(r"([^{}]*:disabled[^{}]*)\{([^{}]*)\}", style_sheets(root)["style.css"])
     assert rule and "cursor: not-allowed" in rule.group(2)
 
+
+
+# ---------------------------------------------------------------- the sample decision card on the proof page
+# The owner's decision of 2026-11-14 (option A): the card's figures are invented, so they live in a register of
+# their own that is valid inside the card and nowhere else. The register of sourced figures never takes one.
+# The outputs were measured by the engine's own purchase rule (decision_paths.compra_paths, 14 November 2026)
+# on invented inputs: order 48,000; stock 30,000 at cost; cost of goods 730,000 and sales 1,000,000 a year;
+# cover target 45 days; lead time 30 days, or none.
+
+CARD = re.compile(r'<section class="card-demo"[^>]*>.*?</section>', re.S)
+CARD_PLAYS = ("a", "b", "c")
+SAMPLE_FIGURES = {
+    "30,000": "stock on hand, at cost (invented input)",
+    "30": "supplier lead time, in days (invented input)",
+    "45": "cover target, at most, in days (invented input)",
+    "48,000": "the buyer's order (invented input), which is the capital play B commits",
+    "24,000": "capital play A commits, half the order; also what play B adds to it",
+    "27": "days of cover after play A (engine output)",
+    "39": "days of cover after play B (engine output)",
+    "15": "days of cover if nothing is ordered (engine output)",
+    "0": "capital play C commits; margin at risk of play B, measured and found to be none (engine output)",
+    "2,219": "margin at risk of play A over the lead time (engine output)",
+    "11,096": "margin at risk of play C over the lead time (engine output)",
+}
+
+
+def proof_card(root: Path, pages: list[build.Page]) -> str:
+    return CARD.search(read(root, build.find(pages, "proof"))).group(0)
+
+
+def card_words(card: str) -> str:
+    return " ".join(html.unescape(re.sub(r"<[^>]+>", " ", card)).split())
+
+
+def test_the_sample_card_stands_under_the_rule_on_the_proof_page_only(site):
+    root, pages = site
+    for page in pages:
+        assert len(CARD.findall(read(root, page))) == (page.slug == "proof"), page.slug
+    text = read(root, build.find(pages, "proof"))
+    assert text.index('<ol class="flow">') < text.index('<section class="card-demo"') < text.index("Writing</h2>")
+
+
+def test_the_sample_card_says_it_is_a_sample_and_never_prints_zero_for_what_it_cannot_measure(site):
+    root, pages = site
+    card = proof_card(root, pages)
+    words = card_words(card)
+    assert "A synthetic sample of the instrument, not a client’s data." in words
+    assert "Draft: waiting for sign-off" in words
+    for name in ("Play A: engine recommendation", "Play B: operator’s adjustment", "Play C: do nothing"):
+        assert name in words, name
+    # Without the lead time, each play's margin at risk reads "not measured", in place of the measured figure.
+    swaps = re.findall(r'<span class="card-demo-v"><span class="card-demo-measured">([^<]*)</span>'
+                       r'<span class="card-demo-unmeasured">'
+                       r'([^<]*)</span>', card)
+    assert len(swaps) == len(CARD_PLAYS)
+    assert [unmeasured for _, unmeasured in swaps] == ["not measured"] * len(CARD_PLAYS)
+    assert all(measured.startswith("USD ") for measured, _ in swaps)
+    figures = set(NUMBER.findall(words))
+    assert not sorted(figures - SAMPLE_FIGURES.keys()), sorted(figures - SAMPLE_FIGURES.keys())
+
+
+def test_the_sample_card_works_with_css_alone(site):
+    """Three radio buttons pick a play and a checkbox takes the lead time away. The style sheet does the rest."""
+    root, pages = site
+    card = proof_card(root, pages)
+    assert not SCRIPT.search(card)
+    picks = re.findall(r'<input class="card-demo-pick" type="radio" name="card-play" id="card-play-([a-z])"', card)
+    assert tuple(picks) == CARD_PLAYS
+    assert len(re.findall(r'<input class="card-demo-pick" type="radio"[^>]*\schecked>', card)) == 1
+    assert '<input class="card-demo-pick" type="checkbox" id="card-no-lead">' in card
+    assert '<label class="card-demo-lead" for="card-no-lead">' in card
+    css = style_sheets(root)["style.css"]
+    for play in CARD_PLAYS:
+        assert f'<label class="card-demo-play" for="card-play-{play}" data-play="{play}">' in card, play
+        assert f'<p class="card-demo-if" data-play="{play}">' in card, play
+        assert f'#card-play-{play}:checked ~ .card-demo-step .card-demo-play[data-play="{play}"]' in css, play
+        assert f'#card-play-{play}:checked ~ .card-demo-step .card-demo-if[data-play="{play}"]' in css, play
+    assert "#card-no-lead:checked ~ .card-demo-step .card-demo-measured" in css
+    assert "#card-no-lead:checked ~ .card-demo-step .card-demo-unmeasured" in css
+    classes = {token for value in re.findall(r'class="([^"]+)"', card) for token in value.split()}
+    assert classes and all(token.startswith("card-demo") for token in classes), sorted(classes)
+    missing = sorted(token for token in classes if not re.search(rf"\.{re.escape(token)}(?![\w-])", css))
+    assert not missing, missing
