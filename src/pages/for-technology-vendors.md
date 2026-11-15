@@ -25,11 +25,12 @@ Most rollouts do not fail in the model or the core code. In a 2015 NeurIPS paper
 - **Silent corruption in the customer's feed:** before your engine runs a single calculation, I check whether one-to-many purchase-order schedule joins, un-netted in-transit inventory, or quarantined dock lots are inflating the stock numbers your ingestion pipeline reads.
 - **The shadow spreadsheet beside the terminal:** what the buyer or supervisor calculates outside your tool, and which real physical constraint your configuration left out: minimum order multiples, dock staging limits, supplier lead-time variance, or shift cutoffs.
 - **The incentive collision:** whether the customer's floor KPIs punish operators for following your workflow, turning every exception into an unrecorded bypass.
+- **Unguarded write paths and rule loopholes:** overly broad permissions, shared floor logins, unbounded live ERP writes without TTL or rollback, and untrusted external text inputs that can steer agentic workflows past your guardrails.
 
 ## Where I have stood
 
 - **On the customer's floor:** thirteen years in Chile, Argentina and Australia across retail planning for more than 200 stores, a three-site logistics network of about 100 people, a USD 30M cross-border e-commerce P&L, and the warehouse-system cutover of a 50,000-SKU distribution centre where I stayed on the floor until the workarounds died and order processing time fell about 20%.
-- **At the keyboard building deterministic guardrails:** I learned to code in C and build in Python and TypeScript with AI coding agents. I have built an inventory and replenishment engine with 10,483 passing tests, receiving and field-audit kits (1,141 and 1,187 passing tests), and a weightlifting planning application (about 1,332 unit tests and 31 PostgreSQL integration tests), staging recommendations in draft beside the operator's own play with cryptographic sign-off and rollback, so a bad upstream record never writes directly to production.
+- **At the keyboard building deterministic guardrails:** I learned to code in C and build in Python and TypeScript with AI coding agents. I have built an inventory and replenishment engine with 10,483 passing tests, receiving and field-audit kits (1,141 and 1,187 passing tests), and a weightlifting planning application (about 1,332 unit tests and 31 PostgreSQL integration tests), staging recommendations in draft beside the operator's own play with HMAC-SHA256 sign-off and rollback, so a bad upstream record never writes directly to production.
 
 ## What I don't claim
 

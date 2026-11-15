@@ -37,7 +37,7 @@ Each one starts from the same place: what your records say against what your flo
 <p>For stock that does not reconcile, write-offs nobody can explain, or a deployment that has stalled.</p>
 <ul>
 <li><strong>Week one, the floor.</strong> On site or by video, with every shift included.</li>
-<li><strong>Week two, the records.</strong> A five-column event log: case, activity, timestamp, who, where.</li>
+<li><strong>Week two, the records.</strong> A five-column event log: case, activity, timestamp, who, where, alongside checks for control loopholes, shared logins and bypass paths.</li>
 <li><strong>Week three, the baseline and the list.</strong> Every loss in the order of what it costs, with the count and the arithmetic shown on pages you can forward, and a 30-60-90-day plan, presented to whoever signs.</li>
 </ul>
 <p>Paid 50% at the start and 50% on delivery. On-site days are billed separately. Your team keeps the count sheets and the queries.</p>
@@ -57,7 +57,7 @@ Each one starts from the same place: what your records say against what your flo
 <h2>Deployment &amp; Cutover Leadership</h2>
 <p>For a WMS, ERP, hotel, farm or AI system going live where a bad start stops dispatch or service.</p>
 <ul>
-<li>Data staged and checked before anything writes to production, with a way back.</li>
+<li>Data staged and checked before anything writes to production, including a pre-go-live adversarial check against malformed records, overly broad permissions and untrusted AI inputs, with a way back.</li>
 <li>Step-by-step instruction on the floor, in the crew&rsquo;s own terms.</li>
 <li>Go-live and hypercare on the floor, until the old shortcuts die.</li>
 </ul>

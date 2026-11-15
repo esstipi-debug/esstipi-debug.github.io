@@ -44,7 +44,7 @@ SPANISH = re.compile(r"[¿¡ñÑ]|\b(?:que|para|los|las|del|una|por|con|también
 EMPLOYER_SHA256 = "317d710efc13fed0f8c4fc2b9a35d0106a560a632af7bdf38ec5a2747b8b4c7e"
 WORD = re.compile(r"[^\W\d_]+")
 NUMBER = re.compile(r"\d(?:[\d,.:]*\d)?(?:%|M\b)?")
-FORM_NAMES = re.compile(r"\b(?:B-1|W-8BEN(?:-E)?|10-K)\b")  # names with a digit in them, not figures
+FORM_NAMES = re.compile(r"\b(?:B-1|W-8BEN(?:-E)?|10-K|HMAC-SHA256)\b")  # names with a digit in them, not figures
 JSONLD = re.compile(r'<script type="application/ld\+json">(.*?)</script>', re.S)
 CONTACT_BUTTON = re.compile(r'<a class="btn btn-contact" href="([^"]+)"')
 
