@@ -825,9 +825,10 @@ def section_line(page: Page) -> str:
 
 
 def page_main(page: Page, pages: list[Page], depth: int) -> str:
+    import risks  # late: risks.py draws the evidence plates with this module's data and helpers
     return f"""<article class="page">
 {headline_group(heading(page), section_line(page))}
-{page.body_html}
+{risks.with_plates(page.body_html, depth)}
 <p class="actions">{contact_button(page)}</p>
 </article>"""
 

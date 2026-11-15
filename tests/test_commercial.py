@@ -56,7 +56,8 @@ FIGURES = {
           "rate (owner decision 2026-11-13, content plan §3 A)",
     "14": "14 November 2026, date of the receiving-kit count (HECHOS, mellon)",
     "15": "15 planners (HECHOS, Trayectoria 2016-2017); 15 to 20 hours a week (plan B5); 15 November 2026, "
-          "date of the engine count (HECHOS, kern)",
+          "date of the engine count (HECHOS, kern) and end of the job-posting sample of the scope plate "
+          "(src/risks.json; coding table in C:/tolkien/docs/designs/laminas-c-level/codificacion.csv)",
     "20": "team of 20 (HECHOS, AGCO row); 15 to 20 hours a week; 20 October 2026 (HECHOS, fdekit)",
     "20%": "order processing time down about 20%, by his estimate (HECHOS, AGCO row; book l.6921); returning "
            "clients pay 20% less (owner decision 2026-11-13, content plan §3 A)",
@@ -97,7 +98,8 @@ FIGURES = {
     "2018": "year of the ERP launch (Revlon, Inc., Form 10-K for 2018, verified 2026-11-13); start of the "
             "three-site logistics role, January 2018 (HECHOS, Trayectoria)",
     "2025": "year of the MIT NANDA report",
-    "2026": "year of the test counts (HECHOS, Sistemas construidos)",
+    "2026": "year of the test counts (HECHOS, Sistemas construidos); year of the job-posting sample of the "
+            "scope plate (src/risks.json)",
     "6,000": "fractional lead fee in USD per month (plan C, option A)",
     "8,500": "field audit fee in USD (plan C, option A)",
     "10,483": "engine passing tests, CLM_TESTS_KERN_ACTUAL: at commit e2159ed on a clean install on "

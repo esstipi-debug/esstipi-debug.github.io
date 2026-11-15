@@ -40,6 +40,64 @@
 <h1>What I changed, checkable before we talk.</h1>
 <p class="kicker">Proof</p>
 </hgroup>
+<h2 id="evidence-map">What each claim rests on</h2>
+<figure class="risk-map" id="backing-plate">
+<figcaption class="risk-lead">I answered for five of these seven risks in live operations, and you have my word for those. Two you can re-run yourself.</figcaption>
+<p class="risk-key">The dot is how far I went; the ring is how far you can check it without me. From left to right: not in scope, described, built and tested outside a live system, answered for it in a live operation.</p>
+<ul class="risk-rows">
+<li><details class="risk-row">
+<summary><span class="risk-name">The system is not installed, configured and supported</span><span class="risk-pays">Operations</span><svg class="risk-track" data-reached="2" data-checkable="2" viewBox="0 0 112 18" role="img" aria-label="How far I went: built and tested outside a live system. What you can check without me: built and tested outside a live system."><line class="risk-track-line" x1="8" y1="9" x2="104" y2="9"/><circle class="risk-track-tick" cx="8" cy="9" r="1.6"/><circle class="risk-track-tick" cx="40" cy="9" r="1.6"/><circle class="risk-track-tick" cx="72" cy="9" r="1.6"/><circle class="risk-track-tick" cx="104" cy="9" r="1.6"/><circle class="risk-track-check" cx="72" cy="9" r="6.5"/><circle class="risk-track-reached" cx="72" cy="9" r="4"/></svg></summary>
+<div class="risk-evidence">
+<p><strong>How far I went:</strong> <span class="risk-level-word">Built and tested outside a live system</span> (<span class="risk-grade">Tested, private repository</span>). An inventory and replenishment engine with 10,483 passing tests, in a private repository.</p>
+<p><strong>What you can check without me:</strong> <span class="risk-level-word">Built and tested outside a live system</span> (<span class="risk-grade">Public and re-runnable</span>). The receiving kit is open source, with its tests. See <a href="https://github.com/esstipi-debug">the code on GitHub</a>.</p>
+</div>
+</details></li>
+<li><details class="risk-row">
+<summary><span class="risk-name">The record was already wrong</span><span class="risk-pays">Finance</span><svg class="risk-track" data-reached="3" data-checkable="2" viewBox="0 0 112 18" role="img" aria-label="How far I went: answered for it in a live operation. What you can check without me: built and tested outside a live system."><line class="risk-track-line" x1="8" y1="9" x2="104" y2="9"/><circle class="risk-track-tick" cx="8" cy="9" r="1.6"/><circle class="risk-track-tick" cx="40" cy="9" r="1.6"/><circle class="risk-track-tick" cx="72" cy="9" r="1.6"/><circle class="risk-track-tick" cx="104" cy="9" r="1.6"/><circle class="risk-track-check" cx="72" cy="9" r="6.5"/><circle class="risk-track-reached" cx="104" cy="9" r="4"/></svg></summary>
+<div class="risk-evidence">
+<p><strong>How far I went:</strong> <span class="risk-level-word">Answered for it in a live operation</span> (<span class="risk-grade">My field work</span>). I ran inventory accuracy and cycle-count programs across a distribution network.</p>
+<p><strong>What you can check without me:</strong> <span class="risk-level-word">Built and tested outside a live system</span> (<span class="risk-grade">Public and re-runnable</span>). A re-runnable audit of a public marketplace dataset, and the integrity guards of the open-source kit. See <a href="../not-received-but-delivered/">the audit</a> and <a href="https://github.com/esstipi-debug">the code on GitHub</a>.</p>
+</div>
+</details></li>
+<li><details class="risk-row">
+<summary><span class="risk-name">The system is set up for the manual, not the floor</span><span class="risk-pays">Operations</span><svg class="risk-track" data-reached="3" data-checkable="0" viewBox="0 0 112 18" role="img" aria-label="How far I went: answered for it in a live operation. What you can check without me: not in scope."><line class="risk-track-line" x1="8" y1="9" x2="104" y2="9"/><circle class="risk-track-tick" cx="8" cy="9" r="1.6"/><circle class="risk-track-tick" cx="40" cy="9" r="1.6"/><circle class="risk-track-tick" cx="72" cy="9" r="1.6"/><circle class="risk-track-tick" cx="104" cy="9" r="1.6"/><circle class="risk-track-check" cx="8" cy="9" r="6.5"/><circle class="risk-track-reached" cx="104" cy="9" r="4"/></svg></summary>
+<div class="risk-evidence">
+<p><strong>How far I went:</strong> <span class="risk-level-word">Answered for it in a live operation</span> (<span class="risk-grade">My field work</span>). In the Melbourne cutover I mapped how stock and dispatch actually ran rather than trusting manuals.</p>
+<p><strong>What you can check without me:</strong> Nothing you can run without me.</p>
+</div>
+</details></li>
+<li><details class="risk-row">
+<summary><span class="risk-name">The incentive pays for the wrong thing</span><span class="risk-pays">Operations</span><svg class="risk-track" data-reached="3" data-checkable="0" viewBox="0 0 112 18" role="img" aria-label="How far I went: answered for it in a live operation. What you can check without me: not in scope."><line class="risk-track-line" x1="8" y1="9" x2="104" y2="9"/><circle class="risk-track-tick" cx="8" cy="9" r="1.6"/><circle class="risk-track-tick" cx="40" cy="9" r="1.6"/><circle class="risk-track-tick" cx="72" cy="9" r="1.6"/><circle class="risk-track-tick" cx="104" cy="9" r="1.6"/><circle class="risk-track-check" cx="8" cy="9" r="6.5"/><circle class="risk-track-reached" cx="104" cy="9" r="4"/></svg></summary>
+<div class="risk-evidence">
+<p><strong>How far I went:</strong> <span class="risk-level-word">Answered for it in a live operation</span> (<span class="risk-grade">My field work</span>). On a floor walk in one of my consulting engagements, a per-operator productivity bonus was producing mixed, short and damaged orders. I retired it.</p>
+<p><strong>What you can check without me:</strong> Nothing you can run without me.</p>
+</div>
+</details></li>
+<li><details class="risk-row">
+<summary><span class="risk-name">A bad number writes straight to the live system</span><span class="risk-pays">Finance</span><svg class="risk-track" data-reached="2" data-checkable="0" viewBox="0 0 112 18" role="img" aria-label="How far I went: built and tested outside a live system. What you can check without me: not in scope."><line class="risk-track-line" x1="8" y1="9" x2="104" y2="9"/><circle class="risk-track-tick" cx="8" cy="9" r="1.6"/><circle class="risk-track-tick" cx="40" cy="9" r="1.6"/><circle class="risk-track-tick" cx="72" cy="9" r="1.6"/><circle class="risk-track-tick" cx="104" cy="9" r="1.6"/><circle class="risk-track-check" cx="8" cy="9" r="6.5"/><circle class="risk-track-reached" cx="72" cy="9" r="4"/></svg></summary>
+<div class="risk-evidence">
+<p><strong>How far I went:</strong> <span class="risk-level-word">Built and tested outside a live system</span> (<span class="risk-grade">Tested, private repository</span>). A draft stage, a signed approval that expires, a flag for finance above a threshold and a way back. No client runs it in production yet.</p>
+<p><strong>What you can check without me:</strong> Nothing you can run without me: the decision card below is a sample with invented figures.</p>
+</div>
+</details></li>
+<li><details class="risk-row">
+<summary><span class="risk-name">Nobody owns it after go-live</span><span class="risk-pays">The chief executive</span><svg class="risk-track" data-reached="3" data-checkable="0" viewBox="0 0 112 18" role="img" aria-label="How far I went: answered for it in a live operation. What you can check without me: not in scope."><line class="risk-track-line" x1="8" y1="9" x2="104" y2="9"/><circle class="risk-track-tick" cx="8" cy="9" r="1.6"/><circle class="risk-track-tick" cx="40" cy="9" r="1.6"/><circle class="risk-track-tick" cx="72" cy="9" r="1.6"/><circle class="risk-track-tick" cx="104" cy="9" r="1.6"/><circle class="risk-track-check" cx="8" cy="9" r="6.5"/><circle class="risk-track-reached" cx="104" cy="9" r="4"/></svg></summary>
+<div class="risk-evidence">
+<p><strong>How far I went:</strong> <span class="risk-level-word">Answered for it in a live operation</span> (<span class="risk-grade">My field work</span>). In the Melbourne cutover I trained 23 operators and stayed on shift until the workarounds died.</p>
+<p><strong>What you can check without me:</strong> Nothing you can run without me.</p>
+</div>
+</details></li>
+<li><details class="risk-row">
+<summary><span class="risk-name">The cash and the return never reach the P&amp;L</span><span class="risk-pays">Finance</span><svg class="risk-track" data-reached="3" data-checkable="0" viewBox="0 0 112 18" role="img" aria-label="How far I went: answered for it in a live operation. What you can check without me: not in scope."><line class="risk-track-line" x1="8" y1="9" x2="104" y2="9"/><circle class="risk-track-tick" cx="8" cy="9" r="1.6"/><circle class="risk-track-tick" cx="40" cy="9" r="1.6"/><circle class="risk-track-tick" cx="72" cy="9" r="1.6"/><circle class="risk-track-tick" cx="104" cy="9" r="1.6"/><circle class="risk-track-check" cx="8" cy="9" r="6.5"/><circle class="risk-track-reached" cx="104" cy="9" r="4"/></svg></summary>
+<div class="risk-evidence">
+<p><strong>How far I went:</strong> <span class="risk-level-word">Answered for it in a live operation</span> (<span class="risk-grade">My field work</span>). A USD 30M cross-border P&amp;L, where about USD 5M of inventory was freed.</p>
+<p><strong>What you can check without me:</strong> Nothing you can run without me.</p>
+</div>
+</details></li>
+</ul>
+<p class="risk-limit">Field work is my own account: it illustrates, it does not validate. None of my systems has a client in production yet.</p>
+</figure>
+
 <h2 id="track-record">Field work</h2>
 <p>Supply chains break across boundaries: a buying rule locks up cash, a cutover pushes teams onto spreadsheets, or a bonus manufactures bad shipments. Here is what I changed across thirteen years in operations, planning and consulting, and why unarchived field diagnoses were consolidated into <a href="../the-deployment-chasm/"><em>The Deployment Chasm</em></a> and the checks below.</p>
 <ul>

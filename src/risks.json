@@ -1,0 +1,87 @@
+{
+  "risks": [
+    {"id": "system", "label": "The system is not installed, configured and supported", "pays": "Operations"},
+    {"id": "record", "label": "The record was already wrong", "pays": "Finance"},
+    {"id": "floor", "label": "The system is set up for the manual, not the floor", "pays": "Operations"},
+    {"id": "incentive", "label": "The incentive pays for the wrong thing", "pays": "Operations"},
+    {"id": "write", "label": "A bad number writes straight to the live system", "pays": "Finance"},
+    {"id": "owner", "label": "Nobody owns it after go-live", "pays": "The chief executive"},
+    {"id": "cash", "label": "The cash and the return never reach the P&L", "pays": "Finance"}
+  ],
+  "scope": {
+    "source": "Coded from ten job postings on startup.jobs published in the two weeks before 15 November 2026: five implementation roles and five deployment strategist roles at software vendors whose customers run physical operations, read with the same rules as my own engagement. Each cell is the middle of five roles; a column is one kind of role, not a whole team.",
+    "kinds": [
+      {
+        "id": "implementation",
+        "label": "One implementation role at a software vendor",
+        "short": "Implementation role",
+        "roles": [
+          {"posted": "2026-11-13", "levels": [3, 0, 0, 0, 0, 3, 3]},
+          {"posted": "2026-11-13", "levels": [3, 2, 0, 0, 2, 1, 0]},
+          {"posted": "2026-11-13", "levels": [3, 0, 0, 0, 1, 1, 0]},
+          {"posted": "2026-11-11", "levels": [3, 0, 0, 0, 0, 3, 0]},
+          {"posted": "2026-11-10", "levels": [3, 0, 0, 0, 0, 3, 1]}
+        ]
+      },
+      {
+        "id": "deployment",
+        "label": "One deployment strategist role at a software vendor",
+        "short": "Deployment strategist role",
+        "roles": [
+          {"posted": "2026-11-13", "levels": [3, 0, 3, 0, 0, 3, 3]},
+          {"posted": "2026-11-05", "levels": [3, 0, 3, 0, 0, 3, 0]},
+          {"posted": "2026-11-03", "levels": [3, 0, 1, 0, 0, 3, 3]},
+          {"posted": "2026-11-03", "levels": [3, 0, 3, 0, 0, 0, 3]},
+          {"posted": "2026-11-13", "levels": [3, 2, 3, 0, 2, 3, 1]}
+        ]
+      }
+    ],
+    "mine": {"label": "My cutover engagement", "short": "My cutover engagement", "levels": [1, 2, 3, 0, 2, 3, 1]}
+  },
+  "backing_key": "The dot is how far I went; the ring is how far you can check it without me. From left to right: not in scope, described, built and tested outside a live system, answered for it in a live operation.",
+  "backing_limit": "Field work is my own account: it illustrates, it does not validate. None of my systems has a client in production yet.",
+  "backing": [
+    {
+      "risk": "system", "reached": 2, "grade": "Tested, private repository",
+      "reached_text": "An inventory and replenishment engine with 10,483 passing tests, in a private repository.",
+      "checkable": 2, "checkable_text": "The receiving kit is open source, with its tests.",
+      "links": [{"label": "the code on GitHub", "href": "https://github.com/esstipi-debug"}]
+    },
+    {
+      "risk": "record", "reached": 3, "grade": "My field work",
+      "reached_text": "I ran inventory accuracy and cycle-count programs across a distribution network.",
+      "checkable": 2, "checkable_text": "A re-runnable audit of a public marketplace dataset, and the integrity guards of the open-source kit.",
+      "links": [{"label": "the audit", "href": "not-received-but-delivered/"}, {"label": "the code on GitHub", "href": "https://github.com/esstipi-debug"}]
+    },
+    {
+      "risk": "floor", "reached": 3, "grade": "My field work",
+      "reached_text": "In the Melbourne cutover I mapped how stock and dispatch actually ran rather than trusting manuals.",
+      "checkable": 0, "checkable_text": "Nothing you can run without me.",
+      "links": []
+    },
+    {
+      "risk": "incentive", "reached": 3, "grade": "My field work",
+      "reached_text": "On a floor walk in one of my consulting engagements, a per-operator productivity bonus was producing mixed, short and damaged orders. I retired it.",
+      "checkable": 0, "checkable_text": "Nothing you can run without me.",
+      "links": []
+    },
+    {
+      "risk": "write", "reached": 2, "grade": "Tested, private repository",
+      "reached_text": "A draft stage, a signed approval that expires, a flag for finance above a threshold and a way back. No client runs it in production yet.",
+      "checkable": 0, "checkable_text": "Nothing you can run without me: the decision card below is a sample with invented figures.",
+      "links": []
+    },
+    {
+      "risk": "owner", "reached": 3, "grade": "My field work",
+      "reached_text": "In the Melbourne cutover I trained 23 operators and stayed on shift until the workarounds died.",
+      "checkable": 0, "checkable_text": "Nothing you can run without me.",
+      "links": []
+    },
+    {
+      "risk": "cash", "reached": 3, "grade": "My field work",
+      "reached_text": "A USD 30M cross-border P&L, where about USD 5M of inventory was freed.",
+      "checkable": 0, "checkable_text": "Nothing you can run without me.",
+      "links": []
+    }
+  ]
+}

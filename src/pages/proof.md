@@ -11,6 +11,10 @@ cta: Ask for a walk-through
 published: 2026-11-09
 updated: 2026-11-15
 ---
+## What each claim rests on {: #evidence-map }
+
+<!-- plate: backing -->
+
 ## Field work {: #track-record }
 
 Supply chains break across boundaries: a buying rule locks up cash, a cutover pushes teams onto spreadsheets, or a bonus manufactures bad shipments. Here is what I changed across thirteen years in operations, planning and consulting, and why unarchived field diagnoses were consolidated into [*The Deployment Chasm*](../the-deployment-chasm/) and the checks below.

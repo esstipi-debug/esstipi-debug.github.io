@@ -13,7 +13,7 @@ offer: Fractional Operations / Deployment Lead | 6000 | month
 offer: Advisory & Operational Due Diligence | 250 | hour
 offer: On-site days | 1200 | day
 published: 2026-11-09
-updated: 2026-11-14
+updated: 2026-11-15
 ---
 Each one starts from the same place: what your records say against what your floor does.
 
@@ -133,6 +133,8 @@ Not everything is a job for me.
 </table>
 
 If you need one of the first three, hire them. I work alongside all of them.
+
+<!-- plate: scope -->
 
 ## Best fit
 
