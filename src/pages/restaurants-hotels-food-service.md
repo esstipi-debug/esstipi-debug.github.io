@@ -1,6 +1,6 @@
 ---
 type: landing
-order: 20
+order: 36
 slug: restaurants-hotels-food-service
 title: Kitchens, hotels and food service
 kicker: Industry

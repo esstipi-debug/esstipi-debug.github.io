@@ -52,14 +52,14 @@ A three-week field audit, cutover leadership, a fractional operations or deploym
 
 <div class="pillar">
 <h2>Proof</h2>
-<p>A 50,000-SKU distribution-centre cutover in Melbourne, a USD 30M cross-border P&amp;L, a re-runnable triage of 2,708 marketplace claims, and a 9,966-test inventory and replenishment engine that stages every decision in draft before write-back.</p>
-<p><a href="proof/">See the proof</a></p>
+<p>A 50,000-SKU distribution-centre cutover in Melbourne, a USD 30M cross-border P&amp;L, a re-runnable triage of 2,708 marketplace claims, and tools I build in Python, SQL and TypeScript, among them a 9,966-test inventory and replenishment engine that stages every decision in draft before write-back.</p>
+<p><a href="proof/">See the proof</a> or <a href="proof/#decision-card">try a decision card</a></p>
 </div>
 
 <div class="pillar" markdown="1">
 ## Working terms
 
-An independent contractor invoicing in USD from Chile, with remote execution and short business-visitor visits for alignment. [Working terms](working-terms/)
+Open to full-time or embedded Deployment Strategist roles with technology vendors and enterprise teams, and to fixed-scope audits and cutovers invoiced in USD from Chile. [Working terms](working-terms/) or [if you are hiring](marcos-stipicich/#if-you-are-hiring)
 </div>
 
 </div>

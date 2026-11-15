@@ -511,7 +511,8 @@ def test_the_desk_stands_beside_the_headline(tmp_path, monkeypatch):
 def test_every_object_on_the_desk_has_a_tile_that_leads_to_its_page(tmp_path, monkeypatch):
     root, text = home_with_desk(tmp_path, monkeypatch)
     tiles = KIT_TILE.findall(section_of(text, "kit"))
-    assert [link for link, _ in tiles] == [f"{item.slug}/" for item in build.DESK]
+    assert [link for link, _ in tiles] == [f"{item.slug}/" + (f"#{item.anchor}" if item.anchor else "")
+                                           for item in build.DESK]
     assert len(set(desk_keys())) == len(desk_keys()) == 9
     width, height = build.TILE_SIZE
     for (link, body), item in zip(tiles, build.DESK):
@@ -523,7 +524,9 @@ def test_every_object_on_the_desk_has_a_tile_that_leads_to_its_page(tmp_path, mo
         assert f"<p>{build.esc(item.text)}</p>" in body, key
         assert ('class="tile-limit"' in body) == bool(item.rule), key
         assert not item.rule or f'<p class="tile-limit">{build.esc(item.rule)}</p>' in body, key
-        assert (root / link / "index.html").is_file(), link
+        target = root / link.split("#", 1)[0] / "index.html"
+        assert target.is_file(), link
+        assert not item.anchor or f'id="{item.anchor}"' in target.read_text(encoding="utf-8"), link
         assert (root / "files" / "desk" / build.tile_name(key)).is_file(), key
 
 

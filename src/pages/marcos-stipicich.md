@@ -17,7 +17,7 @@ I grew up on a sheep ranch in Patagonia, where my father's rule was simple: read
 
 Available for pre-cutover forensic audits, deployment strategy, and Forward Deployed roles.
 
-## If you are hiring
+## If you are hiring {: #if-you-are-hiring }
 
 For technology vendors, enterprise rollouts, and Forward Deployed roles:
 

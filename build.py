@@ -91,7 +91,7 @@ NAV = (
 # The first choice on the home page is what is happening, not who the visitor is: the situation doors
 # stand alone under the hero. The doors by floor and by kind of buyer sit lower, under "industries".
 SITUATION_GROUP = ("situation", "Which one is yours?")
-DOOR_GROUPS = (("floor", "Where is the work?"), ("buyer", "Or what are you?"))
+DOOR_GROUPS = (("buyer", "What are you?"), ("floor", "Or where is the work?"))
 ALL_GROUPS = (SITUATION_GROUP, *DOOR_GROUPS)
 
 # The method, in the tailor's three verbs. On the home page each step is a panel, and the panels stack.
@@ -190,6 +190,7 @@ class DeskObject:
     text: str  # what the object says about the work
     rule: str  # the limit it works under on a client's site, or ""
     slug: str  # the page its card leads to
+    anchor: str = ""  # a place on that page, when the card leads to one part of it
 
 
 # From left to right on the picture. No maker is named, and the picture carries no mark.
@@ -203,7 +204,7 @@ DESK = (
                "the-floor-works-around-the-system"),
     DeskObject("vest", "Vest and gloves",
                "On your floor I follow your site rules, induction included.",
-               "I do not run your equipment or fill a post.", "how-i-work"),
+               "On a site visit I observe and count; I do not operate your machinery.", "how-i-work"),
     DeskObject("tape", "Steel tape",
                "I measure before I trust the record: the rack, the aisle, the pallet, and a blind count "
                "of a sample of locations.", "", "the-inventory-number-is-wrong"),
@@ -220,8 +221,9 @@ DESK = (
                "The count goes on paper before it meets the system. Your team keeps the sheets.", "",
                "the-inventory-number-is-wrong"),
     DeskObject("laptop", "Laptop",
-               "At night I put the record and the floor on one timeline. You get the baseline and the "
-               "list of losses, in the order to fix them.", "", SERVICES_SLUG),
+               "At night I put the record and the floor on one timeline, with tools I build in Python, SQL "
+               "and TypeScript. You get the baseline and the list of losses, in the order to fix them.", "",
+               "proof", "decision-card"),
 )
 
 

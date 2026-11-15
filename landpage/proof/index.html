@@ -63,14 +63,14 @@
 </ul>
 <p>The rule I build to:</p>
 <ol class="flow">
-<li><strong>Check the extract before the math.</strong> Run silent corruption probes on the raw tables: one-to-many join fanout, negative or orphaned stock, un-netted in-transit lots, and unit-of-measure drift. <span class="flow-stop">If a number fails, nothing is written to the live system.</span></li>
+<li><strong>Check the extract before the math.</strong> Run integrity guards on the raw tables: a one-to-many join that repeats a purchase-order line, blocked stock that does not balance, and negative stock. Stock in transit is checked inside the replenishment engine, which runs each calculation twice, with and without what is already on the way, to show which ones would order the same goods twice. <span class="flow-stop">If a number fails, nothing is written to the live system.</span></li>
 <li><strong>Stage three plays in draft.</strong> Put the engine’s recommendation, the operator’s own adjustment, and the status quo side by side in a draft stage with their working-capital and service-level trade-offs.</li>
 <li><strong>Sign off or override with a reason.</strong> The buyer or supervisor approves, modifies, or rejects the draft card; the decision and its reason are logged before execution.</li>
 <li><strong>Keep the way back.</strong> Every approved change carries a rollback path and a 90-day check against the floor baseline.</li>
 </ol>
 
 <p>One decision card, as it waits for a signature. Pick a play to see what the sign-off records, then take the lead time away to see what the engine does with a cost it cannot measure.</p>
-<section class="card-demo" aria-label="A sample decision card, in draft">
+<section class="card-demo" id="decision-card" aria-label="A sample decision card, in draft">
 <input class="card-demo-pick" type="radio" name="card-play" id="card-play-a" checked>
 <input class="card-demo-pick" type="radio" name="card-play" id="card-play-b">
 <input class="card-demo-pick" type="radio" name="card-play" id="card-play-c">

@@ -9,6 +9,8 @@ subject: Working terms
 published: 2026-11-09
 updated: 2026-11-14
 ---
+**Two ways to work together.** Employed, full-time or embedded, as a Deployment Strategist with a technology vendor or an enterprise team, on site with relocation or remote. Or contracted, for a fixed-scope audit or cutover invoiced in USD from Chile; the contracting and travel terms below are for that second way.
+
 **Three things I ask for.** The floor, including the off shifts, under your site rules. The raw records, in five columns: case, activity, timestamp, who, where. One executive who can unblock.
 
 **On the floor.** Visits are floor-first, not conference-room interviews. I wear your required PPE, walk every shift, and speak directly with operators, shift leads, planners, and managers so nothing is filtered before it reaches the baseline. I work in plain sight under your site rules and safety induction; I do not run your equipment, fill an operational post, or bypass your management chain.

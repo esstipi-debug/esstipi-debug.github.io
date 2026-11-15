@@ -154,7 +154,7 @@ def tile(item: DeskObject, pages: list[Page], depth: int) -> str:
     width, height = build.TILE_SIZE
     picture = href(f"files/desk/{build.tile_name(item.key)}", depth)
     limit = f'\n<p class="tile-limit">{esc(item.rule)}</p>' if item.rule else ""
-    return f"""<li><a class="tile" href="{href(build.find(pages, item.slug).path, depth)}">\
+    return f"""<li><a class="tile" href="{href(build.find(pages, item.slug).path, depth)}{"#" + item.anchor if item.anchor else ""}">\
 <span class="tile-frame"><img src="{picture}" width="{width}" height="{height}" alt="" loading="lazy" decoding="async"></span>
 <h3>{esc(item.name)}</h3>
 <p>{esc(item.text)}</p>{limit}</a></li>"""

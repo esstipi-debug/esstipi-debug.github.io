@@ -33,7 +33,7 @@ Most rollouts do not fail in the model or the core code. In a 2015 NeurIPS paper
 
 ## What I don't claim
 
-- I have not served as a vendor's commercial account executive, and my own diagnostic engines are pre-revenue tools rather than a competing SaaS product. What I bring to a vendor team is thirteen years on the buyer's side of the table plus the engineering discipline to turn messy floor exceptions into a clean data contract.
+- I have not served as a vendor's commercial account executive, and my own diagnostic engines are field instruments rather than a competing SaaS product. What I bring to a vendor team is thirteen years on the buyer's side of the table plus the engineering discipline to turn messy floor exceptions into a clean data contract.
 - I use AI to accelerate specification drafting, boilerplate and adversarial code review; floor discovery, causal diagnosis, the mathematical invariants and the sign-off stay in my hands.
 - Hands-on engineering, data-contract work and forensic analysis are performed remotely from Santiago, Chile; short on-site visits focus on floor observation, blind counts and stakeholder alignment under standard business-visitor rules.
 

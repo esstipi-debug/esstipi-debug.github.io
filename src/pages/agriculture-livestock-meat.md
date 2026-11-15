@@ -1,6 +1,6 @@
 ---
 type: landing
-order: 10
+order: 35
 slug: agriculture-livestock-meat
 title: Farm, plant and parts warehouse
 kicker: Industry

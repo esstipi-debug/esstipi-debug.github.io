@@ -1,6 +1,6 @@
 ---
 type: landing
-order: 30
+order: 34
 slug: warehousing-cold-chain-distribution
 title: Warehousing, cold chain and distribution
 kicker: Industry
