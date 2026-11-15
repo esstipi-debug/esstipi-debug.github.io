@@ -409,6 +409,25 @@ def test_short_answers_open_in_place(site):
         assert f'href="{note.slug}/"' in library, note.slug
 
 
+COUNT_WORDS = {9: "nine", 10: "ten", 11: "eleven", 12: "twelve", 13: "thirteen", 14: "fourteen"}
+
+
+def test_proof_counts_the_short_answers(site):
+    """The proof page says how many short answers there are; a new question page changes the word."""
+    root, pages = site
+    questions = [page for page in pages if page.kind == "question"]
+    text = main_text(read(root, build.find(pages, "proof")))
+    assert f"{COUNT_WORDS[len(questions)]} short answers" in text, len(questions)
+
+
+def test_erp_answer_states_the_premise_of_its_audit_rule(site):
+    """The rule only reads right with its premise: the floor knows something the system does not."""
+    root, pages = site
+    text = main_text(read(root, build.find(pages, "should-you-replace-your-erp-with-ai-all-at-once")))
+    assert "knows something the system does not" in text
+    assert "I audit the deployer before I trust the system" in text
+
+
 def test_home_ends_on_the_same_call_as_it_opens(site):
     root, pages = site
     home = build.find(pages, "index")

@@ -16,9 +16,9 @@ updated: 2026-11-14
 ---
 In the sales demo, the data was clean and the workflow was linear. Sixty days after go-live at the customer's site, the receiving clerk is typing dummy quantities to clear the dock, the planner has exported your screen back into Excel, and the executive sponsor is asking why the promised ROI has not shown up before renewal.
 
-Most rollouts do not fail in the model or the core code. In a 2015 NeurIPS paper, Sculley and colleagues noted that a mature machine-learning system might end up at most 5% model code and at least 95% glue code; on tau-bench (Yao et al., 2024), even frontier language-model agents pass fewer than 50% of multi-step retail and airline workflows when they must follow domain rules across turns. In the field, that 95% is where the customer's dirty master data, local incentives and shift shortcuts quietly break your product.
+Most rollouts do not fail in the model or the core code. In a 2015 NeurIPS paper, Sculley and colleagues noted that a mature machine-learning system might end up at most 5% model code and at least 95% glue code; on tau-bench, the 2024 benchmark from Yao and colleagues, even frontier language-model agents pass fewer than 50% of multi-step retail and airline workflows when they must follow domain rules across turns. In the field, that 95% is where the customer's dirty master data, local incentives and shift shortcuts quietly break your product.
 
-<p class="src">Sources: Sculley et al., <a href="https://papers.nips.cc/paper_files/paper/2015/hash/86df7dcfd896fcaf2674f757a2463eba-Abstract.html">Hidden Technical Debt in Machine Learning Systems</a> (NeurIPS, 2015); Yao et al., <a href="https://arxiv.org/abs/2406.12045">tau-bench</a> (2024).</p>
+<p class="src">Sources: Sculley and colleagues, <a href="https://papers.nips.cc/paper_files/paper/2015/hash/86df7dcfd896fcaf2674f757a2463eba-Abstract.html">Hidden Technical Debt in Machine Learning Systems</a>, NeurIPS 2015; Yao and colleagues, <a href="https://arxiv.org/abs/2406.12045">tau-bench</a>, 2024.</p>
 
 ## What I check first
 

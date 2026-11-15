@@ -29,4 +29,4 @@ updated: 2026-11-14
 - United Kingdom: ETA.
 - Schengen area: visa-free short stays.
 
-Hands-on execution is delivered remotely from Chile or under the appropriate work authorisation when a longer on-site deployment requires it. I lived and worked in Melbourne and hold a current Victorian forklift licence (class LF).
+Hands-on execution is delivered remotely from Chile or under the appropriate work authorisation when a longer on-site deployment requires it. I lived and worked in Melbourne.
