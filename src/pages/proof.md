@@ -4,21 +4,24 @@ order: 42
 slug: proof
 title: Proof
 kicker: Proof
-headline: What I have done, and what you can check before we talk.
+headline: What I changed, checkable before we talk.
 description: Field work from thirteen years in operations, a published audit of 2,708 marketplace claims, and deterministic diagnostic software with 9,966 automated tests.
 subject: Question on the proof
 cta: Ask for a walk-through
 published: 2026-11-09
-updated: 2026-11-14
+updated: 2026-11-15
 ---
 ## Field work {: #track-record }
 
-- **Melbourne, 2022 to 2024.** As Outbound Leader at AGCO Corporation, led the warehouse-system changeover of a 50,000-SKU distribution centre with a team of 20. Trained 23 operators on RF scanning on the floor, retired the paper workarounds, and stayed through stabilization; order processing time fell about 20%.
-- **Cross-border e-commerce, 2020 to 2022.** Ran a USD 30M cross-border P&L and freed about USD 5M of inventory.
-- **Three-site logistics, 2018 to 2020.** Ran operations across three sites with about 100 people and a USD 15M budget.
-- **Retail planning, 2016 to 2017.** Led a team of 15 planners supplying more than 200 stores.
-- **Earlier planning roles, 2013 to 2016.** Analysed a USD 100M inventory position, and identified about USD 2M a year of savings during a warehouse-system implementation.
-- **On one floor walk.** Traced mixed, short and damaged orders to a per-operator productivity bonus, retired the metric and measured customer satisfaction instead.
+Supply chains break across boundaries: a buying rule locks up cash, a cutover pushes teams onto spreadsheets, or a bonus manufactures bad shipments. Here is what I changed across thirteen years in operations, planning and consulting, and why unarchived field diagnoses were consolidated into [*The Deployment Chasm*](../the-deployment-chasm/) and the checks below.
+
+- **System changeover without floor bypass (AGCO Corporation, Melbourne, 2022 to 2024).** Outbound Leader during the cutover from a legacy warehouse system to Manhattan Associates on a 50,000-SKU distribution centre with a team of 20. Mapped how stock and dispatch actually ran rather than trusting manuals, worked location schema, wave strategy and floor failure modes with the technical team, trained 23 operators on RF scanning, and stayed on shift until paper workarounds ended. Order processing time fell about 20% (a shift estimate without retained logs).
+- **Working capital and demand rules under rapid scale (cross-border e-commerce, 2020 to 2022).** Owned a USD 30M P&L spanning direct consumer sales and wholesale. Through 300% annual growth, replaced judgement buffers with aggregate statistical demand forecasting and wrote the operating procedures that kept volume moving, freeing about USD 5M of inventory.
+- **Multi-site reporting and replenishment control (Chile and Argentina, 2016 to 2020).** Ran a USD 15M budget across three logistics sites and about 100 people, replacing lagging weekly packs with daily operational reporting that every site planned from. Earlier led 15 planners supplying more than 200 retail stores (holding part of the role remotely from Sydney), building forecasting and replenishment models to balance stockouts against inventory while automating financial reports.
+- **Cost allocation and pre-cutover savings (2013 to 2016).** Analysed a USD 100M inventory position with cost-allocation models and cycle-count controls so the business could see where operating expense actually sat, and identified about USD 2M a year in purchasing and logistics savings alongside floor procedures for an earlier warehouse-system rollout.
+- **Cross-industry diagnostics and incentive repair (2013 to 2022).** Across more than seven independent consulting engagements in warehousing, retail, e-commerce and manufacturing, I built process maps, KPI dashboards and floor procedures. On one floor walk, tracing mixed, short and damaged orders back to a per-operator productivity bonus showed how local metrics break downstream quality; I retired the bonus metric and measured customer satisfaction through zero complaints and response time instead. Individual client archives from that consulting work were not kept, so I consolidated the recurring mechanisms into *The Deployment Chasm* and encoded them into the checks below.
+
+The Melbourne employer is named once and verifiable. Earlier 2013 to 2022 engagements omit company names, with counterparts available on request where contacts remain reachable; for proof you can verify without calling anyone, start with the public audit and tested tools below.
 
 ## Published audit you can re-run {: #sample-audit }
 
