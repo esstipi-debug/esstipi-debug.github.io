@@ -47,6 +47,7 @@ main { margin-top: 20px; }
 .sw-fde { border-top: 2.5px solid var(--fde); }
 .sw-market { border-top: 2.5px dashed var(--market); }
 .sw-pair { border-top: 2.5px dashed var(--pair); }
+.sw-delivery { border-top: 2.5px dotted var(--ink-2); }
 .sw-tailor, .sw-me { border-top: 3px solid var(--accent); }
 .sw-bar { border-top: 2.5px dashed var(--accent); }
 .sw-check { border-top: 2.5px dotted var(--ink); }
@@ -97,6 +98,7 @@ main { margin-top: 20px; }
 .verdict.over { color: var(--ground); background: var(--market); }
 .verdict.covered { color: var(--ink-2); box-shadow: inset 0 0 0 1px var(--rule-strong); }
 .verdict-text { margin: 12px 0 0; color: var(--ink-2); font-size: .9rem; line-height: 1.5; }
+.block p.doubt { margin-top: 8px; }
 .block { border-top: 1px solid var(--rule); padding-top: 13px; margin-top: 13px; }
 .block h3 { margin: 0 0 8px; font: 600 .76rem/1.3 var(--mono); color: var(--muted); }
 .block p { margin: 0; color: var(--ink-2); line-height: 1.55; font-size: .95rem; }
@@ -113,12 +115,13 @@ main { margin-top: 20px; }
 .marks.c-market i.on { background: var(--market); border-color: var(--market); }
 .marks.c-pair i.on { background: var(--pair); border-color: var(--pair); }
 .marks.c-tailor i.on { background: var(--accent); border-color: var(--accent); }
-.marks.c-check i.on { background: var(--ink-2); border-color: var(--ink-2); }
+.marks.c-check i.on, .marks.c-delivery i.on { background: var(--ink-2); border-color: var(--ink-2); }
 .dist { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 10px; }
 .dist span { width: 28px; height: 28px; border-radius: 7px; display: grid; place-items: center; font: 600 .78rem/1 var(--mono); background: var(--ground); border: 1px solid var(--rule); color: var(--muted); }
 .dist span.l2 { color: var(--ink-2); border-color: var(--rule-strong); }
 .dist span.l3 { color: var(--ground); background: var(--market); border-color: var(--market); }
 .dist.fde span.l3 { background: var(--fde); border-color: var(--fde); }
+.dist.delivery span.l3 { background: var(--ink-2); border-color: var(--ink-2); }
 .block p.who-line { display: flex; align-items: center; gap: 8px; margin: 12px 0 6px; color: var(--ink); font-weight: 620; font-size: .88rem; }
 .block p.who-line:first-of-type { margin-top: 0; }
 .tag { display: inline-block; font: 600 .72rem/1 var(--mono); padding: 5px 8px; border-radius: 6px; border: 1px solid var(--rule-strong); color: var(--ink-2); margin-top: 8px; }
@@ -193,7 +196,8 @@ footer { margin-top: 18px; padding-top: 13px; border-top: 1px solid var(--rule);
 <!-- Levels coded from job postings with one pre-registered rubric: 0 not in the role, 1 mentioned,
      2 built or tested before go-live, 3 owned in the live operation. One object per posting; companies stay out of the page.
      C code, S system, V presales, L legacy, E evals, K compliance and scale, T screens, A adversarial,
-     W write, R record, F floor, I incentive, P value, U shift; O adoption (strategist only). -->
+     W write, R record, F floor, I incentive, P value, U shift; O adoption, where it was coded.
+     "delivery" is implementation (first five) and customer success (last four): counted in the verdicts, not drawn. -->
 <script type="application/json" id="atlas-data">
 {"strategist": [
   {"C": 0, "S": 3, "V": 2, "L": 0, "E": 0, "K": 0, "T": 0, "A": 0, "W": 0, "R": 0, "F": 3, "I": 0, "P": 3, "U": 1, "O": 3},
@@ -216,13 +220,24 @@ footer { margin-top: 18px; padding-top: 13px; border-top: 1px solid var(--rule);
   {"C": 3, "S": 3, "V": 2, "L": 0, "E": 0, "K": 2, "T": 3, "A": 0, "W": 2, "R": 0, "F": 0, "I": 0, "P": 0, "U": 0},
   {"C": 2, "S": 3, "V": 2, "L": 0, "E": 0, "K": 0, "T": 0, "A": 2, "W": 2, "R": 0, "F": 3, "I": 0, "P": 1, "U": 0},
   {"C": 3, "S": 3, "V": 0, "L": 0, "E": 0, "K": 2, "T": 0, "A": 2, "W": 0, "R": 0, "F": 0, "I": 0, "P": 0, "U": 0}
+],
+"delivery": [
+  {"C": 0, "S": 3, "V": 2, "L": 0, "E": 0, "K": 0, "T": 0, "A": 0, "W": 0, "R": 0, "F": 0, "I": 0, "P": 3, "U": 0, "O": 3},
+  {"C": 1, "S": 3, "V": 2, "L": 0, "E": 0, "K": 0, "T": 0, "A": 0, "W": 2, "R": 2, "F": 0, "I": 0, "P": 0, "U": 0, "O": 1},
+  {"C": 0, "S": 3, "V": 0, "L": 0, "E": 0, "K": 0, "T": 0, "A": 0, "W": 1, "R": 0, "F": 0, "I": 0, "P": 0, "U": 0, "O": 1},
+  {"C": 1, "S": 3, "V": 0, "L": 2, "E": 0, "K": 0, "T": 0, "A": 0, "W": 0, "R": 0, "F": 0, "I": 0, "P": 0, "U": 0, "O": 3},
+  {"C": 0, "S": 3, "V": 1, "L": 0, "E": 0, "K": 0, "T": 0, "A": 0, "W": 0, "R": 0, "F": 0, "I": 0, "P": 1, "U": 0, "O": 3},
+  {"C": 0, "S": 1, "V": 3, "L": 0, "E": 0, "K": 0, "T": 0, "A": 0, "W": 0, "R": 0, "F": 0, "I": 0, "P": 0, "U": 0},
+  {"C": 0, "S": 1, "V": 3, "L": 0, "E": 0, "K": 1, "T": 0, "A": 0, "W": 0, "R": 0, "F": 1, "I": 0, "P": 3, "U": 1},
+  {"C": 0, "S": 3, "V": 3, "L": 0, "E": 0, "K": 0, "T": 0, "A": 0, "W": 0, "R": 0, "F": 0, "I": 0, "P": 1, "U": 0},
+  {"C": 0, "S": 3, "V": 3, "L": 0, "E": 0, "K": 0, "T": 0, "A": 0, "W": 0, "R": 0, "F": 0, "I": 1, "P": 3, "U": 1}
 ]}
 </script>
 <script>
 (() => {
   const DATA = JSON.parse(document.getElementById("atlas-data").textContent);
-  const ROLES = DATA.strategist, ENGINEERS = DATA.engineer;
-  const N = ROLES.length, M = ENGINEERS.length;
+  const ROLES = DATA.strategist, ENGINEERS = DATA.engineer, DELIVERY = DATA.delivery;
+  const N = ROLES.length, M = ENGINEERS.length, D = DELIVERY.length;
   const count = (key, test, rows = ROLES) => rows.filter(role => test(role[key])).length;
   const WORDS = {
     en: ["none", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen"],
@@ -381,13 +396,17 @@ footer { margin-top: 18px; padding-top: 13px; border-top: 1px solid var(--rule);
   const marketLevel = axis => median(ROLES.map(role => role[axis.key]));
   const fdeLevel = axis => median(ENGINEERS.map(role => role[axis.key]));
   const pairLevel = axis => Math.max(fdeLevel(axis), marketLevel(axis));
+  const deliveryLevel = axis => median(DELIVERY.map(role => role[axis.key]));
+  const vendorLevel = axis => Math.max(pairLevel(axis), deliveryLevel(axis));
+  // Axes whose verdict changes when every doubtful posting takes its other reading. The coding table's test recomputes this list.
+  const DEPENDS_ON_READING = ["U"];
   const describe = (rows, key, lang) => {
     const n = level => rows.filter(row => row[key] === level).length;
     return lang === "en"
       ? `Owned live in ${n(3)}, built or tested in ${n(2)}, mentioned in ${n(1)}, absent from ${n(0)}.`
       : `Responden en vivo ${n(3)}, lo construyen o prueban ${n(2)}, lo mencionan ${n(1)}, no lo incluyen ${n(0)}.`;
   };
-  const verdictOf = axis => pairLevel(axis) < axis.tailor ? "gap" : marketLevel(axis) > axis.tailor ? "over" : "covered";
+  const verdictOf = axis => vendorLevel(axis) < axis.tailor ? "gap" : marketLevel(axis) > axis.tailor ? "over" : "covered";
   const label = (axis, lang) => axis.short[lang].replace("\n", " ");
 
   const STEPS = [
@@ -419,24 +438,25 @@ footer { margin-top: 18px; padding-top: 13px; border-top: 1px solid var(--rule);
       title: "What should a deployment strategist own?",
       sub: "Fourteen things a rollout needs, coded from job postings for the forward deployed engineer and for the strategist the industry hires, and set against the role I propose: the Industrial Tailor.",
       tabs: ["1. The bar", "2. Where I stand", "3. With the FDE"],
-      leadBar: c => `${capital(word(c.presales, "en"))} of ${word(N, "en")} strategist postings ask for presales; ${c.platform === N ? `all ${word(N, "en")}` : word(c.platform, "en")} make them own the platform. Put the engineer beside them and ${word(c.gaps, "en")} of these fourteen are still nobody's, from the record and the write to the incentive and the shift. That is where a rollout loses money.`,
+      leadBar: c => `${capital(word(c.presales, "en"))} of ${word(N, "en")} strategist postings ask for presales; ${c.platform === N ? `all ${word(N, "en")}` : word(c.platform, "en")} make them own the platform. Put the engineer, the implementation team and customer success beside them and ${word(c.firm, "en")} of these fourteen still belong to none of them, from the record and the write to the incentive. ${capital(word(c.gaps - c.firm, "en"))} more, the shift, depends on who 'the users' in those postings are. That is where a rollout loses money.`,
       leadMe: "On the operating half I stand closer to the role I propose than the industry does. The technical half I have tested in my own tools, and five axes I have not placed yet.",
       leadFde: "The engineer builds on what the strategist hands over. The industry strategist hands over intentions; the Industrial Tailor hands over contracts the engineer can test.",
-      series: { fde: "Engineer (FDE)", market: "Industry strategist (FDS)", pair: "Both together", tailor: "Industrial Tailor" },
-      noteBar: "No verdict changes if each doubtful posting takes its other reading, higher or lower.",
+      series: { fde: "Engineer (FDE)", market: "Industry strategist (FDS)", pair: "Both together", tailor: "Industrial Tailor", delivery: "Implementation and customer success" },
+      noteBar: "Only one verdict changes if each doubtful posting takes its other reading, higher or lower: the shift.",
       noteMe: "Hollow point: not placed yet",
       lgBar: "The bar: Industrial Tailor", lgMe: "Where I am", lgCheck: "What a stranger can check without me",
-      srcBar: `Strategist: ${N} deployment strategist postings on startup.jobs, 3 to 13 November 2026. Engineer: ${M} forward deployed engineer postings on startup.jobs, 13 and 14 November 2026. Every posting is coded on all fourteen axes with one rubric written before reading them, and each point is the middle value of its group. The Industrial Tailor is the role I propose, not a coding. The axes run by family: technology and the sale on the right, the operation on the left.`,
+      srcBar: `Strategist: ${N} deployment strategist postings on startup.jobs, 3 to 13 November 2026. Engineer: ${M} forward deployed engineer postings on startup.jobs, 13 and 14 November 2026. Implementation and customer success: ${D} postings on startup.jobs, 10 to 13 November 2026; they count in the verdicts and are not drawn. Every posting is coded on all fourteen axes with one rubric, each rule written before it was applied, and each point is the middle value of its group. The Industrial Tailor is the role I propose, not a coding. The axes run by family: technology and the sale on the right, the operation on the left.`,
       srcMe: "The bar is the role I propose. My levels come from the record of my work; the dotted line is what you can check without calling me.",
       srcFde: "FDE: forward deployed engineer. The strategist's column is what the engineer receives at each step.",
       foot: "Prototype. No level on this page is a self-rating: the industry's are coded from postings, and mine are tied to the record of my work.",
       scenario: (i, n) => `Scenario ${i} of ${n}`, pays: "Who pays first", why: "Why it costs", levels: "Who reaches what",
       market: "What the postings write", own: "What the Industrial Tailor owns", dist: `The ${N} postings, one box each`,
       bar: "The bar", me: "Where I am", check: "What a stranger can check",
-      tags: { codedDs: `coded, ${N} postings`, codedFde: `coded, ${M} postings`, proposal: "proposal", pair: "best of the two" },
-      verdict: { gap: "Nobody's today", over: "Over-asked of the strategist", covered: "Covered by the pair" },
+      tags: { codedDs: `coded, ${N} postings`, codedFde: `coded, ${M} postings`, codedDelivery: `coded, ${D} postings`, proposal: "proposal", pair: "best of the two" },
+      verdict: { gap: "Owned by no vendor role today", over: "Over-asked of the strategist", covered: "Covered by the pair" },
+      doubt: { U: "Not firm. Some implementation and customer success postings train 'the users' or answer for their adoption without saying whether those users work the shift. If they do, this one is covered." },
       verdictText: {
-        gap: "Even together, the strategist and the engineer stop below the bar.",
+        gap: "The strategist, the engineer, implementation and customer success all stop below the bar.",
         over: "Postings put this on the strategist; the Industrial Tailor leaves it to the engineer, the platform or sales.",
         covered: "Between them, the strategist and the engineer reach the bar."
       },
@@ -452,24 +472,25 @@ footer { margin-top: 18px; padding-top: 13px; border-top: 1px solid var(--rule);
       title: "¿De qué debería hacerse cargo un deployment strategist?",
       sub: "Catorce cosas que necesita un despliegue, codificadas desde avisos para el forward deployed engineer y para el estratega que contrata la industria, contra el rol que propongo: el Industrial Tailor.",
       tabs: ["1. La vara", "2. Dónde estoy", "3. Con el FDE"],
-      leadBar: c => `${capital(word(c.presales, "es"))} de ${word(N, "es")} avisos de estratega piden preventa; ${c.platform === N ? `los ${word(N, "es")}` : word(c.platform, "es")}, hacerse cargo de la plataforma. Aun con el ingeniero al lado, ${word(c.gaps, "es")} de estos catorce no son de nadie, del registro y la escritura al incentivo y el turno. Ahí es donde un despliegue pierde la plata.`,
+      leadBar: c => `${capital(word(c.presales, "es"))} de ${word(N, "es")} avisos de estratega piden preventa; ${c.platform === N ? `los ${word(N, "es")}` : word(c.platform, "es")}, hacerse cargo de la plataforma. Aun con el ingeniero, el equipo de implementación y customer success al lado, ${word(c.firm, "es")} de estos catorce no son de ninguno, del registro y la escritura al incentivo. ${capital(word(c.gaps - c.firm, "es"))} más, el turno, depende de quiénes sean «los usuarios» de esos avisos. Ahí es donde un despliegue pierde la plata.`,
       leadMe: "En la mitad operativa estoy más cerca del rol que propongo que la industria. La mitad técnica la probé en mis propias herramientas, y cinco ejes todavía no los ubico.",
       leadFde: "El ingeniero construye sobre lo que le entrega el estratega. El de la industria entrega intenciones; el Industrial Tailor entrega contratos que el ingeniero puede probar.",
-      series: { fde: "Ingeniero (FDE)", market: "Estratega de la industria (FDS)", pair: "Los dos juntos", tailor: "Industrial Tailor" },
-      noteBar: "Ningún veredicto cambia si cada aviso dudoso toma su otra lectura, más alta o más baja.",
+      series: { fde: "Ingeniero (FDE)", market: "Estratega de la industria (FDS)", pair: "Los dos juntos", tailor: "Industrial Tailor", delivery: "Implementación y customer success" },
+      noteBar: "Solo un veredicto cambia si cada aviso dudoso toma su otra lectura, más alta o más baja: el del turno.",
       noteMe: "Punto hueco: todavía sin ubicar",
       lgBar: "La vara: Industrial Tailor", lgMe: "Dónde estoy", lgCheck: "Lo que un tercero comprueba sin mí",
-      srcBar: `Estratega: ${N} avisos de deployment strategist en startup.jobs, del 3 al 13 de noviembre de 2026. Ingeniero: ${M} avisos de forward deployed engineer en startup.jobs, 13 y 14 de noviembre de 2026. Cada aviso está codificado en los catorce ejes con una rúbrica escrita antes de leerlos, y cada punto es la mediana de su grupo. El Industrial Tailor es el rol que propongo, no una codificación. Los ejes van por familia: tecnología y venta a la derecha, operación a la izquierda.`,
+      srcBar: `Estratega: ${N} avisos de deployment strategist en startup.jobs, del 3 al 13 de noviembre de 2026. Ingeniero: ${M} avisos de forward deployed engineer en startup.jobs, 13 y 14 de noviembre de 2026. Implementación y customer success: ${D} avisos en startup.jobs, del 10 al 13 de noviembre de 2026; cuentan en los veredictos y no se dibujan. Cada aviso está codificado en los catorce ejes con una sola rúbrica, cada regla escrita antes de aplicarla, y cada punto es la mediana de su grupo. El Industrial Tailor es el rol que propongo, no una codificación. Los ejes van por familia: tecnología y venta a la derecha, operación a la izquierda.`,
       srcMe: "La vara es el rol que propongo. Mis niveles salen del registro de mi trabajo; la línea punteada es lo que se puede comprobar sin llamarme.",
       srcFde: "FDE: forward deployed engineer. La columna del estratega es lo que recibe el ingeniero en cada paso.",
       foot: "Prototipo. Ningún nivel de esta página es una autoevaluación: los de la industria salen de avisos codificados, y los míos, del registro de mi trabajo.",
       scenario: (i, n) => `Escenario ${i} de ${n}`, pays: "Quién paga primero", why: "Por qué cuesta", levels: "Quién llega a qué",
       market: "Lo que escriben los avisos", own: "De qué se hace cargo el Industrial Tailor", dist: `Los ${N} avisos, uno por casilla`,
       bar: "La vara", me: "Dónde estoy", check: "Lo que comprueba un tercero",
-      tags: { codedDs: `codificado, ${N} avisos`, codedFde: `codificado, ${M} avisos`, proposal: "propuesta", pair: "lo mejor de los dos" },
-      verdict: { gap: "Hoy no es de nadie", over: "Sobrepedido al estratega", covered: "Lo cubre la pareja" },
+      tags: { codedDs: `codificado, ${N} avisos`, codedFde: `codificado, ${M} avisos`, codedDelivery: `codificado, ${D} avisos`, proposal: "propuesta", pair: "lo mejor de los dos" },
+      verdict: { gap: "Hoy no es de ningún rol del proveedor", over: "Sobrepedido al estratega", covered: "Lo cubre la pareja" },
+      doubt: { U: "No es firme. Algunos avisos de implementación y de customer success capacitan a «los usuarios» o responden por su adopción sin decir si son los del turno. Si lo son, este queda cubierto." },
       verdictText: {
-        gap: "Aun juntos, el estratega y el ingeniero quedan bajo la vara.",
+        gap: "El estratega, el ingeniero, implementación y customer success quedan todos bajo la vara.",
         over: "Los avisos se lo cargan al estratega; el Industrial Tailor se lo deja al ingeniero, a la plataforma o a ventas.",
         covered: "Entre los dos, el estratega y el ingeniero llegan a la vara."
       },
@@ -583,7 +604,10 @@ footer { margin-top: 18px; padding-top: 13px; border-top: 1px solid var(--rule);
       <p class="who-line"><span class="sw sw-market"></span>${esc(t.series.market)}</p>
       <p>${esc(axis.note ? axis.note(l) : describe(ROLES, axis.key, l))}</p>${dist(ROLES, "market")}
       <p class="who-line"><span class="sw sw-fde"></span>${esc(t.series.fde)}</p>
-      <p>${esc(describe(ENGINEERS, axis.key, l))}</p>${dist(ENGINEERS, "fde")}`;
+      <p>${esc(describe(ENGINEERS, axis.key, l))}</p>${dist(ENGINEERS, "fde")}
+      <p class="who-line"><span class="sw sw-delivery"></span>${esc(t.series.delivery)}</p>
+      <p>${esc(describe(DELIVERY, axis.key, l))}</p>${dist(DELIVERY, "delivery")}`;
+    const doubt = DEPENDS_ON_READING.includes(axis.key) ? `<p class="verdict-text doubt">${esc(t.doubt[axis.key])}</p>` : "";
     $("ins-bar").innerHTML = `
       <p class="eyebrow">${esc(t.scenario(state.axis + 1, AXES.length))}</p>
       <h2>${esc(label(axis, l))}</h2>
@@ -594,8 +618,9 @@ footer { margin-top: 18px; padding-top: 13px; border-top: 1px solid var(--rule);
         ${row("fde", fdeLevel(axis), t.tags.codedFde, "coded")}
         ${row("market", market, t.tags.codedDs, "coded")}
         ${row("pair", pair, t.tags.pair, "")}
+        ${row("delivery", deliveryLevel(axis), t.tags.codedDelivery, "coded")}
         ${row("tailor", axis.tailor, t.tags.proposal, "")}
-      </div><p class="verdict-text">${esc(t.verdictText[verdict])}</p></div>
+      </div><p class="verdict-text">${esc(t.verdictText[verdict])}</p>${doubt}</div>
       <div class="block"><h3>${esc(t.market)}</h3>${postings}</div>
       <div class="block"><h3>${esc(t.own)}</h3><p>${esc(axis.own[l])}</p></div>`;
   }
@@ -683,8 +708,10 @@ footer { margin-top: 18px; padding-top: 13px; border-top: 1px solid var(--rule);
       ["lead-fde", "leadFde"], ["src-bar", "srcBar"], ["src-me", "srcMe"], ["src-fde", "srcFde"], ["t-foot", "foot"], ["note-bar", "noteBar"], ["note-me", "noteMe"]]) {
       $(id).textContent = t[key];
     }
+    const gapAxes = AXES.filter((_, i) => isGap(i));
     $("lead-bar").textContent = t.leadBar({
-      presales: count("V", v => v >= 2), platform: count("S", v => v === 3), gaps: AXES.filter((_, i) => isGap(i)).length
+      presales: count("V", v => v >= 2), platform: count("S", v => v === 3),
+      gaps: gapAxes.length, firm: gapAxes.filter(axis => !DEPENDS_ON_READING.includes(axis.key)).length
     });
     $("legend-me").innerHTML = `<span class="key"><span class="sw sw-bar"></span>${esc(t.lgBar)}</span><span class="key"><span class="sw sw-me"></span>${esc(t.lgMe)}</span><span class="key"><span class="sw sw-check"></span>${esc(t.lgCheck)}</span>`;
     $("tabs").replaceChildren(...["bar", "me", "fde"].map((view, i) => {
