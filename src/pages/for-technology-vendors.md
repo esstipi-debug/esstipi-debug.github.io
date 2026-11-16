@@ -12,7 +12,7 @@ description: Deployment strategy and field diagnosis for WMS, ERP and supply-cha
 subject: Rollout stalling on the customer's floor
 cta: Tell me which rollout is stalling
 published: 2026-11-09
-updated: 2026-11-14
+updated: 2026-11-16
 ---
 In the sales demo, the data was clean and the workflow was linear. Sixty days after go-live at the customer's site, the receiving clerk is typing dummy quantities to clear the dock, the planner has exported your screen back into Excel, and the executive sponsor is asking why the promised ROI has not shown up before renewal.
 
@@ -34,6 +34,7 @@ Most rollouts do not fail in the model or the core code. In a 2015 NeurIPS paper
 
 ## What I don't claim
 
+- I do not build your connectors or pipelines; your forward deployed engineer does. What I hand over is what the engineer can test: which records to distrust before any calculation, which writes may reach the live system (signed, time-boxed, with a way back), what the floor is paid for, and how a screen has to behave on the night shift. In the strategist and engineer postings I coded in November 2026, each of those four is missing from most of them, and none asks the role to work on the incentive. Doing all four next to the engineer is my proposal, not yet my track record.
 - I have not served as a vendor's commercial account executive, and my own diagnostic engines are field instruments rather than a competing SaaS product. What I bring to a vendor team is thirteen years on the buyer's side of the table plus the engineering discipline to turn messy floor exceptions into a clean data contract.
 - I use AI to accelerate specification drafting, boilerplate and adversarial code review; floor discovery, causal diagnosis, the mathematical invariants and the sign-off stay in my hands.
 - Open to full-time or embedded Deployment Strategist roles on site with relocation or remote ([if you are hiring](../marcos-stipicich/#if-you-are-hiring)). On fixed-scope engagements invoiced from Santiago, Chile, hands-on engineering, data-contract work and forensic analysis are performed remotely, while short on-site visits focus on floor observation, blind counts and stakeholder alignment under standard business-visitor rules.

@@ -9,19 +9,19 @@ description: Field work from thirteen years in operations, a published audit of 
 subject: Question on the proof
 cta: Ask for a walk-through
 published: 2026-11-09
-updated: 2026-11-15
+updated: 2026-11-16
 ---
 ## Field work {: #track-record }
 
 Supply chains break across boundaries: a buying rule locks up cash, a cutover pushes teams onto spreadsheets, or a bonus manufactures bad shipments. Here is what I changed across thirteen years in operations, planning and consulting, and why unarchived field diagnoses were consolidated into [*The Deployment Chasm*](../the-deployment-chasm/) and the checks below.
 
-- **System changeover without floor bypass (AGCO Corporation, Melbourne, 2022 to 2024).** Outbound Leader during the cutover from a legacy warehouse system to Manhattan Associates on a 50,000-SKU distribution centre with a team of 20. Mapped how stock and dispatch actually ran rather than trusting manuals, worked location schema, wave strategy and floor failure modes with the technical team, trained 23 operators on RF scanning, and stayed on shift until paper workarounds ended. Order processing time fell about 20% (a shift estimate without retained logs).
+- **System changeover without floor bypass (AGCO Corporation, Melbourne, 2022 to 2024).** Outbound Leader, split between the desk and the floor: picking, packing and the carriers. Through the full cutover of a 50,000-SKU distribution centre with a team of 20, I closed the legacy warehouse system and opened Manhattan Associates, trained 23 operators on RF scanning, and stayed on shift until the workarounds ended. Order processing time fell about 20% (a shift estimate without retained logs).
 - **Working capital and demand rules under rapid scale (cross-border e-commerce, 2020 to 2022).** Owned a USD 30M P&L spanning direct consumer sales and wholesale. Through 300% annual growth, replaced judgement buffers with aggregate statistical demand forecasting and wrote the operating procedures that kept volume moving, freeing about USD 5M of inventory.
 - **Multi-site reporting and replenishment control (Chile and Argentina, 2016 to 2020).** Ran a USD 15M budget across three logistics sites and about 100 people, replacing lagging weekly packs with daily operational reporting that every site planned from. Earlier led 15 planners supplying more than 200 retail stores (holding part of the role remotely from Sydney), building forecasting and replenishment models to balance stockouts against inventory while automating financial reports.
 - **Cost allocation and pre-cutover savings (2013 to 2016).** Analysed a USD 100M inventory position with cost-allocation models and cycle-count controls so the business could see where operating expense actually sat, and identified about USD 2M a year in purchasing and logistics savings alongside floor procedures for an earlier warehouse-system rollout.
-- **Cross-industry diagnostics and incentive repair (2013 to 2022).** Across more than seven independent consulting engagements in warehousing, retail, e-commerce and manufacturing, I built process maps, KPI dashboards and floor procedures. On one floor walk, tracing mixed, short and damaged orders back to a per-operator productivity bonus showed how local metrics break downstream quality; I retired the bonus metric and measured customer satisfaction through zero complaints and response time instead. Individual client archives from that consulting work were not kept, so I consolidated the recurring mechanisms into *The Deployment Chasm* and encoded them into the checks below.
+- **Cross-industry diagnostics and incentive repair (since 2013).** Across more than seven independent consulting engagements in warehousing, retail, e-commerce and manufacturing, I built process maps, KPI dashboards and floor procedures. On one floor walk, tracing mixed, short and damaged orders back to a per-operator productivity bonus showed how local metrics break downstream quality; I retired the bonus metric and measured customer satisfaction through zero complaints and response time instead. Individual client archives from that consulting work were not kept, so I consolidated the recurring mechanisms into *The Deployment Chasm* and encoded them into the checks below.
 
-The Melbourne employer is named once and verifiable. Earlier 2013 to 2022 engagements omit company names, with counterparts available on request where contacts remain reachable; for proof you can verify without calling anyone, start with the public audit and tested tools below.
+The Melbourne employer is named once, here. Earlier employers and my consulting clients are not named; for proof you can verify without calling anyone, start with the public audit and tested tools below.
 
 ## Published audit you can re-run {: #sample-audit }
 
@@ -34,7 +34,7 @@ I build my own diagnostic and planning tools so I do not arrive on a client's fl
 - **Inventory and replenishment engine:** 10,483 passing tests in Python and none failing, run on a clean install on 15 November 2026 (private repository). Its decision cards set the engine's recommendation beside the operator's own play and the status quo, and a stock spreadsheet goes from intake to a change that waits for an HMAC-SHA256-signed approval and can be rolled back.
 - **Receiving kit:** open source under the MIT licence, with 1,141 passing tests and none failing, run on a clean install on 14 November 2026.
 - **Field kit:** 1,187 passing tests on 20 October 2026. It checks an event log against the five-column contract (case, activity, timestamp, who, where) before any analysis runs, and its integrity guards catch a purchase-order line repeated by a one-to-many join, receipts held in blocked stock that do not balance, and negative stock; each guard is tested against a planted defect.
-- **Weightlifting planning application:** a full-stack TypeScript monorepo with about 1,332 unit tests, 31 integration tests on an embedded PostgreSQL database and an adversarial review agent written into the repository. Building it for a coach left me a field postmortem on adoption from the builder's side: even when software leaves the expert full editorial control, measuring exactly what they used to judge by eye can make them refuse it.
+- **Weightlifting planning application:** a full-stack TypeScript monorepo with about 1,332 unit tests, 31 integration tests on an embedded PostgreSQL database and an adversarial review agent written into the repository. Building it for a coach left me a field postmortem on adoption from the builder's side: even when software leaves the expert full editorial control, putting a number on what they used to judge by eye can make them refuse it.
 
 The rule I build to:
 
@@ -116,5 +116,5 @@ The code is on [GitHub](https://github.com/esstipi-debug).
 
 ## Writing
 
-- Two field notes, [*The Smith and the Tailor*](../the-smith-and-the-tailor/) and [*Nobody Pays for Being Wrong*](../nobody-pays-for-being-wrong/), and ten short answers, among them [why inventory records do not match the shelf](../why-inventory-records-do-not-match-the-shelf/) and [why people follow the system when it is wrong](../why-people-follow-the-system-when-it-is-wrong/).
+- Nine field notes, among them [*The Smith and the Tailor*](../the-smith-and-the-tailor/) and [*Nobody Pays for Being Wrong*](../nobody-pays-for-being-wrong/), and ten short answers, among them [why inventory records do not match the shelf](../why-inventory-records-do-not-match-the-shelf/) and [why people follow the system when it is wrong](../why-people-follow-the-system-when-it-is-wrong/).
 - [*The Deployment Chasm*](../the-deployment-chasm/), a manuscript on why enterprise and supply-chain systems fail between the contract and the floor.

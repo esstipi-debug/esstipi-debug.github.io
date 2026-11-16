@@ -421,6 +421,36 @@ def test_proof_counts_the_short_answers(site):
     assert f"{COUNT_WORDS[len(questions)]} short answers" in text, len(questions)
 
 
+def test_proof_counts_the_field_notes(site):
+    """The proof page says how many field notes there are; a new field note page changes the word."""
+    root, pages = site
+    notes = [page for page in pages if page.kind == "note"]
+    text = main_text(read(root, build.find(pages, "proof")))
+    assert f"{COUNT_WORDS[len(notes)].capitalize()} field notes" in text, len(notes)
+
+
+def test_vendors_say_what_the_engineer_builds_and_what_i_hand_over(site):
+    """The forward deployed engineer builds the connectors; I hand over what the engineer can test, and the
+    pairing is called a proposal, not a track record (tolkien, REPORTE_IDENTIDAD_DS_2030 §9.4 and §9.8 a)."""
+    root, pages = site
+    text = main_text(read(root, build.find(pages, "for-technology-vendors"))).replace("’", "'")
+    claims = text.split("What I don't claim", 1)[1].split("How we would start", 1)[0]
+    assert "your forward deployed engineer does" in claims
+    assert "my proposal, not yet my track record" in claims
+    # holds under every reading of the coding: incentive at level 2 or more in 0 of 18 postings
+    assert "none asks the role to work on the incentive" in claims
+
+
+def test_how_i_work_puts_the_screen_on_shift_and_says_what_was_not_tested(site):
+    """The shift screen is a design rule, and the page says no usability study was run (§9.5 and §9.8 b)."""
+    root, pages = site
+    text = main_text(read(root, build.find(pages, "how-i-work")))
+    assert "A screen has to work on shift" in text
+    assert "I have not run a measured usability study." in text   # no study at all, inside or outside (§9.5)
+    # the rule as the site's own sourced page states it (override-reason-before-or-after, Tetlock and colleagues)
+    assert "for a reviewer whose view the operator does not know" in text
+
+
 def test_erp_answer_states_the_premise_of_its_audit_rule(site):
     """The rule only reads right with its premise: the floor knows something the system does not."""
     root, pages = site
