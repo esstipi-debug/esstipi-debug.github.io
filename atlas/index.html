@@ -10,9 +10,9 @@
 @font-face { font-family: "JetBrains Mono"; src: url("../landpage/files/fonts/jetbrains-mono-latin-variable.woff2") format("woff2"); font-weight: 100 800; font-display: swap; }
 :root {
   --ground: #101217; --panel: #151821; --panel-2: #1c202b; --ink: #eee9de; --ink-2: #c8c3b7; --muted: #9a958a;
-  --accent: #e3a27e; --accent-soft: rgba(227, 162, 126, .16);
-  --fde: #7fb4e6; --fde-soft: rgba(127, 180, 230, .09);
-  --market: #d8b45a; --market-soft: rgba(216, 180, 90, .07);
+  --accent: #e3a27e; --accent-soft: rgba(227, 162, 126, .1);
+  --fde: #7fb4e6;
+  --market: #d8b45a;
   --pair: #62c79b;
   --rule: rgba(238, 233, 222, .12); --rule-strong: rgba(238, 233, 222, .28);
   --mono: "JetBrains Mono", ui-monospace, monospace; color-scheme: dark;
@@ -60,19 +60,15 @@ main { margin-top: 20px; }
 .spoke { stroke: var(--rule); stroke-width: 1; }
 .spoke.on { stroke: var(--ink-2); stroke-width: 1.6; }
 .ring-label { fill: var(--muted); font-size: 13px; paint-order: stroke; stroke: var(--panel); stroke-width: 4px; stroke-linejoin: round; }
-.axis-label, .axis-num { cursor: pointer; }
+.axis-label, .axis-num { cursor: pointer; outline: none; }
+.axis-label:focus-visible, .axis-num:focus-visible { outline: 2px solid var(--accent); outline-offset: 5px; }
 .axis-label .nm { fill: var(--ink-2); font-size: 17px; font-weight: 640; }
 .axis-label.gap .nm, .axis-num.gap { fill: var(--accent); }
-.axis-label.on .nm, .axis-num.on { fill: var(--ink); text-decoration: underline; text-underline-offset: 4px; }
-.axis-label .sc { font-size: 13.5px; font-weight: 560; }
+.axis-label:hover .nm, .axis-num:hover, .axis-label.on .nm, .axis-num.on { fill: var(--ink); }
+.axis-label.on .nm, .axis-num.on { text-decoration: underline; text-underline-offset: 4px; }
 .axis-num { font-size: 30px; font-weight: 700; fill: var(--ink-2); }
-.s-fde { fill: var(--fde); }
-.s-market { fill: var(--market); }
-.s-tailor { fill: var(--accent); }
-.s-check { fill: var(--ink); }
-.s-muted { fill: var(--muted); }
-.p-fde { fill: var(--fde-soft); stroke: var(--fde); stroke-width: 2; stroke-linejoin: round; }
-.p-market { fill: var(--market-soft); stroke: var(--market); stroke-width: 2; stroke-dasharray: 7 5; stroke-linejoin: round; }
+.p-fde { fill: none; stroke: var(--fde); stroke-width: 2; stroke-linejoin: round; }
+.p-market { fill: none; stroke: var(--market); stroke-width: 2; stroke-dasharray: 7 5; stroke-linejoin: round; }
 .p-pair { fill: none; stroke: var(--pair); stroke-width: 2.6; stroke-dasharray: 10 6; stroke-linejoin: round; }
 .p-tailor, .p-me { fill: var(--accent-soft); stroke: var(--accent); stroke-width: 2.8; stroke-linejoin: round; }
 .p-bar { fill: none; stroke: var(--accent); stroke-width: 2; stroke-dasharray: 7 5; stroke-linejoin: round; }
@@ -85,12 +81,22 @@ main { margin-top: 20px; }
 .v-check { fill: var(--ink); stroke: var(--ink); }
 .v.hollow { fill: var(--panel); }
 .hit { fill: transparent; cursor: pointer; }
+.tip { position: fixed; z-index: 5; pointer-events: none; min-width: 200px; max-width: 290px; padding: 10px 12px; background: var(--panel-2); border: 1px solid var(--rule-strong); border-radius: 10px; box-shadow: 0 10px 28px rgba(0, 0, 0, .5); }
+.tip[hidden] { display: none; }
+.tip-title { margin: 0 0 7px; font-weight: 640; font-size: .9rem; line-height: 1.3; color: var(--ink); }
+.tip-row { display: grid; grid-template-columns: 22px 1.1rem minmax(0, 1fr); column-gap: 8px; align-items: center; font-size: .84rem; line-height: 1.75; color: var(--ink-2); }
+.tip-row b { font: 700 .9rem/1 var(--mono); color: var(--ink); }
 .pills { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
+.pills:empty { display: none; }
 .pill { font: 560 .8rem/1.2 "Archivo", sans-serif; color: var(--ink-2); background: var(--ground); border: 1px solid var(--rule); border-radius: 999px; padding: 8px 12px; cursor: pointer; }
 .pill.gap { color: var(--accent); border-color: rgba(227, 162, 126, .45); }
 .pill[aria-pressed="true"] { color: var(--ground); background: var(--accent); border-color: var(--accent); }
 .src { font: 500 .72rem/1.6 var(--mono); color: var(--muted); margin: 16px 0 0; }
 .ins .eyebrow { font: 500 .74rem/1.4 var(--mono); color: var(--muted); margin: 0; }
+.eyebrow-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.nav { display: inline-flex; gap: 4px; }
+.nav-btn { width: 34px; height: 34px; display: grid; place-items: center; font: 600 1.15rem/1 "Archivo", sans-serif; color: var(--ink-2); background: var(--ground); border: 1px solid var(--rule); border-radius: 8px; cursor: pointer; }
+.nav-btn:hover { color: var(--ink); border-color: var(--rule-strong); }
 .ins h2 { margin: 6px 0 4px; font-size: 1.28rem; font-weight: 650; font-stretch: 90%; line-height: 1.22; }
 .pays { font: 600 .74rem/1 var(--mono); color: var(--accent); }
 .verdict { display: inline-block; font: 600 .74rem/1 var(--mono); padding: 6px 9px; border-radius: 6px; margin-top: 10px; }
@@ -103,11 +109,11 @@ main { margin-top: 20px; }
 .block h3 { margin: 0 0 8px; font: 600 .76rem/1.3 var(--mono); color: var(--muted); }
 .block p { margin: 0; color: var(--ink-2); line-height: 1.55; font-size: .95rem; }
 .rows { display: grid; gap: 11px; }
-.row { display: grid; grid-template-columns: 22px minmax(0, 1fr); column-gap: 10px; align-items: center; }
+.row { display: grid; grid-template-columns: 22px minmax(0, 1fr) auto; column-gap: 10px; align-items: center; }
 .row-name { font-weight: 620; font-size: .92rem; color: var(--ink); }
-.row-level { grid-column: 2; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; color: var(--ink-2); font-size: .88rem; margin-top: 4px; }
-.tag-sm { font: 600 .66rem/1 var(--mono); padding: 4px 6px; border-radius: 5px; border: 1px solid var(--rule-strong); color: var(--muted); }
-.tag-sm.coded { color: var(--ink); border-color: var(--ink-2); }
+.row-src { font: 500 .68rem/1.2 var(--mono); color: var(--muted); text-align: right; }
+.row-level { grid-column: 2 / -1; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; color: var(--ink-2); font-size: .88rem; margin-top: 4px; }
+.row-level b { font: 700 .9rem/1 var(--mono); color: var(--ink); }
 .lvl { display: flex; align-items: center; gap: 10px; margin: 0 0 8px; color: var(--ink); font-size: .95rem; font-weight: 600; }
 .marks { display: inline-flex; gap: 4px; }
 .marks i { width: 10px; height: 10px; border: 1px solid var(--muted); display: inline-block; border-radius: 2px; }
@@ -124,6 +130,13 @@ main { margin-top: 20px; }
 .dist.delivery span.l3 { background: var(--ink-2); border-color: var(--ink-2); }
 .block p.who-line { display: flex; align-items: center; gap: 8px; margin: 12px 0 6px; color: var(--ink); font-weight: 620; font-size: .88rem; }
 .block p.who-line:first-of-type { margin-top: 0; }
+.evidence summary { cursor: pointer; font: 600 .76rem/1.3 var(--mono); color: var(--muted); }
+.evidence summary:hover { color: var(--ink-2); }
+.evidence summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+.evidence[open] summary { margin-bottom: 12px; }
+.evidence p { font-size: .88rem; color: var(--muted); }
+.evidence p.who-line { color: var(--ink-2); }
+.evidence .dist span { width: 24px; height: 24px; font-size: .72rem; }
 .tag { display: inline-block; font: 600 .72rem/1 var(--mono); padding: 5px 8px; border-radius: 6px; border: 1px solid var(--rule-strong); color: var(--ink-2); margin-top: 8px; }
 .lanes-wrap { overflow-x: auto; margin-top: 6px; }
 .lanes { display: grid; grid-template-columns: 8.5rem repeat(5, minmax(8.5rem, 1fr)); gap: 6px; min-width: 52rem; }
@@ -137,7 +150,7 @@ main { margin-top: 20px; }
 .cell.on { box-shadow: inset 0 0 0 2px var(--accent); }
 footer { margin-top: 18px; padding-top: 13px; border-top: 1px solid var(--rule); color: var(--muted); font-size: .8rem; line-height: 1.55; }
 @media (max-width: 980px) { .view { grid-template-columns: 1fr; } }
-@media (max-width: 560px) { body { padding: 16px 12px 32px; } .card { padding: 16px; } .ring-label { font-size: 22px; } }
+@media (max-width: 560px) { body { padding: 16px 12px 32px; } .card { padding: 16px; } .ring-label { font-size: 22px; } .nav-btn { width: 42px; height: 42px; } }
 </style>
 </head>
 <body>
@@ -159,7 +172,7 @@ footer { margin-top: 18px; padding-top: 13px; border-top: 1px solid var(--rule);
       <p class="lead" id="lead-bar"></p>
       <div class="toggles" role="group" aria-label="Series" id="series"></div>
       <p class="note"><span id="note-bar"></span></p>
-      <svg class="chart" id="chart-bar" viewBox="0 0 940 780" role="img"></svg>
+      <svg class="chart" id="chart-bar" viewBox="40 28 846 728" role="img"></svg>
       <div class="pills" id="pills-bar"></div>
       <p class="src" id="src-bar"></p>
     </div>
@@ -171,7 +184,7 @@ footer { margin-top: 18px; padding-top: 13px; border-top: 1px solid var(--rule);
       <p class="lead" id="lead-me"></p>
       <div class="legend" id="legend-me"></div>
       <p class="note"><span class="dot-hollow" aria-hidden="true"></span><span id="note-me"></span></p>
-      <svg class="chart" id="chart-me" viewBox="0 0 940 780" role="img"></svg>
+      <svg class="chart" id="chart-me" viewBox="40 28 846 728" role="img"></svg>
       <div class="pills" id="pills-me"></div>
       <p class="src" id="src-me"></p>
     </div>
@@ -187,6 +200,7 @@ footer { margin-top: 18px; padding-top: 13px; border-top: 1px solid var(--rule);
   </section>
 </main>
 <footer id="t-foot"></footer>
+<div class="tip" id="tip" aria-hidden="true" hidden></div>
 </div>
 
 <!-- Levels coded from job postings with one pre-registered rubric: 0 not in the role, 1 mentioned,
@@ -432,13 +446,13 @@ footer { margin-top: 18px; padding-top: 13px; border-top: 1px solid var(--rule);
     en: {
       kicker: "Deployment strategy. A draft for discussion",
       title: "What should a deployment strategist own?",
-      sub: "Fourteen things a rollout needs, coded from job postings for the forward deployed engineer and for the strategist the industry hires, and set against the role I propose: the Industrial Tailor.",
+      sub: "Fourteen things a rollout needs, coded from job postings and set against the role I propose: the Industrial Tailor.",
       tabs: ["1. The bar", "2. Where I stand", "3. With the FDE"],
-      leadBar: c => `${capital(word(c.presales, "en"))} of ${word(N, "en")} strategist postings ask for presales; ${c.platform === N ? `all ${word(N, "en")}` : word(c.platform, "en")} make them own the platform. Put the engineer, the implementation team and customer success beside them and ${word(c.firm, "en")} of these fourteen still belong to none of them, from the record and the write to the incentive. ${capital(word(c.gaps - c.firm, "en"))} more, the shift, depends on who 'the users' in those postings are. That is where a rollout loses money.`,
+      leadBar: c => `${capital(word(c.presales, "en"))} of ${word(N, "en")} strategist postings ask for presales, and ${c.platform === N ?`all ${word(N, "en")}` : word(c.platform, "en")} make them own the platform. Add the engineer, the implementation team and customer success, and ${word(c.firm, "en")} of these fourteen still belong to none of them: that is where a rollout loses money.`,
       leadMe: "On the operating half I stand closer to the role I propose than the industry does. The technical half I have tested in my own tools, and five axes I have not placed yet.",
       leadFde: "The engineer builds on what the strategist hands over. The industry strategist hands over intentions; the Industrial Tailor hands over contracts the engineer can test.",
       series: { fde: "Engineer (FDE)", market: "Industry strategist (FDS)", pair: "Both together", tailor: "Industrial Tailor", delivery: "Implementation and customer success" },
-      noteBar: "Only one verdict changes if each doubtful posting takes its other reading, higher or lower: the shift.",
+      noteBar: "One more axis is marked, the shift: it is the only verdict that changes if each doubtful posting takes its other reading.",
       noteMe: "Hollow point: not placed yet",
       lgBar: "The bar: Industrial Tailor", lgMe: "Where I am", lgCheck: "What a stranger can check without me",
       srcBar: `Strategist: ${N} deployment strategist postings on startup.jobs, 3 to 13 November 2026. Engineer: ${M} forward deployed engineer postings on startup.jobs, 13 and 14 November 2026. Implementation and customer success: ${D} postings on startup.jobs, 10 to 13 November 2026; they count in the verdicts and are not drawn. Every posting is coded on all fourteen axes with one rubric, each rule written before it was applied, and each point is the middle value of its group. One coder read them all, and a second, blind coding is still pending. The Industrial Tailor is the role I propose, not a coding. The axes run by family: technology and the sale on the right, the operation on the left.`,
@@ -458,7 +472,7 @@ footer { margin-top: 18px; padding-top: 13px; border-top: 1px solid var(--rule);
       },
       notPlaced: "Not placed yet: no verified evidence in this draft.",
       noCheck: { field: "Nothing a stranger can run: it rests on my account.", private: "Nothing a stranger can run: the repository is private.", none: "Nothing to check yet." },
-      sBar: "Bar", sMe: "Me", sCheck: "Check",
+      prev: "Previous scenario", next: "Next scenario",
       step: (i, n) => `Step ${i} of ${n}`, whoFde: "Forward deployed engineer", whoMarket: "Industry strategist", whoTailor: "Industrial Tailor",
       chartBar: "Radar: fourteen things a rollout needs, coded from postings for the engineer and the industry strategist, with both together and the Industrial Tailor",
       chartMe: "Radar: the Industrial Tailor against my record on fourteen axes"
@@ -466,13 +480,13 @@ footer { margin-top: 18px; padding-top: 13px; border-top: 1px solid var(--rule);
     es: {
       kicker: "Estrategia de despliegue. Borrador para discutir",
       title: "¿De qué debería hacerse cargo un deployment strategist?",
-      sub: "Catorce cosas que necesita un despliegue, codificadas desde avisos para el forward deployed engineer y para el estratega que contrata la industria, contra el rol que propongo: el Industrial Tailor.",
+      sub: "Catorce cosas que necesita un despliegue, codificadas desde avisos de empleo y puestas contra el rol que propongo: el Industrial Tailor.",
       tabs: ["1. La vara", "2. Dónde estoy", "3. Con el FDE"],
-      leadBar: c => `${capital(word(c.presales, "es"))} de ${word(N, "es")} avisos de estratega piden preventa; ${c.platform === N ? `los ${word(N, "es")}` : word(c.platform, "es")}, hacerse cargo de la plataforma. Aun con el ingeniero, el equipo de implementación y customer success al lado, ${word(c.firm, "es")} de estos catorce no son de ninguno, del registro y la escritura al incentivo. ${capital(word(c.gaps - c.firm, "es"))} más, el turno, depende de quiénes sean «los usuarios» de esos avisos. Ahí es donde un despliegue pierde la plata.`,
+      leadBar: c => `${capital(word(c.presales, "es"))} de ${word(N, "es")} avisos de estratega piden preventa, y ${c.platform === N ?`los ${word(N, "es")}` : word(c.platform, "es")} le cargan la plataforma. Aun con el ingeniero, el equipo de implementación y customer success al lado, ${word(c.firm, "es")} de estos catorce no son de ninguno: ahí es donde un despliegue pierde la plata.`,
       leadMe: "En la mitad operativa estoy más cerca del rol que propongo que la industria. La mitad técnica la probé en mis propias herramientas, y cinco ejes todavía no los ubico.",
       leadFde: "El ingeniero construye sobre lo que le entrega el estratega. El de la industria entrega intenciones; el Industrial Tailor entrega contratos que el ingeniero puede probar.",
       series: { fde: "Ingeniero (FDE)", market: "Estratega de la industria (FDS)", pair: "Los dos juntos", tailor: "Industrial Tailor", delivery: "Implementación y customer success" },
-      noteBar: "Solo un veredicto cambia si cada aviso dudoso toma su otra lectura, más alta o más baja: el del turno.",
+      noteBar: "Hay un eje más marcado, el turno: es el único veredicto que cambia si cada aviso dudoso toma su otra lectura.",
       noteMe: "Punto hueco: todavía sin ubicar",
       lgBar: "La vara: Industrial Tailor", lgMe: "Dónde estoy", lgCheck: "Lo que un tercero comprueba sin mí",
       srcBar: `Estratega: ${N} avisos de deployment strategist en startup.jobs, del 3 al 13 de noviembre de 2026. Ingeniero: ${M} avisos de forward deployed engineer en startup.jobs, 13 y 14 de noviembre de 2026. Implementación y customer success: ${D} avisos en startup.jobs, del 10 al 13 de noviembre de 2026; cuentan en los veredictos y no se dibujan. Cada aviso está codificado en los catorce ejes con una sola rúbrica, cada regla escrita antes de aplicarla, y cada punto es la mediana de su grupo. Los leyó un solo codificador, y falta una segunda codificación a ciegas. El Industrial Tailor es el rol que propongo, no una codificación. Los ejes van por familia: tecnología y venta a la derecha, operación a la izquierda.`,
@@ -492,14 +506,14 @@ footer { margin-top: 18px; padding-top: 13px; border-top: 1px solid var(--rule);
       },
       notPlaced: "Todavía sin ubicar: no hay evidencia verificada en este borrador.",
       noCheck: { field: "Nada que un tercero pueda correr: se sostiene en mi relato.", private: "Nada que un tercero pueda correr: el repositorio es privado.", none: "Todavía nada que comprobar." },
-      sBar: "Vara", sMe: "Yo", sCheck: "Comprobable",
+      prev: "Escenario anterior", next: "Escenario siguiente",
       step: (i, n) => `Paso ${i} de ${n}`, whoFde: "Forward deployed engineer", whoMarket: "Estratega de la industria", whoTailor: "Industrial Tailor",
       chartBar: "Radar: catorce cosas que necesita un despliegue, codificadas desde avisos para el ingeniero y el estratega de la industria, con los dos juntos y el Industrial Tailor",
       chartMe: "Radar: el Industrial Tailor contra mi registro en catorce ejes"
     }
   };
 
-  const state = { lang: "en", view: "bar", axis: 9, step: 1, show: { fde: true, market: true, pair: true, tailor: true } };
+  const state = { lang: "en", view: "bar", axis: 9, step: 1, evidence: false, show: { fde: true, market: true, pair: true, tailor: true } };
   const $ = id => document.getElementById(id);
   const NS = "http://www.w3.org/2000/svg";
   const el = (tag, attrs = {}, text) => {
@@ -510,19 +524,49 @@ footer { margin-top: 18px; padding-top: 13px; border-top: 1px solid var(--rule);
   };
   const esc = text => String(text).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 
+  // ---------------------------------------------------------------- the tooltip
+  // The levels of one axis, series by series: [swatch, series name, level]. The side panel shows the same levels.
+  const tip = $("tip");
+  function showTip(i, rows, x, y) {
+    const key = `${state.view}-${i}`;
+    if (tip.hidden || tip.dataset.key !== key) {
+      const title = document.createElement("p");
+      title.className = "tip-title";
+      title.textContent = `${i + 1}. ${label(AXES[i], state.lang)}`;
+      tip.replaceChildren(title, ...rows.map(([swatch, name, level]) => {
+        const row = document.createElement("div"), line = document.createElement("span");
+        const value = document.createElement("b"), who = document.createElement("span");
+        row.className = "tip-row";
+        line.className = `sw sw-${swatch}`;
+        value.textContent = level;
+        who.textContent = name;
+        row.append(line, value, who);
+        return row;
+      }));
+      tip.dataset.key = key;
+      tip.hidden = false;
+    }
+    const box = tip.getBoundingClientRect();
+    const fitsBelow = y + 18 + box.height <= window.innerHeight;
+    tip.style.left = `${Math.max(8, Math.min(x + 14, window.innerWidth - box.width - 8))}px`;
+    tip.style.top = `${Math.max(8, fitsBelow ? y + 18 : y - box.height - 12)}px`;
+  }
+  const hideTip = () => { tip.hidden = true; };
+
   // ---------------------------------------------------------------- the radar
   const CX = 470, CY = 392;
   // On a phone the chart draws at a third of its size: the axes show their number only, and the pills below name them.
+  // On a wider screen every axis carries its number and its name, so the pills are not drawn.
   const NARROW = window.matchMedia("(max-width: 560px)");
   const geometry = () => NARROW.matches
-    ? { R: 300, gap: 40, vertex: 9, compact: true }
-    : { R: 245, gap: 24, vertex: 5.5, line: 19, compact: false };
+    ? { R: 290, gap: 40, vertex: 9, compact: true }
+    : { R: 280, gap: 24, vertex: 5.5, line: 19, compact: false };
   let R = geometry().R;
   const angle = i => (-90 + i * 360 / AXES.length) * Math.PI / 180;
   const point = (i, level) => [CX + R * level / 3 * Math.cos(angle(i)), CY + R * level / 3 * Math.sin(angle(i))];
   const points = levels => levels.map((level, i) => point(i, level).map(n => n.toFixed(1)).join(",")).join(" ");
 
-  function radar(svg, { layers, title, highlight, scores }) {
+  function radar(svg, { layers, title, highlight, rows }) {
     const g = geometry();
     R = g.R;
     svg.replaceChildren();
@@ -556,25 +600,40 @@ footer { margin-top: 18px; padding-top: 13px; border-top: 1px solid var(--rule);
         const anchor = Math.abs(cos) < .2 ? "middle" : cos > 0 ? "start" : "end";
         const names = axis.short[state.lang].split("\n");
         names[0] = `${i + 1}. ${names[0]}`;
-        const lines = names.length + 1;
-        const top = ly + (sin < -.5 ? -(lines - 1) * g.line - 4 : sin > .5 ? g.line * .8 : -(lines - 1) * g.line / 2 + 5);
+        const rise = (names.length - 1) * g.line;
+        const top = ly + (sin < -.5 ? -rise - 4 : sin > .5 ? g.line * .8 : -rise / 2 + 5);
         text = el("text", { class: "axis-label" + classes, x: lx.toFixed(1), y: top.toFixed(1), "text-anchor": anchor });
         names.forEach((line, n) => text.append(el("tspan", { class: "nm", x: lx.toFixed(1), dy: n === 0 ? 0 : g.line }, line)));
-        const scoreLine = el("tspan", { class: "sc", x: lx.toFixed(1), dy: g.line });
-        scores(i).forEach(([cls, value], n) => scoreLine.append(el("tspan", { class: cls, dx: n ? 11 : 0 }, value)));
-        text.append(scoreLine);
       }
-      text.addEventListener("click", () => pickAxis(i));
-      svg.append(text);
+      // The label is the keyboard and screen-reader way in: it says the levels the tooltip shows.
+      const levels = rows(i);
+      const spoken = levels.map(([, name, level]) => `${name}: ${level}`).join(", ");
+      for (const [name, value] of [["tabindex", 0], ["role", "button"], ["data-axis", i], ["aria-pressed", i === state.axis],
+        ["aria-label", `${i + 1}. ${label(axis, state.lang)}. ${spoken}`]]) text.setAttribute(name, value);
+      text.addEventListener("focus", () => {
+        const box = text.getBoundingClientRect();
+        showTip(i, levels, box.right, box.bottom - 18);
+      });
+      text.addEventListener("blur", hideTip);
+      text.addEventListener("keydown", event => {
+        if (event.key !== "Enter" && event.key !== " ") return;
+        event.preventDefault();
+        pickAxis(i);
+        svg.querySelector(`[data-axis="${i}"]`).focus();
+      });
       const [hx, hy] = point(i, 3);
       const hit = el("circle", { class: "hit", cx: hx.toFixed(1), cy: hy.toFixed(1), r: 22 });
-      hit.addEventListener("click", () => pickAxis(i));
-      svg.append(hit);
+      for (const node of [text, hit]) {
+        node.addEventListener("click", () => pickAxis(i));
+        node.addEventListener("pointermove", event => { if (event.pointerType !== "touch") showTip(i, levels, event.clientX, event.clientY); });
+        node.addEventListener("pointerleave", hideTip);
+      }
+      svg.append(text, hit);
     });
   }
 
   function pills(container, highlight) {
-    container.replaceChildren(...AXES.map((axis, i) => {
+    container.replaceChildren(...(NARROW.matches ? AXES : []).map((axis, i) => {
       const button = document.createElement("button");
       button.type = "button";
       button.className = "pill" + (highlight(i) ? " gap" : "");
@@ -588,13 +647,16 @@ footer { margin-top: 18px; padding-top: 13px; border-top: 1px solid var(--rule);
   const marks = (level, color) => `<span class="marks ${color}" aria-hidden="true">${[1, 2, 3].map(k => `<i class="${k <= level ? "on" : ""}"></i>`).join("")}</span>`;
   const levelLine = (level, color) => `<div class="lvl">${marks(level, color)}<span>${esc(LEVELS[state.lang][level])}</span></div>`;
   const isGap = i => verdictOf(AXES[i]) === "gap";
+  const stepper = t => `
+      <div class="eyebrow-row"><p class="eyebrow">${esc(t.scenario(state.axis + 1, AXES.length))}</p>
+        <div class="nav"><button type="button" class="nav-btn" data-move="-1" aria-label="${esc(t.prev)}">&#8249;</button><button type="button" class="nav-btn" data-move="1" aria-label="${esc(t.next)}">&#8250;</button></div></div>`;
 
   function inspectBar() {
     const t = UI[state.lang], l = state.lang, axis = AXES[state.axis];
     const market = marketLevel(axis), pair = pairLevel(axis), verdict = verdictOf(axis);
-    const row = (key, level, tag, tagClass) => `
-      <div class="row"><span class="sw sw-${key}"></span><span class="row-name">${esc(t.series[key])}</span>
-        <div class="row-level">${marks(level, "c-" + key)}<span>${esc(LEVELS[l][level])}</span><span class="tag-sm ${tagClass}">${esc(tag)}</span></div></div>`;
+    const row = (key, level, tag) => `
+      <div class="row"><span class="sw sw-${key}"></span><span class="row-name">${esc(t.series[key])}</span><span class="row-src">${esc(tag)}</span>
+        <div class="row-level">${marks(level, "c-" + key)}<b>${level}</b><span>${esc(LEVELS[l][level])}</span></div></div>`;
     const dist = (rows, cls) => `<div class="dist ${cls}" aria-label="${esc(t.dist)}">${rows.map(role => role[axis.key]).map(v => `<span class="l${v}" title="${esc(LEVELS[l][v])}">${v}</span>`).join("")}</div>`;
     const postings = `
       <p class="who-line"><span class="sw sw-market"></span>${esc(t.series.market)}</p>
@@ -605,20 +667,22 @@ footer { margin-top: 18px; padding-top: 13px; border-top: 1px solid var(--rule);
       <p>${esc(describe(DELIVERY, axis.key, l))}</p>${dist(DELIVERY, "delivery")}`;
     const doubt = DEPENDS_ON_READING.includes(axis.key) ? `<p class="verdict-text doubt">${esc(t.doubt[axis.key])}</p>` : "";
     $("ins-bar").innerHTML = `
-      <p class="eyebrow">${esc(t.scenario(state.axis + 1, AXES.length))}</p>
+      ${stepper(t)}
       <h2>${esc(label(axis, l))}</h2>
       <span class="pays">${esc(t.pays)}: ${esc(axis.pays)}</span>
       <div><span class="verdict ${verdict}">${esc(t.verdict[verdict])}</span></div>
       <div class="block"><h3>${esc(t.why)}</h3><p>${esc(axis.why[l])}</p></div>
       <div class="block"><h3>${esc(t.levels)}</h3><div class="rows">
-        ${row("fde", fdeLevel(axis), t.tags.codedFde, "coded")}
-        ${row("market", market, t.tags.codedDs, "coded")}
-        ${row("pair", pair, t.tags.pair, "")}
-        ${row("delivery", deliveryLevel(axis), t.tags.codedDelivery, "coded")}
-        ${row("tailor", axis.tailor, t.tags.proposal, "")}
+        ${row("fde", fdeLevel(axis), t.tags.codedFde)}
+        ${row("market", market, t.tags.codedDs)}
+        ${row("pair", pair, t.tags.pair)}
+        ${row("delivery", deliveryLevel(axis), t.tags.codedDelivery)}
+        ${row("tailor", axis.tailor, t.tags.proposal)}
       </div><p class="verdict-text">${esc(t.verdictText[verdict])}</p>${doubt}</div>
-      <div class="block"><h3>${esc(t.market)}</h3>${postings}</div>
-      <div class="block"><h3>${esc(t.own)}</h3><p>${esc(axis.own[l])}</p></div>`;
+      <div class="block"><h3>${esc(t.own)}</h3><p>${esc(axis.own[l])}</p></div>
+      <details class="block evidence"${state.evidence ? " open" : ""}><summary>${esc(t.market)}</summary>${postings}</details>`;
+    // The postings stay one click away, and the panel remembers the choice from one scenario to the next.
+    $("ins-bar").querySelector("details").addEventListener("toggle", event => { state.evidence = event.target.open; });
   }
 
   function inspectMe() {
@@ -626,7 +690,7 @@ footer { margin-top: 18px; padding-top: 13px; border-top: 1px solid var(--rule);
     const placed = axis.me !== null;
     const checkText = axis.checkText ? axis.checkText[l] : t.noCheck[axis.grade && axis.grade !== "public" ? axis.grade : "none"];
     $("ins-me").innerHTML = `
-      <p class="eyebrow">${esc(t.scenario(state.axis + 1, AXES.length))}</p>
+      ${stepper(t)}
       <h2>${esc(label(axis, l))}</h2>
       <div class="block"><h3>${esc(t.bar)}</h3>${levelLine(axis.tailor, "c-tailor")}<p>${esc(axis.own[l])}</p></div>
       <div class="block"><h3>${esc(t.me)}</h3>${placed
@@ -645,7 +709,7 @@ footer { margin-top: 18px; padding-top: 13px; border-top: 1px solid var(--rule);
     if (state.show.pair) layers.push({ poly: "p-pair", levels: AXES.map(pairLevel) });
     radar($("chart-bar"), {
       layers, title: t.chartBar, highlight: isGap,
-      scores: i => [["s-fde", `FDE ${fdeLevel(AXES[i])}`], ["s-market", `FDS ${marketLevel(AXES[i])}`], ["s-tailor", `Tailor ${AXES[i].tailor}`]]
+      rows: i => [["fde", t.series.fde, fdeLevel(AXES[i])], ["market", t.series.market, marketLevel(AXES[i])], ["tailor", t.series.tailor, AXES[i].tailor]]
     });
     pills($("pills-bar"), isGap);
     inspectBar();
@@ -660,7 +724,7 @@ footer { margin-top: 18px; padding-top: 13px; border-top: 1px solid var(--rule);
         { poly: "p-check", vertex: "v-check", levels: AXES.map(a => a.check), scale: .6 }
       ],
       title: t.chartMe, highlight: () => false,
-      scores: i => [["s-muted", `${t.sBar} ${AXES[i].tailor}`], ["s-tailor", `${t.sMe} ${AXES[i].me ?? "?"}`], ["s-check", `${t.sCheck} ${AXES[i].check}`]]
+      rows: i => [["bar", t.lgBar, AXES[i].tailor], ["me", t.lgMe, AXES[i].me ?? "?"], ["check", t.lgCheck, AXES[i].check]]
     });
     pills($("pills-me"), () => false);
     inspectMe();
@@ -704,10 +768,9 @@ footer { margin-top: 18px; padding-top: 13px; border-top: 1px solid var(--rule);
       ["lead-fde", "leadFde"], ["src-bar", "srcBar"], ["src-me", "srcMe"], ["src-fde", "srcFde"], ["t-foot", "foot"], ["note-bar", "noteBar"], ["note-me", "noteMe"]]) {
       $(id).textContent = t[key];
     }
-    const gapAxes = AXES.filter((_, i) => isGap(i));
     $("lead-bar").textContent = t.leadBar({
       presales: count("V", v => v >= 2), platform: count("S", v => v === 3),
-      gaps: gapAxes.length, firm: gapAxes.filter(axis => !DEPENDS_ON_READING.includes(axis.key)).length
+      firm: AXES.filter((axis, i) => isGap(i) && !DEPENDS_ON_READING.includes(axis.key)).length
     });
     $("legend-me").innerHTML = `<span class="key"><span class="sw sw-bar"></span>${esc(t.lgBar)}</span><span class="key"><span class="sw sw-me"></span>${esc(t.lgMe)}</span><span class="key"><span class="sw sw-check"></span>${esc(t.lgCheck)}</span>`;
     $("tabs").replaceChildren(...["bar", "me", "fde"].map((view, i) => {
@@ -731,6 +794,7 @@ footer { margin-top: 18px; padding-top: 13px; border-top: 1px solid var(--rule);
   }
 
   function render() {
+    hideTip();
     texts();
     for (const view of ["bar", "me", "fde"]) $(`view-${view}`).hidden = view !== state.view;
     if (state.view === "bar") drawBar();
@@ -739,6 +803,17 @@ footer { margin-top: 18px; padding-top: 13px; border-top: 1px solid var(--rule);
   }
   function pickAxis(i) { state.axis = i; render(); }
 
+  // The arrows beside "Scenario n of 14": the panel is redrawn on every step, so the focus goes back to the same arrow.
+  for (const id of ["ins-bar", "ins-me"]) {
+    $(id).addEventListener("click", event => {
+      const arrow = event.target.closest("[data-move]");
+      if (!arrow) return;
+      const move = arrow.dataset.move;
+      pickAxis((state.axis + Number(move) + AXES.length) % AXES.length);
+      $(id).querySelector(`[data-move="${move}"]`).focus();
+    });
+  }
+  window.addEventListener("scroll", hideTip, { passive: true });
   NARROW.addEventListener("change", render);
   document.addEventListener("keydown", event => {
     if (state.view === "fde" || !["ArrowLeft", "ArrowRight"].includes(event.key)) return;
