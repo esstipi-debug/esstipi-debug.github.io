@@ -10,10 +10,14 @@
 @font-face { font-family: "JetBrains Mono"; src: url("../landpage/files/fonts/jetbrains-mono-latin-variable.woff2") format("woff2"); font-weight: 100 800; font-display: swap; }
 :root {
   --ground: #101217; --panel: #151821; --panel-2: #1c202b; --ink: #eee9de; --ink-2: #c8c3b7; --muted: #9a958a;
-  --accent: #e3a27e; --accent-soft: rgba(227, 162, 126, .1);
-  --fde: #7fb4e6;
-  --market: #d8b45a;
-  --pair: #62c79b;
+  --accent: #e3a27e;
+  /* Series lines: the four pass the chart palette check on this panel with every pair compared
+     (lightness band, chroma, colour-blind and full-vision separation, contrast). The tints share
+     the accent's lightness and chroma and sit behind dark text on chips and badges; the Tailor's is the accent. */
+  --fde: #6395e4; --fde-tint: #90b4ee;
+  --market: #ac65aa; --market-tint: #d39ed1;
+  --pair: #46a990;
+  --tailor: #cb8055; --tailor-soft: rgba(203, 128, 85, .1);
   --rule: rgba(238, 233, 222, .12); --rule-strong: rgba(238, 233, 222, .28);
   --mono: "JetBrains Mono", ui-monospace, monospace; color-scheme: dark;
 }
@@ -48,8 +52,8 @@ main { margin-top: 20px; }
 .sw-market { border-top: 2.5px dashed var(--market); }
 .sw-pair { border-top: 2.5px dashed var(--pair); }
 .sw-delivery { border-top: 2.5px dotted var(--ink-2); }
-.sw-tailor, .sw-me { border-top: 3px solid var(--accent); }
-.sw-bar { border-top: 2.5px dashed var(--accent); }
+.sw-tailor, .sw-me { border-top: 3px solid var(--tailor); }
+.sw-bar { border-top: 2.5px dashed var(--tailor); }
 .sw-check { border-top: 2.5px dotted var(--ink); }
 .note { display: flex; align-items: center; gap: 8px; font-size: .8rem; color: var(--muted); margin: 10px 0 0; }
 .dot-hollow { width: 11px; height: 11px; border-radius: 50%; border: 2px solid var(--ink-2); display: inline-block; flex: none; }
@@ -70,14 +74,14 @@ main { margin-top: 20px; }
 .p-fde { fill: none; stroke: var(--fde); stroke-width: 2; stroke-linejoin: round; }
 .p-market { fill: none; stroke: var(--market); stroke-width: 2; stroke-dasharray: 7 5; stroke-linejoin: round; }
 .p-pair { fill: none; stroke: var(--pair); stroke-width: 2.6; stroke-dasharray: 10 6; stroke-linejoin: round; }
-.p-tailor, .p-me { fill: var(--accent-soft); stroke: var(--accent); stroke-width: 2.8; stroke-linejoin: round; }
-.p-bar { fill: none; stroke: var(--accent); stroke-width: 2; stroke-dasharray: 7 5; stroke-linejoin: round; }
+.p-tailor, .p-me { fill: var(--tailor-soft); stroke: var(--tailor); stroke-width: 2.8; stroke-linejoin: round; }
+.p-bar { fill: none; stroke: var(--tailor); stroke-width: 2; stroke-dasharray: 7 5; stroke-linejoin: round; }
 .p-check { fill: none; stroke: var(--ink); stroke-width: 2; stroke-dasharray: 2 5; stroke-linecap: round; }
 .v { stroke-width: 2.2; }
 .v-fde { fill: var(--fde); stroke: var(--fde); }
 .v-market { fill: var(--market); stroke: var(--market); }
-.v-tailor, .v-me { fill: var(--accent); stroke: var(--accent); }
-.v-bar { fill: var(--panel); stroke: var(--accent); }
+.v-tailor, .v-me { fill: var(--tailor); stroke: var(--tailor); }
+.v-bar { fill: var(--panel); stroke: var(--tailor); }
 .v-check { fill: var(--ink); stroke: var(--ink); }
 .v.hollow { fill: var(--panel); }
 .hit { fill: transparent; cursor: pointer; }
@@ -101,7 +105,7 @@ main { margin-top: 20px; }
 .pays { font: 600 .74rem/1 var(--mono); color: var(--accent); }
 .verdict { display: inline-block; font: 600 .74rem/1 var(--mono); padding: 6px 9px; border-radius: 6px; margin-top: 10px; }
 .verdict.gap { color: var(--ground); background: var(--accent); }
-.verdict.over { color: var(--ground); background: var(--market); }
+.verdict.over { color: var(--ground); background: var(--market-tint); }
 .verdict.covered { color: var(--ink-2); box-shadow: inset 0 0 0 1px var(--rule-strong); }
 .verdict-text { margin: 12px 0 0; color: var(--ink-2); font-size: .9rem; line-height: 1.5; }
 .block p.doubt { margin-top: 8px; }
@@ -120,13 +124,13 @@ main { margin-top: 20px; }
 .marks.c-fde i.on { background: var(--fde); border-color: var(--fde); }
 .marks.c-market i.on { background: var(--market); border-color: var(--market); }
 .marks.c-pair i.on { background: var(--pair); border-color: var(--pair); }
-.marks.c-tailor i.on { background: var(--accent); border-color: var(--accent); }
+.marks.c-tailor i.on { background: var(--tailor); border-color: var(--tailor); }
 .marks.c-check i.on, .marks.c-delivery i.on { background: var(--ink-2); border-color: var(--ink-2); }
 .dist { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 10px; }
 .dist span { width: 28px; height: 28px; border-radius: 7px; display: grid; place-items: center; font: 600 .78rem/1 var(--mono); background: var(--ground); border: 1px solid var(--rule); color: var(--muted); }
 .dist span.l2 { color: var(--ink-2); border-color: var(--rule-strong); }
-.dist span.l3 { color: var(--ground); background: var(--market); border-color: var(--market); }
-.dist.fde span.l3 { background: var(--fde); border-color: var(--fde); }
+.dist span.l3 { color: var(--ground); background: var(--market-tint); border-color: var(--market-tint); }
+.dist.fde span.l3 { background: var(--fde-tint); border-color: var(--fde-tint); }
 .dist.delivery span.l3 { background: var(--ink-2); border-color: var(--ink-2); }
 .block p.who-line { display: flex; align-items: center; gap: 8px; margin: 12px 0 6px; color: var(--ink); font-weight: 620; font-size: .88rem; }
 .block p.who-line:first-of-type { margin-top: 0; }
