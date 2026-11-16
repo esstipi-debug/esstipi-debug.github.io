@@ -676,18 +676,23 @@ def question_main(page: Page, pages: list[Page], depth: int) -> str:
 </article>"""
 
 
-def note_main(page: Page, pages: list[Page], depth: int) -> str:
+def note_answers(page: Page, pages: list[Page], depth: int) -> str:
+    """The short answers drawn from a field note. A note with none yet prints no heading and no empty list."""
+    questions = questions_of(pages, page.slug)
+    if not questions:
+        return ""
     items = "\n".join(f'<li><a href="{href(question.path, depth)}">{render_inline(question.title)}</a></li>'
-                      for question in questions_of(pages, page.slug))
+                      for question in questions)
+    return f"\n<h2>Questions these field notes answer</h2>\n<ul>\n{items}\n</ul>"
+
+
+def note_main(page: Page, pages: list[Page], depth: int) -> str:
     return f"""<article>
 {headline_group(esc(page.title), esc(page.kicker or "Field notes"))}
 {byline(page, depth)}
 {lead_with_answer(page.body_html)}
-<p class="cta"><a href="{esc(page.pdf or "")}">Read the field notes</a> (PDF, {page.pdf_pages} pages)</p>
-<h2>Questions these field notes answer</h2>
-<ul>
-{items}
-</ul>
+<p class="cta"><a href="{esc(page.pdf or "")}">Read the field notes</a> (PDF, {page.pdf_pages} pages)</p>\
+{note_answers(page, pages, depth)}
 </article>"""
 
 

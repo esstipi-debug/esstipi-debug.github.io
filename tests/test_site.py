@@ -116,6 +116,16 @@ def test_no_product_names(site):
         assert not PRODUCT_NAMES.search(path.read_text(encoding="utf-8")), path
 
 
+def test_note_pages_list_their_questions_only_when_they_have_some(site):
+    """A field note with no short answer yet prints neither the heading nor an empty list."""
+    root, pages = site
+    for page in build.notes_of(pages):
+        text = read(root, page)
+        has_questions = bool(build.questions_of(pages, page.slug))
+        assert ("<h2>Questions these field notes answer</h2>" in text) == has_questions, page.slug
+        assert not re.search(r"<ul>\s*</ul>", text), page.slug
+
+
 def test_question_pages_do_not_link_to_each_other(site):
     root, pages = site
     questions = build.questions_of(pages)
