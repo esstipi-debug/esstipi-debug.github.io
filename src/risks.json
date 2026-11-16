@@ -55,7 +55,7 @@
     },
     {
       "risk": "floor", "reached": 3, "grade": "My field work",
-      "reached_text": "In the Melbourne cutover I mapped how stock and dispatch actually ran rather than trusting manuals.",
+      "reached_text": "In Melbourne my role was split between the desk and the floor, through the full cutover from the old warehouse system to the new one.",
       "checkable": 0, "checkable_text": "Nothing you can run without me.",
       "links": []
     },
