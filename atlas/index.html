@@ -150,10 +150,6 @@ footer { margin-top: 18px; padding-top: 13px; border-top: 1px solid var(--rule);
   </div>
   <div class="controls">
     <div class="seg" role="group" aria-label="Views" id="tabs"></div>
-    <div class="seg" role="group" aria-label="Language">
-      <button type="button" data-lang="en" aria-pressed="true">EN</button>
-      <button type="button" data-lang="es" aria-pressed="false">ES</button>
-    </div>
   </div>
 </header>
 
@@ -296,10 +292,10 @@ footer { margin-top: 18px; padding-top: 13px; border-top: 1px solid var(--rule);
              es: "Pesa la disyuntiva contra el piso y el registro antes de que el ingeniero elija camino." } },
     { key: "E", tailor: 2, me: null, check: 0, pays: "CFO",
       short: { en: "AI evals\nand CPVT", es: "Evals de IA\ny CPVT" },
-      why: { en: "A model never tested on the customer's own cases, or one that costs more per valid transaction (CPVT) than it saves, burns the budget quietly.",
-             es: "Un modelo que nunca se probó con los casos del cliente, o que cuesta más por transacción válida (CPVT) de lo que ahorra, quema el presupuesto en silencio." },
-      own: { en: "Writes the floor cases the evaluation must pass, and prices each valid transaction before anything is automated.",
-             es: "Escribe los casos del piso que la evaluación debe pasar, y pone precio a cada transacción válida antes de automatizar." } },
+      why: { en: "A model never tested on the customer's own cases, or one that costs more per verified transaction (CPVT) than it saves, burns the budget quietly.",
+             es: "Un modelo que nunca se probó con los casos del cliente, o que cuesta más por transacción verificada (CPVT) de lo que ahorra, quema el presupuesto en silencio." },
+      own: { en: "Writes the floor cases the evaluation must pass, and prices each verified transaction before anything is automated.",
+             es: "Escribe los casos del piso que la evaluación debe pasar, y pone precio a cada transacción verificada antes de automatizar." } },
     { key: "K", tailor: 1, me: null, check: 0, pays: "CEO",
       short: { en: "Compliance\nand scale", es: "Compliance\ny escala" },
       why: { en: "A pilot that cannot pass the security review or reach the next site never becomes a contract.",
@@ -316,8 +312,8 @@ footer { margin-top: 18px; padding-top: 13px; border-top: 1px solid var(--rule);
               es: "Las tarjetas de decisión de mi motor ponen su recomendación junto a la jugada del operador y al statu quo." } },
     { key: "A", tailor: 3, me: 2, grade: "public", check: 2, pays: "CFO",
       short: { en: "Adversarial\nmodelling", es: "Modelado\nadversarial" },
-      why: { en: "Every rule gets gamed: by a crew under pressure, by a bad record, by a supplier. Nobody models it before go-live.",
-             es: "Toda regla se trampea: un equipo bajo presión, un registro malo, un proveedor. Nadie lo modela antes del go-live." },
+      why: { en: "Every rule gets gamed: by a crew under pressure, by a bad record, by a supplier. If nobody models it before go-live, the first test happens in the live operation.",
+             es: "Toda regla se trampea: un equipo bajo presión, un registro malo, un proveedor. Si nadie lo modela antes del go-live, la primera prueba ocurre en la operación en vivo." },
       own: { en: "Lists how each rule will be gamed, tests the system against that list before go-live and keeps the list alive after it.",
              es: "Lista cómo se va a trampear cada regla, prueba el sistema contra esa lista antes del go-live y la mantiene viva después." },
       mine: { en: "My public audit reads 2,708 'not received' claims against the delivery record: 1,542 were written on or before the recorded delivery day.",
@@ -357,8 +353,8 @@ footer { margin-top: 18px; padding-top: 13px; border-top: 1px solid var(--rule);
         : `${count("F", v => v === 3)} de ${N} mandan al estratega al lugar a ver el trabajo real y responder por el ajuste; ${count("F", v => v === 1)} piden entender los flujos a distancia; ${count("F", v => v === 0)} no lo menciona.`,
       own: { en: "Walks every shift before configuring, the night one included, and owns the fit until the workarounds die.",
              es: "Camina todos los turnos antes de configurar, el nocturno incluido, y responde por el ajuste hasta que mueren los atajos." },
-      mine: { en: "In the Melbourne cutover I mapped how stock and dispatch actually ran, and stayed on shift until the workarounds died.",
-              es: "En el cutover de Melbourne mapeé cómo corrían de verdad el stock y el despacho, y me quedé en el turno hasta que murieron los atajos." } },
+      mine: { en: "In Melbourne my role was split between the desk and the floor, through the full cutover from the old warehouse system to the new one, and I stayed on shift until the workarounds died.",
+              es: "En Melbourne mi rol se repartía entre el escritorio y el piso durante todo el cutover del sistema de bodega viejo al nuevo, y me quedé en el turno hasta que murieron los atajos." } },
     { key: "I", tailor: 3, me: 3, grade: "field", check: 0, pays: "COO",
       short: { en: "Incentives\nand friction", es: "Incentivos\ny fricción" },
       why: { en: "A bonus per operator pays for the shortcut that breaks the order, and the software takes the blame.",
@@ -368,8 +364,8 @@ footer { margin-top: 18px; padding-top: 13px; border-top: 1px solid var(--rule);
         : `${some(count("I", v => v >= 1), l)} de los ${N} avisos menciona los incentivos del cliente.`,
       own: { en: "Audits KPIs and bonuses on the floor before go-live, and changes what pays for the bypass.",
              es: "Audita KPI y bonos en el piso antes del go-live, y cambia lo que paga el atajo." },
-      mine: { en: "In one of my consulting engagements I retired a per-operator bonus that was producing mixed, short and damaged orders, and replaced it with customer satisfaction: zero claims and response time.",
-              es: "En una de mis consultorías retiré un bono por operador que producía pedidos mezclados, faltantes y dañados, y lo reemplacé por satisfacción del cliente: cero reclamos y tiempo de respuesta." } },
+      mine: { en: "In one of my consulting engagements I retired a per-operator output KPI tied to a bonus, which was producing mixed, short and damaged orders, and replaced it with customer satisfaction: zero complaints and response time.",
+              es: "En una de mis consultorías retiré un KPI de producción por operador atado a un bono, que producía pedidos mezclados, faltantes y dañados, y lo reemplacé por satisfacción del cliente: cero reclamos y tiempo de respuesta." } },
     { key: "P", tailor: 3, me: 3, grade: "field", check: 0, pays: "CFO",
       short: { en: "P&L and the\n90-day check", es: "P&L y control\na 90 días" },
       why: { en: "Three months after go-live nobody can show the saving, because nobody measured the baseline.",
@@ -445,7 +441,7 @@ footer { margin-top: 18px; padding-top: 13px; border-top: 1px solid var(--rule);
       noteBar: "Only one verdict changes if each doubtful posting takes its other reading, higher or lower: the shift.",
       noteMe: "Hollow point: not placed yet",
       lgBar: "The bar: Industrial Tailor", lgMe: "Where I am", lgCheck: "What a stranger can check without me",
-      srcBar: `Strategist: ${N} deployment strategist postings on startup.jobs, 3 to 13 November 2026. Engineer: ${M} forward deployed engineer postings on startup.jobs, 13 and 14 November 2026. Implementation and customer success: ${D} postings on startup.jobs, 10 to 13 November 2026; they count in the verdicts and are not drawn. Every posting is coded on all fourteen axes with one rubric, each rule written before it was applied, and each point is the middle value of its group. The Industrial Tailor is the role I propose, not a coding. The axes run by family: technology and the sale on the right, the operation on the left.`,
+      srcBar: `Strategist: ${N} deployment strategist postings on startup.jobs, 3 to 13 November 2026. Engineer: ${M} forward deployed engineer postings on startup.jobs, 13 and 14 November 2026. Implementation and customer success: ${D} postings on startup.jobs, 10 to 13 November 2026; they count in the verdicts and are not drawn. Every posting is coded on all fourteen axes with one rubric, each rule written before it was applied, and each point is the middle value of its group. One coder read them all, and a second, blind coding is still pending. The Industrial Tailor is the role I propose, not a coding. The axes run by family: technology and the sale on the right, the operation on the left.`,
       srcMe: "The bar is the role I propose. My levels come from the record of my work; the dotted line is what you can check without calling me.",
       srcFde: "FDE: forward deployed engineer. The strategist's column is what the engineer receives at each step.",
       foot: "Prototype. No level on this page is a self-rating: the industry's are coded from postings, and mine are tied to the record of my work.",
@@ -479,7 +475,7 @@ footer { margin-top: 18px; padding-top: 13px; border-top: 1px solid var(--rule);
       noteBar: "Solo un veredicto cambia si cada aviso dudoso toma su otra lectura, más alta o más baja: el del turno.",
       noteMe: "Punto hueco: todavía sin ubicar",
       lgBar: "La vara: Industrial Tailor", lgMe: "Dónde estoy", lgCheck: "Lo que un tercero comprueba sin mí",
-      srcBar: `Estratega: ${N} avisos de deployment strategist en startup.jobs, del 3 al 13 de noviembre de 2026. Ingeniero: ${M} avisos de forward deployed engineer en startup.jobs, 13 y 14 de noviembre de 2026. Implementación y customer success: ${D} avisos en startup.jobs, del 10 al 13 de noviembre de 2026; cuentan en los veredictos y no se dibujan. Cada aviso está codificado en los catorce ejes con una sola rúbrica, cada regla escrita antes de aplicarla, y cada punto es la mediana de su grupo. El Industrial Tailor es el rol que propongo, no una codificación. Los ejes van por familia: tecnología y venta a la derecha, operación a la izquierda.`,
+      srcBar: `Estratega: ${N} avisos de deployment strategist en startup.jobs, del 3 al 13 de noviembre de 2026. Ingeniero: ${M} avisos de forward deployed engineer en startup.jobs, 13 y 14 de noviembre de 2026. Implementación y customer success: ${D} avisos en startup.jobs, del 10 al 13 de noviembre de 2026; cuentan en los veredictos y no se dibujan. Cada aviso está codificado en los catorce ejes con una sola rúbrica, cada regla escrita antes de aplicarla, y cada punto es la mediana de su grupo. Los leyó un solo codificador, y falta una segunda codificación a ciegas. El Industrial Tailor es el rol que propongo, no una codificación. Los ejes van por familia: tecnología y venta a la derecha, operación a la izquierda.`,
       srcMe: "La vara es el rol que propongo. Mis niveles salen del registro de mi trabajo; la línea punteada es lo que se puede comprobar sin llamarme.",
       srcFde: "FDE: forward deployed engineer. La columna del estratega es lo que recibe el ingeniero en cada paso.",
       foot: "Prototipo. Ningún nivel de esta página es una autoevaluación: los de la industria salen de avisos codificados, y los míos, del registro de mi trabajo.",
@@ -732,7 +728,6 @@ footer { margin-top: 18px; padding-top: 13px; border-top: 1px solid var(--rule);
       button.addEventListener("click", () => { state.show[key] = !state.show[key]; render(); });
       return button;
     }));
-    document.querySelectorAll("[data-lang]").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.lang === state.lang)));
   }
 
   function render() {
@@ -744,7 +739,6 @@ footer { margin-top: 18px; padding-top: 13px; border-top: 1px solid var(--rule);
   }
   function pickAxis(i) { state.axis = i; render(); }
 
-  document.querySelectorAll("[data-lang]").forEach(b => b.addEventListener("click", () => { state.lang = b.dataset.lang; render(); }));
   NARROW.addEventListener("change", render);
   document.addEventListener("keydown", event => {
     if (state.view === "fde" || !["ArrowLeft", "ArrowRight"].includes(event.key)) return;
