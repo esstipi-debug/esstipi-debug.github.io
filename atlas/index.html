@@ -18,13 +18,18 @@
   --market: #ac65aa; --market-tint: #d39ed1;
   --pair: #46a990;
   --tailor: #cb8055; --tailor-soft: rgba(203, 128, 85, .1);
+  --tape: #e2b53a; --tape-dark: #0b0d11;
   --rule: rgba(238, 233, 222, .12); --rule-strong: rgba(238, 233, 222, .28);
   --mono: "JetBrains Mono", ui-monospace, monospace; color-scheme: dark;
 }
 * { box-sizing: border-box; }
 html, body { margin: 0; background: var(--ground); color: var(--ink); font-family: "Archivo", system-ui, sans-serif; overflow-x: clip; }
-body { padding: 22px 16px 40px; }
+body { --pad-top: 22px; --pad-x: 16px; padding: var(--pad-top) var(--pad-x) 40px; }
 .wrap { max-width: 1360px; margin: 0 auto; }
+/* Caution tape across the top while the page is a work in progress: the negative margins undo the body padding so it runs edge to edge. */
+.tape { display: flex; margin: calc(-1 * var(--pad-top)) calc(-1 * var(--pad-x)) 22px; }
+.tape::before, .tape::after { content: ""; flex: 1 1 0; min-width: 30px; background: repeating-linear-gradient(-45deg, var(--tape) 0, var(--tape) 13px, var(--tape-dark) 14px, var(--tape-dark) 27px, var(--tape) 28px); box-shadow: inset 0 -1px 0 rgba(0, 0, 0, .55); }
+.tape p { margin: 0; padding: 9px 18px; color: var(--tape); font: 700 .74rem/1.35 var(--mono); letter-spacing: .14em; text-transform: uppercase; text-align: center; text-wrap: balance; }
 header { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 16px; padding-bottom: 18px; border-bottom: 1px solid var(--rule); }
 .kicker { font: 500 .76rem/1.4 var(--mono); color: var(--muted); margin: 0 0 8px; }
 h1 { margin: 0; font-weight: 660; font-stretch: 86%; font-size: clamp(1.5rem, 3vw, 2.25rem); line-height: 1.1; }
@@ -154,10 +159,11 @@ main { margin-top: 20px; }
 .cell.on { box-shadow: inset 0 0 0 2px var(--accent); }
 footer { margin-top: 18px; padding-top: 13px; border-top: 1px solid var(--rule); color: var(--muted); font-size: .8rem; line-height: 1.55; }
 @media (max-width: 980px) { .view { grid-template-columns: 1fr; } }
-@media (max-width: 560px) { body { padding: 16px 12px 32px; } .card { padding: 16px; } .ring-label { font-size: 22px; } .nav-btn { width: 42px; height: 42px; } }
+@media (max-width: 560px) { body { --pad-top: 16px; --pad-x: 12px; padding-bottom: 32px; } .tape { margin-bottom: 16px; } .tape::before, .tape::after { min-width: 22px; } .tape p { max-width: 12.5rem; } .card { padding: 16px; } .ring-label { font-size: 22px; } .nav-btn { width: 42px; height: 42px; } }
 </style>
 </head>
 <body>
+<div class="tape" role="note"><p id="t-tape"></p></div>
 <div class="wrap">
 <header>
   <div>
@@ -448,6 +454,7 @@ footer { margin-top: 18px; padding-top: 13px; border-top: 1px solid var(--rule);
 
   const UI = {
     en: {
+      tape: "Work in progress. Still being tuned.",
       kicker: "Deployment strategy. A draft for discussion",
       title: "What should a deployment strategist own?",
       sub: "Fourteen things a rollout needs, coded from job postings and set against the role I propose: the Industrial Tailor.",
@@ -482,6 +489,7 @@ footer { margin-top: 18px; padding-top: 13px; border-top: 1px solid var(--rule);
       chartMe: "Radar: the Industrial Tailor against my record on fourteen axes"
     },
     es: {
+      tape: "En obra. Todavía se está afinando.",
       kicker: "Estrategia de despliegue. Borrador para discutir",
       title: "¿De qué debería hacerse cargo un deployment strategist?",
       sub: "Catorce cosas que necesita un despliegue, codificadas desde avisos de empleo y puestas contra el rol que propongo: el Industrial Tailor.",
@@ -768,7 +776,7 @@ footer { margin-top: 18px; padding-top: 13px; border-top: 1px solid var(--rule);
   function texts() {
     const t = UI[state.lang];
     document.documentElement.lang = state.lang;
-    for (const [id, key] of [["t-kicker", "kicker"], ["t-title", "title"], ["t-sub", "sub"], ["lead-me", "leadMe"],
+    for (const [id, key] of [["t-tape", "tape"], ["t-kicker", "kicker"], ["t-title", "title"], ["t-sub", "sub"], ["lead-me", "leadMe"],
       ["lead-fde", "leadFde"], ["src-bar", "srcBar"], ["src-me", "srcMe"], ["src-fde", "srcFde"], ["t-foot", "foot"], ["note-bar", "noteBar"], ["note-me", "noteMe"]]) {
       $(id).textContent = t[key];
     }
