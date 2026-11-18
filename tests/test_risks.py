@@ -209,3 +209,23 @@ def test_a_data_file_that_is_not_an_object_names_the_file(tmp_path):
 def test_an_unknown_plate_marker_stops_the_build():
     with pytest.raises(ValueError, match="unknown plate 'hexagon'"):
         risks.with_plates("<p>A</p>\n<!-- plate: hexagon -->\n", depth=1)
+
+
+def test_engagements_links_to_the_atlas_outside_the_scope_plate(site):
+    root, pages = site
+    page_html = read(root, "engagements", pages)
+    scope = plate(page_html, "scope")
+    assert 'href="https://esstipi-debug.github.io/atlas/"' in page_html
+    assert "atlas/" not in scope
+
+
+def test_plates_and_nav_active_state_are_styled(site):
+    root, pages = site
+    css = (root / "style.css").read_text(encoding="utf-8")
+    assert "article.page:has(.eng-deck, .risk-map)" in css
+    assert ":not(.eng-deck, .risk-map, .card-demo)" in css
+    assert 'a[aria-current="page"]' in css
+    engagements = read(root, "engagements", pages)
+    assert 'href="../engagements/" aria-current="page"' in engagements
+    assert engagements.count('aria-current="page"') == 1
+    assert 'aria-current="page"' not in read(root, "index", pages)

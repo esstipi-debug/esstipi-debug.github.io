@@ -576,12 +576,13 @@ def head(page: Page, pages: list[Page], depth: int) -> str:
 </head>"""
 
 
-def site_header(depth: int) -> str:
+def site_header(depth: int, current: str = "") -> str:
     home = href("", depth)
     items = []
     for label, target in NAV:
         link = f"{home}{target}" if target.startswith("#") else href(target, depth)
-        items.append(f'<li><a href="{link}">{label}</a></li>')
+        active = ' aria-current="page"' if current and target == current else ""
+        items.append(f'<li><a href="{link}"{active}>{label}</a></li>')
     links = "\n".join(items)
     return f"""<header class="site-header"><div class="wrap">
 <a class="name" href="{home}">{AUTHOR}</a>
@@ -857,7 +858,7 @@ def render_page(page: Page, pages: list[Page]) -> str:
     return f"""{head(page, pages, depth)}
 <body class="{body_class}">
 <a class="skip" href="#main">Skip to content</a>
-{site_header(depth)}
+{site_header(depth, page.path)}
 <main id="main"{main_class}>
 {main}
 </main>

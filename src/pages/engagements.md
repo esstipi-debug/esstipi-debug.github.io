@@ -13,7 +13,7 @@ offer: Fractional Operations / Deployment Lead | 6000 | month
 offer: Advisory & Operational Due Diligence | 250 | hour
 offer: On-site days | 1200 | day
 published: 2026-11-09
-updated: 2026-11-15
+updated: 2026-11-18
 ---
 Each one starts from the same place: what your records say against what your floor does.
 
@@ -36,8 +36,8 @@ Each one starts from the same place: what your records say against what your flo
 <h2>Diagnostic Field Audit</h2>
 <p>For stock that does not reconcile, write-offs nobody can explain, or a deployment that has stalled.</p>
 <ul>
-<li><strong>Week one, the floor.</strong> On site or by video, with every shift included.</li>
-<li><strong>Week two, the records.</strong> A five-column event log: case, activity, timestamp, who, where, alongside checks for control loopholes, shared logins and bypass paths.</li>
+<li><strong>Week one, the records or the floor.</strong> Starts offline on a static five-column export (case, activity, timestamp, who, where) with zero network access, or on the floor by video or on site across every shift.</li>
+<li><strong>Week two, loopholes and incentives.</strong> Cross-check the records against the shifts for control loopholes, shared logins, bypass paths, and floor KPIs or bonuses that pay for shortcuts.</li>
 <li><strong>Week three, the baseline and the list.</strong> Every loss in the order of what it costs, with the count and the arithmetic shown on pages you can forward, and a 30-60-90-day plan, presented to whoever signs.</li>
 </ul>
 <p>Paid 50% at the start and 50% on delivery. On-site days are billed separately. Your team keeps the count sheets and the queries.</p>
@@ -58,6 +58,7 @@ Each one starts from the same place: what your records say against what your flo
 <p>For a WMS, ERP, hotel, farm or AI system going live where a bad start stops dispatch or service.</p>
 <ul>
 <li>Data staged and checked before anything writes to production, including a pre-go-live adversarial check against malformed records, overly broad permissions and untrusted AI inputs, with a way back.</li>
+<li>Floor KPIs and bonus rules audited and tested against bypass behaviour before go-live, so the incentive does not pay the crew to route around the system.</li>
 <li>Step-by-step instruction on the floor, in the crew&rsquo;s own terms.</li>
 <li>Go-live and hypercare on the floor, until the old shortcuts die.</li>
 </ul>
@@ -135,6 +136,8 @@ Not everything is a job for me.
 If you need one of the first three, hire them. I work alongside all of them.
 
 <!-- plate: scope -->
+
+For the full fourteen-axis interactive radar comparing deployment strategists, forward deployed engineers, implementation and customer success roles, open the [deployment strategist radar](https://esstipi-debug.github.io/atlas/).
 
 ## Best fit
 
