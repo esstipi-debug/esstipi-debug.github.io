@@ -120,5 +120,5 @@ The code is on [GitHub](https://github.com/esstipi-debug).
 
 ## Writing
 
-- Nine field notes, among them [*The Smith and the Tailor*](../the-smith-and-the-tailor/) and [*Nobody Pays for Being Wrong*](../nobody-pays-for-being-wrong/), and ten short answers, among them [why inventory records do not match the shelf](../why-inventory-records-do-not-match-the-shelf/) and [why people follow the system when it is wrong](../why-people-follow-the-system-when-it-is-wrong/).
+- Ten field notes, among them [*The Smith and the Tailor*](../the-smith-and-the-tailor/) and [*Nobody Pays for Being Wrong*](../nobody-pays-for-being-wrong/), and ten short answers, among them [why inventory records do not match the shelf](../why-inventory-records-do-not-match-the-shelf/) and [why people follow the system when it is wrong](../why-people-follow-the-system-when-it-is-wrong/).
 - [*The Deployment Chasm*](../the-deployment-chasm/), a manuscript on why enterprise and supply-chain systems fail between the contract and the floor.
