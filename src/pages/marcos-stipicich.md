@@ -21,6 +21,10 @@ Available for pre-cutover forensic audits, cutover leadership, and Deployment St
 
 For technology vendors, enterprise rollouts, and Deployment Strategist or Forward Deployed Strategist roles:
 
+<div class="links" markdown="1">
+
 - [How a deployment runs](../for-technology-vendors/#how-we-would-start)
 - [Proof and built systems](../proof/)
 - [The one-page onboarding plan (PDF)](../files/client-onboarding-plan.pdf)
+
+</div>

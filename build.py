@@ -687,7 +687,7 @@ def note_answers(page: Page, pages: list[Page], depth: int) -> str:
         return ""
     items = "\n".join(f'<li><a href="{href(question.path, depth)}">{render_inline(question.title)}</a></li>'
                       for question in questions)
-    return f"\n<h2>Questions these field notes answer</h2>\n<ul>\n{items}\n</ul>"
+    return f'\n<h2>Questions these field notes answer</h2>\n<ul class="links">\n{items}\n</ul>'
 
 
 def note_main(page: Page, pages: list[Page], depth: int) -> str:

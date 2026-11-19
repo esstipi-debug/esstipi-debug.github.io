@@ -13,7 +13,11 @@ updated: 2026-11-09
 ---
 Three lines are enough: what the operation is, what changed or is about to change, and what does not add up. If you can, say which system it runs on.
 
+<div class="links" markdown="1">
+
 - Email: [marcos.stipicic@gmail.com](mailto:marcos.stipicic@gmail.com)
 - LinkedIn: [linkedin.com/in/marcos-stipicich](https://www.linkedin.com/in/marcos-stipicich)
+
+</div>
 
 I work from Santiago, Chile, in English and in USD, and take on work in the United States, Australia, Canada, the United Kingdom and Europe. When a call helps, we set one up by email.

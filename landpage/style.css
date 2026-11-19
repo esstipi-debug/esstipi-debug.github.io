@@ -165,6 +165,12 @@ hgroup > h1 { margin-bottom: .5rem; } /* the line that names the section sits cl
 :where(main.wrap) li::marker { color: var(--accent); }
 :where(main.wrap) a { text-decoration: underline; text-decoration-color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: .22em; transition: color .2s; }
 :where(main.wrap) a:hover { color: var(--accent); }
+/* What a finger has to hit is 44px tall, also where the letters are small. A list whose items are links gives
+   each link its own row, with no gap between rows to miss. A link that is most of a small line (a source, an
+   origin, a byline) reaches past its letters, above and below, without moving the line. */
+.links li { margin: 0; }
+.links a { display: inline-flex; align-items: center; min-height: 2.75rem; padding-block: .3rem; }
+.src a, .origin a, .byline a { padding-block: .85rem; }
 
 .kicker { margin-bottom: 1rem; font-weight: 500; font-size: .875rem; line-height: 1.3; color: var(--muted); }
 .lede { max-width: 38rem; margin-bottom: 1.75rem; font-size: 1.1875rem; line-height: 1.5; color: var(--ink-2); }
@@ -744,7 +750,7 @@ article.page:has(.eng-deck) > hgroup + p { max-width: 38rem; margin: 1rem 0 0; f
   align-items: center;
   justify-content: center;
   min-width: 2.35rem;
-  min-height: 2.35rem;
+  min-height: 2.75rem;
   padding: 0 .7rem;
   border: 1px solid var(--rule);
   background: var(--ground);
@@ -754,6 +760,10 @@ article.page:has(.eng-deck) > hgroup + p { max-width: 38rem; margin: 1rem 0 0; f
   transition: border-color .2s, color .2s, background-color .2s;
 }
 .book-pill:hover, .book-pill-m:hover { border-color: var(--rule-strong); color: var(--ink); }
+/* On a phone the page pills stand in one row under Previous and Next: they share the row and narrow together,
+   so that none is left alone on a second line. */
+.book-nav-mob .book-pills { order: 1; flex: 1 0 100%; display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 2.35rem); gap: .25rem; justify-content: center; }
+.book-pill-m { min-width: 0; padding: 0; }
 .book-hint { margin: 0; font-size: .8125rem; color: var(--muted); text-align: center; }
 
 /* Mobile single-page state wiring (pages 1..7) */
