@@ -16,14 +16,8 @@ description: I find the money an operation loses between its records and its flo
 published: 2026-11-09
 updated: 2026-11-18
 ---
-<div class="home-thesis" markdown="1">
-<div class="thesis-head" markdown="1">
-
-## Why a system that works in the plan fails on the floor
-
-Rarely the algorithm. Usually one of three things that were there before the system arrived.
-
-</div>
+<details class="fold home-thesis" markdown="1">
+<summary><h2>Why a system that works in the plan fails on the floor</h2><span class="thesis-intro">Rarely the algorithm. Usually one of three things that were there before the system arrived.</span></summary>
 <div class="thesis-body" markdown="1">
 
 1. **The record was already wrong.** In one retailer's audit, 65% of about 370,000 inventory records were inaccurate. A new system, or an AI agent, reads that record as the truth. [Why records drift](why-inventory-records-do-not-match-the-shelf/)
@@ -34,32 +28,35 @@ The number people quote, 95%, comes from a 2025 MIT NANDA report, *The GenAI Div
 {: .note }
 
 </div>
-</div>
+</details>
 
 <div class="home-pillars" markdown="1">
 
-<div class="pillar" markdown="1">
-## How I work
+<details class="fold pillar" markdown="1">
+<summary><h2>How I work</h2></summary>
 
 I walk the floor first, the 02:30 shift included, and ask what happened rather than what people think. Then I put the record and the floor on one timeline and write the working down, so finance, the floor and engineering can check it. Captures of screens, labels and racks run in plain sight with notice, never faces; an operator is recorded only if they say yes. [How I diagnose](how-i-work/)
-</div>
 
-<div class="pillar" markdown="1">
-## Engagements
+</details>
+
+<details class="fold pillar" markdown="1">
+<summary><h2>Engagements</h2></summary>
 
 A three-week field audit, cutover leadership, a fractional operations or deployment lead, and advisory by the hour. [Engagements and fees](engagements/)
-</div>
 
-<div class="pillar">
-<h2>Proof</h2>
+</details>
+
+<details class="fold pillar">
+<summary><h2>Proof</h2></summary>
 <p>A 50,000-SKU distribution-centre cutover in Melbourne, a USD 30M cross-border P&amp;L, a re-runnable triage of 2,708 marketplace claims, and tools I build in Python, SQL and TypeScript, among them an inventory and replenishment engine with 10,607 passing tests that stages every decision in draft before write-back.</p>
 <p><a href="proof/">See the proof</a> or <a href="proof/#decision-card">try a decision card</a></p>
-</div>
+</details>
 
-<div class="pillar" markdown="1">
-## Working terms
+<details class="fold pillar" markdown="1">
+<summary><h2>Working terms</h2></summary>
 
 Open to full-time or embedded Deployment Strategist roles with technology vendors and enterprise teams, and to fixed-scope audits and cutovers invoiced in USD from Chile. On a site visit I observe and count using the blade you issue; I do not operate your machinery or fill a post. [Working terms](working-terms/) or [if you are hiring](marcos-stipicich/#if-you-are-hiring)
-</div>
+
+</details>
 
 </div>

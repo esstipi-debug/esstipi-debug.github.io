@@ -8,7 +8,7 @@
 <meta name="author" content="Marcos Stipicich">
 <link rel="canonical" href="https://esstipi-debug.github.io/landpage/">
 <meta name="color-scheme" content="dark">
-<meta name="theme-color" content="#101217">
+<meta name="theme-color" content="#0a1626">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Marcos Stipicich · Supply chain operations and system deployment">
 <meta property="og:description" content="I find the money an operation loses between its records and its floor, and take it out at the cause. US, Australia, Canada, UK, Europe.">
@@ -17,7 +17,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="google-site-verification" content="yWgq7sziMlBmLplKNEser905TPbsTWBzZ840z-s1YfE">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="preload" href="files/fonts/archivo-latin-variable.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="files/fonts/ibm-plex-sans-latin-variable.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="style.css">
 <link rel="stylesheet" href="home.css">
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebSite", "name": "Marcos Stipicich", "url": "https://esstipi-debug.github.io/landpage/", "inLanguage": "en", "description": "I find the money an operation loses between its records and its floor, and take it out at the cause. US, Australia, Canada, UK, Europe.", "author": {"@type": "Person", "@id": "https://esstipi-debug.github.io/landpage/marcos-stipicich/#person", "name": "Marcos Stipicich", "url": "https://esstipi-debug.github.io/landpage/marcos-stipicich/", "sameAs": ["https://www.linkedin.com/in/marcos-stipicich", "https://github.com/esstipi-debug"]}}</script>
@@ -36,8 +36,8 @@
 <div class="tape" aria-hidden="true"><span></span></div>
 </header>
 <main id="main">
+<div class="wrap top">
 <section id="hero" class="hero">
-<div class="wrap hero-in">
 <h1><span class="h1-a">Your operation loses money between the record and the floor.</span> <span class="h1-b">I find it and take it out.</span></h1>
 <div class="hero-body">
 <div class="hero-copy">
@@ -47,25 +47,71 @@
 <p class="hero-role">Supply Chain &amp; Operations × Deployment Strategy</p>
 </div>
 </div>
-</div>
 </section>
 <section id="situations" class="situations">
-<div class="wrap">
 <p class="statement"><span>Stock the books show and the floor does not hold.</span> <span>Write-offs nobody can explain.</span> <span>Orders shipped wrong, and the overtime to put them right.</span></p>
-<h2 class="doors-q">Which one is yours?</h2>
+<input class="pick" type="radio" name="situation" id="pick-1" aria-labelledby="pick-l1">
+<input class="pick" type="radio" name="situation" id="pick-2" aria-labelledby="pick-l2">
+<input class="pick" type="radio" name="situation" id="pick-3" aria-labelledby="pick-l3">
+<div class="picks" role="group" aria-labelledby="pick-q">
+<h2 class="doors-q" id="pick-q">Which one is yours?</h2>
+<label id="pick-l1" for="pick-1">A new system goes live soon</label>
+<label id="pick-l2" for="pick-2">The inventory number is wrong</label>
+<label id="pick-l3" for="pick-3">The floor works around the system</label>
+</div>
+<div class="states">
+<div class="state state-0"><div class="dwg-box"><svg class="dwg" viewBox="0 0 560 230" role="img" aria-label="The record runs straight; the floor drops away from it and comes back. The distance between them is the gap."><path class="d-plan" d="M30 80H530"/><path class="d-floor" pathLength="1" d="M30 80H150C185 80 185 160 220 160H330C365 160 365 80 400 80H530"/><path class="d-dim" d="M275 80V160M268 80H282M268 160H282"/><text x="30" y="62">the record</text><text x="232" y="190">the floor</text><text class="d-big" x="290" y="127">the gap</text><text class="note" x="530" text-anchor="end" y="222">not to scale</text></svg></div></div>
+<div class="state state-1">
+<div class="dwg-box"><svg class="dwg" viewBox="0 0 560 230" role="img" aria-label="The plan runs straight through go-live; the floor drops at go-live and takes the rest of the year to come back."><path class="d-plan" d="M30 80H530"/><path class="d-dim" d="M190 40V190"/><path class="d-floor" pathLength="1" d="M30 80H190L210 165C300 165 400 130 500 80H530"/><path class="d-dim" d="M250 80V163M243 80H257M243 163H257"/><text x="30" y="62">the plan</text><text x="198" y="56">go-live</text><text x="310" y="196">the floor</text><text class="d-big" x="264" y="128">USD 64M</text><text class="note" x="530" text-anchor="end" y="222">not to scale</text></svg></div>
+<p class="state-fig"><span class="tag">Company filing</span> <b class="state-n">USD 64M</b> of sales a US cosmetics maker could not ship in the year it switched on a new ERP, by its own estimate. <a href="a-new-system-goes-live/">Before your go-live</a></p>
 <ul class="doors">
 <li><a class="door" href="a-new-system-goes-live/"><span class="door-t">A new system goes live soon</span><span class="door-d">A warehouse, ERP or AI system, and the orders still have to ship.</span></a></li>
+</ul>
+</div>
+<div class="state state-2">
+<div class="dwg-box"><svg class="dwg" viewBox="0 0 560 230" role="img" aria-label="The floor follows the record for 35% of its length and leaves it for the other 65%."><path class="d-dim" d="M30 44H530M30 38V50M530 38V50"/><path class="d-plan" d="M30 90H530"/><path class="d-floor" pathLength="1" d="M30 90H205V135H262V112H330V150H405V122H470V140H530"/><path class="d-dim" d="M205 182H530M205 176V188M530 176V188"/><text x="280" y="32" text-anchor="middle">about 370,000 records</text><text x="30" y="78">the record</text><text x="30" y="132">the floor</text><text class="d-big" x="367" y="208" text-anchor="middle">65%</text><text class="note" x="30" text-anchor="start" y="222">lengths to scale</text></svg></div>
+<p class="state-fig"><span class="tag">Study</span> <b class="state-n">65%</b> of about 370,000 inventory records were inaccurate, in one retailer’s audit. <a href="why-inventory-records-do-not-match-the-shelf/">Why records drift</a></p>
+<ul class="doors">
 <li><a class="door" href="the-inventory-number-is-wrong/"><span class="door-t">The inventory number is wrong</span><span class="door-d">The books say one number and the floor holds another.</span></a></li>
+</ul>
+</div>
+<div class="state state-3">
+<div class="dwg-box"><svg class="dwg" viewBox="0 0 560 230" role="img" aria-label="The plan runs straight through the system; the floor goes around it and comes back to the line."><rect class="d-box" x="208" y="78" width="144" height="64"/><path class="d-plan" d="M40 110H208M352 110H520"/><path class="d-floor" pathLength="1" d="M40 110H146C176 110 171 46 201 46H359C389 46 384 110 414 110H520"/><text x="40" y="98">the plan</text><text x="280" y="117" text-anchor="middle">the system</text><text x="420" y="142">the floor</text><text class="d-big" x="280" y="34" text-anchor="middle">about 20%</text><text class="note" x="530" text-anchor="end" y="222">not to scale</text></svg></div>
+<p class="state-fig"><span class="tag">My field work</span> <b class="state-n">50,000</b> SKU distribution centre, taken through its warehouse-system changeover. Order processing time fell about 20% once the floor workarounds were retired. <a href="proof/">Proof</a></p>
+<ul class="doors">
 <li><a class="door" href="the-floor-works-around-the-system/"><span class="door-t">The floor works around the system</span><span class="door-d">You paid for it. The spreadsheet is still beside it.</span></a></li>
 </ul>
+</div>
+</div>
+</section>
+</div>
+<section id="industries" class="readers">
+<div class="wrap readers-in">
+<div class="readers-buyer">
+<h2 class="doors-q">What are you?</h2>
+<ul class="doors">
+<li><a class="door" href="for-technology-vendors/"><span class="door-t">A technology vendor whose rollouts stall on the customer’s floor</span><span class="door-d">The software works in the demo. Three months after go-live, the customer’s planners are back on their spreadsheet.</span></a></li>
+<li><a class="door" href="for-investors/"><span class="door-t">I’m buying or backing one</span><span class="door-d">Private equity, search funds and expert calls.</span></a></li>
+<li><a class="door" href="marcos-stipicich/#if-you-are-hiring"><span class="door-t">If you are hiring</span><span class="door-d">For technology vendors, enterprise rollouts, and Deployment Strategist or Forward Deployed Strategist roles.</span></a></li>
+</ul>
+</div>
+<div class="readers-floor">
+<h2 class="doors-q">Or where is the work?</h2>
+<ul class="doors">
+<li><a class="door" href="warehousing-cold-chain-distribution/"><span class="door-t">Warehousing, cold chain &amp; distribution</span><span class="door-d">Distribution centres, cold stores, importers, wholesale and cross-border e-commerce.</span></a></li>
+<li><a class="door" href="agriculture-livestock-meat/"><span class="door-t">Farm, livestock &amp; meat</span><span class="door-d">Stations, meat processors, machinery and parts distributors, AgTech.</span></a></li>
+<li><a class="door" href="restaurants-hotels-food-service/"><span class="door-t">Kitchens, hotels &amp; food service</span><span class="door-d">Restaurant groups, hotel food and beverage, central kitchens, food-service distributors.</span></a></li>
+</ul>
+</div>
+<p class="fit"><span class="tag">Best fit</span> An operation with its own floor (a farm, a plant, a kitchen or a warehouse) and revenue between USD 10M and USD 100M, or a technology team deploying into one; a system change in the last or next 12 months; and an executive who signs. The entry point is the field audit.</p>
 </div>
 </section>
 <section id="proof" class="figures">
 <div class="wrap">
 <h2>What you can check</h2>
 <p class="fig-note">Each number says where it comes from: a study, a company filing, my own analysis, or my own field work.</p>
-<div class="fig-grid">
-<a class="fig fig-lead" href="why-inventory-records-do-not-match-the-shelf/">
+<div class="fig-list">
+<a class="fig" href="why-inventory-records-do-not-match-the-shelf/">
 <span class="fig-g">Study</span>
 <span class="fig-n">65%</span>
 <span class="fig-t">of about 370,000 inventory records were inaccurate, in one retailer’s audit.</span>
@@ -77,11 +123,19 @@
 <span class="fig-t">of sales a US cosmetics maker could not ship in the year it switched on a new ERP, by its own estimate.</span>
 <span class="fig-go">Before your go-live</span>
 </a>
-<a class="fig" href="not-received-but-delivered/">
+<a class="fig fig-drawn" href="not-received-but-delivered/">
 <span class="fig-g">My analysis</span>
 <span class="fig-n">57%</span>
 <span class="fig-t">of “not received” reviews on delivered orders were written on or before the delivery day, in a public marketplace dataset.</span>
-<span class="fig-chart"><svg viewBox="0 0 300 14" preserveAspectRatio="none" role="img" aria-label="2,708 claims: 1,542 late orders; 73 at flagged sellers; 1,093 with no clear cause"><rect class="seg-late" x="0.0" y="0" width="170.8" height="14"/><rect class="seg-flag" x="170.8" y="0" width="8.1" height="14"/><rect class="seg-open" x="178.9" y="0" width="121.1" height="14"/></svg><span class="fig-legend"><span class="leg leg-late">1,542 late orders</span><span class="leg leg-flag">73 at flagged sellers</span><span class="leg leg-open">1,093 with no clear cause</span></span></span>
+<span class="claims" role="img" aria-label="2,708 claims: 1,542 late orders; 73 at flagged sellers; 1,093 with no clear cause" style="grid-template-columns: 1542fr 73fr 1093fr">
+<span class="cota cota-late"><span><b>1,542</b> written on or before the delivery day</span></span>
+<span class="cota cota-after"><span><b>1,166</b> written after it</span></span>
+<svg class="claims-bar" viewBox="0 0 2708 10" preserveAspectRatio="none" aria-hidden="true"><rect class="seg-late" x="0" y="0" width="1542" height="10"/><rect class="seg-flag" x="1542" y="0" width="73" height="10"/><rect class="seg-open" x="1615" y="0" width="1093" height="10"/></svg>
+<span class="datum"><span>delivery day</span></span>
+<span class="sub sub-flag" style="--half: 2.26%"><span><b>73</b> at flagged sellers</span></span>
+<span class="cota cota-rest"><span><b>1,093</b> with no clear cause</span></span>
+</span>
+<span class="claims-base">Of 95,824 delivered orders with a review, 2,708 had a review saying the order had not arrived. <span class="note">Lengths to scale.</span></span>
 <span class="fig-go">See the audit</span>
 </a>
 <a class="fig" href="proof/">
@@ -94,22 +148,25 @@
 </div>
 </section>
 <section id="method" class="method">
-<div class="wrap"><h2>How the work goes</h2></div>
-<ol class="stack">
-<li><div class="wrap step"><div class="step-rule" aria-hidden="true"></div><div class="step-body"><h3>Measure</h3>
-<p>Count what the floor holds against what the record says.</p></div></div></li>
-<li><div class="wrap step"><div class="step-rule" aria-hidden="true"></div><div class="step-body"><h3>Cut</h3>
-<p>Take out the loss the count exposes, at its cause.</p></div></div></li>
-<li><div class="wrap step"><div class="step-rule" aria-hidden="true"></div><div class="step-body"><h3>Stitch</h3>
-<p>Stay through go-live until the new way of working holds.</p></div></div></li>
+<div class="wrap">
+<h2>How the work goes</h2>
+<ol class="stages">
+<li><svg class="dwg dwg-step" viewBox="0 0 240 112" role="img" aria-label="The floor line drops away from the record, and the drop is measured."><path class="d-plan" d="M10 40H230"/><path class="d-floor" d="M10 40H70C88 40 88 86 106 86H140C158 86 158 40 176 40H230"/><path class="d-dim" d="M123 40V86M116 40H130M116 86H130"/></svg>
+<h3>Measure</h3>
+<p>Count what the floor holds against what the record says.</p></li>
+<li><svg class="dwg dwg-step" viewBox="0 0 240 112" role="img" aria-label="The part of the floor line that dropped is cut out at both ends."><path class="d-plan" d="M10 40H230"/><path class="d-floor" d="M10 40H70M176 40H230"/><path class="d-ghost" d="M70 58C88 58 88 104 106 104H140C158 104 158 58 176 58"/><path class="d-cut" d="M63 28L77 52M169 28L183 52"/></svg>
+<h3>Cut</h3>
+<p>Take out the loss the count exposes, at its cause.</p></li>
+<li><svg class="dwg dwg-step" viewBox="0 0 240 112" role="img" aria-label="The floor line runs along the record again, stitched across the cut."><path class="d-plan" d="M10 37H230"/><path class="d-floor" d="M10 43H230"/><path class="d-stitch" d="M76 31V49M90 31V49M104 31V49M118 31V49M132 31V49M146 31V49M160 31V49M174 31V49"/></svg>
+<h3>Stitch</h3>
+<p>Stay through go-live until the new way of working holds.</p></li>
 </ol>
-<div class="wrap"><p class="method-more">For technology teams, the same work runs in five steps, from the first audit to the handback. <a href="for-technology-vendors/#how-we-would-start">How a deployment runs</a></p></div>
-</section>
-<div class="home-thesis">
-<div class="thesis-head">
-<h2>Why a system that works in the plan fails on the floor</h2>
-<p>Rarely the algorithm. Usually one of three things that were there before the system arrived.</p>
+<p class="method-more">For technology teams, the same work runs in five steps, from the first audit to the handback. <a href="for-technology-vendors/#how-we-would-start">How a deployment runs</a></p>
 </div>
+</section>
+<details class="fold home-thesis">
+<summary>
+<h2>Why a system that works in the plan fails on the floor</h2><span class="thesis-intro">Rarely the algorithm. Usually one of three things that were there before the system arrived.</span></summary>
 <div class="thesis-body">
 <ol>
 <li><strong>The record was already wrong.</strong> In one retailer&rsquo;s audit, 65% of about 370,000 inventory records were inaccurate. A new system, or an AI agent, reads that record as the truth. <a href="why-inventory-records-do-not-match-the-shelf/">Why records drift</a></li>
@@ -118,100 +175,82 @@
 </ol>
 <p class="note">The number people quote, 95%, comes from a 2025 MIT NANDA report, <em>The GenAI Divide</em>: 95% of organisations saw no measurable P&amp;L impact from generative-AI pilots. It is a preliminary industry report, and it covers AI pilots, not ERP or WMS projects. The cause it names is older than AI: brittle workflows and missing context.</p>
 </div>
-</div>
+</details>
 <div class="home-pillars">
-<div class="pillar">
+<details class="fold pillar">
+<summary>
 <h2>How I work</h2>
+</summary>
 <p>I walk the floor first, the 02:30 shift included, and ask what happened rather than what people think. Then I put the record and the floor on one timeline and write the working down, so finance, the floor and engineering can check it. Captures of screens, labels and racks run in plain sight with notice, never faces; an operator is recorded only if they say yes. <a href="how-i-work/">How I diagnose</a></p>
-</div>
-<div class="pillar">
+</details>
+<details class="fold pillar">
+<summary>
 <h2>Engagements</h2>
+</summary>
 <p>A three-week field audit, cutover leadership, a fractional operations or deployment lead, and advisory by the hour. <a href="engagements/">Engagements and fees</a></p>
-</div>
-<div class="pillar">
+</details>
+<details class="fold pillar">
+<summary>
 <h2>Proof</h2>
+</summary>
 <p>A 50,000-SKU distribution-centre cutover in Melbourne, a USD 30M cross-border P&amp;L, a re-runnable triage of 2,708 marketplace claims, and tools I build in Python, SQL and TypeScript, among them an inventory and replenishment engine with 10,607 passing tests that stages every decision in draft before write-back.</p>
 <p><a href="proof/">See the proof</a> or <a href="proof/#decision-card">try a decision card</a></p>
-</div>
-<div class="pillar">
+</details>
+<details class="fold pillar">
+<summary>
 <h2>Working terms</h2>
+</summary>
 <p>Open to full-time or embedded Deployment Strategist roles with technology vendors and enterprise teams, and to fixed-scope audits and cutovers invoiced in USD from Chile. On a site visit I observe and count using the blade you issue; I do not operate your machinery or fill a post. <a href="working-terms/">Working terms</a> or <a href="marcos-stipicich/#if-you-are-hiring">if you are hiring</a></p>
+</details>
 </div>
-</div>
-<section id="industries" class="index">
-<div class="wrap index-grid">
-<div>
-<h2 class="doors-q">What are you?</h2>
-<ul class="doors">
-<li><a class="door" href="for-technology-vendors/"><span class="door-t">A technology vendor whose rollouts stall on the customer’s floor</span><span class="door-d">The software works in the demo. Three months after go-live, the customer’s planners are back on their spreadsheet.</span></a></li>
-<li><a class="door" href="for-investors/"><span class="door-t">I’m buying or backing one</span><span class="door-d">Private equity, search funds and expert calls.</span></a></li>
-</ul>
-</div>
-<div>
-<h2 class="doors-q">Or where is the work?</h2>
-<ul class="doors">
-<li><a class="door" href="warehousing-cold-chain-distribution/"><span class="door-t">Warehousing, cold chain &amp; distribution</span><span class="door-d">Distribution centres, cold stores, importers, wholesale and cross-border e-commerce.</span></a></li>
-<li><a class="door" href="agriculture-livestock-meat/"><span class="door-t">Farm, livestock &amp; meat</span><span class="door-d">Stations, meat processors, machinery and parts distributors, AgTech.</span></a></li>
-<li><a class="door" href="restaurants-hotels-food-service/"><span class="door-t">Kitchens, hotels &amp; food service</span><span class="door-d">Restaurant groups, hotel food and beverage, central kitchens, food-service distributors.</span></a></li>
-</ul>
-</div>
-</div>
-</section>
 <section id="library">
 <div class="wrap">
 <h2 id="field-notes">Field notes</h2>
-<div class="notes">
-<article class="note-item">
-<h3><a href="the-smith-and-the-tailor/">The Smith and the Tailor</a></h3>
-<p>Field notes for the CEO: why many deployments are cut before anyone measures the floor, and two rules you can set before kickoff.</p>
-<p class="meta"><a href="https://cdn.jsdelivr.net/gh/esstipi-debug/esstipi-debug@main/papers/the-smith-and-the-tailor.pdf">PDF, 10 pages</a></p>
-</article>
-<article class="note-item">
-<h3><a href="nobody-pays-for-being-wrong/">Nobody Pays for Being Wrong</a></h3>
-<p>A bestiary of the go-live: why obeying the system and dodging it answer the same rule, and what a rule looks like when nobody has to carry it.</p>
-<p class="meta"><a href="https://cdn.jsdelivr.net/gh/esstipi-debug/esstipi-debug@main/papers/nobody-pays-for-being-wrong.pdf">PDF, 27 pages</a></p>
-</article>
-<article class="note-item">
-<h3><a href="the-shortcut-is-not-a-lapse/">The Shortcut Is Not a Lapse</a></h3>
-<p>Field notes for the COO: why dented units ship, and three questions to ask where the record is written.</p>
-<p class="meta"><a href="https://cdn.jsdelivr.net/gh/esstipi-debug/esstipi-debug@main/papers/the-shortcut-is-not-a-lapse.pdf">PDF, 8 pages</a></p>
-</article>
-<article class="note-item">
-<h3><a href="the-damage-has-no-name/">The Damage Has No Name</a></h3>
-<p>Field notes for the CFO: why the fastest driver on the report can be the most expensive one in the ledger, and how to trace the damage to a name.</p>
-<p class="meta"><a href="https://cdn.jsdelivr.net/gh/esstipi-debug/esstipi-debug@main/papers/the-damage-has-no-name.pdf">PDF, 8 pages</a></p>
-</article>
-<article class="note-item">
-<h3><a href="when-exceptions-outrun-the-desk/">When Exceptions Outrun the Desk</a></h3>
-<p>Field notes for the COO: why exceptions the desk cannot clear leave the procedure, and four numbers to watch each week before the record drifts.</p>
-<p class="meta"><a href="https://cdn.jsdelivr.net/gh/esstipi-debug/esstipi-debug@main/papers/when-exceptions-outrun-the-desk.pdf">PDF, 8 pages</a></p>
-</article>
-<article class="note-item">
-<h3><a href="who-is-allowed-to-be-right/">Who Is Allowed to Be Right?</a></h3>
-<p>Field notes for the CEO: why the person who sees a rule fail after go-live may not be the one who can stop it, and how to measure the gap.</p>
-<p class="meta"><a href="https://cdn.jsdelivr.net/gh/esstipi-debug/esstipi-debug@main/papers/who-is-allowed-to-be-right.pdf">PDF, 8 pages</a></p>
-</article>
-<article class="note-item">
-<h3><a href="the-tow-the-system-calls-idle/">The Tow the System Calls Idle</a></h3>
-<p>Field notes for the COO: why minutes the time standard has no category for are charged to the operator, and five steps to let the floor contest them.</p>
-<p class="meta"><a href="https://cdn.jsdelivr.net/gh/esstipi-debug/esstipi-debug@main/papers/the-tow-the-system-calls-idle.pdf">PDF, 8 pages</a></p>
-</article>
-<article class="note-item">
-<h3><a href="a-hundred-eyes-one-percent/">A Hundred Eyes, One Percent</a></h3>
-<p>Field notes for the CFO: why a human approval can get weaker as the system it checks gets better, and how to test the control, not the signature.</p>
-<p class="meta"><a href="https://cdn.jsdelivr.net/gh/esstipi-debug/esstipi-debug@main/papers/a-hundred-eyes-one-percent.pdf">PDF, 9 pages</a></p>
-</article>
-<article class="note-item">
-<h3><a href="use-it-or-lose-it/">Use It or Lose It</a></h3>
-<p>Field notes for the CEO: why a budget that expires on a fixed date pays for a rush in its last week, who carries the bill, and the rule you can change.</p>
-<p class="meta"><a href="https://cdn.jsdelivr.net/gh/esstipi-debug/esstipi-debug@main/papers/use-it-or-lose-it.pdf">PDF, 8 pages</a></p>
-</article>
-<article class="note-item">
-<h3><a href="put-the-toll-on-the-bridge/">Put the Toll on the Bridge</a></h3>
-<p>Field notes for the COO: where a step on a shift screen protects you, where it buys workarounds, and four questions for the next screen you approve.</p>
-<p class="meta"><a href="https://cdn.jsdelivr.net/gh/esstipi-debug/esstipi-debug@main/papers/put-the-toll-on-the-bridge.pdf">PDF, 10 pages</a></p>
-</article>
-</div>
+<table class="index">
+<thead><tr><th scope="col">Note</th><th scope="col">For</th><th scope="col">What it covers</th><th scope="col">File</th></tr></thead>
+<tbody>
+<tr><th scope="row"><a href="the-smith-and-the-tailor/">The Smith and the Tailor</a></th>
+<td class="ix-for">CEO</td>
+<td class="ix-what">Field notes for the CEO: why many deployments are cut before anyone measures the floor, and two rules you can set before kickoff.</td>
+<td class="ix-file"><a href="https://cdn.jsdelivr.net/gh/esstipi-debug/esstipi-debug@main/papers/the-smith-and-the-tailor.pdf">PDF, 10 pages</a></td></tr>
+<tr><th scope="row"><a href="nobody-pays-for-being-wrong/">Nobody Pays for Being Wrong</a></th>
+<td class="ix-for"></td>
+<td class="ix-what">A bestiary of the go-live: why obeying the system and dodging it answer the same rule, and what a rule looks like when nobody has to carry it.</td>
+<td class="ix-file"><a href="https://cdn.jsdelivr.net/gh/esstipi-debug/esstipi-debug@main/papers/nobody-pays-for-being-wrong.pdf">PDF, 27 pages</a></td></tr>
+<tr><th scope="row"><a href="the-shortcut-is-not-a-lapse/">The Shortcut Is Not a Lapse</a></th>
+<td class="ix-for">COO</td>
+<td class="ix-what">Field notes for the COO: why dented units ship, and three questions to ask where the record is written.</td>
+<td class="ix-file"><a href="https://cdn.jsdelivr.net/gh/esstipi-debug/esstipi-debug@main/papers/the-shortcut-is-not-a-lapse.pdf">PDF, 8 pages</a></td></tr>
+<tr><th scope="row"><a href="the-damage-has-no-name/">The Damage Has No Name</a></th>
+<td class="ix-for">CFO</td>
+<td class="ix-what">Field notes for the CFO: why the fastest driver on the report can be the most expensive one in the ledger, and how to trace the damage to a name.</td>
+<td class="ix-file"><a href="https://cdn.jsdelivr.net/gh/esstipi-debug/esstipi-debug@main/papers/the-damage-has-no-name.pdf">PDF, 8 pages</a></td></tr>
+<tr><th scope="row"><a href="when-exceptions-outrun-the-desk/">When Exceptions Outrun the Desk</a></th>
+<td class="ix-for">COO</td>
+<td class="ix-what">Field notes for the COO: why exceptions the desk cannot clear leave the procedure, and four numbers to watch each week before the record drifts.</td>
+<td class="ix-file"><a href="https://cdn.jsdelivr.net/gh/esstipi-debug/esstipi-debug@main/papers/when-exceptions-outrun-the-desk.pdf">PDF, 8 pages</a></td></tr>
+<tr><th scope="row"><a href="who-is-allowed-to-be-right/">Who Is Allowed to Be Right?</a></th>
+<td class="ix-for">CEO</td>
+<td class="ix-what">Field notes for the CEO: why the person who sees a rule fail after go-live may not be the one who can stop it, and how to measure the gap.</td>
+<td class="ix-file"><a href="https://cdn.jsdelivr.net/gh/esstipi-debug/esstipi-debug@main/papers/who-is-allowed-to-be-right.pdf">PDF, 8 pages</a></td></tr>
+<tr><th scope="row"><a href="the-tow-the-system-calls-idle/">The Tow the System Calls Idle</a></th>
+<td class="ix-for">COO</td>
+<td class="ix-what">Field notes for the COO: why minutes the time standard has no category for are charged to the operator, and five steps to let the floor contest them.</td>
+<td class="ix-file"><a href="https://cdn.jsdelivr.net/gh/esstipi-debug/esstipi-debug@main/papers/the-tow-the-system-calls-idle.pdf">PDF, 8 pages</a></td></tr>
+<tr><th scope="row"><a href="a-hundred-eyes-one-percent/">A Hundred Eyes, One Percent</a></th>
+<td class="ix-for">CFO</td>
+<td class="ix-what">Field notes for the CFO: why a human approval can get weaker as the system it checks gets better, and how to test the control, not the signature.</td>
+<td class="ix-file"><a href="https://cdn.jsdelivr.net/gh/esstipi-debug/esstipi-debug@main/papers/a-hundred-eyes-one-percent.pdf">PDF, 9 pages</a></td></tr>
+<tr><th scope="row"><a href="use-it-or-lose-it/">Use It or Lose It</a></th>
+<td class="ix-for">CEO</td>
+<td class="ix-what">Field notes for the CEO: why a budget that expires on a fixed date pays for a rush in its last week, who carries the bill, and the rule you can change.</td>
+<td class="ix-file"><a href="https://cdn.jsdelivr.net/gh/esstipi-debug/esstipi-debug@main/papers/use-it-or-lose-it.pdf">PDF, 8 pages</a></td></tr>
+<tr><th scope="row"><a href="put-the-toll-on-the-bridge/">Put the Toll on the Bridge</a></th>
+<td class="ix-for">COO</td>
+<td class="ix-what">Field notes for the COO: where a step on a shift screen protects you, where it buys workarounds, and four questions for the next screen you approve.</td>
+<td class="ix-file"><a href="https://cdn.jsdelivr.net/gh/esstipi-debug/esstipi-debug@main/papers/put-the-toll-on-the-bridge.pdf">PDF, 10 pages</a></td></tr>
+</tbody>
+</table>
 <h2 id="questions">Short answers</h2>
 <div class="qa">
 <div>
@@ -226,7 +265,8 @@
 <details><summary>How do you check a deployment 90 days after go-live?</summary>
 <p class="short">Log twenty system recommendations a month against what the operator would do and what doing nothing costs. If neither ever wins, audit the deployer. <a href="90-day-check-after-go-live/">Full answer</a></p></details>
 </div>
-<div>
+<details class="fold fold-quiet">
+<summary>Five more short answers</summary>
 <details><summary>Why do people follow the system even when it is wrong?</summary>
 <p class="short">Because obeying costs them nothing today and questioning has a price. What reduces the error is making people answer for the decision. <a href="why-people-follow-the-system-when-it-is-wrong/">Full answer</a></p></details>
 <details><summary>Do manual overrides of a statistical forecast improve accuracy?</summary>
@@ -237,7 +277,7 @@
 <p class="short">In one retailer’s audit, 65% of nearly 370,000 records did not match the shelf. A model trained on them is wrong exactly where the record is. <a href="why-inventory-records-do-not-match-the-shelf/">Full answer</a></p></details>
 <details><summary>A customer says “not received” and the system says “delivered”: which record is wrong?</summary>
 <p class="short">Often neither. In a public marketplace dataset, 57% of “not received” reviews on delivered orders were written on or before the delivery day. <a href="not-received-but-delivered/">Full answer</a></p></details>
-</div>
+</details>
 </div>
 <p class="next"><a href="marcos-stipicich/">About the author</a> · <a href="the-deployment-chasm/"><em>The Deployment Chasm</em></a>, a manuscript</p>
 </div>

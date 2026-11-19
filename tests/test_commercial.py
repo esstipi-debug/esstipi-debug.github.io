@@ -116,6 +116,10 @@ FIGURES = {
     "73": "claims at flagged sellers (Which Record Lies?, README results table, Olist)",
     "1,093": "claims with no clear cause (Which Record Lies?, README results table, Olist)",
     "1,542": "late orders: claims written on or before the delivery day (Which Record Lies?, Olist)",
+    "1,166": "claims written after the recorded delivery day, 73 plus 1,093 (Which Record Lies?, Olist; "
+             "published page not-received-but-delivered)",
+    "95,824": "delivered orders with a review, the base of the 2,708 claims (Olist; published page "
+              "not-received-but-delivered)",
     "2,708": "\"not received\" claims on delivered orders (Which Record Lies?, Olist)",
     "5M": "about USD 5M of inventory freed (HECHOS, Trayectoria 2020-2022)",
     "300%": "300% annual growth on the USD 30M cross-border P&L (HECHOS, Trayectoria 2020-2022)",
@@ -180,10 +184,11 @@ def test_situation_pages_answer_each_role(site):
 
 
 def test_home_opens_with_situations_not_job_titles(site):
-    """The first choice is what is happening, not who you are (audience doors come second)."""
+    """The first choice is what is happening, not who you are: the audience doors come second, right after
+    the situations and before the method (the owner's choice of 2026-11-19)."""
     root, pages = site
     text = read(root, build.find(pages, "index"))
-    assert text.index('id="situations"') < text.index('id="method"') < text.index('id="industries"')
+    assert text.index('id="situations"') < text.index('id="industries"') < text.index('id="method"')
     first = text.split('id="situations"', 1)[1].split("</section>", 1)[0]
     labels = [html.unescape(label) for label in re.findall(r'<span class="door-t">(.*?)</span>', first)]
     assert len(labels) == DOORS_PER_GROUP["situation"]
@@ -393,13 +398,20 @@ def test_a_public_dataset_is_not_called_my_data(site):
     assert "my data" not in section and "my own data" not in section
 
 
-def test_the_method_is_three_steps_that_need_no_picture(site):
+def test_the_method_is_three_steps_each_drawn_as_one_line(site):
+    """The steps read without their drawings, and each drawing says in words what it shows. The drawings are
+    line work, the same line in three states: no photograph and no picture of a tool. The owner's choice of
+    2026-11-19 replaces the earlier rule that the method takes no picture at all."""
     root, pages = site
     method = section_of(read(root, build.find(pages, "index")), "method")
     steps = re.findall(r"<h3>(.*?)</h3>\s*<p>(.*?)</p>", method, re.S)
     assert steps == [(build.esc(title), build.esc(text)) for title, text in build.METHOD_STEPS]
     assert len(steps) == 3
-    assert "<svg" not in method and "<img" not in method
+    drawings = re.findall(r"<svg\b([^>]*)>", method)
+    assert len(drawings) == len(steps)
+    for attributes in drawings:
+        assert 'role="img"' in attributes and re.search(r'aria-label="[^"]{30,}"', attributes), attributes
+    assert "<img" not in method and "<text" not in method   # no raster picture, and no words inside a drawing
 
 
 def test_short_answers_open_in_place(site):
@@ -414,7 +426,8 @@ def test_short_answers_open_in_place(site):
         assert f'href="{note.slug}/"' in library, note.slug
 
 
-COUNT_WORDS = {9: "nine", 10: "ten", 11: "eleven", 12: "twelve", 13: "thirteen", 14: "fourteen"}
+COUNT_WORDS = {4: "four", 5: "five", 6: "six", 7: "seven", 8: "eight", 9: "nine", 10: "ten", 11: "eleven",
+               12: "twelve", 13: "thirteen", 14: "fourteen"}
 
 
 def test_proof_counts_the_short_answers(site):
@@ -1057,3 +1070,187 @@ def test_the_sample_card_works_with_css_alone(site):
     assert classes and all(token.startswith("card-demo") for token in classes), sorted(classes)
     missing = sorted(token for token in classes if not re.search(rf"\.{re.escape(token)}(?![\w-])", css))
     assert not missing, missing
+
+
+# ---------------------------------------------------------------- the home page as a working drawing
+# The owner's choice of 2026-11-19 (version C, "plan against floor"): the white line is the record and the
+# red one is the floor as measured. The situations are picked beside the headline and each one shows its
+# drawing, its figure and its door; who the reader is comes next; the thesis and the pillars fold on a phone.
+# No script: radio buttons, <details> and the style sheets.
+
+SITUATION_FIGURES = {"a-new-system-goes-live": "USD 64M", "the-inventory-number-is-wrong": "65%",
+                     "the-floor-works-around-the-system": "50,000"}
+AUDIT_BASE = re.compile(r"Of [\d,]+ delivered orders with a review, [\d,]+ had a review saying the order had "
+                        r"not arrived\.")
+
+
+def home_page(site) -> str:
+    root, pages = site
+    return read(root, build.find(pages, "index"))
+
+
+def library_of(text: str) -> str:
+    return text.split('<section id="library">', 1)[1].split("</section>", 1)[0]
+
+
+def states_of(text: str) -> dict[str, str]:
+    """The panels of the situations sheet by number: "0" is the one that shows before anything is picked."""
+    chunks = section_of(text, "situations").split('<div class="state state-')[1:]
+    return {chunk[0]: chunk for chunk in chunks}
+
+
+def words_of(markup: str) -> str:
+    return " ".join(html.unescape(re.sub(r"<[^>]+>", " ", markup)).split())
+
+
+def test_the_site_is_set_in_plex(site):
+    """One sans and one mono, both IBM Plex (SIL Open Font License). The two earlier files stay on disk for
+    the radar page, which loads them itself; no style sheet of the site names them."""
+    root, _ = site
+    assert build.FONT_FILES == ("ibm-plex-sans-latin-variable.woff2", "ibm-plex-mono-latin-400.woff2")
+    sheets = style_sheets(root)
+    for name, css in sheets.items():
+        assert "Archivo" not in css and "JetBrains" not in css, name
+        assert "font-stretch" not in css, name   # Plex has no width axis: a width asked of it is dead code
+    assert '"IBM Plex Sans"' in sheets["style.css"] and '"IBM Plex Mono"' in sheets["style.css"]
+
+
+def test_the_browser_bar_and_the_404_page_take_the_page_colour(site):
+    root, pages = site
+    ground = re.search(r"--ground:\s*(#[0-9a-f]{6})", style_sheets(root)["style.css"]).group(1)
+    assert ground == "#0a1626"   # the blueprint ground
+    for page in pages:
+        assert f'<meta name="theme-color" content="{ground}">' in read(root, page), page.slug
+    assert f"background:{ground}" in build.not_found_html()
+
+
+def test_the_hero_stands_alone_and_the_situations_sheet_follows_it(site):
+    text = home_page(site)
+    hero = section_of(text, "hero")
+    assert 'id="situations"' not in hero and "<svg" not in hero and "<input" not in hero
+    assert text.index('id="hero"') < text.index('id="situations"') < text.index('id="industries"')
+
+
+def test_the_situations_are_picked_with_radio_buttons_and_css(site):
+    """Three radio buttons, none picked when the page opens, each named by the door it stands for. The style
+    sheet shows the panel of the picked one and, until then, the drawing of the gap."""
+    root, pages = site
+    text = home_page(site)
+    sheet = section_of(text, "situations")
+    picks = re.findall(r'<input class="pick" type="radio" name="situation" id="pick-(\d)"([^>]*)>', sheet)
+    assert [number for number, _ in picks] == ["1", "2", "3"]
+    assert not [rest for _, rest in picks if "checked" in rest]
+    for number, rest in picks:
+        assert f'aria-labelledby="pick-l{number}"' in rest, number
+    labels = re.findall(r'<label id="pick-l(\d)" for="pick-(\d)">(.*?)</label>', sheet)
+    assert [(own, target) for own, target, _ in labels] == [("1", "1"), ("2", "2"), ("3", "3")]
+    assert [html.unescape(words) for _, _, words in labels] == [page.door for page in landings(pages, "situation")]
+    assert sorted(states_of(text)) == ["0", "1", "2", "3"]
+    css = style_sheets(root)["home.css"]
+    assert ".pick:checked ~ .states .state-0" in css          # the drawing of the gap gives way to a pick
+    for number in "123":
+        assert f"#pick-{number}:checked ~ .states .state-{number}" in css, number
+        assert f'#pick-{number}:checked ~ .picks label[for="pick-{number}"]' in css, number
+        assert f'#pick-{number}:focus-visible ~ .picks label[for="pick-{number}"]' in css, number
+
+
+def test_each_situation_shows_its_drawing_its_figure_and_its_door(site):
+    root, pages = site
+    states = states_of(home_page(site))
+    figures = {figure.number: figure for figure in build.HOME_FIGURES}
+    assert states["0"].count("<svg") == 1 and 'class="door"' not in states["0"]
+    for number, page in enumerate(landings(pages, "situation"), 1):
+        state, figure = states[str(number)], figures[SITUATION_FIGURES[page.slug]]
+        assert state.count("<svg") == 1 and 'role="img"' in state, page.slug
+        assert f'<a class="door" href="{page.slug}/">' in state, page.slug
+        for piece in (figure.grade, figure.number, figure.caption, figure.label):
+            assert build.esc(piece) in state, (page.slug, piece)
+        assert f'href="{build.find(pages, figure.slug).path}"' in state, page.slug
+
+
+def test_a_drawing_that_is_not_to_scale_says_so(site):
+    """Three drawings are schematic and say so; the one cut at the 65% of the study says its lengths are to scale."""
+    states = states_of(home_page(site))
+    notes = {number: re.findall(r'<text class="note"[^>]*>(.*?)</text>', state) for number, state in states.items()}
+    assert notes == {"0": ["not to scale"], "1": ["not to scale"], "2": ["lengths to scale"], "3": ["not to scale"]}
+
+
+def test_the_inventory_drawing_is_cut_at_the_share_the_study_found():
+    import drawings
+    left, right = drawings.RECORD_SPAN
+    cut = drawings.leaves_the_record_at(0.65)
+    assert cut == left + round(0.35 * (right - left))        # 35% of the line matches the record, 65% does not
+    assert f"M{left} 90H{cut}V" in drawings.inventory(0.65)
+
+
+def test_who_you_are_comes_with_the_hiring_door_and_the_best_fit(site):
+    """The doors by kind of reader and by floor, the door for whoever is hiring, and who the work fits best:
+    the last two in the words of the pages they come from, so that the home page cannot drift from them."""
+    root, pages = site
+    readers = section_of(home_page(site), "industries")
+    for group in ("buyer", "floor"):
+        for page in landings(pages, group):
+            assert f'<a class="door" href="{page.slug}/">' in readers, page.slug
+    author = read(root, build.find(pages, build.AUTHOR_SLUG))
+    title, line = re.search(r'<h2 id="if-you-are-hiring">(.*?)</h2>\s*<p>(.*?)</p>', author, re.S).groups()
+    door = re.search(rf'<a class="door" href="{build.AUTHOR_SLUG}/#if-you-are-hiring">'
+                     r'<span class="door-t">(.*?)</span><span class="door-d">(.*?)</span></a>', readers)
+    assert door, "the hiring door is missing"
+    assert door.group(1) == title and door.group(2) == line.rstrip(":") + "."
+    engagements = read(root, build.find(pages, "engagements"))
+    best_fit = re.search(r"Best fit</h2>\s*<p>(.*?)</p>", engagements, re.S).group(1)
+    assert f'<p class="fit"><span class="tag">Best fit</span> {best_fit}</p>' in readers
+
+
+def test_the_claims_are_drawn_on_both_sides_of_the_delivery_day(site):
+    root, pages = site
+    proof = section_of(home_page(site), "proof")
+    late, flag, rest = (count for _, _, count in build.CLAIMS_TRIAGE)
+    rects = re.findall(r'<rect class="seg-(\w+)" x="(\d+)" y="0" width="(\d+)"', proof)
+    assert [key for key, _, _ in rects] == [key for key, _, _ in build.CLAIMS_TRIAGE]
+    assert [int(width) for _, _, width in rects] == [late, flag, rest]     # one unit of width for each claim
+    assert [int(x) for _, x, _ in rects] == [0, late, late + flag]
+    words = words_of(proof)
+    assert f"{late:,} written on or before the delivery day" in words
+    assert f"{flag + rest:,} written after it" in words
+    assert "Lengths to scale." in words
+    base = AUDIT_BASE.search(main_text(read(root, build.find(pages, "not-received-but-delivered"))))
+    assert base and base.group(0) in words   # the base of the 57%, in the audit's own sentence
+
+
+def test_the_thesis_and_the_pillars_fold_on_a_phone_and_stand_open_on_a_wide_screen(site):
+    root, _ = site
+    text = home_page(site)
+    assert text.count('<details class="fold home-thesis">') == 1
+    assert text.count('<details class="fold pillar">') == 4
+    css = style_sheets(root)["home.css"]
+    forced = css.index(".fold::details-content { content-visibility: visible; }")
+    assert css[:forced].rsplit("@media", 1)[1].split("{", 1)[0].strip() == "(min-width: 48rem)"
+    assert "@supports selector(::details-content)" in css[:forced]
+    visible = main_text(text)
+    for phrase in ("The record was already wrong.", "Nobody owns it after go-live.", "How I work", "Working terms"):
+        assert phrase in visible, phrase
+
+
+def test_the_field_notes_are_an_index_that_names_the_reader(site):
+    root, pages = site
+    library = library_of(home_page(site))
+    rows = re.findall(r"<tr>(.*?)</tr>", library.split("<tbody>", 1)[1].split("</tbody>", 1)[0], re.S)
+    notes = build.notes_of(pages)
+    assert len(rows) == len(notes)
+    for row, note in zip(rows, notes):
+        assert f'<a href="{note.slug}/">{build.esc(note.title)}</a>' in row, note.slug
+        assert build.esc(note.description) in row, note.slug     # still on the page, for whoever reads the markup
+        reader = re.search(r"for the (CEO|COO|CFO)\b", note.description)
+        assert f'<td class="ix-for">{reader.group(1) if reader else ""}</td>' in row, note.slug
+        assert build.pdf_link(note) in row, note.slug
+
+
+def test_half_the_short_answers_fold_on_a_phone(site):
+    root, pages = site
+    library = library_of(home_page(site))
+    questions = build.questions_of(pages)
+    folded = library.split('<details class="fold fold-quiet">', 1)[1]
+    assert folded.count("<details>") == len(questions) // 2
+    summary = re.search(r"<summary>(.*?)</summary>", folded).group(1)
+    assert summary == f"{COUNT_WORDS[len(questions) // 2].capitalize()} more short answers"

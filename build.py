@@ -18,10 +18,10 @@ entry pages, shown as doors on the home page (three situations first, then
 three floors and two kinds of buyer); "page" the other commercial pages
 (engagements, proof, working terms).
 
-The method section of the home page shows four plates once they all exist in
-src/files/plates/ (plates.py writes them); until then it shows three drawn tools.
-The hero desk picture (desk.webp and desk-800.webp) and the yard background detail
-(yard.webp) are prepared by desk.py in src/files/desk/ and gated independently on the home page.
+The home page is laid out by home.py as a working drawing, with the line drawings of drawings.py.
+The hero desk picture (desk.webp and desk-800.webp) and the yard detail (yard.webp) are prepared by
+desk.py in src/files/desk/ and gated independently on the home page; the present design draws neither
+the yard nor the plates of plates.py, and both tools stay for when pictures return.
 """
 from __future__ import annotations
 
@@ -108,7 +108,10 @@ SERVICES_SLUG = "engagements"
 HERO_SIZES = "(min-width: 62rem) 56vw, 100vw"  # the width the picture of the desk takes beside the headline
 DETAIL_SIZES = {"yard": (800, 668)}  # detail cut of the picture used behind the How I work pillar
 DESK_DETAILS = tuple(DETAIL_SIZES)
-FONT_FILES = ("archivo-latin-variable.woff2", "jetbrains-mono-latin-variable.woff2")  # in src/files/fonts/
+# In src/files/fonts/: the sans, a variable file, and the mono. The folder also keeps the two files of the
+# earlier design, which the radar page (atlas/) still loads by itself; no style sheet of the site names them.
+FONT_FILES = ("ibm-plex-sans-latin-variable.woff2", "ibm-plex-mono-latin-400.woff2")
+GROUND = "#0a1626"  # --ground in src/style.css: the browser bar and the 404 page take the page colour
 NEXT_LINKS = (("Engagements and fees", SERVICES_SLUG), ("Proof", "proof"), ("Working terms", "working-terms"))
 # The button asks for what the reader sees. Naming what is broken is my work, not theirs.
 DEFAULT_CTA = "Tell me what you’re seeing"  # a typographic apostrophe: the closing call sets these words very large
@@ -561,7 +564,7 @@ def head(page: Page, pages: list[Page], depth: int) -> str:
 <meta name="author" content="{AUTHOR}">
 <link rel="canonical" href="{page.url}">
 <meta name="color-scheme" content="dark">
-<meta name="theme-color" content="#101217">
+<meta name="theme-color" content="{GROUND}">
 <meta property="og:type" content="{og_type}">
 <meta property="og:title" content="{esc(page.title)}">
 <meta property="og:description" content="{esc(page.description)}">
@@ -880,10 +883,10 @@ def not_found_html() -> str:
 <meta name="robots" content="noindex">
 <meta name="color-scheme" content="dark">
 <style>
-body{margin:0;background:#101217;color:#e6e8ec;font:16px/1.6 system-ui,-apple-system,sans-serif}
+body{margin:0;background:GROUND;color:#e8eef8;font:16px/1.6 system-ui,-apple-system,sans-serif}
 main{max-width:34rem;margin:18vh auto 0;padding:0 1.25rem}
 h1{font-size:1.25rem;font-weight:600;margin:0 0 .5rem}
-p{color:#9ca3af;margin:0}
+p{color:#aebdd2;margin:0}
 </style>
 </head>
 <body>
@@ -893,7 +896,7 @@ p{color:#9ca3af;margin:0}
 </main>
 </body>
 </html>
-"""
+""".replace("GROUND", GROUND)
 
 
 # ---------------------------------------------------------------- site files

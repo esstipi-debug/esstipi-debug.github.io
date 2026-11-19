@@ -1,219 +1,274 @@
-/* Hallmark · checked: 2026-11-14 · the stamp, with what was set aside and why, opens style.css · redesign: polish */
+/* Hallmark · checked: 2026-11-19 · the stamp, with what was set aside and why, opens style.css · redesign: the project's own, as a working drawing */
 
-/* The home page only, on top of style.css: the hero (with an optional desk figure), the symptoms and the three
-   situations, the four figures in a chain, the method as three stacked panels, the argument, the
-   pillars, the doors, the library and the closing call. Sections run the full width; .wrap or a
-   padded edge keeps their content on the page's column. No script. */
+/* The home page only, on top of style.css, laid out as a working drawing: the headline beside the sheet
+   where a situation is picked; who the reader is; the four figures, the third with its drawing; the method
+   as one line in three states; the argument and the pillars, which fold on a phone; the field notes as an
+   index, the short answers and the closing call. Sections run the full width; .wrap or a padded edge keeps
+   their content on the page's column. No script: radio buttons, <details> and the selectors below. */
 
-:where(.kind-home) { --band: clamp(4rem, 8vw, 7rem); --edge: max(1.25rem, calc((100% - 84rem) / 2)); }
-:where(.kind-home) h2 { font-stretch: 76%; font-size: clamp(1.75rem, 2.9vw, 2.75rem); line-height: 1.06; letter-spacing: -.012em; }
-.text-link, .thesis-body a, .pillar a, .short a, .method-more a, .note-item .meta a, #library .next a { color: var(--ink); box-shadow: inset 0 -1px 0 var(--accent); transition: color .2s; }
-.text-link:hover, .thesis-body a:hover, .pillar a:hover, .short a:hover, .method-more a:hover, .note-item .meta a:hover, #library .next a:hover { color: var(--accent); }
+:where(.kind-home) { --band: clamp(2.75rem, 1.8rem + 4.4vw, 5.5rem); --edge: max(1.25rem, calc((100% - 84rem) / 2)); }
+:where(.kind-home) h2 { font-size: clamp(1.55rem, 1.15rem + 1.6vw, 2.25rem); line-height: 1.14; }
+.kind-home details { margin: 0; padding-block: 0; border-block: 0; }
+.kind-home summary { font-weight: inherit; list-style: none; }
+.kind-home summary::-webkit-details-marker { display: none; }
+.kind-home details[open] summary { margin-bottom: 0; }
+.state-fig a, .thesis-body a, .pillar a, .short a, .method-more a, #library .next a {
+  padding-block: .6rem; color: var(--ink); text-decoration: underline; text-decoration-color: var(--accent); text-decoration-thickness: 1.5px; text-underline-offset: .22em; transition: color .2s;
+}
+.state-fig a:hover, .thesis-body a:hover, .pillar a:hover, .short a:hover, .method-more a:hover, #library .next a:hover { color: var(--accent-up); }
+.tag { display: inline-block; padding: .16rem .45rem .2rem; border: 1px solid var(--rule-strong); font-size: .8125rem; line-height: 1.3; color: var(--ink-2); white-space: nowrap; }
+.note { font-size: .8125rem; line-height: 1.4; color: var(--muted); }
 
-/* ---------------------------------------------------------------- hero */
-.hero { padding-block: clamp(1.75rem, 3.2vw, 3rem) clamp(2.5rem, 5vw, 4.5rem); }
-.hero-in { container-type: inline-size; }
-.hero h1 { font-stretch: 68%; font-size: clamp(2.05rem, 4.7cqi, 4.6rem); line-height: 1.03; text-wrap: wrap; }
-.h1-a, .h1-b { display: block; text-wrap: balance; }
-.h1-b { color: var(--accent); }
-.hero-body { display: grid; gap: 2rem; margin-top: clamp(1.5rem, 3cqi, 2.5rem); }
-.hero .lede { max-width: 44ch; margin: 0; font-size: clamp(1.125rem, 1.6cqi, 1.3125rem); }
-.hero-with-figure .lede { max-width: 34ch; }
-.hero .actions { margin: 1.5rem 0 0; }
-.hero-role { margin-top: 1.25rem; font-weight: 500; font-stretch: 88%; font-size: .875rem; line-height: 1.3; color: var(--muted); }
+/* ---------------------------------------------------------------- the headline and, beside it, the sheet of situations */
+.top { display: grid; gap: clamp(2rem, 4vw, 3.5rem); align-items: start; padding-block: clamp(2rem, 1rem + 4.5vw, 4.5rem) clamp(2.5rem, 5vw, 4.5rem); }
+.hero h1 { font-size: clamp(2.3rem, 1.3rem + 3.6vw, 3.5rem); line-height: 1.07; letter-spacing: -.024em; }
+.h1-a { display: block; }
+.h1-b { display: block; margin-top: .2em; text-decoration: underline; text-decoration-color: var(--accent); text-decoration-thickness: .085em; text-underline-offset: .16em; text-decoration-skip-ink: none; }
+.hero-body { display: grid; gap: 2rem; margin-top: 1.5rem; }
+.hero-copy { min-width: 0; }
+.hero .lede { max-width: 31rem; margin: 0; font-size: clamp(1.0625rem, 1rem + .4vw, 1.25rem); }
+.hero .actions { margin: 1.9rem 0 0; align-items: center; gap: .6rem 1.25rem; }
+.hero-role { margin-top: 1.5rem; font-size: .875rem; line-height: 1.5; color: var(--muted); }
+/* The picture of the desk, for when it returns: under the copy, fading into the sheet on every side. */
 .hero-figure img {
   width: 100%;
   aspect-ratio: 16 / 9;
-  min-height: 13rem;
   object-fit: cover;
-  object-position: 50% 60%;
-  -webkit-mask-image: linear-gradient(90deg, transparent, var(--mask) 12%, var(--mask) 90%, transparent), linear-gradient(180deg, transparent, var(--mask) 12%, var(--mask) 78%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, var(--mask) 12%, var(--mask) 88%, transparent), linear-gradient(180deg, transparent, var(--mask) 12%, var(--mask) 80%, transparent);
   -webkit-mask-composite: source-in;
-  mask-image: linear-gradient(90deg, transparent, var(--mask) 12%, var(--mask) 90%, transparent), linear-gradient(180deg, transparent, var(--mask) 12%, var(--mask) 78%, transparent);
+  mask-image: linear-gradient(90deg, transparent, var(--mask) 12%, var(--mask) 88%, transparent), linear-gradient(180deg, transparent, var(--mask) 12%, var(--mask) 80%, transparent);
   mask-composite: intersect;
 }
-.hero-figure figcaption { margin-top: .25rem; padding-right: 10%; font-size: .75rem; line-height: 1.3; color: var(--muted); text-align: right; }
+.hero-with-figure .hero-figure figcaption { margin-top: .25rem; font-size: .75rem; line-height: 1.3; color: var(--muted); text-align: right; }
+.has-yard { --yard: none; } /* the yard at night is not drawn in this design; the class stays for when pictures return */
 @media (min-width: 62rem) {
-  .hero-with-figure { grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); align-items: end; gap: 2.5rem; }
-  .hero-with-figure .hero-copy { padding-bottom: 2.25rem; }
-  .hero-figure img { max-height: calc(100dvh - 19.5rem); }
-}
-/* Short laptop screens: the whole hero, picture included, stays in the first screen. */
-@media (min-width: 62rem) and (max-height: 51rem) {
-  .hero { padding-block: 1.25rem 1.5rem; }
-  .hero-body { margin-top: 1.5rem; }
-  .hero-with-figure .hero-copy { padding-bottom: 1.25rem; }
-  .hero-figure img { max-height: calc(100dvh - 20rem); }
+  .top { grid-template-columns: minmax(0, 5.5fr) minmax(0, 6fr); }
+  .hero { padding-top: .5rem; }
 }
 
-/* ---------------------------------------------------------------- the symptoms and the three situations */
-.situations { padding-block: var(--band) clamp(3.5rem, 7vw, 6rem); border-top: 1px solid var(--rule); }
-.statement { max-width: 22em; font-weight: 300; font-stretch: 80%; font-size: clamp(1.7rem, 3.6vw, 3.25rem); line-height: 1.12; letter-spacing: -.012em; }
-.statement span { display: block; text-wrap: balance; }
-.statement span + span { margin-top: .35em; }
-.situations .doors-q { margin-top: clamp(3rem, 6vw, 5rem); }
-.situations .doors { margin-top: 1.5rem; border-top: 1px solid var(--rule-strong); }
-.situations .door { display: grid; grid-template-columns: minmax(0, 1fr) 2rem; gap: .35rem 1.5rem; align-items: baseline; padding-block: 1.35rem; border-bottom: 1px solid var(--rule); }
-.situations .door::after { content: "\2192"; grid-row: 1; grid-column: 2; justify-self: end; font-size: 1.4rem; line-height: 1; color: var(--accent); transition: transform .35s var(--ease); }
-.situations .door-t { font-weight: 620; font-stretch: 80%; font-size: clamp(1.35rem, 2.1vw, 1.9rem); line-height: 1.15; transition: color .2s, transform .35s var(--ease); }
-.situations .door-d { grid-column: 1 / -1; color: var(--ink-2); }
-.situations .door:hover .door-t { color: var(--accent); transform: translateX(.4rem); }
-.situations .door:hover::after { transform: translateX(.4rem); }
-@media (min-width: 52rem) {
-  .situations .door { grid-template-columns: minmax(0, 5fr) minmax(0, 6fr) 2rem; }
-  .situations .door-d { grid-column: 2; grid-row: 1; }
-  .situations .door::after { grid-column: 3; }
+.situations { position: relative; padding: clamp(1rem, .6rem + 1.6vw, 1.6rem); border: 1px solid var(--rule-strong); }
+.statement { font-size: clamp(1.125rem, 1.02rem + .5vw, 1.3125rem); font-weight: 500; line-height: 1.35; }
+.statement span { display: block; }
+.pick { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+.picks { display: grid; gap: .5rem; margin-top: 1.25rem; }
+.kind-home .doors-q { font-size: 1rem; font-weight: 500; line-height: 1.3; letter-spacing: 0; color: var(--ink-2); }
+.picks label { position: relative; display: flex; align-items: center; min-height: 2.9rem; padding: .5rem .8rem .5rem 2.5rem; border: 1px solid var(--rule-strong); font-weight: 500; line-height: 1.25; cursor: pointer; transition: border-color .2s, background-color .2s; }
+.picks label::before, .picks label::after { content: ""; position: absolute; top: 50%; border-radius: 50%; }
+.picks label::before { left: .8rem; width: 1rem; height: 1rem; margin-top: -.5rem; border: 1.5px solid var(--ink-2); }
+.picks label::after { left: 1.05rem; width: .5rem; height: .5rem; margin-top: -.25rem; background: var(--accent); transform: scale(0); transition: transform .2s var(--ease); }
+.picks label:hover { border-color: var(--ink-2); }
+#pick-1:checked ~ .picks label[for="pick-1"], #pick-2:checked ~ .picks label[for="pick-2"], #pick-3:checked ~ .picks label[for="pick-3"] { border-color: var(--accent); background: var(--panel); }
+#pick-1:checked ~ .picks label[for="pick-1"]::after, #pick-2:checked ~ .picks label[for="pick-2"]::after, #pick-3:checked ~ .picks label[for="pick-3"]::after { transform: scale(1); }
+#pick-1:focus-visible ~ .picks label[for="pick-1"], #pick-2:focus-visible ~ .picks label[for="pick-2"], #pick-3:focus-visible ~ .picks label[for="pick-3"] { outline: 2px solid var(--accent); outline-offset: 2px; }
+@media (min-width: 44rem) { .picks { grid-template-columns: repeat(3, minmax(0, 1fr)); } .picks .doors-q { grid-column: 1 / -1; } }
+
+/* A panel shows only when its situation is picked; until then the sheet shows the drawing of the gap. */
+.states { margin-top: .9rem; }
+.state { display: none; }
+.state-0 { display: block; }
+.pick:checked ~ .states .state-0 { display: none; }
+#pick-1:checked ~ .states .state-1, #pick-2:checked ~ .states .state-2, #pick-3:checked ~ .states .state-3 { display: block; }
+.dwg-box, .dwg-step { border: 1px solid var(--rule-strong); background:
+  linear-gradient(var(--grid) 1px, transparent 1px) 0 0 / 100% 1.25rem,
+  linear-gradient(90deg, var(--grid) 1px, transparent 1px) 0 0 / 1.25rem 100%,
+  var(--panel); }
+.dwg-box { padding: .4rem; }
+.state-fig { margin-top: 1rem; max-width: 40rem; color: var(--ink-2); }
+.state-fig .tag { margin-right: .35rem; vertical-align: .12em; }
+.state-n { margin-right: .15em; font-size: 1.9em; font-weight: 600; line-height: 1.15; letter-spacing: -.02em; color: var(--ink); white-space: nowrap; }
+.state-fig a { font-weight: 500; white-space: nowrap; }
+.door { display: block; }
+.door-t, .door-d { display: block; }
+.state .doors { margin-top: .9rem; }
+.state .door { position: relative; padding: .85rem 3rem .9rem 1rem; border: 1px solid var(--accent); transition: background-color .2s, color .2s; }
+.state .door::after { content: ""; position: absolute; right: 1.2rem; top: 50%; width: .65rem; height: .65rem; border-top: 2px solid currentColor; border-right: 2px solid currentColor; transform: translateY(-50%) rotate(45deg); }
+.state .door-t { font-size: 1.1875rem; font-weight: 600; line-height: 1.2; }
+.state .door-d { margin-top: .15rem; font-size: .9375rem; color: var(--ink-2); transition: color .2s; }
+.state .door:hover, .state .door:focus-visible { background: var(--accent); color: var(--accent-ink); }
+.state .door:hover .door-d, .state .door:focus-visible .door-d { color: var(--accent-ink); }
+
+/* ---------------------------------------------------------------- drawings: the record is the plan line, the floor the red one */
+.dwg { display: block; width: 100%; height: auto; overflow: visible; }
+.dwg path, .dwg rect { fill: none; }
+.d-plan { stroke: var(--line); stroke-width: 2.6; }
+.d-floor { stroke: var(--accent); stroke-width: 4.4; stroke-linejoin: round; stroke-linecap: round; }
+.d-dim { stroke: var(--muted); stroke-width: 1.8; }
+.dwg .d-box { fill: var(--panel); stroke: var(--line); stroke-width: 2.6; }
+.dwg text { font: 400 20px var(--sans); fill: var(--ink-2); }
+.dwg .d-big { font-size: 23px; font-weight: 600; fill: var(--ink); }
+.dwg .note { font-size: 17px; fill: var(--muted); }
+@media (min-width: 36rem) {
+  .d-plan, .dwg .d-box { stroke-width: 1.5; }
+  .d-floor { stroke-width: 2.6; }
+  .d-dim { stroke-width: 1; }
+  .dwg text { font-size: 12.5px; }
+  .dwg .d-big { font-size: 16px; }
+  .dwg .note { font-size: 10.5px; }
 }
 
-/* ---------------------------------------------------------------- what you can check */
-.figures { padding-block: var(--band); background: var(--ground-deep); }
-.fig-grid { display: grid; margin-top: 2rem; border-top: 1px solid var(--rule-strong); }
-.fig { position: relative; isolation: isolate; display: flex; flex-direction: column; gap: .6rem; padding-block: clamp(1.5rem, 3vw, 2.5rem); border-bottom: 1px solid var(--rule); overflow: hidden; }
-.fig-n { font-weight: 660; font-stretch: 66%; font-size: clamp(3.25rem, 6.6vw, 5.75rem); line-height: .9; letter-spacing: -.02em; font-variant-numeric: lining-nums tabular-nums; }
-.fig-lead .fig-n { font-size: clamp(4rem, 9vw, 7.5rem); color: var(--accent); }
-.fig-note { max-width: 52ch; margin-top: .75rem; font-size: .9375rem; color: var(--muted); }
-.fig-g { font-weight: 500; font-stretch: 88%; font-size: .8125rem; line-height: 1.3; color: var(--muted); }
-.fig-chart { display: block; max-width: 26rem; margin-top: .35rem; }
-.fig-chart svg { display: block; width: 100%; height: .875rem; }
-.fig-chart rect { stroke: var(--ground-deep); stroke-width: 2; vector-effect: non-scaling-stroke; }
-.seg-late, .leg-late::before { fill: var(--accent); background: var(--accent); }
-.seg-flag, .leg-flag::before { fill: var(--ink); background: var(--ink); }
-.seg-open, .leg-open::before { fill: var(--bar-rest); background: var(--bar-rest); }
-.fig-legend { display: grid; gap: .2rem; margin-top: .6rem; font-weight: 500; font-size: .8125rem; line-height: 1.4; font-variant-numeric: lining-nums tabular-nums; color: var(--ink-2); }
-.leg::before { content: ""; display: inline-block; width: .6rem; height: .6rem; margin-right: .45rem; vertical-align: -.03rem; }
-.fig-t { max-width: 34ch; color: var(--ink-2); text-wrap: pretty; }
-.fig-go { align-self: flex-start; margin-top: auto; padding-top: 1rem; font-weight: 620; font-stretch: 88%; box-shadow: inset 0 -1px 0 var(--accent); transition: color .2s; }
-.fig:hover .fig-go { color: var(--accent); }
-@media (min-width: 56rem) {
-  .fig-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .fig:nth-child(odd) { padding-right: 2.5rem; border-right: 1px solid var(--rule); }
-  .fig:nth-child(even) { padding-left: 2.5rem; }
+/* ---------------------------------------------------------------- who the reader is, and where the work is */
+.readers, .figures, .method, #library, .close { padding-block: var(--band); border-top: 1px solid var(--rule); }
+.readers-in { display: grid; gap: 2rem 3.5rem; }
+.readers-buyer, .readers-floor { min-width: 0; }
+.readers .doors { margin-top: .5rem; border-bottom: 1px solid var(--rule); }
+.readers .door { padding: .7rem 0 .75rem; border-top: 1px solid var(--rule); }
+.readers .door-t { font-weight: 600; line-height: 1.3; }
+.readers .door-d { margin-top: .12rem; font-size: .9375rem; line-height: 1.4; color: var(--muted); }
+.readers .door:hover .door-t { text-decoration: underline; text-decoration-color: var(--accent); text-decoration-thickness: 1.5px; text-underline-offset: .2em; }
+.fit { align-self: start; font-size: 1rem; color: var(--ink-2); }
+.fit .tag { margin: 0 .5rem .5rem 0; }
+@media (min-width: 48rem) { .readers-in { grid-template-columns: repeat(2, minmax(0, 1fr)); } .fit { grid-column: 1 / -1; } }
+@media (min-width: 75rem) { .readers-in { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.05fr); } .fit { grid-column: auto; } }
+@media (max-width: 39.99rem) {
+  .readers-floor .door-d { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  .readers-floor .door { display: flex; align-items: center; min-height: 2.75rem; }
 }
 
-/* ---------------------------------------------------------------- how the work goes: three panels that stack */
-.method { padding-top: var(--band); }
-.method h2 { margin-bottom: 2rem; }
-.method-more { max-width: 60ch; margin-top: 2.5rem; color: var(--ink-2); }
-.stack li { position: sticky; top: calc(var(--nav) + 8px); z-index: 1; background: var(--ground); }
-.stack li:nth-child(1) { --to: 33.4%; }
-.stack li:nth-child(2) { --to: 66.7%; background: var(--panel); }
-.stack li:nth-child(3) { --to: 100%; background: var(--ground-deep); }
-.step { display: grid; align-content: space-between; gap: 2rem; min-height: min(44vh, 25rem); padding-bottom: clamp(1.5rem, 3vw, 2.5rem); }
-/* The rule on top of each panel is the tape again: it has run a third, two thirds, all the way. */
-.step-rule {
-  height: 10px;
-  background:
-    linear-gradient(90deg, var(--accent), var(--accent)) 0 0 / var(--to) 2px no-repeat,
-    linear-gradient(90deg, var(--rule-strong) 1px, transparent 1px) 0 0 / 60px 10px repeat-x,
-    linear-gradient(90deg, var(--rule) 1px, transparent 1px) 0 0 / 12px 5px repeat-x;
+/* ---------------------------------------------------------------- what you can check: four figures, the third with its drawing */
+.fig-note { margin-top: .8rem; max-width: 36rem; color: var(--ink-2); }
+.fig-list { margin-top: clamp(1.5rem, 3vw, 2.25rem); border-bottom: 1px solid var(--rule); }
+.fig { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: .4rem 1rem; align-items: center; padding-block: 1rem; border-top: 1px solid var(--rule); transition: background-color .2s; }
+.fig-g { justify-self: start; padding: .16rem .45rem .2rem; border: 1px solid var(--rule-strong); font-size: .8125rem; line-height: 1.3; color: var(--ink-2); white-space: nowrap; }
+.fig-n { justify-self: end; font-size: 1.5rem; font-weight: 600; line-height: 1.1; letter-spacing: -.02em; white-space: nowrap; }
+.fig-t, .fig-go, .claims, .claims-base { grid-column: 1 / -1; }
+.fig-t { color: var(--ink-2); }
+.fig-go { justify-self: start; display: inline-flex; align-items: center; min-height: 2.75rem; font-weight: 500; text-decoration: underline; text-decoration-color: var(--accent); text-decoration-thickness: 1.5px; text-underline-offset: .22em; transition: color .2s; }
+.fig:hover .fig-go { color: var(--accent-up); }
+@media (min-width: 54rem) {
+  .fig { grid-template-columns: 9.5rem 9rem minmax(0, 1fr) 11rem; gap: .9rem 1.5rem; padding-block: .6rem; }
+  .fig-g { grid-column: 1; grid-row: 1; }
+  .fig-n { grid-column: 2; grid-row: 1; justify-self: start; }
+  .fig-t { grid-column: 3; grid-row: 1; }
+  .fig-go { grid-column: 4; grid-row: 1; justify-self: end; }
+  .claims { grid-row: 2; }
+  .claims-base { grid-row: 3; }
+  .fig-drawn { padding-bottom: 1.25rem; }
 }
-.step-body { display: grid; gap: 1rem; align-items: end; }
-.step h3 { font-weight: 700; font-stretch: 62%; font-size: clamp(4.5rem, 15vw, 13rem); line-height: .86; letter-spacing: -.02em; }
-.step p { max-width: 32ch; font-size: clamp(1.125rem, 1.7vw, 1.5rem); line-height: 1.35; color: var(--ink-2); text-wrap: balance; }
-@media (max-width: 51.99rem) { .step { min-height: min(38vh, 19rem); } }
-@media (min-width: 52rem) {
-  .step-body { grid-template-columns: minmax(0, 8fr) minmax(0, 4fr); }
-  .step p { padding-bottom: .9rem; }
+/* The claims on both sides of the delivery day. The bar is one drawing a claim wide per unit; the marks over
+   and under it take the same shares, so every dimension line stands over its own stretch of the bar. */
+.claims { position: relative; display: grid; align-items: end; padding-top: 1.7rem; }
+.cota, .sub { display: block; font: 400 .8125rem/1.3 var(--mono); color: var(--ink-2); }
+.cota b, .sub b { font-weight: 400; color: var(--ink); }
+.cota > span { display: block; padding: 0 .35rem .3rem; }
+.cota::after, .cota-rest::before { content: ""; display: block; height: 11px; border: solid var(--muted); border-width: 0 1px; background: linear-gradient(var(--muted), var(--muted)) 0 50% / 100% 1px no-repeat; }
+.cota-late { grid-column: 1; grid-row: 1; margin-bottom: .4rem; }
+.cota-after { grid-column: 2 / 4; grid-row: 1; margin-bottom: .4rem; }
+.claims-bar { grid-column: 1 / -1; grid-row: 2; display: block; width: 100%; height: 1.25rem; }
+.claims-bar rect { stroke: var(--ground); stroke-width: 2; vector-effect: non-scaling-stroke; }
+.cota-rest { grid-column: 3; grid-row: 3; align-self: start; margin-top: .4rem; }
+.cota-rest::after { content: none; }
+.cota-rest > span { padding: .3rem .35rem 0; }
+.sub-flag { grid-column: 1 / 3; grid-row: 3; justify-self: end; align-self: start; margin-right: var(--half, 0%); padding: 1.1rem .6rem 0 0; border-right: 1px solid var(--muted); text-align: right; }
+.datum { grid-column: 2; grid-row: 1 / 4; position: absolute; top: -1.7rem; bottom: 0; left: 0; width: 0; border-left: 1px solid var(--line); }
+.datum > span { position: absolute; top: 0; left: .4rem; font-size: .8125rem; line-height: 1.3; color: var(--ink); white-space: nowrap; }
+.claims-base { display: block; max-width: 46rem; font-size: .9375rem; color: var(--muted); }
+
+/* ---------------------------------------------------------------- how the work goes: the same line in three states */
+.stages { display: grid; max-width: 56rem; margin-top: clamp(1.5rem, 3vw, 2.5rem); }
+.stages li { display: grid; grid-template-columns: minmax(0, 7.75rem) minmax(0, 1fr); column-gap: 1rem; align-items: center; }
+.stages li + li .dwg-step { border-top: 0; }
+.dwg-step { grid-row: 1 / 3; }
+.stages h3 { align-self: end; }
+.stages p { align-self: start; }
+.dwg-step .d-plan { stroke-width: 2.2; }
+.dwg-step .d-floor { stroke-width: 3.6; }
+.dwg-step .d-dim, .d-cut, .d-stitch, .d-ghost { stroke-width: 2; }
+.d-cut { stroke: var(--line); }
+.d-stitch { stroke: var(--accent); }
+.d-ghost { stroke: var(--accent); stroke-dasharray: 5 5; opacity: .6; }
+.stages h3 { font-size: 1.5rem; line-height: 1.15; letter-spacing: -.015em; }
+.stages p { margin-top: .2rem; padding-bottom: .4rem; font-size: 1rem; color: var(--ink-2); }
+.method-more { margin-top: clamp(1.5rem, 3vw, 2.5rem); max-width: 44rem; color: var(--ink-2); }
+@media (min-width: 48rem) {
+  .stages li { grid-template-columns: minmax(0, 21rem) minmax(0, 1fr); column-gap: 2.5rem; }
+  .dwg-step .d-plan { stroke-width: 1.2; }
+  .dwg-step .d-floor { stroke-width: 2; }
+  .dwg-step .d-dim, .d-cut, .d-stitch, .d-ghost { stroke-width: 1.1; }
+  .stages h3 { font-size: 1.75rem; }
+}
+
+/* ---------------------------------------------------------------- what folds: shut on a phone, open from 48rem up */
+.fold > summary { position: relative; display: block; padding-right: 2.5rem; cursor: pointer; }
+.fold > summary::before, .fold > summary::after, .qa summary::before, .qa summary::after { content: ""; position: absolute; right: .3rem; top: 1.05rem; width: .9rem; height: 1.5px; background: var(--accent); transition: transform .25s var(--ease); }
+.fold > summary::after, .qa summary::after { transform: rotate(90deg); }
+.fold[open] > summary::after, .qa details[open] > summary::after { transform: rotate(0); }
+@media (min-width: 48rem) {
+  @supports selector(::details-content) {
+    .fold::details-content { content-visibility: visible; }
+    .fold > summary { padding-right: 0; cursor: auto; pointer-events: none; }
+    .fold > summary::before, .fold > summary::after { content: none; }
+    .qa > .fold-quiet > summary { display: none; }
+  }
 }
 
 /* ---------------------------------------------------------------- the argument */
-.home-thesis { display: grid; gap: 2.5rem; padding: var(--band) var(--edge); background: var(--panel); }
-.thesis-head p { max-width: 30ch; margin-top: 1rem; font-size: 1.1875rem; line-height: 1.45; color: var(--ink-2); }
-.thesis-body li { max-width: 60ch; padding-block: 1.6rem; color: var(--ink-2); }
-.thesis-body li:first-child { padding-top: 0; }
-.thesis-body li + li { border-top: 1px solid var(--rule); }
-.thesis-body li strong { display: block; margin-bottom: .6rem; font-weight: 640; font-stretch: 82%; font-size: clamp(1.35rem, 2vw, 1.75rem); line-height: 1.15; color: var(--ink); }
-.note { max-width: 62ch; margin-top: 2rem; font-size: .9063rem; line-height: 1.55; color: var(--muted); }
-@media (min-width: 60rem) {
-  .home-thesis { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 4rem; }
-  .thesis-head { position: sticky; top: 6.5rem; align-self: start; }
+.home-thesis { display: grid; gap: 1.25rem 4rem; }
+.kind-home .home-thesis { padding: var(--band) var(--edge); border-top: 1px solid var(--rule); }
+.thesis-intro { display: block; margin-top: .9rem; max-width: 30rem; font-size: 1.125rem; font-weight: 400; line-height: 1.5; color: var(--ink-2); }
+.thesis-body ol { counter-reset: cause; }
+.thesis-body li { position: relative; padding: .95rem 0 1rem 2.75rem; border-top: 1px solid var(--rule); counter-increment: cause; color: var(--ink-2); }
+.thesis-body li::before { content: counter(cause); position: absolute; left: 0; top: .95rem; display: grid; place-items: center; width: 1.7rem; height: 1.7rem; border: 1.5px solid var(--accent); font: 400 .875rem/1 var(--mono); font-variant-numeric: tabular-nums; color: var(--ink); }
+.thesis-body strong { color: var(--ink); }
+.thesis-body .note { margin-top: .25rem; padding-top: 1rem; border-top: 1px solid var(--rule); font: 400 .9375rem/1.5 var(--sans); color: var(--muted); }
+@media (min-width: 62rem) {
+  .home-thesis { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); }
+  .home-thesis > summary { position: sticky; top: 6rem; align-self: start; }
 }
 
-/* ---------------------------------------------------------------- how I work, engagements, proof, terms */
-.home-pillars { display: grid; gap: 1px; width: min(100% - 2.5rem, 84rem); margin: var(--band) auto; border: 1px solid var(--rule); background: var(--rule); }
-.pillar { display: flex; flex-direction: column; gap: .8rem; padding: clamp(1.5rem, 3vw, 2.5rem); background: var(--ground); }
-.pillar h2 { font-size: clamp(1.5rem, 2.3vw, 2.1rem); }
-.pillar p { max-width: 54ch; color: var(--ink-2); }
-.pillar:first-child { justify-content: flex-end; min-height: 20rem; }
-.pillar:nth-child(2) { background: var(--tint); }
-/* The yard at night stands behind the first pillar once yard.webp exists. */
-.has-yard .pillar:first-child {
-  background:
-    linear-gradient(180deg, var(--veil-1) 0%, var(--veil-3) 46%, var(--ground) 88%),
-    url("files/desk/yard.webp") center / cover no-repeat var(--ground);
+/* ---------------------------------------------------------------- how I work, engagements, proof, terms: the title block of the sheet */
+.home-pillars { display: grid; gap: 1px; margin: 0 var(--edge) var(--band); border: 1px solid var(--rule); background: var(--rule); }
+.home-pillars .pillar { padding: 0 1.1rem; background: var(--ground); }
+.pillar > summary { display: flex; align-items: center; min-height: 3.25rem; }
+.pillar h2 { font-size: 1.0625rem; font-weight: 600; line-height: 1.3; letter-spacing: 0; color: var(--ink); }
+.pillar p { margin-bottom: 1rem; font-size: 1rem; color: var(--ink-2); }
+@media (min-width: 48rem) {
+  .home-pillars { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .home-pillars .pillar { padding: 1.1rem 1.25rem .6rem; }
+  .pillar > summary { min-height: 0; margin-bottom: .6rem; }
+  .pillar h2 { color: var(--muted); }
 }
-@media (min-width: 58rem) {
-  .home-pillars { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); }
-  .pillar:first-child { grid-row: 1 / span 3; min-height: 32rem; }
-}
+@media (min-width: 75rem) { .home-pillars { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
 
-/* ---------------------------------------------------------------- where the work is */
-.index { padding-bottom: var(--band); }
-.index-grid { display: grid; gap: 3rem; }
-.index .doors-q { font-size: clamp(1.5rem, 2.2vw, 2rem); }
-.index .doors { margin-top: 1rem; }
-.index .doors li + li { border-top: 1px solid var(--rule); }
-.index .door { display: block; padding-block: 1rem; }
-.index .door-t { display: block; font-weight: 620; font-stretch: 82%; font-size: 1.25rem; line-height: 1.2; transition: color .2s; }
-.index .door-d { display: block; margin-top: .2rem; font-size: .9688rem; color: var(--ink-2); }
-.index .door:hover .door-t { color: var(--accent); }
-@media (min-width: 56rem) { .index-grid { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 4rem; } }
-
-/* ---------------------------------------------------------------- field notes and short answers */
-#library { padding-block: var(--band); background: var(--ground-deep); }
-.notes { display: grid; gap: 2.5rem; margin-top: 2rem; }
-.note-item h3 { font-weight: 300; font-stretch: 78%; font-size: clamp(1.8rem, 3.2vw, 2.9rem); line-height: 1.04; letter-spacing: -.012em; }
-.note-item h3 a { transition: color .2s; }
-.note-item h3 a:hover { color: var(--accent); }
-.note-item p { max-width: 46ch; margin-top: .75rem; color: var(--ink-2); }
-.note-item .meta { margin-top: .9rem; font-weight: 500; font-stretch: 88%; font-size: .8125rem; line-height: 1.3; }
-#questions { margin-top: clamp(3rem, 6vw, 5rem); }
-.qa { display: grid; gap: 0 4rem; margin-top: 1.25rem; }
-.qa details { margin: 0; padding-block: .7rem; border: 0; }
-.qa summary { display: grid; grid-template-columns: 1.4rem minmax(0, 1fr); gap: .4rem; list-style: none; line-height: 1.35; text-wrap: pretty; transition: color .2s; }
-.qa summary::-webkit-details-marker { display: none; }
-.qa summary::before { content: "+"; font-family: var(--mono); color: var(--accent); }
-.qa details[open] summary { margin-bottom: 0; }
-.qa details[open] summary::before { content: "-"; }
-.qa summary:hover { color: var(--accent); }
-.qa .short { margin: .5rem 0 .4rem 1.8rem; font-size: .9688rem; color: var(--ink-2); }
-.qa .short a { white-space: nowrap; }
-#library .next { margin-top: 2.5rem; }
-@media (min-width: 52rem) {
-  .notes { grid-template-columns: 1fr 1fr; gap: 4rem; }
-  .qa { grid-template-columns: 1fr 1fr; }
+/* ---------------------------------------------------------------- the field notes as an index, and the short answers */
+.index { width: 100%; max-width: 46rem; margin-top: 1.4rem; border-collapse: collapse; border-bottom: 1px solid var(--rule); }
+.index thead, .ix-what { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+.index tbody { display: block; }
+.index tr { display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: 1rem; align-items: center; border-top: 1px solid var(--rule); }
+.index th, .index td { padding: 0; font-weight: 400; text-align: left; }
+.index th a { display: inline-flex; align-items: center; min-height: 2.75rem; padding-block: .3rem; font-weight: 600; line-height: 1.25; }
+.index th a:hover { text-decoration: underline; text-decoration-color: var(--accent); text-decoration-thickness: 1.5px; text-underline-offset: .2em; }
+.ix-for { display: none; font-size: .875rem; line-height: 1.3; color: var(--ink-2); }
+.ix-file a { display: inline-flex; align-items: center; min-width: 2.75rem; min-height: 2.75rem; font-size: .875rem; color: var(--ink-2); white-space: nowrap; text-decoration: underline; text-decoration-color: var(--accent); text-underline-offset: .22em; }
+.ix-file a:hover { color: var(--ink); }
+@media (min-width: 40rem) {
+  .index thead { position: static; display: block; width: auto; height: auto; overflow: visible; clip-path: none; }
+  .index thead tr { border-top: 0; padding-bottom: .5rem; }
+  .index thead th { font-size: .8125rem; line-height: 1.3; color: var(--muted); }
+  .index thead th:nth-child(3) { display: none; }
+  .index tr { grid-template-columns: minmax(0, 1fr) 4rem 7.5rem; column-gap: 1.5rem; }
+  .ix-for { display: block; }
+  .ix-file, .index thead th:last-child { justify-self: end; }
 }
+#questions { margin-top: clamp(2.75rem, 6vw, 4.5rem); }
+.qa { display: grid; gap: 0 3.5rem; margin-top: 1.1rem; align-items: start; }
+@media (min-width: 62rem) { .qa { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.qa details:not(.fold) { border-top: 1px solid var(--rule); }
+.qa details:not(.fold) > summary { position: relative; display: flex; align-items: center; min-height: 3.1rem; padding: .65rem 2.5rem .65rem 0; font-weight: 500; line-height: 1.35; cursor: pointer; transition: color .2s; }
+.qa details:not(.fold) > summary:hover { color: var(--accent-up); }
+.qa summary::before, .qa summary::after { top: 50%; }
+.fold-quiet > summary { display: flex; align-items: center; min-height: 3.1rem; border-top: 1px solid var(--rule); font-size: .9375rem; line-height: 1.3; color: var(--ink-2); }
+.fold-quiet > summary::before, .fold-quiet > summary::after { top: 50%; }
+.short { max-width: 42rem; padding-bottom: 1.1rem; color: var(--ink-2); }
+.short a { white-space: nowrap; }
+#library .next { margin-top: 2rem; }
 
 /* ---------------------------------------------------------------- the closing call */
-.close { padding-block: clamp(5rem, 10vw, 9rem); }
-.close-link { display: inline-block; font-weight: 660; font-stretch: 66%; font-size: clamp(2.6rem, 8.5vw, 8rem); line-height: .95; letter-spacing: -.02em; text-decoration: underline; text-decoration-color: var(--accent); text-decoration-thickness: 2px; text-underline-offset: .12em; transition: color .25s; }
-.close-link:hover { color: var(--accent); }
-.close p { max-width: 52ch; margin-top: 1.5rem; color: var(--ink-2); }
+.close-link { display: inline; font-weight: 600; font-size: clamp(2.3rem, 1.25rem + 4.6vw, 4.25rem); line-height: 1.12; letter-spacing: -.024em; text-decoration: underline; text-decoration-color: var(--accent); text-decoration-thickness: .08em; text-underline-offset: .14em; text-decoration-skip-ink: none; transition: text-decoration-thickness .2s; }
+.close-link:hover { text-decoration-thickness: .14em; }
+.close p { max-width: 36rem; margin-top: 1.6rem; color: var(--ink-2); }
 
-/* ---------------------------------------------------------------- motion */
-@keyframes rise { from { opacity: 0; transform: translateY(14px); } }
-@keyframes lamp { from { opacity: 0; transform: scale(1.025); } }
-@keyframes lit { from { opacity: .22; } to { opacity: 1; } }
-@keyframes arrive { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: none; } }
-
+/* ---------------------------------------------------------------- motion: a picked situation draws its floor line */
+@keyframes trace { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
 @media (prefers-reduced-motion: no-preference) {
-  /* On load: the headline, then the line and the buttons, while the lamp comes on. */
-  .h1-a, .h1-b, .hero .lede, .hero .actions, .hero-role { animation: rise .8s var(--ease) both; }
-  .h1-a { animation-delay: .05s; }
-  .h1-b { animation-delay: .14s; }
-  .hero .lede { animation-delay: .24s; }
-  .hero .actions { animation-delay: .32s; }
-  .hero-role { animation-delay: .4s; }
-  .hero-figure img { animation: lamp 1.4s var(--ease) .1s both; }
-
-  @supports (animation-timeline: view()) {
-    /* The three symptoms light up one after another as they are read. */
-    .statement span { animation: lit linear both; animation-timeline: view(); animation-range: entry 10% cover 42%; }
-    /* Blocks arrive as they enter the screen. */
-    .situations .doors li, .fig, .thesis-body li, .pillar, .index .doors li, .note-item {
-      animation: arrive linear both;
-      animation-timeline: view();
-      animation-range: entry 0% entry 42%;
-    }
-  }
+  .state .d-floor { stroke-dasharray: 1; animation: trace 1s var(--ease) backwards; }
 }
