@@ -24,10 +24,11 @@
   /* Series lines: the four pass the chart palette check on this panel with every pair compared
      (lightness band, chroma, colour-blind and full-vision separation, contrast). The tints share
      the accent's lightness and chroma and sit behind dark text on chips and badges; the Tailor's is the accent. */
-  --fde: #6395e4; --fde-tint: #90b4ee;
-  --market: #ac65aa; --market-tint: #d39ed1;
+  --fde: #6395e4; --fde-tint: #90b4ee; --fde-soft: rgba(99, 149, 228, .18);
+  --market: #ac65aa; --market-tint: #d39ed1; --market-soft: rgba(172, 101, 170, .18);
   --pair: #46a990;
-  --tailor: #cb8055; --tailor-soft: rgba(203, 128, 85, .1);
+  --tailor: #cb8055; --tailor-soft: rgba(203, 128, 85, .14);
+  --check-soft: rgba(238, 233, 222, .08);
   --tape: #e2b53a; --tape-dark: #0b0d11;
   --rule: rgba(238, 233, 222, .12); --rule-strong: rgba(238, 233, 222, .28);
   --mono: "JetBrains Mono", ui-monospace, monospace; color-scheme: dark;
@@ -70,7 +71,7 @@ main { margin-top: 20px; }
 .key { display: inline-flex; align-items: center; gap: 8px; }
 .sw { width: 22px; height: 0; display: inline-block; flex: none; }
 .sw-fde { border-top: 2.5px solid var(--fde); }
-.sw-market { border-top: 2.5px dashed var(--market); }
+.sw-market { border-top: 2.5px solid var(--market); }
 .sw-pair { border-top: 2.5px dashed var(--pair); }
 .sw-delivery { border-top: 2.5px dotted var(--ink-2); }
 .sw-tailor, .sw-me { border-top: 3px solid var(--tailor); }
@@ -81,10 +82,12 @@ main { margin-top: 20px; }
 .chart { width: 100%; height: auto; display: block; margin: 4px auto 0; max-width: 860px; }
 .chart text { font-family: "Archivo", sans-serif; }
 .ring { fill: none; stroke: var(--rule); stroke-width: 1; }
+.ring.inner { stroke-dasharray: 3 4; }
 .ring.outer { stroke: var(--rule-strong); }
 .spoke { stroke: var(--rule); stroke-width: 1; }
 .spoke.on { stroke: var(--ink-2); stroke-width: 1.6; }
 .ring-label { fill: var(--muted); font-size: 13px; paint-order: stroke; stroke: var(--panel); stroke-width: 4px; stroke-linejoin: round; }
+.ring-label.zero { font-size: 12px; }
 .axis-label, .axis-num { cursor: pointer; outline: none; }
 .axis-label:focus-visible, .axis-num:focus-visible { outline: 2px solid var(--accent); outline-offset: 5px; }
 .axis-label .nm { fill: var(--ink-2); font-size: 17px; font-weight: 640; }
@@ -92,12 +95,12 @@ main { margin-top: 20px; }
 .axis-label:hover .nm, .axis-num:hover, .axis-label.on .nm, .axis-num.on { fill: var(--ink); }
 .axis-label.on .nm, .axis-num.on { text-decoration: underline; text-underline-offset: 4px; }
 .axis-num { font-size: 30px; font-weight: 700; fill: var(--ink-2); }
-.p-fde { fill: none; stroke: var(--fde); stroke-width: 2; stroke-linejoin: round; }
-.p-market { fill: none; stroke: var(--market); stroke-width: 2; stroke-dasharray: 7 5; stroke-linejoin: round; }
-.p-pair { fill: none; stroke: var(--pair); stroke-width: 2.6; stroke-dasharray: 10 6; stroke-linejoin: round; }
+.p-fde { fill: var(--fde-soft); stroke: var(--fde); stroke-width: 2.5; stroke-linejoin: round; }
+.p-market { fill: var(--market-soft); stroke: var(--market); stroke-width: 2.5; stroke-linejoin: round; }
+.p-pair { fill: none; stroke: var(--pair); stroke-width: 2.4; stroke-dasharray: 8 5; stroke-linejoin: round; }
 .p-tailor, .p-me { fill: var(--tailor-soft); stroke: var(--tailor); stroke-width: 2.8; stroke-linejoin: round; }
 .p-bar { fill: none; stroke: var(--tailor); stroke-width: 2; stroke-dasharray: 7 5; stroke-linejoin: round; }
-.p-check { fill: none; stroke: var(--ink); stroke-width: 2; stroke-dasharray: 2 5; stroke-linecap: round; }
+.p-check { fill: var(--check-soft); stroke: var(--ink); stroke-width: 2; stroke-dasharray: 2 5; stroke-linecap: round; stroke-linejoin: round; }
 .v { stroke-width: 2.2; }
 .v-fde { fill: var(--fde); stroke: var(--fde); }
 .v-market { fill: var(--market); stroke: var(--market); }
@@ -315,7 +318,7 @@ footer p { margin: 0; }
     en: ["Not in the role", "Mentioned", "Tested before go-live", "Owned in the live operation"],
     es: ["Fuera del rol", "Mencionado", "Probado antes del go-live", "Responde en la operación viva"]
   };
-  const RING_SHORT = { en: ["", "Mentioned", "Tested", "Owned live"], es: ["", "Mencionado", "Probado", "Responde en vivo"] };
+  const RING_SHORT = { en: ["Not in role", "Mentioned", "Tested", "Owned live"], es: ["Fuera del rol", "Mencionado", "Probado", "Responde en vivo"] };
   const GRADE = {
     field: { en: "My field work", es: "Mi trabajo de campo" },
     private: { en: "Tested, private repository", es: "Probado, repositorio privado" },
@@ -612,37 +615,47 @@ footer p { margin: 0; }
   const CX = 470, CY = 392;
   // On a phone the chart draws at a third of its size: the axes show their number only, and the pills below name them.
   // On a wider screen every axis carries its number and its name, so the pills are not drawn.
+  // Level 0 sits on an inner baseline ring (R0) instead of collapsing to the centre point, so isolated
+  // non-zero axes in FDE and FDS remain closed filled polygons rather than zero-width spoke lines.
   const NARROW = window.matchMedia("(max-width: 560px)");
   const geometry = () => NARROW.matches
-    ? { R: 290, gap: 40, vertex: 9, compact: true }
-    : { R: 280, gap: 24, vertex: 5.5, line: 19, compact: false };
-  let R = geometry().R;
+    ? { R: 290, R0: 56, gap: 40, vertex: 9, compact: true }
+    : { R: 280, R0: 56, gap: 24, vertex: 5.5, line: 19, compact: false };
+  let R = geometry().R, R0 = geometry().R0;
+  const radius = level => R0 + (R - R0) * level / 3;
   const angle = i => (-90 + i * 360 / AXES.length) * Math.PI / 180;
-  const point = (i, level) => [CX + R * level / 3 * Math.cos(angle(i)), CY + R * level / 3 * Math.sin(angle(i))];
+  const point = (i, level) => [CX + radius(level) * Math.cos(angle(i)), CY + radius(level) * Math.sin(angle(i))];
   const points = levels => levels.map((level, i) => point(i, level).map(n => n.toFixed(1)).join(",")).join(" ");
 
   function radar(svg, { layers, title, highlight, rows }) {
     const g = geometry();
     R = g.R;
+    R0 = g.R0;
     svg.replaceChildren();
     svg.setAttribute("aria-label", title);
-    for (let k = 1; k <= 3; k++) svg.append(el("polygon", { class: "ring" + (k === 3 ? " outer" : ""), points: points(Array(AXES.length).fill(k)) }));
+    for (let k = 0; k <= 3; k++) {
+      const cls = "ring" + (k === 0 ? " inner" : k === 3 ? " outer" : "");
+      svg.append(el("polygon", { class: cls, points: points(Array(AXES.length).fill(k)) }));
+    }
     AXES.forEach((axis, i) => {
-      const [x, y] = point(i, 3);
-      svg.append(el("line", { class: "spoke" + (i === state.axis ? " on" : ""), x1: CX, y1: CY, x2: x.toFixed(1), y2: y.toFixed(1) }));
+      const [x0, y0] = point(i, 0), [x, y] = point(i, 3);
+      svg.append(el("line", { class: "spoke" + (i === state.axis ? " on" : ""), x1: x0.toFixed(1), y1: y0.toFixed(1), x2: x.toFixed(1), y2: y.toFixed(1) }));
     });
     for (const layer of layers) {
       svg.append(el("polygon", { class: layer.poly, points: points(layer.levels) }));
       if (!layer.vertex) continue;
       layer.levels.forEach((level, i) => {
         const [x, y] = point(i, level);
-        const hollow = layer.hollow && layer.hollow(i) ? " hollow" : "";
-        svg.append(el("circle", { class: `v ${layer.vertex}${hollow}`, cx: x.toFixed(1), cy: y.toFixed(1), r: (g.vertex * (layer.scale || 1)).toFixed(1) }));
+        const isHollow = Boolean(layer.hollow && layer.hollow(i));
+        const hollow = isHollow ? " hollow" : "";
+        const scale = (layer.scale || 1) * (level === 0 && !isHollow ? .62 : 1);
+        svg.append(el("circle", { class: `v ${layer.vertex}${hollow}`, cx: x.toFixed(1), cy: y.toFixed(1), r: (g.vertex * scale).toFixed(1) }));
       });
     }
     // Ring names go after the polygons, on a halo, so no line or vertex covers them.
+    svg.append(el("text", { class: "ring-label zero", x: CX, y: (CY + (g.compact ? 7 : 4)).toFixed(1), "text-anchor": "middle" }, g.compact ? "0" : RING_SHORT[state.lang][0]));
     for (let k = 1; k <= 3; k++) {
-      svg.append(el("text", { class: "ring-label", x: CX + 10, y: (CY - R * k / 3 + (g.compact ? 26 : 17)).toFixed(1) }, RING_SHORT[state.lang][k]));
+      svg.append(el("text", { class: "ring-label", x: CX + 10, y: (CY - radius(k) + (g.compact ? 24 : 16)).toFixed(1) }, RING_SHORT[state.lang][k]));
     }
     AXES.forEach((axis, i) => {
       const a = angle(i), cos = Math.cos(a), sin = Math.sin(a);
@@ -758,9 +771,9 @@ footer p { margin: 0; }
   function drawBar() {
     const t = UI[state.lang];
     const layers = [];
-    if (state.show.fde) layers.push({ poly: "p-fde", vertex: "v-fde", levels: AXES.map(fdeLevel) });
-    if (state.show.market) layers.push({ poly: "p-market", vertex: "v-market", levels: AXES.map(marketLevel) });
     if (state.show.tailor) layers.push({ poly: "p-tailor", vertex: "v-tailor", levels: AXES.map(a => a.tailor) });
+    if (state.show.fde) layers.push({ poly: "p-fde", vertex: "v-fde", levels: AXES.map(fdeLevel), scale: .92 });
+    if (state.show.market) layers.push({ poly: "p-market", vertex: "v-market", levels: AXES.map(marketLevel), scale: .76 });
     if (state.show.pair) layers.push({ poly: "p-pair", levels: AXES.map(pairLevel) });
     radar($("chart-bar"), {
       layers, title: t.chartBar, highlight: isGap,
