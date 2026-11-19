@@ -14,7 +14,7 @@ secondary: See a sample audit | not-received-but-delivered
 subject: What we're seeing
 description: I find the money an operation loses between its records and its floor, and take it out at the cause. US, Australia, Canada, UK, Europe.
 published: 2026-11-09
-updated: 2026-11-15
+updated: 2026-11-18
 ---
 <div class="home-thesis" markdown="1">
 <div class="thesis-head" markdown="1">
@@ -52,7 +52,7 @@ A three-week field audit, cutover leadership, a fractional operations or deploym
 
 <div class="pillar">
 <h2>Proof</h2>
-<p>A 50,000-SKU distribution-centre cutover in Melbourne, a USD 30M cross-border P&amp;L, a re-runnable triage of 2,708 marketplace claims, and tools I build in Python, SQL and TypeScript, among them an inventory and replenishment engine with 10,483 passing tests that stages every decision in draft before write-back.</p>
+<p>A 50,000-SKU distribution-centre cutover in Melbourne, a USD 30M cross-border P&amp;L, a re-runnable triage of 2,708 marketplace claims, and tools I build in Python, SQL and TypeScript, among them an inventory and replenishment engine with 10,607 passing tests that stages every decision in draft before write-back.</p>
 <p><a href="proof/">See the proof</a> or <a href="proof/#decision-card">try a decision card</a></p>
 </div>
 

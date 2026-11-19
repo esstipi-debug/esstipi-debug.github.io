@@ -5,7 +5,7 @@ slug: proof
 title: Proof
 kicker: Proof
 headline: What I changed, checkable before we talk.
-description: Field work from thirteen years in operations, a published audit of 2,708 marketplace claims, and deterministic diagnostic software with 10,483 passing tests.
+description: Field work from thirteen years in operations, a published audit of 2,708 marketplace claims, and deterministic diagnostic software with 10,607 passing tests.
 subject: Question on the proof
 cta: Ask for a walk-through
 published: 2026-11-09
@@ -25,7 +25,7 @@ updated: 2026-11-18
 <span class="proof-kpi-t">Public marketplace claims audited; 57% written on or before delivery day</span>
 </div>
 <div class="proof-kpi">
-<span class="proof-kpi-n">10,483</span>
+<span class="proof-kpi-n">10,607</span>
 <span class="proof-kpi-t">Passing tests on the deterministic replenishment engine (private repository)</span>
 </div>
 </div>
@@ -97,8 +97,8 @@ I build diagnostic and planning tools so I do not arrive on a floor with a blank
 
 <div class="sys-grid" markdown="1">
 
-- **Inventory and replenishment engine.** 10,483 passing tests in Python and none failing, clean install on 15 November 2026 (private repository). Decision cards set the engine's recommendation beside the operator's play and the status quo, staging changes behind HMAC-SHA256-signed approval and rollback.
-- **Receiving kit.** Open source under the MIT licence, with 1,141 passing tests and none failing, clean install on 14 November 2026.
+- **Inventory and replenishment engine.** 10,607 passing tests in Python and none failing, clean install on 18 November 2026 (private repository). Decision cards set the engine's recommendation beside the operator's play and the status quo, staging changes behind HMAC-SHA256-signed approval and rollback.
+- **Receiving kit.** Open source under the MIT licence, with 1,141 passing tests and none failing, clean install on 18 November 2026.
 - **Field kit.** 1,187 passing tests on 20 October 2026. Checks an event log against the five-column contract (case, activity, timestamp, who, where) before analysis runs; integrity guards catch one-to-many join fanout, unbalanced blocked stock and negative stock against planted defects.
 - **Weightlifting planning application.** TypeScript monorepo with about 1,332 unit tests, 31 integration tests on embedded PostgreSQL and an adversarial review agent. Building it left a builder-side adoption postmortem: putting a number on what an expert used to judge by eye can still trigger refusal.
 
