@@ -43,7 +43,7 @@
   "backing": [
     {
       "risk": "system", "reached": 2, "grade": "Tested, private repository",
-      "reached_text": "An inventory and replenishment engine with 10,607 passing tests, in a private repository.",
+      "reached_text": "An inventory and replenishment engine with 10,756 passing tests, in a private repository.",
       "checkable": 2, "checkable_text": "The receiving kit is open source, with its tests.",
       "links": [{"label": "the code on GitHub", "href": "https://github.com/esstipi-debug"}]
     },
