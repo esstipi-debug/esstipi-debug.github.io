@@ -223,9 +223,22 @@ def test_plates_and_nav_active_state_are_styled(site):
     root, pages = site
     css = (root / "style.css").read_text(encoding="utf-8")
     assert "article.page:has(.eng-deck, .risk-map)" in css
-    assert ":not(.eng-deck, .risk-map, .card-demo)" in css
+    assert ":not(.eng-deck, .risk-map, .card-demo," in css
     assert 'a[aria-current="page"]' in css
     engagements = read(root, "engagements", pages)
     assert 'href="../engagements/" aria-current="page"' in engagements
     assert engagements.count('aria-current="page"') == 1
     assert 'aria-current="page"' not in read(root, "index", pages)
+
+
+def test_book_page_embeds_leafable_sample_reader_with_fullscreen_and_no_script(site):
+    root, pages = site
+    book_html = read(root, "the-deployment-chasm", pages)
+    assert 'id="sample-reader"' in book_html
+    assert 'id="book-fs"' in book_html
+    assert "Full screen" in book_html and "Exit full screen" in book_html
+    for n in range(1, 8):
+        assert f'id="book-p{n}"' in book_html
+        assert f'files/book/page-{n:02d}.webp' in book_html
+        assert (root / "files" / "book" / f"page-{n:02d}.webp").is_file()
+    assert not re.search(r'<script(?! type="application/ld\+json")', book_html)

@@ -717,9 +717,11 @@ def author_main(page: Page, pages: list[Page], depth: int) -> str:
 
 
 def book_main(page: Page, pages: list[Page], depth: int) -> str:
-    return f"""<article>
+    import book  # late: book.py renders the zero-JS leafable sample reader from src/files/book/
+    return f"""<article class="book-page">
 {headline_group(esc(page.title), esc(page.kicker or "Manuscript"))}
 <p class="byline">By <a href="{href(AUTHOR_SLUG + '/', depth)}">{AUTHOR}</a></p>
+{book.reader_html(depth)}
 {page.body_html}
 </article>"""
 

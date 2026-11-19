@@ -100,26 +100,51 @@ Each one starts from the same place: what your records say against what your flo
 </div>
 </div>
 
+<div class="rate-strip" markdown="1">
+<div class="rate-strip-head" markdown="1">
+
 ## On-site days
 
 USD 1,200 per day, plus travel at cost
 {: .price }
 
-For any engagement that needs me on the floor. [How travel works](../working-terms/).
+</div>
+<div class="rate-strip-copy" markdown="1">
+Data analysis, diagnostic tooling and specification work run remotely from Chile. On-site days cover floor walks, blind counts and leadership alignment under standard business-visitor rules. [How travel works](../working-terms/).
+</div>
+</div>
 
-Hands-on data analysis, diagnostic tooling and specification work are delivered remotely from Chile; on-site days are used for floor walks, blind counts and leadership alignment under standard business-visitor rules.
+<div class="band band-deep" markdown="1">
 
 ## After the work
 
-**The 90-day check is included.** Ninety days after an audit is delivered or a system goes live, we check by video whether it held. After an audit, your team re-counts the same sample and we see whether the losses on the list came down. After a go-live, the [90-day check](../90-day-check-after-go-live/): who still uses the system, who went around it, and why.
+<div class="promise-grid" markdown="1">
+<div class="promise-card" markdown="1">
+<span class="promise-num">90 days</span>
 
-**If it did not hold, putting it back is on me.** The work to bring the agreed measures back carries no fee; travel, if it is needed, is at cost. The measures are the ones we agree in writing before we start.
+**The 90-day check is included.** Ninety days after an audit or go-live, we check by video whether it held: your team re-counts the same sample, or we run the [90-day check](../90-day-check-after-go-live/) on who still uses the system, who went around it, and why.
+
+</div>
+<div class="promise-card promise-accent" markdown="1">
+<span class="promise-num">No fee</span>
+
+**If it did not hold, putting it back is on me.** The work to bring the agreed measures back carries no fee; travel, if it is needed, is at cost. Measures are agreed in writing before we start.
+
+</div>
+<div class="promise-card" markdown="1">
+<span class="promise-num">20% less</span>
 
 **Coming back costs less.** For 12 months after an engagement ends, advisory hours and on-site days cost 20% less.
 
+</div>
+</div>
+</div>
+
+<div class="band band-panel" markdown="1">
+
 ## Who to hire for what
 
-Not everything is a job for me.
+Not everything is a job for me. If you need one of the first three, hire them; I work alongside all of them.
 
 <table class="compare">
 <thead>
@@ -133,17 +158,27 @@ Not everything is a job for me.
 </tbody>
 </table>
 
-If you need one of the first three, hire them. I work alongside all of them.
+</div>
+
+<div class="plate-card">
 
 <!-- plate: scope -->
 
-For the full fourteen-axis interactive radar comparing deployment strategists, forward deployed engineers, implementation and customer success roles, open the [deployment strategist radar](https://esstipi-debug.github.io/atlas/).
+<div class="radar-bar">
+<p>Want the full fourteen-axis view against forward deployed engineers, implementation and customer success?</p>
+<a class="btn btn-ghost" href="https://esstipi-debug.github.io/atlas/">Open the fourteen-axis radar</a>
+</div>
+</div>
+
+<div class="fit-band" markdown="1">
+<div class="fit-copy" markdown="1">
 
 ## Best fit
 
 An operation with its own floor (a farm, a plant, a kitchen or a warehouse) and revenue between USD 10M and USD 100M, or a technology team deploying into one; a system change in the last or next 12 months; and an executive who signs. The entry point is the field audit.
 
-<details markdown="1">
+</div>
+<details class="roles-drawer" markdown="1">
 <summary>Roles I can cover</summary>
 
 - **Deployment Strategist.** For applied-AI, robotics, AgTech and food-tech teams: turn a pilot into a deployment the floor keeps using. *Fractional lead or cutover leadership.*
@@ -155,3 +190,4 @@ An operation with its own floor (a farm, a plant, a kitchen or a warehouse) and 
 - **Operating Advisor.** For private equity, search funds and investment firms: check the floor, the cold rooms, the warehouses and the systems before an acquisition. *Advisory or field audit.*
 
 </details>
+</div>

@@ -9,47 +9,113 @@ description: Field work from thirteen years in operations, a published audit of 
 subject: Question on the proof
 cta: Ask for a walk-through
 published: 2026-11-09
-updated: 2026-11-16
+updated: 2026-11-18
 ---
+<div class="proof-strip" aria-label="Headline figures">
+<div class="proof-kpi proof-kpi-lead">
+<span class="proof-kpi-n">50,000</span>
+<span class="proof-kpi-t">SKU warehouse cutover in Melbourne; order processing time fell about 20%</span>
+</div>
+<div class="proof-kpi">
+<span class="proof-kpi-n">USD 30M</span>
+<span class="proof-kpi-t">Cross-border e-commerce P&amp;L; about USD 5M of inventory freed</span>
+</div>
+<div class="proof-kpi">
+<span class="proof-kpi-n">2,708</span>
+<span class="proof-kpi-t">Public marketplace claims audited; 57% written on or before delivery day</span>
+</div>
+<div class="proof-kpi">
+<span class="proof-kpi-n">10,483</span>
+<span class="proof-kpi-t">Passing tests on the deterministic replenishment engine (private repository)</span>
+</div>
+</div>
+
+<div class="plate-card" markdown="1">
+
 ## What each claim rests on {: #evidence-map }
 
 <!-- plate: backing -->
 
+</div>
+
+<div class="band band-deep" markdown="1">
+
 ## Field work {: #track-record }
 
-Supply chains break across boundaries: a buying rule locks up cash, a cutover pushes teams onto spreadsheets, or a bonus manufactures bad shipments. Here is what I changed across thirteen years in operations, planning and consulting, and why unarchived field diagnoses were consolidated into [*The Deployment Chasm*](../the-deployment-chasm/) and the checks below.
+Thirteen years across operations, planning and consulting. Unarchived field diagnoses were consolidated into [*The Deployment Chasm*](../the-deployment-chasm/) and encoded into the checks below.
+
+<div class="track-grid" markdown="1">
 
 - **System changeover without floor bypass (AGCO Corporation, Melbourne, 2022 to 2024).** Outbound Leader, split between the desk and the floor: picking, packing and the carriers. Through the full cutover of a 50,000-SKU distribution centre with a team of 20, I closed the legacy warehouse system and opened Manhattan Associates, trained 23 operators on RF scanning, and stayed on shift until the workarounds ended. Order processing time fell about 20% (a shift estimate without retained logs).
 - **Working capital and demand rules under rapid scale (cross-border e-commerce, 2020 to 2022).** Owned a USD 30M P&L spanning direct consumer sales and wholesale. Through 300% annual growth, replaced judgement buffers with aggregate statistical demand forecasting and wrote the operating procedures that kept volume moving, freeing about USD 5M of inventory.
-- **Multi-site reporting and replenishment control (Chile and Argentina, 2016 to 2020).** Ran a USD 15M budget across three logistics sites and about 100 people, replacing lagging weekly packs with daily operational reporting that every site planned from. Earlier led 15 planners supplying more than 200 retail stores (holding part of the role remotely from Sydney), building forecasting and replenishment models to balance stockouts against inventory while automating financial reports.
-- **Cost allocation and pre-cutover savings (2013 to 2016).** Analysed a USD 100M inventory position with cost-allocation models and cycle-count controls so the business could see where operating expense actually sat, and identified about USD 2M a year in purchasing and logistics savings alongside floor procedures for an earlier warehouse-system rollout.
-- **Cross-industry diagnostics and incentive repair (since 2013).** Across more than seven independent consulting engagements in warehousing, retail, e-commerce and manufacturing, I built process maps, KPI dashboards and floor procedures. On one floor walk, tracing mixed, short and damaged orders back to a per-operator productivity bonus showed how local metrics break downstream quality; I retired the bonus metric and measured customer satisfaction through zero complaints and response time instead. Individual client archives from that consulting work were not kept, so I consolidated the recurring mechanisms into *The Deployment Chasm* and encoded them into the checks below.
+- **Multi-site reporting and replenishment control (Chile and Argentina, 2016 to 2020).** Ran a USD 15M budget across three logistics sites and about 100 people, replacing lagging weekly packs with daily operational reporting. Earlier led 15 planners supplying more than 200 retail stores (partly remotely from Sydney), building forecasting and replenishment models while automating financial reports.
+- **Cost allocation and pre-cutover savings (2013 to 2016).** Analysed a USD 100M inventory position with cost-allocation models and cycle-count controls, and identified about USD 2M a year in purchasing and logistics savings alongside floor procedures for an earlier warehouse-system rollout.
+- **Cross-industry diagnostics and incentive repair (since 2013).** Across more than seven independent consulting engagements in warehousing, retail, e-commerce and manufacturing, I built process maps, KPI dashboards and floor procedures. On one floor walk, tracing mixed, short and damaged orders back to a per-operator productivity bonus showed how local metrics break downstream quality; I retired the bonus metric and measured customer satisfaction through zero complaints and response time instead.
 
-The Melbourne employer is named once, here. Earlier employers and my consulting clients are not named; for proof you can verify without calling anyone, start with the public audit and tested tools below.
+</div>
+
+The Melbourne employer is named once, here. Earlier employers and consulting clients stay unnamed; for proof you can verify without calling anyone, start with the public audit and tested tools below.
+{: .track-note }
+
+</div>
+
+<div class="band band-panel" markdown="1">
 
 ## Published audit you can re-run {: #sample-audit }
 
-- **[When "not received" means late](../not-received-but-delivered/).** A forensic triage of 2,708 "not received" claims on delivered orders in a public Brazilian marketplace dataset: 1,542 (57%) were written on or before the recorded delivery day, 73 sat at flagged sellers, and 1,093 had no clear cause in the record. The Python code and its tests are public and re-runnable.
+<div class="audit-spotlight" markdown="1">
+<div class="audit-visual">
+<span class="audit-big">57%</span>
+<span class="audit-sub">of 2,708 &ldquo;not received&rdquo; claims on delivered orders were written on or before the recorded delivery day</span>
+<div class="audit-bar">
+<svg viewBox="0 0 300 14" preserveAspectRatio="none" role="img" aria-label="2,708 claims: 1,542 late orders; 73 at flagged sellers; 1,093 with no clear cause">
+<rect class="seg-late" x="0.0" y="0" width="170.8" height="14"/>
+<rect class="seg-flag" x="170.8" y="0" width="8.1" height="14"/>
+<rect class="seg-open" x="178.9" y="0" width="121.1" height="14"/>
+</svg>
+<div class="audit-legend">
+<span class="audit-leg audit-leg-late">1,542 late orders</span>
+<span class="audit-leg audit-leg-flag">73 at flagged sellers</span>
+<span class="audit-leg audit-leg-open">1,093 with no clear cause</span>
+</div>
+</div>
+</div>
+<div class="audit-copy" markdown="1">
+**When "not received" means late.** A forensic triage on a public Brazilian marketplace dataset showing which record lied before anyone blames the warehouse or the carrier. The Python code and its tests are public and re-runnable.
+
+<a class="btn btn-ghost" href="../not-received-but-delivered/">Read the audit</a>
+</div>
+</div>
+
+</div>
+
+<div class="band band-deep" markdown="1">
 
 ## Built systems
 
-I build my own diagnostic and planning tools so I do not arrive on a client's floor with a blank spreadsheet. None of them is in commercial production at a client yet; what they prove is how I translate operational physics into tested software before touching a live system:
+I build diagnostic and planning tools so I do not arrive on a floor with a blank spreadsheet. None is in commercial production at a client yet; they show how operational physics becomes tested software before touching a live system.
 
-- **Inventory and replenishment engine:** 10,483 passing tests in Python and none failing, run on a clean install on 15 November 2026 (private repository). Its decision cards set the engine's recommendation beside the operator's own play and the status quo, and a stock spreadsheet goes from intake to a change that waits for an HMAC-SHA256-signed approval and can be rolled back.
-- **Receiving kit:** open source under the MIT licence, with 1,141 passing tests and none failing, run on a clean install on 14 November 2026.
-- **Field kit:** 1,187 passing tests on 20 October 2026. It checks an event log against the five-column contract (case, activity, timestamp, who, where) before any analysis runs, and its integrity guards catch a purchase-order line repeated by a one-to-many join, receipts held in blocked stock that do not balance, and negative stock; each guard is tested against a planted defect.
-- **Weightlifting planning application:** a full-stack TypeScript monorepo with about 1,332 unit tests, 31 integration tests on an embedded PostgreSQL database and an adversarial review agent written into the repository. Building it for a coach left me a field postmortem on adoption from the builder's side: even when software leaves the expert full editorial control, putting a number on what they used to judge by eye can make them refuse it.
+<div class="sys-grid" markdown="1">
+
+- **Inventory and replenishment engine.** 10,483 passing tests in Python and none failing, clean install on 15 November 2026 (private repository). Decision cards set the engine's recommendation beside the operator's play and the status quo, staging changes behind HMAC-SHA256-signed approval and rollback.
+- **Receiving kit.** Open source under the MIT licence, with 1,141 passing tests and none failing, clean install on 14 November 2026.
+- **Field kit.** 1,187 passing tests on 20 October 2026. Checks an event log against the five-column contract (case, activity, timestamp, who, where) before analysis runs; integrity guards catch one-to-many join fanout, unbalanced blocked stock and negative stock against planted defects.
+- **Weightlifting planning application.** TypeScript monorepo with about 1,332 unit tests, 31 integration tests on embedded PostgreSQL and an adversarial review agent. Building it left a builder-side adoption postmortem: putting a number on what an expert used to judge by eye can still trigger refusal.
+
+</div>
 
 The rule I build to:
 
 <ol class="flow">
-<li><strong>Check the extract before the math.</strong> Run integrity guards on the raw tables: a one-to-many join that repeats a purchase-order line, blocked stock that does not balance, and negative stock. Stock in transit is checked inside the replenishment engine, which runs each calculation twice, with and without what is already on the way, to show which ones would order the same goods twice. <span class="flow-stop">If a number fails, nothing is written to the live system.</span></li>
-<li><strong>Stage three plays in draft.</strong> Put the engine’s recommendation, the operator’s own adjustment, and the status quo side by side in a draft stage with their working-capital and service-level trade-offs.</li>
+<li><strong>Check the extract before the math.</strong> Run integrity guards on raw tables: one-to-many join fanout, unbalanced blocked stock, negative stock and double-counted stock in transit. <span class="flow-stop">If a number fails, nothing is written to the live system.</span></li>
+<li><strong>Stage three plays in draft.</strong> Put the engine’s recommendation, the operator’s own adjustment, and the status quo side by side in draft with their working-capital and service-level trade-offs.</li>
 <li><strong>Sign off or override with a reason.</strong> The buyer or supervisor approves, modifies, or rejects the draft card; the decision and its reason are logged before execution.</li>
 <li><strong>Keep the way back.</strong> Every approved change carries a rollback path and a 90-day check against the floor baseline.</li>
 </ol>
 
 One decision card, as it waits for a signature. Pick a play to see what the sign-off records, then take the lead time away to see what the engine does with a cost it cannot measure.
+
+</div>
 
 <section class="card-demo" id="decision-card" aria-label="A sample decision card, in draft">
 <input class="card-demo-pick" type="radio" name="card-play" id="card-play-a" checked>
@@ -120,5 +186,13 @@ The code is on [GitHub](https://github.com/esstipi-debug).
 
 ## Writing
 
-- Ten field notes, among them [*The Smith and the Tailor*](../the-smith-and-the-tailor/) and [*Nobody Pays for Being Wrong*](../nobody-pays-for-being-wrong/), and ten short answers, among them [why inventory records do not match the shelf](../why-inventory-records-do-not-match-the-shelf/) and [why people follow the system when it is wrong](../why-people-follow-the-system-when-it-is-wrong/).
-- [*The Deployment Chasm*](../the-deployment-chasm/), a manuscript on why enterprise and supply-chain systems fail between the contract and the floor.
+<div class="writing-grid" markdown="1">
+<div class="writing-card" markdown="1">
+Ten field notes, among them [*The Smith and the Tailor*](../the-smith-and-the-tailor/) and [*Nobody Pays for Being Wrong*](../nobody-pays-for-being-wrong/), and ten short answers, among them [why inventory records do not match the shelf](../why-inventory-records-do-not-match-the-shelf/) and [why people follow the system when it is wrong](../why-people-follow-the-system-when-it-is-wrong/).
+</div>
+<div class="writing-card writing-book" markdown="1">
+[*The Deployment Chasm*](../the-deployment-chasm/), a manuscript on why enterprise and supply-chain systems fail between the contract and the floor. Leaf through the sample as a book or read it full screen.
+
+<a class="btn btn-ghost" href="../the-deployment-chasm/">Open sample book</a>
+</div>
+</div>
