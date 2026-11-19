@@ -9,12 +9,15 @@
     {"id": "cash", "label": "The cash and the return never reach the P&L", "pays": "Finance"}
   ],
   "scope": {
-    "source": "Coded from ten job postings on startup.jobs published in the two weeks before 15 November 2026: five implementation roles and five deployment strategist roles at software vendors whose customers run physical operations, read with the same rules as my own engagement. Each cell is the middle of five roles; a column is one kind of role, not a whole team.",
+    "source": "Coded from ten job postings on startup.jobs published in the two weeks before 15 November 2026: five implementation roles and five deployment strategist roles at software vendors whose customers run physical operations, read with the same rules as my own engagement. Each mark is one posting: one role, not a whole team.",
+    "reading": "Each row, left to right: five implementation roles, five deployment strategist roles, my cutover engagement. The count is the postings that build or answer for the risk.",
+    "count_head": "In scope in",
     "kinds": [
       {
         "id": "implementation",
         "label": "One implementation role at a software vendor",
         "short": "Implementation role",
+        "group": "Implementation roles",
         "roles": [
           {"posted": "2026-11-13", "levels": [3, 0, 0, 0, 0, 3, 3]},
           {"posted": "2026-11-13", "levels": [3, 2, 0, 0, 2, 1, 0]},
@@ -27,6 +30,7 @@
         "id": "deployment",
         "label": "One deployment strategist role at a software vendor",
         "short": "Deployment strategist role",
+        "group": "Deployment strategist roles",
         "roles": [
           {"posted": "2026-11-13", "levels": [3, 0, 3, 0, 0, 3, 3]},
           {"posted": "2026-11-05", "levels": [3, 0, 3, 0, 0, 3, 0]},
@@ -38,7 +42,7 @@
     ],
     "mine": {"label": "My cutover engagement", "short": "My cutover engagement", "levels": [1, 2, 3, 2, 2, 3, 1]}
   },
-  "backing_key": "The dot is how far I went; the ring is how far you can check it without me. From left to right: not in scope, described, built and tested outside a live system, answered for it in a live operation.",
+  "backing_key": "The upper line is how far I went; the lower line, in red, is how far you can check it without me. From left to right: not in scope, described, built and tested outside a live system, answered for it in a live operation.",
   "backing_limit": "Field work is my own account: it illustrates, it does not validate. None of my systems has a client in production yet.",
   "backing": [
     {

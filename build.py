@@ -835,12 +835,27 @@ def section_line(page: Page) -> str:
     return esc(line)
 
 
+def contact_link(page: Page) -> str:
+    """The contact call as a link: the words and the address of the button, for a page that already showed it."""
+    return f'<a class="page-close-link" href="{contact_href(page)}">{esc(page.cta or DEFAULT_CTA)}</a>'
+
+
 def page_main(page: Page, pages: list[Page], depth: int) -> str:
-    import risks  # late: risks.py draws the evidence plates with this module's data and helpers
+    """A page in its own words, with what it asks for put in: the plates, the drawings and the rows. The
+    contact button closes the page, unless the page marks a place for it under the headline; then the page
+    closes with the same call as a link, so that there is still one button and the last word is still the call."""
+    import page_parts  # late: both draw with this module's data and helpers
+    import risks
+    body = page_parts.fold_rows(page_parts.with_drawings(risks.with_plates(page.body_html, depth), pages))
+    button = f'<p class="actions">{contact_button(page)}</p>'
+    if page_parts.CONTACT in body:
+        body, ending = body.replace(page_parts.CONTACT, button, 1), f'<p class="page-close">{contact_link(page)}</p>'
+    else:
+        ending = button
     return f"""<article class="page">
 {headline_group(heading(page), section_line(page))}
-{risks.with_plates(page.body_html, depth)}
-<p class="actions">{contact_button(page)}</p>
+{body}
+{ending}
 </article>"""
 
 

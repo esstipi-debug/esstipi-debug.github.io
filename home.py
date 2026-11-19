@@ -8,9 +8,9 @@ with <details>, and what moves, moves with CSS.
 From top to bottom: the headline beside the sheet where the reader picks a situation (each one shows its
 drawing, its figure and its door); who the reader is and where the work is; the four figures; the method;
 the argument and the pillars, written in src/pages/index.md; the field notes and the short answers; and
-the closing call. Three sentences come from other pages and are read from them, never retyped: who the
-work fits best (engagements), the door for whoever is hiring (the author page) and the base of the claims
-(the audit).
+the closing call. Two sentences come from other pages and are read from them, never retyped: who the
+work fits best (engagements) and the door for whoever is hiring (the author page). The drawing of the
+claims, with the audit's own sentence under it, is page_parts.py's: the proof page shows the same one.
 """
 from __future__ import annotations
 
@@ -19,6 +19,7 @@ import re
 import build
 import drawings
 from build import Page, esc, href
+from page_parts import AUDIT_SLUG, claims_drawing
 
 DESK_ALT = ("Illustration: a desk at night by a window over a warehouse yard, with a field kit laid out on it: "
             "a passport and a boarding pass, a high-visibility vest and gloves, a steel tape, "
@@ -41,13 +42,8 @@ SITUATION_FIGURE = {
 }
 BEST_FIT = ("engagements", "Best fit")              # the page and the heading the sentence stands under
 HIRING = (build.AUTHOR_SLUG, "If you are hiring")   # the same, for the door of whoever is hiring
-AUDIT_SLUG = "not-received-but-delivered"
-AUDIT_BASE = re.compile(r"Of [\d,]+ delivered orders with a review, [\d,]+ had a review saying the order had "
-                        r"not arrived\.")
 READER = re.compile(r"for the (CEO|COO|CFO)\b")     # a field note says who it is written for
 COUNT_WORDS = ("no", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten")
-LATE_WORDS = "written on or before the delivery day"
-AFTER_WORDS = "written after it"
 INDEX_HEADS = ("Note", "For", "What it covers", "File")
 
 
@@ -60,14 +56,6 @@ def paragraph_under(pages: list[Page], slug: str, heading: str) -> str:
     if not found:
         raise ValueError(f"{slug}: no paragraph under the heading {heading!r}, and the home page prints it")
     return found.group(1)
-
-
-def audit_base(pages: list[Page]) -> str:
-    """How many orders the claims were found in, in the audit's own sentence."""
-    found = AUDIT_BASE.search(build.find(pages, AUDIT_SLUG).body_html)
-    if not found:
-        raise ValueError(f"{AUDIT_SLUG}: the sentence with the base of the claims is missing")
-    return found.group(0)
 
 
 def figure_of(slug: str) -> build.HomeFigure:
@@ -227,28 +215,6 @@ def readers(pages: list[Page], depth: int) -> str:
 
 
 # ---------------------------------------------------------------- the four figures
-
-def claims_drawing(pages: list[Page]) -> str:
-    """The audit's claims on both sides of the delivery day, one unit of width for each claim: those written
-    on or before it, and those written after it, split in two. Drawn from the published counts."""
-    (_, _, late), (_, flag_words, flag), (_, rest_words, rest) = build.CLAIMS_TRIAGE
-    total, after = late + flag + rest, flag + rest
-    x, rects = 0, []
-    for key, _, count in build.CLAIMS_TRIAGE:
-        rects.append(f'<rect class="seg-{key}" x="{x}" y="0" width="{count}" height="10"/>')
-        x += count
-    summary = "; ".join(f"{count:,} {words}" for _, words, count in build.CLAIMS_TRIAGE)
-    columns = f"{late}fr {flag}fr {rest}fr"
-    return f"""<span class="claims" role="img" aria-label="{total:,} claims: {esc(summary)}" style="grid-template-columns: {columns}">
-<span class="cota cota-late"><span><b>{late:,}</b> {LATE_WORDS}</span></span>
-<span class="cota cota-after"><span><b>{after:,}</b> {AFTER_WORDS}</span></span>
-<svg class="claims-bar" viewBox="0 0 {total} 10" preserveAspectRatio="none" aria-hidden="true">{"".join(rects)}</svg>
-<span class="datum"><span>delivery day</span></span>
-<span class="sub sub-flag" style="--half: {50 * flag / (late + flag):.2f}%"><span><b>{flag:,}</b> {esc(flag_words)}</span></span>
-<span class="cota cota-rest"><span><b>{rest:,}</b> {esc(rest_words)}</span></span>
-</span>
-<span class="claims-base">{audit_base(pages)} <span class="note">Lengths to scale.</span></span>"""
-
 
 def figure_item(figure: build.HomeFigure, pages: list[Page], depth: int) -> str:
     drawn = figure.slug == AUDIT_SLUG

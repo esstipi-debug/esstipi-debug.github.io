@@ -51,6 +51,15 @@ CONTACT_BUTTON = re.compile(r'<a class="btn btn-contact" href="([^"]+)"')
 # Every figure a commercial page may print, and where it comes from. A new number fails the test
 # until it is added here with its source. HECHOS = cv dossier/HECHOS.md; plan = the approved site plan.
 FIGURES = {
+    "0": "postings that build or answer for the incentive risk: none of the ten (scope plate, counted by "
+         "risks.py from src/risks.json)",
+    "2": "postings that build or answer for the record risk, and for the write risk: two of the ten (scope plate, "
+         "src/risks.json)",
+    "4": "postings that build or answer for the floor risk, and for the cash risk: four of the ten (scope plate, "
+         "src/risks.json)",
+    "7": "postings that build or answer for the ownership risk: seven of the ten (scope plate, src/risks.json)",
+    "10": "the ten job postings coded in the scope plate, all of which take on the system risk (src/risks.json; "
+          "coding table in C:/tolkien/docs/designs/laminas-c-level/codificacion.csv)",
     "02:30": "the night shift, a time of day used as a scene, not a measurement",
     "12": "best fit: a system change in the last or next 12 months (plan C); 12 months of the returning-client "
           "rate (owner decision 2026-11-13, content plan §3 A)",
@@ -838,6 +847,13 @@ def test_the_page_clips_sideways_overflow_without_a_scroll_box(site):
     for element, declarations in set_on.items():
         assert "overflow-x: clip" in declarations, element
         assert "overflow-x: hidden" not in declarations and "overflow: hidden" not in declarations, element
+
+
+def test_a_source_line_is_set_in_the_body_face(site):
+    """The mono face is kept for figures and dimensions: a source line is a sentence, so it takes the body face."""
+    root, _ = site
+    rule = re.search(r"(?<![\w-])\.src\s*\{([^}]*)\}", style_sheets(root)["style.css"])
+    assert rule and "var(--mono)" not in rule.group(1), rule and rule.group(1)
 
 
 def test_every_file_a_style_sheet_points_to_exists(site):

@@ -1,5 +1,5 @@
-/* Hallmark · checked: 2026-11-19 · genre: editorial (inferred) · scope: all 36 pages of landpage/, style.css and home.css (static tier; the render tier ran on three pages only and its findings are open: see the README)
- * floor: 0 FAIL · fixed: 5 (3, 34, 41, 64, F24) · structural: 3 printed (58, 59, 77)
+/* Hallmark · checked: 2026-11-19 · genre: editorial (inferred) · scope: all 36 pages of landpage/, style.css and home.css (static tier on every page; render tier on the home, proof and engagements pages, with layout findings open: see the README)
+ * floor: 0 FAIL · fixed: 7 (3, 34, 41, 44b, 49a, 64, F24) · structural: 3 printed (58, 59, 77)
  * built: the project · redesign: full (the project's own, as a working drawing, outside a Hallmark run) · copy: verbatim · v2.0.0 */
 /* Hallmark · dismissed 46a · "20% less" is the owner's own rate for returning clients, decided on 2026-11-13, a price term and not a measured result */
 /* Hallmark · waive 49b · one link, a real phrase, on two lines at 320px · the closing call is set at display size, so on a phone it breaks once and no further */
@@ -200,254 +200,139 @@ details ul { margin-bottom: 0; }
   .compare td[data-label]::before { content: attr(data-label) ": "; color: var(--muted); }
 }
 
-/* ---------------------------------------------------------------- collapsing engagement cards & rich page canvas */
+/* ---------------------------------------------------------------- the wide pages: proof, engagements and the book */
 main.wrap > article.page:has(.eng-deck, .risk-map),
 main.wrap > article.book-page:has(.book-reader) { max-width: none; }
-main.wrap > article.page:has(.eng-deck, .risk-map) > :not(.eng-deck, .risk-map, .card-demo, .band, .rate-strip, .plate-card, .fit-band, .proof-strip, .writing-grid),
+main.wrap > article.page:has(.eng-deck, .risk-map) > :not(.eng-deck, .risk-map, .card-demo, .band, .rate-strip, .fit-band, .fig-list, .page-close),
 main.wrap > article.book-page:has(.book-reader) > :not(.book-reader) { max-width: 44rem; }
+article.page > hgroup + .actions { margin: 1.5rem 0 0; }
+article.page:has(.eng-deck) > hgroup + p { max-width: 38rem; margin: 1rem 0 0; font-size: 1.1875rem; line-height: 1.5; color: var(--ink-2); }
 
-.eng-deck { position: relative; width: 100%; max-width: 74rem; margin: 1.75rem 0 2.75rem; }
+/* A block of a page: a hairline over it and air. No box: what sets a block apart is its rule and its heading. */
+.band, .fit-band, .page-close { margin: clamp(2.5rem, 2rem + 2.4vw, 4rem) 0 0; padding-top: clamp(1.4rem, 1.15rem + 1vw, 1.9rem); border-top: 1px solid var(--rule); }
+.band > h2:first-child { margin-top: 0; }
+.band > p { max-width: 44rem; color: var(--ink-2); }
+.band > p:last-child { margin-bottom: 0; }
+.band .compare { margin-bottom: 0; }
+/* A page that showed its button under the headline closes with the same call, as a link. */
+.page-close-link { display: inline-flex; align-items: center; min-height: 2.75rem; font-size: clamp(1.35rem, 1.1rem + .9vw, 1.65rem); font-weight: 600; line-height: 1.2; text-decoration-thickness: 2px; }
+
+/* What opens and shuts carries two red strokes that turn into one. */
+.row > summary::before, .row > summary::after,
+.risk-row > summary::before, .risk-row > summary::after,
+.roles-drawer > summary::before, .roles-drawer > summary::after,
+.eng-rail::before, .eng-rail::after { content: ""; position: absolute; right: .3rem; top: 50%; width: .9rem; height: 1.5px; background: var(--accent); transition: transform .25s var(--ease); }
+.row > summary::after, .risk-row > summary::after, .roles-drawer > summary::after, .eng-rail::after { transform: rotate(90deg); }
+.row[open] > summary::after, .risk-row[open] > summary::after, .roles-drawer[open] > summary::after { transform: rotate(0); }
+
+/* ---------------------------------------------------------------- the engagements, as a rate sheet
+   Four radio buttons and the selectors below, with no script. On a phone one engagement is open at a time: the
+   only rule that hides a text names the pick of another one, so the page never depends on anything but the
+   radio buttons to be read. On a wide screen the four stand open (name and terms, what it is, price and how it
+   is paid) and the radio buttons leave the page. */
+.eng-deck, .rate-strip { --rate-cols: minmax(0, 17rem) minmax(0, 1fr) 15.5rem; --rate-gap: clamp(2rem, 4vw, 4rem); }
+.eng-deck { position: relative; margin: 2rem 0 0; }
 .eng-pick { position: absolute; opacity: 0; pointer-events: none; }
 .eng-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
-
-.eng-cards { display: flex; flex-direction: column; gap: .625rem; }
-.eng-card {
-  position: relative;
-  border: 1px solid var(--rule);
-  background: var(--panel);
-  color: var(--ink);
-  overflow: hidden;
-  transition: flex .7s var(--ease), border-color .3s ease, box-shadow .3s ease;
-}
-
-/* The picture behind a card sits still: the card answers by widening, and the picture only lightens. */
-.eng-art {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background-size: cover;
-  background-position: center;
-  filter: grayscale(50%) brightness(.34);
-  transition: filter .7s var(--ease);
-}
-.eng-art::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, var(--veil-2) 0%, var(--veil-3) 45%, var(--veil-4) 100%);
-}
-.eng-card[data-card="1"] .eng-art {
-  background-image:
-    radial-gradient(circle at 85% 20%, var(--selection) 0%, transparent 55%),
-    linear-gradient(90deg, var(--rule) 1px, transparent 1px);
-  background-size: auto, 3.5rem 100%;
-}
-.eng-card[data-card="2"] .eng-art {
-  background-image:
-    radial-gradient(circle at 80% 30%, var(--selection) 0%, transparent 52%),
-    repeating-linear-gradient(90deg, var(--rule) 0 1px, transparent 1px 14px);
-}
-.eng-card[data-card="3"] .eng-art {
-  background-image:
-    radial-gradient(circle at 85% 25%, var(--selection) 0%, transparent 55%),
-    linear-gradient(180deg, var(--rule) 1px, transparent 1px);
-  background-size: auto, 100% 3rem;
-}
-.eng-card[data-card="4"] .eng-art {
-  background-image:
-    radial-gradient(circle at 82% 24%, var(--selection) 0%, transparent 50%),
-    linear-gradient(90deg, var(--rule-strong) 1px, transparent 1px),
-    linear-gradient(90deg, var(--rule) 1px, transparent 1px);
-  background-size: auto, 60px 10px, 12px 5px;
-  background-repeat: no-repeat, repeat-x, repeat-x;
-}
-
-.eng-hit { position: absolute; inset: 0; z-index: 3; cursor: pointer; }
-.eng-num { font: 400 .75rem/1 var(--mono); color: var(--accent); }
-.eng-rail {
-  position: relative;
-  z-index: 2;
-  display: flex;
-  align-items: baseline;
-  gap: .75rem;
-  padding: 1rem 1.15rem;
-}
-.eng-rail-copy { display: flex; flex-wrap: wrap; align-items: baseline; gap: .2rem .75rem; flex: 1; min-width: 0; }
-.eng-rail-title { font-weight: 620; font-size: 1.0625rem; line-height: 1.25; color: var(--ink); }
-.eng-rail-price { font: 400 .75rem/1.3 var(--mono); color: var(--accent); }
-.eng-rail::after { content: "+"; font: 400 1rem/1 var(--mono); color: var(--accent); margin-left: auto; }
-
-.eng-body {
-  display: none;
-  position: relative;
-  z-index: 2;
-  flex-direction: column;
-  padding: 1.35rem 1.15rem 1.5rem;
-}
-.eng-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: .35rem 1rem; margin-bottom: .6rem; }
-.eng-idx { font-weight: 500; font-size: .8125rem; line-height: 1.3; color: var(--muted); }
-.eng-price { font: 400 .875rem/1.3 var(--mono); color: var(--accent); }
-.eng-body h2 { margin: 0 0 .65rem; font-size: clamp(1.35rem, 1.1rem + .8vw, 1.75rem); }
-.eng-body p { margin-bottom: .75rem; color: var(--ink-2); }
-.eng-body p:first-of-type { color: var(--ink); }
-.eng-body ul { margin-bottom: .75rem; color: var(--ink-2); }
-.eng-body li { margin-bottom: .4rem; }
-.eng-foot { margin: 0; margin-top: auto; padding-top: .5rem; }
-.eng-cta {
-  position: relative;
-  z-index: 4;
-  display: inline-flex;
-  align-items: center;
-  font-weight: 620;
-  font-size: .9375rem;
-  line-height: 1.2;
-  color: var(--ink);
-  text-decoration: none;
-  box-shadow: inset 0 -1px 0 var(--accent);
-  min-height: 2.75rem;
-  transition: color .2s;
-}
-.eng-cta:hover { color: var(--accent); }
-
-:where(#eng-1:checked) ~ .eng-cards .eng-card[data-card="1"],
-:where(#eng-2:checked) ~ .eng-cards .eng-card[data-card="2"],
-:where(#eng-3:checked) ~ .eng-cards .eng-card[data-card="3"],
-:where(#eng-4:checked) ~ .eng-cards .eng-card[data-card="4"] {
-  border-color: var(--rule-strong);
-  box-shadow: inset 0 2px 0 var(--accent);
-}
-:where(#eng-1:checked) ~ .eng-cards .eng-card[data-card="1"] .eng-art,
-:where(#eng-2:checked) ~ .eng-cards .eng-card[data-card="2"] .eng-art,
-:where(#eng-3:checked) ~ .eng-cards .eng-card[data-card="3"] .eng-art,
-:where(#eng-4:checked) ~ .eng-cards .eng-card[data-card="4"] .eng-art {
-  filter: grayscale(10%) brightness(.58);
-}
-:where(#eng-1:checked) ~ .eng-cards .eng-card[data-card="1"] .eng-hit,
-:where(#eng-2:checked) ~ .eng-cards .eng-card[data-card="2"] .eng-hit,
-:where(#eng-3:checked) ~ .eng-cards .eng-card[data-card="3"] .eng-hit,
-:where(#eng-4:checked) ~ .eng-cards .eng-card[data-card="4"] .eng-hit {
-  pointer-events: none;
-}
-:where(#eng-1:checked) ~ .eng-cards .eng-card[data-card="1"] .eng-rail,
-:where(#eng-2:checked) ~ .eng-cards .eng-card[data-card="2"] .eng-rail,
-:where(#eng-3:checked) ~ .eng-cards .eng-card[data-card="3"] .eng-rail,
-:where(#eng-4:checked) ~ .eng-cards .eng-card[data-card="4"] .eng-rail {
-  display: none;
-}
-:where(#eng-1:checked) ~ .eng-cards .eng-card[data-card="1"] .eng-body,
-:where(#eng-2:checked) ~ .eng-cards .eng-card[data-card="2"] .eng-body,
-:where(#eng-3:checked) ~ .eng-cards .eng-card[data-card="3"] .eng-body,
-:where(#eng-4:checked) ~ .eng-cards .eng-card[data-card="4"] .eng-body {
-  display: flex;
-}
-
+.eng-cards { border-bottom: 1px solid var(--rule); }
+.eng-card { position: relative; border-top: 1px solid var(--rule); }
+.eng-hit { position: absolute; inset: 0; z-index: 2; cursor: pointer; }
+.eng-rail { position: relative; display: flex; align-items: center; min-height: 4.25rem; padding: .8rem 2.5rem .85rem 0; }
+.eng-rail-copy { display: grid; gap: .2rem; }
+.eng-rail-title { font-weight: 600; font-size: 1.0625rem; line-height: 1.3; color: var(--ink); }
+.eng-rail-price { font: 400 .875rem/1.3 var(--mono); color: var(--ink-2); }
+.eng-body { padding: 1.15rem 0 1.4rem; }
+.eng-name h2 { margin: 0 0 .3rem; }
+.eng-idx { margin: 0; font-size: .9375rem; line-height: 1.4; color: var(--muted); }
+.eng-price { margin: .75rem 0 0; font: 400 1rem/1.4 var(--mono); color: var(--ink); }
+.eng-text { margin-top: .9rem; }
+.eng-text > p, .eng-text > ul { margin-bottom: .75rem; color: var(--ink-2); }
+.eng-text > p:first-child { color: var(--ink); }
+.eng-text > :last-child { margin-bottom: 0; }
+.eng-text li { margin-bottom: .4rem; }
+.eng-text li strong { color: var(--ink); }
+.eng-deal { margin-top: .9rem; }
+.eng-deal > p { margin: 0 0 .4rem; font-size: .9375rem; line-height: 1.5; color: var(--ink-2); }
+.eng-deal > .eng-foot { margin: 0; }
+.eng-cta { position: relative; z-index: 3; display: inline-flex; align-items: center; min-height: 2.75rem; font-weight: 600; }
 #eng-1:focus-visible ~ .eng-cards .eng-card[data-card="1"],
 #eng-2:focus-visible ~ .eng-cards .eng-card[data-card="2"],
 #eng-3:focus-visible ~ .eng-cards .eng-card[data-card="3"],
-#eng-4:focus-visible ~ .eng-cards .eng-card[data-card="4"] {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
-}
-
-@media (min-width: 64rem) {
-  .eng-cards { flex-direction: row; height: 31.5rem; align-items: stretch; }
-  .eng-card { flex: .42; min-width: 5.25rem; }
-  .eng-rail {
-    position: absolute;
-    inset: 1.5rem .75rem;
-    padding: 0;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 1.5rem;
-    transition: opacity .25s ease;
-  }
-  .eng-rail::after { display: none; }
-  .eng-rail-copy {
-    flex: 0 0 auto;
-    writing-mode: vertical-rl;
-    transform: rotate(180deg);
-    display: block;
-  }
-  .eng-rail-title { display: block; font-size: .9375rem; line-height: 1.2; white-space: nowrap; }
-  .eng-rail-price { display: block; margin-block-start: .2rem; font-size: .6875rem; line-height: 1.2; white-space: nowrap; }
-
-  /* A panel shows unless another card is picked: the rule that hides it names that pick, so the
-     page never depends on anything but the radio buttons to be read. */
-  .eng-body {
-    display: flex;
-    position: absolute;
-    inset: 0;
-    width: max(100%, 36rem);
-    padding: 1.4rem 1.85rem;
-    overflow-y: auto;
-    transition: opacity .35s ease .15s, transform .5s var(--ease) .15s;
-  }
-  .eng-body p, .eng-body ul { max-width: 48rem; }
+#eng-4:focus-visible ~ .eng-cards .eng-card[data-card="4"] { outline: 2px solid var(--accent); outline-offset: 2px; }
+@media (max-width: 61.99rem) {
   :where(#eng-1:checked) ~ .eng-cards .eng-card:not([data-card="1"]) .eng-body,
   :where(#eng-2:checked) ~ .eng-cards .eng-card:not([data-card="2"]) .eng-body,
   :where(#eng-3:checked) ~ .eng-cards .eng-card:not([data-card="3"]) .eng-body,
-  :where(#eng-4:checked) ~ .eng-cards .eng-card:not([data-card="4"]) .eng-body {
-    opacity: 0;
-    pointer-events: none;
-    transform: translateY(6px);
-    transition: opacity .3s ease, transform .45s var(--ease);
-  }
-
+  :where(#eng-4:checked) ~ .eng-cards .eng-card:not([data-card="4"]) .eng-body { display: none; }
+  :where(#eng-1:checked) ~ .eng-cards .eng-card[data-card="1"] .eng-body,
+  :where(#eng-2:checked) ~ .eng-cards .eng-card[data-card="2"] .eng-body,
+  :where(#eng-3:checked) ~ .eng-cards .eng-card[data-card="3"] .eng-body,
+  :where(#eng-4:checked) ~ .eng-cards .eng-card[data-card="4"] .eng-body { display: block; }
+  :where(#eng-1:checked) ~ .eng-cards .eng-card[data-card="1"] :is(.eng-rail, .eng-hit),
+  :where(#eng-2:checked) ~ .eng-cards .eng-card[data-card="2"] :is(.eng-rail, .eng-hit),
+  :where(#eng-3:checked) ~ .eng-cards .eng-card[data-card="3"] :is(.eng-rail, .eng-hit),
+  :where(#eng-4:checked) ~ .eng-cards .eng-card[data-card="4"] :is(.eng-rail, .eng-hit) { display: none; }
   :where(#eng-1:checked) ~ .eng-cards .eng-card[data-card="1"],
   :where(#eng-2:checked) ~ .eng-cards .eng-card[data-card="2"],
   :where(#eng-3:checked) ~ .eng-cards .eng-card[data-card="3"],
-  :where(#eng-4:checked) ~ .eng-cards .eng-card[data-card="4"] {
-    flex: 4.2;
-  }
-  :where(#eng-1:checked) ~ .eng-cards .eng-card[data-card="1"] .eng-rail,
-  :where(#eng-2:checked) ~ .eng-cards .eng-card[data-card="2"] .eng-rail,
-  :where(#eng-3:checked) ~ .eng-cards .eng-card[data-card="3"] .eng-rail,
-  :where(#eng-4:checked) ~ .eng-cards .eng-card[data-card="4"] .eng-rail {
-    display: flex;
-    opacity: 0;
-    pointer-events: none;
-  }
+  :where(#eng-4:checked) ~ .eng-cards .eng-card[data-card="4"] { box-shadow: inset 0 2px 0 var(--accent); }
+}
+@media (min-width: 62rem) {
+  .eng-pick, .eng-hit, .eng-rail { display: none; }
+  .eng-body { display: grid; grid-template-columns: var(--rate-cols); grid-template-areas: "name text price" "name text deal"; grid-template-rows: auto 1fr; gap: .9rem var(--rate-gap); align-items: start; padding: 1.75rem 0 1.9rem; }
+  .eng-name { grid-area: name; }
+  .eng-price { grid-area: price; margin: 0; padding-top: .3rem; }
+  .eng-text { grid-area: text; max-width: 40rem; margin: 0; }
+  .eng-deal { grid-area: deal; margin: 0; }
+}
+/* The on-site days: the fifth line of the same sheet. */
+.rate-strip { padding: 1.15rem 0 0; }
+.rate-strip-head h2 { margin: 0 0 .3rem; }
+.rate-strip-head .price { margin: 0 0 .7rem; font-size: .9375rem; color: var(--ink); }
+.rate-strip-copy p { max-width: 40rem; margin: 0; color: var(--ink-2); }
+@media (min-width: 62rem) {
+  .rate-strip { display: grid; grid-template-columns: var(--rate-cols); column-gap: var(--rate-gap); align-items: start; padding: 1.75rem 0 0; }
+  .rate-strip-head { display: contents; }
+  .rate-strip-head h2 { grid-column: 1; grid-row: 1; margin: 0; }
+  .rate-strip-head .price { grid-column: 3; grid-row: 1; margin: 0; padding-top: .3rem; font-size: 1rem; }
+  .rate-strip-copy { grid-column: 2; grid-row: 1; }
 }
 
-@media (hover: hover) and (min-width: 64rem) {
-  .eng-cards:hover .eng-card:not(:hover) {
-    flex: .42;
-    border-color: var(--rule);
-    box-shadow: none;
-  }
-  .eng-cards:hover .eng-card:not(:hover) .eng-art {
-    filter: grayscale(50%) brightness(.34);
-  }
-  .eng-cards:hover .eng-card:not(:hover) .eng-rail {
-    opacity: 1;
-  }
-  .eng-cards:hover .eng-card:not(:hover) .eng-body {
-    opacity: 0;
-    pointer-events: none;
-    transform: translateY(6px);
-    transition-delay: 0s;
-  }
-
-  .eng-cards:hover .eng-card:hover {
-    flex: 4.2;
-    border-color: var(--rule-strong);
-    box-shadow: inset 0 2px 0 var(--accent);
-  }
-  .eng-cards:hover .eng-card:hover .eng-art {
-    filter: grayscale(10%) brightness(.56);
-  }
-  .eng-cards:hover .eng-card:hover .eng-rail {
-    opacity: 0;
-    pointer-events: none;
-  }
-  .eng-cards:hover .eng-card:hover .eng-body {
-    opacity: 1;
-    pointer-events: auto;
-    transform: none;
-    transition: opacity .35s ease .15s, transform .5s var(--ease) .15s;
-  }
+/* After the work: two spans on one scale, each from its own start (the check counts from the audit or the
+   go-live, the lower rate from the end of the engagement), and the three promises in rows under them. */
+.after { margin: 1.5rem 0 0; }
+.after-dwg { display: grid; gap: .3rem 2.5rem; max-width: 58rem; }
+.after-from { font-size: .9375rem; line-height: 1.4; color: var(--ink-2); }
+.after-from + .after-span { margin-bottom: 1rem; }
+.after-span { display: block; width: calc(var(--days) / 365 * 100%); }
+.after-span .cota::after { border-color: var(--line); background-image: linear-gradient(var(--line), var(--line)); background-size: 100% 2px; }
+.after-check .cota::after { border-right: 2px solid var(--accent); }
+.after-dwg .note { display: block; }
+.after-rows { margin: 1.5rem 0 0; border-bottom: 1px solid var(--rule); }
+.after-row { display: grid; gap: .3rem 2.5rem; padding: 1rem 0 1.1rem; border-top: 1px solid var(--rule); }
+.after-row p { max-width: 44rem; margin: 0; color: var(--ink-2); }
+.after-k { font-size: 1.1875rem; font-weight: 600; line-height: 1.25; color: var(--ink); }
+.after-row strong { color: var(--ink); }
+@media (min-width: 48rem) {
+  .after-dwg { grid-template-columns: 15rem minmax(0, 1fr); align-items: end; row-gap: 1.1rem; }
+  .after-from { padding-bottom: .15rem; }
+  .after-from + .after-span { margin-bottom: 0; }
+  .after-dwg .note { grid-column: 2; }
+  .after-row { grid-template-columns: 15rem minmax(0, 1fr); }
 }
+
+/* Who the work fits best, and the roles it can cover. */
+.fit-band { display: grid; gap: 1.5rem 3rem; align-items: start; }
+.fit-copy h2 { margin-top: 0; }
+.fit-copy p { max-width: 40rem; margin-bottom: 0; color: var(--ink-2); }
+.roles-drawer { margin: 0; padding: 0; border: 0; border-block: 1px solid var(--rule); }
+.roles-drawer > summary { position: relative; display: flex; align-items: center; min-height: 3.25rem; padding-right: 2.5rem; font-weight: 600; list-style: none; }
+.roles-drawer > summary::-webkit-details-marker { display: none; }
+.roles-drawer[open] > summary { margin-bottom: 0; }
+.roles-drawer ul { margin: 0; padding: 0 0 .4rem; list-style: none; font-size: .9375rem; color: var(--ink-2); }
+.roles-drawer li { margin: 0; padding: .7rem 0; border-top: 1px solid var(--rule); }
+.roles-drawer li strong { color: var(--ink); }
+@media (min-width: 56rem) { .fit-band { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); } }
 
 /* ---------------------------------------------------------------- motion */
 @keyframes measure { to { transform: scaleX(1); } }
@@ -457,55 +342,32 @@ main.wrap > article.book-page:has(.book-reader) > :not(.book-reader) { max-width
   }
 }
 /* A source line under a figure taken from a study or a filing. */
-.src { margin-top: -.35rem; font: 400 .75rem/1.55 var(--mono); color: var(--muted); overflow-wrap: anywhere; }
+.src { margin-top: -.35rem; font-size: .875rem; line-height: 1.55; color: var(--muted); overflow-wrap: anywhere; }
 .src a { color: inherit; text-decoration: underline; text-underline-offset: .2em; }
 /* The five steps of a deployment: the list numbers them, the text does not. */
 .steps ol { display: grid; gap: 1.15rem; margin: 1.25rem 0 1.5rem; }
 .steps li { padding-left: .35rem; }
 .steps em { display: block; margin-top: .3rem; font: 400 .8125rem/1.5 var(--mono); color: var(--muted); }
-/* The rule the systems are built to: four boxes in a horizontal pipeline on wide screens, with CSS step numbers. */
-.flow {
-  counter-reset: flow-step;
-  display: grid;
-  gap: 1.5rem;
-  max-width: none;
-  margin: 1.5rem 0 2.25rem;
-  padding-left: 0;
-  list-style: none;
-}
-.flow li {
-  counter-increment: flow-step;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: .45rem;
-  margin: 0;
-  padding: 1.15rem 1.2rem 1.25rem;
-  border: 1px solid var(--rule-strong);
-  border-top: 2px solid var(--accent);
-  background: var(--panel);
-  font-size: .9375rem;
-  line-height: 1.5;
-  color: var(--ink-2);
-}
-.flow li::before {
-  content: "0" counter(flow-step);
-  font: 400 .75rem/1 var(--mono);
-  color: var(--accent);
-  margin-bottom: .15rem;
-}
-.flow li strong { color: var(--ink); font-size: 1rem; line-height: 1.25; }
-.flow-stop { display: block; margin-top: auto; padding: .55rem .7rem; border: 1px solid var(--accent); background: var(--tint); color: var(--ink); font-size: .875rem; }
+/* The rule the systems are built to: one line with four stations, numbered in order by the style sheet. The
+   stop hangs under the first one, in red: if a number fails, the line goes no further. */
+.flow { counter-reset: flow-step; position: relative; display: grid; gap: 1.6rem; max-width: none; margin: 1.25rem 0 2rem; padding: 0 0 0 2.75rem; list-style: none; }
+.flow::before { content: ""; position: absolute; left: .8rem; top: .3rem; bottom: .3rem; width: 2px; background: var(--line); }
+.flow li { counter-increment: flow-step; position: relative; margin: 0; font-size: .9375rem; line-height: 1.5; color: var(--ink-2); }
+.flow li::before { content: counter(flow-step); position: absolute; left: -2.75rem; top: -.1rem; display: grid; place-items: center; width: 1.7rem; height: 1.7rem; border: 1.5px solid var(--line); background: var(--ground); font: 400 .875rem/1 var(--mono); color: var(--ink); }
+.flow li strong { display: block; margin-bottom: .2rem; font-size: 1.0625rem; line-height: 1.3; color: var(--ink); }
+.flow-stop { display: block; max-width: 22rem; margin-top: .7rem; padding-top: .55rem; border-top: 2px solid var(--accent); color: var(--ink); }
 @media (min-width: 58rem) {
-  .flow { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; }
+  .flow { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0 2.25rem; padding: 2.5rem 0 0; }
+  .flow::before { left: 0; right: 0; top: .85rem; bottom: auto; width: auto; height: 2px; }
+  .flow li::before { left: 0; top: -2.5rem; }
 }
 /* A sample decision card on the proof page. Three radio buttons pick a play and a checkbox takes the lead
    time away; the selectors below do the rest, with no script. Every play stays readable whatever is picked. */
-.card-demo { position: relative; max-width: none; margin: 1.75rem 0 2rem; border: 1px solid var(--rule-strong); border-top: 2px solid var(--accent); background: var(--panel); color: var(--ink-2); }
+.card-demo { position: relative; max-width: none; margin: clamp(2rem, 4vw, 3rem) 0 2rem; border: 1px solid var(--rule-strong); background: var(--panel); color: var(--ink-2); }
 .card-demo-pick { position: absolute; opacity: 0; pointer-events: none; }
 .card-demo-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: .35rem 1rem; padding: .9rem 1.1rem; border-bottom: 1px solid var(--rule); }
 .card-demo-title { font-weight: 620; color: var(--ink); }
-.card-demo-state { padding: .2rem .55rem; border: 1px solid var(--accent); font: 400 .8125rem/1.3 var(--mono); color: var(--accent); }
+.card-demo-state { padding: .2rem .55rem; border: 1px solid var(--accent); font-size: .8125rem; font-weight: 500; line-height: 1.3; color: var(--accent); }
 .card-demo-note { padding: .75rem 1.1rem; border-bottom: 1px solid var(--rule); font-size: .875rem; line-height: 1.55; color: var(--muted); }
 .card-demo-note strong { color: var(--ink-2); }
 .card-demo-step { padding: 1.1rem; border-bottom: 1px solid var(--rule); font-size: .9375rem; line-height: 1.55; color: var(--ink-2); }
@@ -514,15 +376,15 @@ main.wrap > article.book-page:has(.book-reader) > :not(.book-reader) { max-width
 .card-demo-step > p + p, .card-demo-step > ul + p { margin-top: .75rem; }
 .card-demo-probes, .card-demo-record { display: grid; gap: .45rem; margin: .6rem 0 0; padding-left: 1.1rem; }
 .card-demo-pass { padding-top: .5rem; border-top: 1px solid var(--accent); }
-.card-demo-plays { display: grid; gap: .625rem; margin-top: .9rem; }
-.card-demo-play { display: flex; flex-direction: column; gap: .35rem; padding: .85rem .9rem; border: 1px solid var(--rule); background: var(--ground); color: var(--ink-2); cursor: pointer; transition: border-color .2s; }
-.card-demo-play:hover { border-color: var(--rule-strong); }
+.card-demo-plays { display: grid; margin-top: .9rem; border-bottom: 1px solid var(--rule); }
+.card-demo-play { display: flex; flex-direction: column; gap: .35rem; padding: .85rem .9rem .95rem; border-top: 1px solid var(--rule); color: var(--ink-2); cursor: pointer; transition: background-color .2s; }
+.card-demo-play:hover { background: var(--panel-up); color: var(--ink-2); }
 .card-demo-name { font-weight: 620; color: var(--ink); }
 .card-demo-what { margin-bottom: .2rem; font-size: .875rem; color: var(--muted); }
-.card-demo-row { display: grid; gap: .1rem; padding-top: .35rem; border-top: 1px solid var(--rule); }
+.card-demo-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: baseline; gap: .1rem 1rem; padding-top: .35rem; border-top: 1px solid var(--rule); }
 .card-demo-k { font-size: .875rem; }
 .card-demo-v { font: 400 .875rem/1.55 var(--mono); color: var(--ink); font-variant-numeric: tabular-nums; }
-.card-demo-rank { margin-top: auto; padding-top: .45rem; font: 400 .8125rem/1.45 var(--mono); color: var(--muted); }
+.card-demo-rank { margin-top: auto; padding-top: .45rem; font-size: .8125rem; line-height: 1.45; color: var(--muted); }
 .card-demo-lead { display: inline-flex; align-items: center; min-height: 2.75rem; margin-top: .9rem; padding: .45rem .8rem; border: 1px solid var(--rule-strong); font-size: .875rem; color: var(--ink); cursor: pointer; transition: border-color .2s, color .2s; }
 .card-demo-lead:hover { border-color: var(--accent); color: var(--accent); }
 .card-demo-gap { margin-top: .75rem; padding-top: .6rem; border-top: 1px solid var(--accent); }
@@ -531,7 +393,8 @@ main.wrap > article.book-page:has(.book-reader) > :not(.book-reader) { max-width
 #card-play-a:checked ~ .card-demo-step .card-demo-play[data-play="a"],
 #card-play-b:checked ~ .card-demo-step .card-demo-play[data-play="b"],
 #card-play-c:checked ~ .card-demo-step .card-demo-play[data-play="c"] {
-  border-color: var(--accent);
+  background: var(--tint);
+  color: var(--ink-2);
   box-shadow: inset 0 2px 0 var(--accent);
 }
 #card-play-a:checked ~ .card-demo-step .card-demo-if[data-play="a"],
@@ -553,290 +416,198 @@ main.wrap > article.book-page:has(.book-reader) > :not(.book-reader) { max-width
 }
 
 @media (min-width: 44rem) {
-  .card-demo-plays { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .card-demo-plays { grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid var(--rule); }
+  .card-demo-play { border-top: 0; border-left: 1px solid var(--rule); }
+  .card-demo-play:first-child { border-left: 0; }
+  .card-demo-row { grid-template-columns: minmax(0, 1fr); }
 }
 
-/* The evidence plates (risks.py): what a rollout role takes on beside my cutover engagement, and how far
-   each risk is backed. Every mark takes its colour here, never from the markup. */
-.risk-map { max-width: 60rem; margin: 1.75rem 0 2.25rem; }
-.risk-lead { margin: 0 0 1rem; font-weight: 620; font-size: 1.125rem; line-height: 1.35; color: var(--ink); }
-.risk-table { width: 100%; border-collapse: collapse; font-size: .9375rem; line-height: 1.45; color: var(--ink-2); }
-.risk-table th, .risk-table td { padding: .7rem .9rem .7rem 0; border-bottom: 1px solid var(--rule); text-align: left; vertical-align: top; }
-.risk-table thead th { font-weight: 500; font-size: .8125rem; line-height: 1.3; color: var(--muted); }
-.risk-table tbody th { width: 28%; font-weight: 620; color: var(--ink); }
-.risk-level { display: inline-flex; align-items: flex-start; gap: .5rem; }
-.risk-level-mark { flex: none; width: 1.75rem; height: .5rem; margin-top: .45em; }
-.risk-level-on { fill: var(--accent); }
-.risk-level-off { fill: none; stroke: var(--muted); stroke-width: 1; }
+/* The evidence plates (risks.py). On the proof page, two lines for each risk on one scale: the upper one is how
+   far I went, the lower one, in red, how far a stranger can check it without me. On the engagements page, a
+   mark for each coded posting and for my engagement, and how many postings build or answer for each risk.
+   Every mark takes its colour here, never from the markup. */
+.risk-map { max-width: 70rem; margin: 1.25rem 0 0; }
+.risk-lead { max-width: 44rem; font-size: 1.1875rem; line-height: 1.45; color: var(--ink-2); }
+.risk-lines { display: flex; flex-wrap: wrap; gap: .35rem 1.75rem; margin: 1.1rem 0 0; font-size: .9375rem; line-height: 1.4; color: var(--ink-2); }
+.risk-lines span { display: inline-flex; align-items: center; }
+.risk-swatch { display: inline-block; width: 1.4rem; height: 3px; margin-right: .5rem; }
+.risk-swatch-reached { background: var(--line); }
+.risk-swatch-check { background: var(--accent); }
+.risk-key { margin: .6rem 0 0; max-width: 50rem; font-size: .9375rem; line-height: 1.55; color: var(--muted); }
+.risk-scale { display: none; }
+.risk-rows { margin: 1.5rem 0 0; padding: 0; list-style: none; border-bottom: 1px solid var(--rule); }
+.risk-rows > li { margin: 0; }
+.risk-row { margin: 0; padding: 0; border: 0; border-top: 1px solid var(--rule); }
+.risk-row > summary { position: relative; display: grid; gap: .5rem 2.5rem; align-items: center; min-height: 3.25rem; padding: .85rem 2.5rem .95rem 0; font-weight: 400; cursor: pointer; list-style: none; }
+.risk-row > summary::-webkit-details-marker { display: none; }
+.risk-row[open] > summary { margin-bottom: 0; }
+.risk-name { font-weight: 600; line-height: 1.3; }
+.risk-pays { display: inline-block; margin-left: .5rem; font-size: .8125rem; font-weight: 400; color: var(--muted); white-space: nowrap; }
+.risk-row > summary:hover .risk-name { text-decoration: underline; text-decoration-color: var(--accent); text-decoration-thickness: 1.5px; text-underline-offset: .2em; }
+.risk-track { display: block; width: 100%; height: 1.75rem; overflow: visible; }
+.risk-track path { fill: none; vector-effect: non-scaling-stroke; }
+.risk-track-tick { stroke: var(--rule-strong); stroke-width: 1; }
+.risk-track-reached { stroke: var(--line); stroke-width: 2.5; }
+.risk-track-check { stroke: var(--accent); stroke-width: 2.5; }
+.risk-evidence { max-width: 46rem; padding: 0 0 1.25rem; font-size: .9375rem; line-height: 1.55; color: var(--ink-2); }
+.risk-evidence p { margin: .4rem 0; }
+.risk-evidence strong { color: var(--ink); }
 .risk-level-word { color: var(--ink-2); }
-.risk-key, .risk-limit { font-size: .875rem; line-height: 1.55; color: var(--muted); }
-.risk-key { margin: 0 0 .75rem; }
-.risk-limit { margin: .9rem 0 0; }
-.risk-rows { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--rule); }
-.risk-row { margin: 0; padding-block: 0; border-block: 0; border-bottom: 1px solid var(--rule); }
-.risk-row summary { display: flex; flex-wrap: wrap; align-items: center; gap: .35rem 1rem; padding: .75rem 0; list-style: none; }
-.risk-row summary::-webkit-details-marker { display: none; }
-.risk-row summary::after { content: "+"; margin-left: auto; color: var(--muted); font-weight: 500; }
-.risk-row[open] summary::after { content: "\2212"; }
-.risk-row[open] summary { margin-bottom: 0; }
-.risk-row summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
-.risk-name { flex: 1 1 16rem; color: var(--ink); }
-.risk-pays { flex: none; font-size: .8125rem; font-weight: 500; color: var(--muted); }
-.risk-track { flex: none; width: 7rem; height: 1.125rem; }
-.risk-track-line { stroke: var(--rule-strong); stroke-width: 1; }
-.risk-track-tick { fill: var(--muted); }
-.risk-track-check { fill: none; stroke: var(--ink); stroke-width: 1.5; }
-.risk-track-reached { fill: var(--accent); }
-.risk-evidence { padding: 0 0 .9rem; font-size: .9375rem; line-height: 1.55; color: var(--ink-2); }
-.risk-evidence p { margin: .35rem 0; }
 .risk-grade { color: var(--muted); }
-
-@media (max-width: 36rem) {
-  .risk-table thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
-  .risk-table, .risk-table tbody, .risk-table tbody tr, .risk-table tbody th, .risk-table td { display: block; }
-  .risk-table tr { padding: .7rem 0; border-bottom: 1px solid var(--rule); }
-  .risk-table th, .risk-table td { padding: .2rem 0; border: 0; }
-  .risk-table tbody th { width: auto; }
-  .risk-table td[data-label]::before { content: attr(data-label); display: block; font-size: .8125rem; color: var(--muted); }
-}
-
-/* ---------------------------------------------------------------- elevated bands & grids (engagements + proof) */
-.band, .rate-strip, .plate-card, .fit-band, .proof-strip, .writing-grid { max-width: 74rem; }
-
-.rate-strip {
-  display: grid;
-  gap: 1rem 2.5rem;
-  align-items: center;
-  margin: 0 0 2.75rem;
-  padding: 1.35rem 1.75rem;
-  border: 1px solid var(--rule);
-  border-top: 2px solid var(--accent);
-  background: var(--panel);
-}
-.rate-strip-head h2 { margin: 0 0 .35rem; font-size: 1.35rem; }
-.rate-strip-head .price { margin: 0; font-size: .9375rem; }
-.rate-strip-copy p { margin: 0; font-size: .9375rem; color: var(--ink-2); }
-@media (min-width: 52rem) {
-  .rate-strip { grid-template-columns: minmax(15rem, 4fr) minmax(0, 8fr); }
-}
-
-.band {
-  margin: 2.75rem 0;
-  padding: clamp(1.75rem, 3.5vw, 2.75rem);
-  border: 1px solid var(--rule);
-}
-.band > h2:first-child { margin-top: 0; }
-.band-deep {
-  background:
-    radial-gradient(circle at 92% 10%, var(--panel-glow) 0%, transparent 45%),
-    var(--ground-deep);
-}
-.band-panel { background: var(--panel); color: var(--ink); }
-.band > p:not(.track-note) { max-width: 52rem; color: var(--ink-2); }
-
-.promise-grid {
-  display: grid;
-  gap: 1px;
-  margin-top: 1.5rem;
-  border: 1px solid var(--rule);
-  background: var(--rule);
-}
-.promise-card {
-  display: flex;
-  flex-direction: column;
-  gap: .65rem;
-  padding: clamp(1.35rem, 2.5vw, 1.85rem);
-  background: var(--ground);
-  color: var(--ink);
-}
-.promise-accent { background: var(--tint); box-shadow: inset 0 2px 0 var(--accent); }
-.promise-num {
-  font-weight: 660;
-  font-size: clamp(2.1rem, 3.2vw, 3rem);
-  line-height: .95;
-  letter-spacing: -.02em;
-  color: var(--accent);
-  font-variant-numeric: lining-nums tabular-nums;
-}
-.promise-card p { margin: 0; font-size: .9375rem; line-height: 1.55; color: var(--ink-2); }
-.promise-card strong { color: var(--ink); }
-@media (min-width: 52rem) {
-  .promise-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-}
-
-.plate-card {
-  margin: 2.75rem 0;
-  padding: clamp(1.75rem, 3.5vw, 2.65rem);
-  border: 1px solid var(--rule-strong);
-  border-top: 2px solid var(--accent);
-  background:
-    radial-gradient(circle at 88% 8%, var(--panel-glow) 0%, transparent 46%),
-    var(--panel);
-}
-.plate-card > h2:first-child { margin-top: 0; margin-bottom: 1.25rem; }
-.plate-card .risk-map { max-width: none; margin: 0; }
-.radar-bar {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem 1.5rem;
-  margin-top: 1.75rem;
-  padding-top: 1.35rem;
-  border-top: 1px solid var(--rule);
-}
-.radar-bar p { margin: 0; max-width: 38rem; font-size: .9375rem; color: var(--ink-2); }
-
-.fit-band {
-  display: grid;
-  gap: 1.5rem 2.5rem;
-  align-items: start;
-  margin: 2.75rem 0 1.5rem;
-}
-.fit-copy h2 { margin-top: 0; }
-.fit-copy p { margin-bottom: 0; color: var(--ink-2); }
-.roles-drawer {
-  margin: 0;
-  padding: 1.15rem 1.4rem;
-  border: 1px solid var(--rule-strong);
-  background: var(--panel);
-}
-.roles-drawer summary { display: flex; align-items: center; justify-content: space-between; min-height: 2.75rem; list-style: none; color: var(--ink); }
-.roles-drawer summary::-webkit-details-marker { display: none; }
-.roles-drawer summary::after { content: "+"; font: 400 1.1rem/1 var(--mono); color: var(--accent); }
-.roles-drawer[open] summary::after { content: "\2212"; }
-.roles-drawer ul { margin-top: .85rem; padding-left: 1.15rem; font-size: .9375rem; color: var(--ink-2); }
-.roles-drawer li strong { color: var(--ink); }
+.risk-limit { margin: 1.1rem 0 0; max-width: 44rem; font-size: .9375rem; color: var(--muted); }
 @media (min-width: 56rem) {
-  .fit-band { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); }
+  /* The names of the four levels stand over the lines, each over its own stroke of the scale. */
+  .risk-row > summary { grid-template-columns: minmax(0, 1fr) 32rem; }
+  .risk-scale { display: block; position: relative; width: 32rem; height: 4.4rem; margin: 1.5rem 2.5rem 0 auto; font-size: .8125rem; line-height: 1.3; color: var(--muted); }
+  .risk-scale span { position: absolute; bottom: .4rem; width: 6.2rem; }
+  .risk-scale span:nth-child(1) { left: 0; }
+  .risk-scale span:nth-child(2) { left: 33.333%; transform: translateX(-50%); text-align: center; }
+  .risk-scale span:nth-child(3) { left: 66.667%; transform: translateX(-50%); text-align: center; }
+  .risk-scale span:nth-child(4) { right: 0; text-align: right; }
+  .risk-scale + .risk-rows { margin-top: 0; }
 }
 
-/* ---------------------------------------------------------------- proof gallery blocks */
-.proof-strip {
-  display: grid;
-  gap: 1px;
-  margin: 1.75rem 0 2.5rem;
-  border: 1px solid var(--rule-strong);
-  background: var(--rule);
-}
-.proof-kpi {
-  display: flex;
-  flex-direction: column;
-  gap: .5rem;
-  padding: 1.35rem 1.4rem;
-  background: var(--panel);
-}
-.proof-kpi-lead { background: var(--tint); box-shadow: inset 0 2px 0 var(--accent); }
-.proof-kpi-n {
-  font-weight: 660;
-  font-size: clamp(2.15rem, 3.6vw, 3.1rem);
-  line-height: .94;
-  letter-spacing: -.02em;
-  color: var(--ink);
-  font-variant-numeric: lining-nums tabular-nums;
-}
-.proof-kpi-lead .proof-kpi-n { color: var(--accent); }
-.proof-kpi-t { font-size: .875rem; line-height: 1.45; color: var(--ink-2); }
-@media (min-width: 44rem) { .proof-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-@media (min-width: 64rem) { .proof-strip { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
-
-.track-grid ul, .sys-grid ul {
-  display: grid;
-  gap: 1rem;
-  margin: 1.5rem 0;
-  padding-left: 0;
-  list-style: none;
-}
-.track-grid li, .sys-grid li {
-  margin: 0;
-  padding: 1.35rem 1.45rem;
-  border: 1px solid var(--rule);
-  background: var(--panel);
-  font-size: .9375rem;
-  line-height: 1.55;
-  color: var(--ink-2);
-  transition: border-color .2s;
-}
-.track-grid li:hover, .sys-grid li:hover { border-color: var(--rule-strong); }
-.track-grid li:first-child {
-  border-color: var(--rule-strong);
-  border-top: 2px solid var(--accent);
-  background: var(--tint);
-}
-.track-grid li strong, .sys-grid li strong {
-  display: block;
-  margin-bottom: .45rem;
-  font-size: 1.0625rem;
-  line-height: 1.25;
-  color: var(--ink);
-}
-.track-note { margin: 1rem 0 0; max-width: 54rem; font-size: .875rem; color: var(--muted); }
-@media (min-width: 52rem) {
-  .track-grid ul, .sys-grid ul { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .track-grid li:first-child { grid-column: 1 / -1; }
+/* The scope plate. A mark is three strokes filled from the bottom: the level reads from its shape. */
+.risk-legend { display: flex; flex-wrap: wrap; gap: .45rem 1.75rem; margin: 1.4rem 0 0; padding: 0; list-style: none; font-size: .9375rem; color: var(--ink-2); }
+.risk-legend li, .risk-legend .risk-level { display: flex; align-items: center; gap: .55rem; margin: 0; }
+.risk-read { margin: .8rem 0 0; max-width: 50rem; font-size: .9375rem; line-height: 1.5; color: var(--muted); }
+.risk-level { display: inline-block; }
+.risk-tally { display: inline-grid; gap: 2px; width: 1.35rem; vertical-align: middle; }
+.risk-tally i { display: block; height: 5px; }
+.risk-level-off { background: var(--rule); }
+.risk-level-on { background: var(--line); }
+.risk-mine .risk-level-on { background: var(--accent); }
+.risk-matrix .risk-level-word { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.risk-matrix { width: 100%; margin-top: 1.4rem; border-collapse: collapse; table-layout: fixed; }
+.risk-matrix th { font-weight: 400; text-align: left; }
+.risk-matrix thead th { padding: 0 0 .6rem; font-size: .8125rem; line-height: 1.3; color: var(--muted); vertical-align: bottom; }
+.risk-matrix thead th[colspan] { text-align: center; }
+.risk-matrix tbody tr { border-top: 1px solid var(--rule); }
+.risk-matrix tbody tr:last-child { border-bottom: 1px solid var(--rule); }
+.risk-matrix tbody th { padding: .65rem 1rem .7rem 0; font-weight: 600; line-height: 1.3; }
+.risk-matrix td { padding: .5rem 0; text-align: center; }
+.risk-matrix .risk-gap { padding-left: 1.1rem; }
+.risk-matrix td.risk-count { padding-left: 1.1rem; text-align: left; font-size: .8125rem; line-height: 1.3; color: var(--ink-2); white-space: nowrap; }
+.risk-count b { font-size: 1.5rem; font-weight: 600; line-height: 1; letter-spacing: -.02em; color: var(--ink); }
+.risk-c-lv { width: 2.25rem; }
+.risk-c-gap { width: 3.35rem; }
+.risk-c-mine { width: 8rem; }
+.risk-c-count { width: 7rem; }
+.risk-map .src { max-width: 50rem; margin-top: 1.25rem; font-size: .9375rem; }
+.radar-bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem 2rem; margin-top: 1.75rem; }
+.radar-bar p { margin: 0; max-width: 38rem; font-size: .9375rem; color: var(--ink-2); }
+/* On a narrow screen each risk is its name, its count, and under them its eleven marks in one line: the two
+   kinds of five roles that risks.py checks, then mine. The header row leaves the sight, never the reader. */
+@media (max-width: 47.99rem) {
+  .risk-matrix colgroup { display: none; }
+  .risk-matrix thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+  .risk-matrix, .risk-matrix tbody { display: block; }
+  .risk-matrix tbody tr { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)) .35rem repeat(5, minmax(0, 1fr)) .35rem minmax(0, 1fr); align-items: center; padding-block: .8rem .9rem; }
+  .risk-matrix tbody th { grid-column: 1 / 10; padding: 0 0 .45rem; }
+  .risk-matrix td, .risk-matrix .risk-gap { padding: .2rem 0; }
+  .risk-matrix td.risk-gap { grid-column-start: 7; }
+  .risk-matrix td.risk-mine { grid-column-start: 13; }
+  .risk-matrix td.risk-count { grid-row: 1; grid-column: 10 / -1; justify-self: end; padding: 0; }
 }
 
-.audit-spotlight {
-  display: grid;
-  gap: 1.75rem 2.75rem;
-  align-items: center;
-  margin-top: 1.25rem;
+/* ---------------------------------------------------------------- figures with their grade (the home page and the proof page)
+   A row for each figure: what kind of source stands behind it, the number, what it measures, and where it leads. */
+.fig-list { margin-top: clamp(1.5rem, 3vw, 2.25rem); border-bottom: 1px solid var(--rule); }
+.fig { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: .4rem 1rem; align-items: center; padding-block: 1rem; border-top: 1px solid var(--rule); transition: background-color .2s; }
+.fig-g { justify-self: start; padding: .16rem .45rem .2rem; border: 1px solid var(--rule-strong); font-size: .8125rem; line-height: 1.3; color: var(--ink-2); white-space: nowrap; }
+.fig-n { justify-self: end; font-size: 1.5rem; font-weight: 600; line-height: 1.1; letter-spacing: -.02em; white-space: nowrap; }
+.fig-t, .fig-go { grid-column: 1 / -1; }
+.fig-t { color: var(--ink-2); }
+.fig-go { justify-self: start; display: inline-flex; align-items: center; min-height: 2.75rem; font-weight: 500; text-decoration: underline; text-decoration-color: var(--accent); text-decoration-thickness: 1.5px; text-underline-offset: .22em; transition: color .2s; }
+.fig:hover .fig-go { color: var(--accent-up); }
+@media (min-width: 54rem) {
+  .fig { grid-template-columns: 9.5rem 9rem minmax(0, 1fr) 11rem; gap: .9rem 1.5rem; padding-block: .6rem; }
+  .fig-g { grid-column: 1; grid-row: 1; }
+  .fig-n { grid-column: 2; grid-row: 1; justify-self: start; }
+  .fig-t { grid-column: 3; grid-row: 1; }
+  .fig-go { grid-column: 4; grid-row: 1; justify-self: end; }
 }
-.audit-visual {
-  display: flex;
-  flex-direction: column;
-  gap: .55rem;
-  padding: 1.5rem;
-  border: 1px solid var(--rule);
-  background: var(--ground-deep);
+.note { font-size: .8125rem; line-height: 1.4; color: var(--muted); }
+/* On the proof page a figure jumps to its section, which comes right under: wider columns for the grade and the
+   section's name, and on a phone the name of the jump is not drawn (it is still read out). */
+.fig-jumps { margin-top: clamp(1.75rem, 3vw, 2.5rem); }
+.fig-jumps .fig { text-decoration: none; }
+.fig-jumps .fig:hover { color: var(--ink); }
+@media (max-width: 53.99rem) {
+  .fig-jumps .fig { position: relative; padding-block: .85rem .95rem; }
+  .fig-jumps .fig-go { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 }
-.audit-big {
-  font-weight: 660;
-  font-size: clamp(3rem, 6vw, 4.75rem);
-  line-height: .9;
-  letter-spacing: -.02em;
-  color: var(--accent);
-  font-variant-numeric: lining-nums tabular-nums;
+@media (min-width: 54rem) {
+  .fig-jumps .fig { grid-template-columns: 13rem 9rem minmax(0, 1fr) 17rem; }
+  .fig-jumps .fig-go { text-align: right; }
 }
-.audit-sub { font-size: .9375rem; line-height: 1.45; color: var(--ink-2); }
-.audit-bar { margin-top: .5rem; }
-.audit-bar svg { display: block; width: 100%; height: .875rem; }
-.audit-bar rect { stroke: var(--ground-deep); stroke-width: 2; vector-effect: non-scaling-stroke; }
+
+/* ---------------------------------------------------------------- rows that fold (page_parts.py)
+   A list of things, each with its title: shut on a phone, where the title is what shows and the first row opens
+   the list, and open from 56rem up, with the title beside its text. Without ::details-content a row stays a
+   plain <details> at every width. */
+.rows { margin: 1.5rem 0 0; padding: 0; list-style: none; border-bottom: 1px solid var(--rule); }
+.rows > li { margin: 0; }
+.row { margin: 0; padding: 0; border: 0; border-top: 1px solid var(--rule); }
+.row > summary { position: relative; display: block; padding: .95rem 2.5rem 1rem 0; font-weight: 400; line-height: 1.35; cursor: pointer; list-style: none; }
+.row > summary::-webkit-details-marker { display: none; }
+.row[open] > summary { margin-bottom: 0; }
+.row > summary:hover strong { text-decoration: underline; text-decoration-color: var(--accent); text-decoration-thickness: 1.5px; text-underline-offset: .2em; }
+.row > p { max-width: 44rem; margin: 0; padding: 0 0 1.2rem; font-size: .9375rem; line-height: 1.6; color: var(--ink-2); }
+.rows + p { margin-top: 1.75rem; }
+.track-note { margin-top: 1.1rem; font-size: .9375rem; color: var(--muted); }
+@media (min-width: 56rem) {
+  @supports selector(::details-content) {
+    .row { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); column-gap: clamp(2rem, 4vw, 4rem); }
+    .row::details-content { content-visibility: visible; }
+    .row > summary { padding-right: 0; cursor: auto; pointer-events: none; }
+    .row > summary::before, .row > summary::after { content: none; }
+    .row > p { padding-top: .95rem; }
+  }
+}
+
+/* ---------------------------------------------------------------- the published audit, with the drawing of its claims */
+.audit { display: grid; gap: 1.5rem 3.5rem; align-items: start; margin-top: 1.25rem; }
+.audit-lead { max-width: 30rem; margin: 0; font-size: 1.1875rem; line-height: 1.45; color: var(--ink-2); }
+.audit-big { display: block; margin-bottom: .5rem; font-size: clamp(2.6rem, 2rem + 2.6vw, 3.75rem); font-weight: 600; line-height: 1; letter-spacing: -.03em; color: var(--ink); }
+.audit-sub { display: block; }
+.audit .drawing { min-width: 0; }
+.drawing .claims-base { margin-top: 1rem; }
+.audit-copy p { max-width: 34rem; margin: 0 0 1rem; color: var(--ink-2); }
+.audit-copy p:last-child { margin-bottom: 0; }
+.audit-copy strong { color: var(--ink); }
+@media (min-width: 62rem) {
+  .audit { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); }
+  .audit .drawing { grid-column: 2; grid-row: 1 / 3; padding-top: .6rem; }
+}
+/* The claims on both sides of the delivery day. The bar is one drawing a claim wide per unit; the marks over
+   and under it take the same shares, so every dimension line stands over its own stretch of the bar. */
+.claims { position: relative; display: grid; align-items: end; padding-top: 1.7rem; }
+.cota, .sub { display: block; font: 400 .8125rem/1.3 var(--mono); color: var(--ink-2); }
+.cota b, .sub b { font-weight: 400; color: var(--ink); }
+.cota > span { display: block; padding: 0 .35rem .3rem; }
+.cota::after, .cota-rest::before { content: ""; display: block; height: 11px; border: solid var(--muted); border-width: 0 1px; background: linear-gradient(var(--muted), var(--muted)) 0 50% / 100% 1px no-repeat; }
+.cota-late { grid-column: 1; grid-row: 1; margin-bottom: .4rem; }
+.cota-after { grid-column: 2 / 4; grid-row: 1; margin-bottom: .4rem; }
+.claims-bar { grid-column: 1 / -1; grid-row: 2; display: block; width: 100%; height: 1.25rem; }
+.claims-bar rect { stroke: var(--ground); stroke-width: 2; vector-effect: non-scaling-stroke; }
+.cota-rest { grid-column: 3; grid-row: 3; align-self: start; margin-top: .4rem; }
+.cota-rest::after { content: none; }
+.cota-rest > span { padding: .3rem .35rem 0; }
+.sub-flag { grid-column: 1 / 3; grid-row: 3; justify-self: end; align-self: start; margin-right: var(--half, 0%); padding: 1.1rem .6rem 0 0; border-right: 1px solid var(--muted); text-align: right; }
+.datum { grid-column: 2; grid-row: 1 / 4; position: absolute; top: -1.7rem; bottom: 0; left: 0; width: 0; border-left: 1px solid var(--line); }
+.datum > span { position: absolute; top: 0; left: .4rem; font-size: .8125rem; line-height: 1.3; color: var(--ink); white-space: nowrap; }
+.claims-base { display: block; max-width: 46rem; font-size: .9375rem; color: var(--muted); }
 .seg-late { fill: var(--accent); }
 .seg-flag { fill: var(--ink); }
 .seg-open { fill: var(--bar-rest); }
-.audit-legend { display: flex; flex-wrap: wrap; gap: .35rem 1.15rem; margin-top: .65rem; font-size: .8125rem; color: var(--ink-2); font-variant-numeric: lining-nums tabular-nums; }
-.audit-leg::before { content: ""; display: inline-block; width: .55rem; height: .55rem; margin-right: .4rem; vertical-align: -.02rem; }
-.audit-leg-late::before { background: var(--accent); }
-.audit-leg-flag::before { background: var(--ink); }
-.audit-leg-open::before { background: var(--bar-rest); }
-.audit-copy p { margin-bottom: 1.25rem; color: var(--ink-2); }
-.audit-copy strong { color: var(--ink); }
-@media (min-width: 52rem) {
-  .audit-spotlight { grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); }
-}
 
-.writing-grid {
-  display: grid;
-  gap: 1rem;
-  margin: 1.25rem 0 2rem;
-}
-.writing-card {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: 1.15rem;
-  padding: 1.5rem 1.65rem;
-  border: 1px solid var(--rule);
-  background: var(--panel);
-  color: var(--ink-2);
-}
-.writing-card p { margin: 0; }
-.writing-card .btn { align-self: flex-start; }
-.writing-book { border-color: var(--rule-strong); border-top: 2px solid var(--accent); background: var(--tint); }
-@media (min-width: 52rem) {
-  .writing-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-}
+/* ---------------------------------------------------------------- what is written: two rows */
+.writing-grid { display: grid; gap: 0 3rem; margin: 1.25rem 0 0; }
+.writing-card { padding: 1.1rem 0 1.25rem; border-top: 1px solid var(--rule); }
+.writing-card p { max-width: 40rem; margin: 0 0 .9rem; color: var(--ink-2); }
+.writing-card p:last-child { margin-bottom: 0; }
+@media (min-width: 56rem) { .writing-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 
 /* ---------------------------------------------------------------- interactive zero-JS book sample reader */
 .book-page { max-width: 44rem; }

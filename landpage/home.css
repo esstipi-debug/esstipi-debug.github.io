@@ -17,7 +17,6 @@
 }
 .state-fig a:hover, .thesis-body a:hover, .pillar a:hover, .short a:hover, .method-more a:hover, #library .next a:hover { color: var(--accent-up); }
 .tag { display: inline-block; padding: .16rem .45rem .2rem; border: 1px solid var(--rule-strong); font-size: .8125rem; line-height: 1.3; color: var(--ink-2); white-space: nowrap; }
-.note { font-size: .8125rem; line-height: 1.4; color: var(--muted); }
 
 /* ---------------------------------------------------------------- the headline and, beside it, the sheet of situations */
 .top { display: grid; gap: clamp(2rem, 4vw, 3.5rem); align-items: start; padding-block: clamp(2rem, 1rem + 4.5vw, 4.5rem) clamp(2.5rem, 5vw, 4.5rem); }
@@ -126,42 +125,12 @@
 
 /* ---------------------------------------------------------------- what you can check: four figures, the third with its drawing */
 .fig-note { margin-top: .8rem; max-width: 36rem; color: var(--ink-2); }
-.fig-list { margin-top: clamp(1.5rem, 3vw, 2.25rem); border-bottom: 1px solid var(--rule); }
-.fig { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: .4rem 1rem; align-items: center; padding-block: 1rem; border-top: 1px solid var(--rule); transition: background-color .2s; }
-.fig-g { justify-self: start; padding: .16rem .45rem .2rem; border: 1px solid var(--rule-strong); font-size: .8125rem; line-height: 1.3; color: var(--ink-2); white-space: nowrap; }
-.fig-n { justify-self: end; font-size: 1.5rem; font-weight: 600; line-height: 1.1; letter-spacing: -.02em; white-space: nowrap; }
-.fig-t, .fig-go, .claims, .claims-base { grid-column: 1 / -1; }
-.fig-t { color: var(--ink-2); }
-.fig-go { justify-self: start; display: inline-flex; align-items: center; min-height: 2.75rem; font-weight: 500; text-decoration: underline; text-decoration-color: var(--accent); text-decoration-thickness: 1.5px; text-underline-offset: .22em; transition: color .2s; }
-.fig:hover .fig-go { color: var(--accent-up); }
+.claims, .claims-base { grid-column: 1 / -1; }
 @media (min-width: 54rem) {
-  .fig { grid-template-columns: 9.5rem 9rem minmax(0, 1fr) 11rem; gap: .9rem 1.5rem; padding-block: .6rem; }
-  .fig-g { grid-column: 1; grid-row: 1; }
-  .fig-n { grid-column: 2; grid-row: 1; justify-self: start; }
-  .fig-t { grid-column: 3; grid-row: 1; }
-  .fig-go { grid-column: 4; grid-row: 1; justify-self: end; }
   .claims { grid-row: 2; }
   .claims-base { grid-row: 3; }
   .fig-drawn { padding-bottom: 1.25rem; }
 }
-/* The claims on both sides of the delivery day. The bar is one drawing a claim wide per unit; the marks over
-   and under it take the same shares, so every dimension line stands over its own stretch of the bar. */
-.claims { position: relative; display: grid; align-items: end; padding-top: 1.7rem; }
-.cota, .sub { display: block; font: 400 .8125rem/1.3 var(--mono); color: var(--ink-2); }
-.cota b, .sub b { font-weight: 400; color: var(--ink); }
-.cota > span { display: block; padding: 0 .35rem .3rem; }
-.cota::after, .cota-rest::before { content: ""; display: block; height: 11px; border: solid var(--muted); border-width: 0 1px; background: linear-gradient(var(--muted), var(--muted)) 0 50% / 100% 1px no-repeat; }
-.cota-late { grid-column: 1; grid-row: 1; margin-bottom: .4rem; }
-.cota-after { grid-column: 2 / 4; grid-row: 1; margin-bottom: .4rem; }
-.claims-bar { grid-column: 1 / -1; grid-row: 2; display: block; width: 100%; height: 1.25rem; }
-.claims-bar rect { stroke: var(--ground); stroke-width: 2; vector-effect: non-scaling-stroke; }
-.cota-rest { grid-column: 3; grid-row: 3; align-self: start; margin-top: .4rem; }
-.cota-rest::after { content: none; }
-.cota-rest > span { padding: .3rem .35rem 0; }
-.sub-flag { grid-column: 1 / 3; grid-row: 3; justify-self: end; align-self: start; margin-right: var(--half, 0%); padding: 1.1rem .6rem 0 0; border-right: 1px solid var(--muted); text-align: right; }
-.datum { grid-column: 2; grid-row: 1 / 4; position: absolute; top: -1.7rem; bottom: 0; left: 0; width: 0; border-left: 1px solid var(--line); }
-.datum > span { position: absolute; top: 0; left: .4rem; font-size: .8125rem; line-height: 1.3; color: var(--ink); white-space: nowrap; }
-.claims-base { display: block; max-width: 46rem; font-size: .9375rem; color: var(--muted); }
 
 /* ---------------------------------------------------------------- how the work goes: the same line in three states */
 .stages { display: grid; max-width: 56rem; margin-top: clamp(1.5rem, 3vw, 2.5rem); }

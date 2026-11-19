@@ -40,75 +40,67 @@
 <h1>What I changed, checkable before we talk.</h1>
 <p class="kicker">Proof</p>
 </hgroup>
-<div class="proof-strip" aria-label="Headline figures">
-<div class="proof-kpi proof-kpi-lead">
-<span class="proof-kpi-n">50,000</span>
-<span class="proof-kpi-t">SKU warehouse cutover in Melbourne; order processing time fell about 20%</span>
-</div>
-<div class="proof-kpi">
-<span class="proof-kpi-n">USD 30M</span>
-<span class="proof-kpi-t">Cross-border e-commerce P&amp;L; about USD 5M of inventory freed</span>
-</div>
-<div class="proof-kpi">
-<span class="proof-kpi-n">2,708</span>
-<span class="proof-kpi-t">Public marketplace claims audited; 57% written on or before delivery day</span>
-</div>
-<div class="proof-kpi">
-<span class="proof-kpi-n">10,607</span>
-<span class="proof-kpi-t">Passing tests on the deterministic replenishment engine (private repository)</span>
-</div>
+<p class="actions"><a class="btn btn-contact" href="mailto:marcos.stipicic@gmail.com?subject=Question%20on%20the%20proof">Ask for a walk-through</a></p>
+
+<div class="fig-list fig-jumps" role="group" aria-label="Headline figures">
+<a class="fig" href="#track-record"><span class="fig-g">My field work</span><span class="fig-n">50,000</span><span class="fig-t">SKU warehouse cutover in Melbourne; order processing time fell about 20%</span><span class="fig-go">Field work</span></a>
+<a class="fig" href="#track-record"><span class="fig-g">My field work</span><span class="fig-n">USD 30M</span><span class="fig-t">Cross-border e-commerce P&amp;L; about USD 5M of inventory freed</span><span class="fig-go">Field work</span></a>
+<a class="fig" href="#sample-audit"><span class="fig-g">My analysis</span><span class="fig-n">2,708</span><span class="fig-t">Public marketplace claims audited; 57% written on or before delivery day</span><span class="fig-go">Published audit you can re-run</span></a>
+<a class="fig" href="#built-systems"><span class="fig-g">Tested, private repository</span><span class="fig-n">10,607</span><span class="fig-t">Passing tests on the deterministic replenishment engine (private repository)</span><span class="fig-go">Built systems</span></a>
 </div>
 
-<div class="plate-card">
+<section class="band">
 <h2 id="evidence-map">What each claim rests on</h2>
 <figure class="risk-map" id="backing-plate">
 <figcaption class="risk-lead">I answered for five of these seven risks in live operations, and you have my word for those. Two you can re-run yourself.</figcaption>
-<p class="risk-key">The dot is how far I went; the ring is how far you can check it without me. From left to right: not in scope, described, built and tested outside a live system, answered for it in a live operation.</p>
+<p class="risk-lines"><span><i class="risk-swatch risk-swatch-reached" aria-hidden="true"></i>How far I went</span><span><i class="risk-swatch risk-swatch-check" aria-hidden="true"></i>What you can check without me</span></p>
+<p class="risk-key">The upper line is how far I went; the lower line, in red, is how far you can check it without me. From left to right: not in scope, described, built and tested outside a live system, answered for it in a live operation.</p>
+<div class="risk-scale" aria-hidden="true"><span>Not in scope</span><span>Described</span><span>Built and tested outside a live system</span><span>Answered for it in a live operation</span></div>
 <ul class="risk-rows">
 <li><details class="risk-row">
-<summary><span class="risk-name">The system is not installed, configured and supported</span><span class="risk-pays">Operations</span><svg class="risk-track" data-reached="2" data-checkable="2" viewBox="0 0 112 18" role="img" aria-label="How far I went: built and tested outside a live system. What you can check without me: built and tested outside a live system."><line class="risk-track-line" x1="8" y1="9" x2="104" y2="9"/><circle class="risk-track-tick" cx="8" cy="9" r="1.6"/><circle class="risk-track-tick" cx="40" cy="9" r="1.6"/><circle class="risk-track-tick" cx="72" cy="9" r="1.6"/><circle class="risk-track-tick" cx="104" cy="9" r="1.6"/><circle class="risk-track-check" cx="72" cy="9" r="6.5"/><circle class="risk-track-reached" cx="72" cy="9" r="4"/></svg></summary>
+<summary><span class="risk-name">The system is not installed, configured and supported <span class="risk-pays">Operations</span></span><svg class="risk-track" data-reached="2" data-checkable="2" viewBox="0 0 300 28" preserveAspectRatio="none" role="img" aria-label="How far I went: built and tested outside a live system. What you can check without me: built and tested outside a live system."><path class="risk-track-tick" d="M1 2V26"/><path class="risk-track-tick" d="M100.33 2V26"/><path class="risk-track-tick" d="M199.67 2V26"/><path class="risk-track-tick" d="M299 2V26"/><path class="risk-track-reached" d="M1 9H199.67M199.67 4V14"/><path class="risk-track-check" d="M1 19H199.67M199.67 14V24"/></svg></summary>
 <div class="risk-evidence">
 <p><strong>How far I went:</strong> <span class="risk-level-word">Built and tested outside a live system</span> (<span class="risk-grade">Tested, private repository</span>). An inventory and replenishment engine with 10,607 passing tests, in a private repository.</p>
 <p><strong>What you can check without me:</strong> <span class="risk-level-word">Built and tested outside a live system</span> (<span class="risk-grade">Public and re-runnable</span>). The receiving kit is open source, with its tests. See <a href="https://github.com/esstipi-debug">the code on GitHub</a>.</p>
 </div>
 </details></li>
 <li><details class="risk-row">
-<summary><span class="risk-name">The record was already wrong</span><span class="risk-pays">Finance</span><svg class="risk-track" data-reached="3" data-checkable="2" viewBox="0 0 112 18" role="img" aria-label="How far I went: answered for it in a live operation. What you can check without me: built and tested outside a live system."><line class="risk-track-line" x1="8" y1="9" x2="104" y2="9"/><circle class="risk-track-tick" cx="8" cy="9" r="1.6"/><circle class="risk-track-tick" cx="40" cy="9" r="1.6"/><circle class="risk-track-tick" cx="72" cy="9" r="1.6"/><circle class="risk-track-tick" cx="104" cy="9" r="1.6"/><circle class="risk-track-check" cx="72" cy="9" r="6.5"/><circle class="risk-track-reached" cx="104" cy="9" r="4"/></svg></summary>
+<summary><span class="risk-name">The record was already wrong <span class="risk-pays">Finance</span></span><svg class="risk-track" data-reached="3" data-checkable="2" viewBox="0 0 300 28" preserveAspectRatio="none" role="img" aria-label="How far I went: answered for it in a live operation. What you can check without me: built and tested outside a live system."><path class="risk-track-tick" d="M1 2V26"/><path class="risk-track-tick" d="M100.33 2V26"/><path class="risk-track-tick" d="M199.67 2V26"/><path class="risk-track-tick" d="M299 2V26"/><path class="risk-track-reached" d="M1 9H299M299 4V14"/><path class="risk-track-check" d="M1 19H199.67M199.67 14V24"/></svg></summary>
 <div class="risk-evidence">
 <p><strong>How far I went:</strong> <span class="risk-level-word">Answered for it in a live operation</span> (<span class="risk-grade">My field work</span>). I ran inventory accuracy and cycle-count programs across a distribution network.</p>
 <p><strong>What you can check without me:</strong> <span class="risk-level-word">Built and tested outside a live system</span> (<span class="risk-grade">Public and re-runnable</span>). A re-runnable audit of a public marketplace dataset, and the integrity guards of the open-source kit. See <a href="../not-received-but-delivered/">the audit</a> and <a href="https://github.com/esstipi-debug">the code on GitHub</a>.</p>
 </div>
 </details></li>
 <li><details class="risk-row">
-<summary><span class="risk-name">The system is set up for the manual, not the floor</span><span class="risk-pays">Operations</span><svg class="risk-track" data-reached="3" data-checkable="0" viewBox="0 0 112 18" role="img" aria-label="How far I went: answered for it in a live operation. What you can check without me: not in scope."><line class="risk-track-line" x1="8" y1="9" x2="104" y2="9"/><circle class="risk-track-tick" cx="8" cy="9" r="1.6"/><circle class="risk-track-tick" cx="40" cy="9" r="1.6"/><circle class="risk-track-tick" cx="72" cy="9" r="1.6"/><circle class="risk-track-tick" cx="104" cy="9" r="1.6"/><circle class="risk-track-check" cx="8" cy="9" r="6.5"/><circle class="risk-track-reached" cx="104" cy="9" r="4"/></svg></summary>
+<summary><span class="risk-name">The system is set up for the manual, not the floor <span class="risk-pays">Operations</span></span><svg class="risk-track" data-reached="3" data-checkable="0" viewBox="0 0 300 28" preserveAspectRatio="none" role="img" aria-label="How far I went: answered for it in a live operation. What you can check without me: not in scope."><path class="risk-track-tick" d="M1 2V26"/><path class="risk-track-tick" d="M100.33 2V26"/><path class="risk-track-tick" d="M199.67 2V26"/><path class="risk-track-tick" d="M299 2V26"/><path class="risk-track-reached" d="M1 9H299M299 4V14"/><path class="risk-track-check" d="M1 14V24"/></svg></summary>
 <div class="risk-evidence">
 <p><strong>How far I went:</strong> <span class="risk-level-word">Answered for it in a live operation</span> (<span class="risk-grade">My field work</span>). In Melbourne my role was split between the desk and the floor, through the full cutover from the old warehouse system to the new one.</p>
 <p><strong>What you can check without me:</strong> Nothing you can run without me.</p>
 </div>
 </details></li>
 <li><details class="risk-row">
-<summary><span class="risk-name">The incentive pays for the wrong thing</span><span class="risk-pays">Operations</span><svg class="risk-track" data-reached="3" data-checkable="0" viewBox="0 0 112 18" role="img" aria-label="How far I went: answered for it in a live operation. What you can check without me: not in scope."><line class="risk-track-line" x1="8" y1="9" x2="104" y2="9"/><circle class="risk-track-tick" cx="8" cy="9" r="1.6"/><circle class="risk-track-tick" cx="40" cy="9" r="1.6"/><circle class="risk-track-tick" cx="72" cy="9" r="1.6"/><circle class="risk-track-tick" cx="104" cy="9" r="1.6"/><circle class="risk-track-check" cx="8" cy="9" r="6.5"/><circle class="risk-track-reached" cx="104" cy="9" r="4"/></svg></summary>
+<summary><span class="risk-name">The incentive pays for the wrong thing <span class="risk-pays">Operations</span></span><svg class="risk-track" data-reached="3" data-checkable="0" viewBox="0 0 300 28" preserveAspectRatio="none" role="img" aria-label="How far I went: answered for it in a live operation. What you can check without me: not in scope."><path class="risk-track-tick" d="M1 2V26"/><path class="risk-track-tick" d="M100.33 2V26"/><path class="risk-track-tick" d="M199.67 2V26"/><path class="risk-track-tick" d="M299 2V26"/><path class="risk-track-reached" d="M1 9H299M299 4V14"/><path class="risk-track-check" d="M1 14V24"/></svg></summary>
 <div class="risk-evidence">
 <p><strong>How far I went:</strong> <span class="risk-level-word">Answered for it in a live operation</span> (<span class="risk-grade">My field work</span>). On a floor walk in one of my consulting engagements, a per-operator productivity bonus was producing mixed, short and damaged orders. I retired it.</p>
 <p><strong>What you can check without me:</strong> Nothing you can run without me.</p>
 </div>
 </details></li>
 <li><details class="risk-row">
-<summary><span class="risk-name">A bad number writes straight to the live system</span><span class="risk-pays">Finance</span><svg class="risk-track" data-reached="2" data-checkable="0" viewBox="0 0 112 18" role="img" aria-label="How far I went: built and tested outside a live system. What you can check without me: not in scope."><line class="risk-track-line" x1="8" y1="9" x2="104" y2="9"/><circle class="risk-track-tick" cx="8" cy="9" r="1.6"/><circle class="risk-track-tick" cx="40" cy="9" r="1.6"/><circle class="risk-track-tick" cx="72" cy="9" r="1.6"/><circle class="risk-track-tick" cx="104" cy="9" r="1.6"/><circle class="risk-track-check" cx="8" cy="9" r="6.5"/><circle class="risk-track-reached" cx="72" cy="9" r="4"/></svg></summary>
+<summary><span class="risk-name">A bad number writes straight to the live system <span class="risk-pays">Finance</span></span><svg class="risk-track" data-reached="2" data-checkable="0" viewBox="0 0 300 28" preserveAspectRatio="none" role="img" aria-label="How far I went: built and tested outside a live system. What you can check without me: not in scope."><path class="risk-track-tick" d="M1 2V26"/><path class="risk-track-tick" d="M100.33 2V26"/><path class="risk-track-tick" d="M199.67 2V26"/><path class="risk-track-tick" d="M299 2V26"/><path class="risk-track-reached" d="M1 9H199.67M199.67 4V14"/><path class="risk-track-check" d="M1 14V24"/></svg></summary>
 <div class="risk-evidence">
 <p><strong>How far I went:</strong> <span class="risk-level-word">Built and tested outside a live system</span> (<span class="risk-grade">Tested, private repository</span>). A draft stage, a signed approval that expires, a flag for finance above a threshold and a way back. No client runs it in production yet.</p>
 <p><strong>What you can check without me:</strong> Nothing you can run without me: the decision card below is a sample with invented figures.</p>
 </div>
 </details></li>
 <li><details class="risk-row">
-<summary><span class="risk-name">Nobody owns it after go-live</span><span class="risk-pays">The chief executive</span><svg class="risk-track" data-reached="3" data-checkable="0" viewBox="0 0 112 18" role="img" aria-label="How far I went: answered for it in a live operation. What you can check without me: not in scope."><line class="risk-track-line" x1="8" y1="9" x2="104" y2="9"/><circle class="risk-track-tick" cx="8" cy="9" r="1.6"/><circle class="risk-track-tick" cx="40" cy="9" r="1.6"/><circle class="risk-track-tick" cx="72" cy="9" r="1.6"/><circle class="risk-track-tick" cx="104" cy="9" r="1.6"/><circle class="risk-track-check" cx="8" cy="9" r="6.5"/><circle class="risk-track-reached" cx="104" cy="9" r="4"/></svg></summary>
+<summary><span class="risk-name">Nobody owns it after go-live <span class="risk-pays">The chief executive</span></span><svg class="risk-track" data-reached="3" data-checkable="0" viewBox="0 0 300 28" preserveAspectRatio="none" role="img" aria-label="How far I went: answered for it in a live operation. What you can check without me: not in scope."><path class="risk-track-tick" d="M1 2V26"/><path class="risk-track-tick" d="M100.33 2V26"/><path class="risk-track-tick" d="M199.67 2V26"/><path class="risk-track-tick" d="M299 2V26"/><path class="risk-track-reached" d="M1 9H299M299 4V14"/><path class="risk-track-check" d="M1 14V24"/></svg></summary>
 <div class="risk-evidence">
 <p><strong>How far I went:</strong> <span class="risk-level-word">Answered for it in a live operation</span> (<span class="risk-grade">My field work</span>). In the Melbourne cutover I trained 23 operators and stayed on shift until the workarounds died.</p>
 <p><strong>What you can check without me:</strong> Nothing you can run without me.</p>
 </div>
 </details></li>
 <li><details class="risk-row">
-<summary><span class="risk-name">The cash and the return never reach the P&amp;L</span><span class="risk-pays">Finance</span><svg class="risk-track" data-reached="3" data-checkable="0" viewBox="0 0 112 18" role="img" aria-label="How far I went: answered for it in a live operation. What you can check without me: not in scope."><line class="risk-track-line" x1="8" y1="9" x2="104" y2="9"/><circle class="risk-track-tick" cx="8" cy="9" r="1.6"/><circle class="risk-track-tick" cx="40" cy="9" r="1.6"/><circle class="risk-track-tick" cx="72" cy="9" r="1.6"/><circle class="risk-track-tick" cx="104" cy="9" r="1.6"/><circle class="risk-track-check" cx="8" cy="9" r="6.5"/><circle class="risk-track-reached" cx="104" cy="9" r="4"/></svg></summary>
+<summary><span class="risk-name">The cash and the return never reach the P&amp;L <span class="risk-pays">Finance</span></span><svg class="risk-track" data-reached="3" data-checkable="0" viewBox="0 0 300 28" preserveAspectRatio="none" role="img" aria-label="How far I went: answered for it in a live operation. What you can check without me: not in scope."><path class="risk-track-tick" d="M1 2V26"/><path class="risk-track-tick" d="M100.33 2V26"/><path class="risk-track-tick" d="M199.67 2V26"/><path class="risk-track-tick" d="M299 2V26"/><path class="risk-track-reached" d="M1 9H299M299 4V14"/><path class="risk-track-check" d="M1 14V24"/></svg></summary>
 <div class="risk-evidence">
 <p><strong>How far I went:</strong> <span class="risk-level-word">Answered for it in a live operation</span> (<span class="risk-grade">My field work</span>). A USD 30M cross-border P&amp;L, where about USD 5M of inventory was freed.</p>
 <p><strong>What you can check without me:</strong> Nothing you can run without me.</p>
@@ -117,57 +109,47 @@
 </ul>
 <p class="risk-limit">Field work is my own account: it illustrates, it does not validate. None of my systems has a client in production yet.</p>
 </figure>
-</div>
-<div class="band band-deep">
+</section>
+<section class="band">
 <h2 id="track-record">Field work</h2>
 <p>Thirteen years across operations, planning and consulting. Unarchived field diagnoses were consolidated into <a href="../the-deployment-chasm/"><em>The Deployment Chasm</em></a> and encoded into the checks below.</p>
-<div class="track-grid">
-<ul>
-<li><strong>System changeover without floor bypass (AGCO Corporation, Melbourne, 2022 to 2024).</strong> Outbound Leader, split between the desk and the floor: picking, packing and the carriers. Through the full cutover of a 50,000-SKU distribution centre with a team of 20, I closed the legacy warehouse system and opened Manhattan Associates, trained 23 operators on RF scanning, and stayed on shift until the workarounds ended. Order processing time fell about 20% (a shift estimate without retained logs).</li>
-<li><strong>Working capital and demand rules under rapid scale (cross-border e-commerce, 2020 to 2022).</strong> Owned a USD 30M P&amp;L spanning direct consumer sales and wholesale. Through 300% annual growth, replaced judgement buffers with aggregate statistical demand forecasting and wrote the operating procedures that kept volume moving, freeing about USD 5M of inventory.</li>
-<li><strong>Multi-site reporting and replenishment control (Chile and Argentina, 2016 to 2020).</strong> Ran a USD 15M budget across three logistics sites and about 100 people, replacing lagging weekly packs with daily operational reporting. Earlier led 15 planners supplying more than 200 retail stores (partly remotely from Sydney), building forecasting and replenishment models while automating financial reports.</li>
-<li><strong>Cost allocation and pre-cutover savings (2013 to 2016).</strong> Analysed a USD 100M inventory position with cost-allocation models and cycle-count controls, and identified about USD 2M a year in purchasing and logistics savings alongside floor procedures for an earlier warehouse-system rollout.</li>
-<li><strong>Cross-industry diagnostics and incentive repair (since 2013).</strong> Across more than seven independent consulting engagements in warehousing, retail, e-commerce and manufacturing, I built process maps, KPI dashboards and floor procedures. On one floor walk, tracing mixed, short and damaged orders back to a per-operator productivity bonus showed how local metrics break downstream quality; I retired the bonus metric and measured customer satisfaction through zero complaints and response time instead.</li>
+<ul class="rows">
+<li><details class="row" open><summary><strong>System changeover without floor bypass (AGCO Corporation, Melbourne, 2022 to 2024).</strong></summary><p>Outbound Leader, split between the desk and the floor: picking, packing and the carriers. Through the full cutover of a 50,000-SKU distribution centre with a team of 20, I closed the legacy warehouse system and opened Manhattan Associates, trained 23 operators on RF scanning, and stayed on shift until the workarounds ended. Order processing time fell about 20% (a shift estimate without retained logs).</p></details></li>
+<li><details class="row"><summary><strong>Working capital and demand rules under rapid scale (cross-border e-commerce, 2020 to 2022).</strong></summary><p>Owned a USD 30M P&amp;L spanning direct consumer sales and wholesale. Through 300% annual growth, replaced judgement buffers with aggregate statistical demand forecasting and wrote the operating procedures that kept volume moving, freeing about USD 5M of inventory.</p></details></li>
+<li><details class="row"><summary><strong>Multi-site reporting and replenishment control (Chile and Argentina, 2016 to 2020).</strong></summary><p>Ran a USD 15M budget across three logistics sites and about 100 people, replacing lagging weekly packs with daily operational reporting. Earlier led 15 planners supplying more than 200 retail stores (partly remotely from Sydney), building forecasting and replenishment models while automating financial reports.</p></details></li>
+<li><details class="row"><summary><strong>Cost allocation and pre-cutover savings (2013 to 2016).</strong></summary><p>Analysed a USD 100M inventory position with cost-allocation models and cycle-count controls, and identified about USD 2M a year in purchasing and logistics savings alongside floor procedures for an earlier warehouse-system rollout.</p></details></li>
+<li><details class="row"><summary><strong>Cross-industry diagnostics and incentive repair (since 2013).</strong></summary><p>Across more than seven independent consulting engagements in warehousing, retail, e-commerce and manufacturing, I built process maps, KPI dashboards and floor procedures. On one floor walk, tracing mixed, short and damaged orders back to a per-operator productivity bonus showed how local metrics break downstream quality; I retired the bonus metric and measured customer satisfaction through zero complaints and response time instead.</p></details></li>
 </ul>
-</div>
 <p class="track-note">The Melbourne employer is named once, here. Earlier employers and consulting clients stay unnamed; for proof you can verify without calling anyone, start with the public audit and tested tools below.</p>
-</div>
-<div class="band band-panel">
+</section>
+<section class="band">
 <h2 id="sample-audit">Published audit you can re-run</h2>
-<div class="audit-spotlight">
-<div class="audit-visual">
-<span class="audit-big">57%</span>
-<span class="audit-sub">of 2,708 &ldquo;not received&rdquo; claims on delivered orders were written on or before the recorded delivery day</span>
-<div class="audit-bar">
-<svg viewBox="0 0 300 14" preserveAspectRatio="none" role="img" aria-label="2,708 claims: 1,542 late orders; 73 at flagged sellers; 1,093 with no clear cause">
-<rect class="seg-late" x="0.0" y="0" width="170.8" height="14"/>
-<rect class="seg-flag" x="170.8" y="0" width="8.1" height="14"/>
-<rect class="seg-open" x="178.9" y="0" width="121.1" height="14"/>
-</svg>
-<div class="audit-legend">
-<span class="audit-leg audit-leg-late">1,542 late orders</span>
-<span class="audit-leg audit-leg-flag">73 at flagged sellers</span>
-<span class="audit-leg audit-leg-open">1,093 with no clear cause</span>
-</div>
-</div>
-</div>
+<div class="audit">
+<p class="audit-lead"><span class="audit-big">57%</span> <span class="audit-sub">of 2,708 &ldquo;not received&rdquo; claims on delivered orders were written on or before the recorded delivery day</span></p>
+<div class="drawing"><span class="claims" role="img" aria-label="2,708 claims: 1,542 late orders; 73 at flagged sellers; 1,093 with no clear cause" style="grid-template-columns: 1542fr 73fr 1093fr">
+<span class="cota cota-late"><span><b>1,542</b> written on or before the delivery day</span></span>
+<span class="cota cota-after"><span><b>1,166</b> written after it</span></span>
+<svg class="claims-bar" viewBox="0 0 2708 10" preserveAspectRatio="none" aria-hidden="true"><rect class="seg-late" x="0" y="0" width="1542" height="10"/><rect class="seg-flag" x="1542" y="0" width="73" height="10"/><rect class="seg-open" x="1615" y="0" width="1093" height="10"/></svg>
+<span class="datum"><span>delivery day</span></span>
+<span class="sub sub-flag" style="--half: 2.26%"><span><b>73</b> at flagged sellers</span></span>
+<span class="cota cota-rest"><span><b>1,093</b> with no clear cause</span></span>
+</span>
+<span class="claims-base">Of 95,824 delivered orders with a review, 2,708 had a review saying the order had not arrived. <span class="note">Lengths to scale.</span></span></div>
 <div class="audit-copy">
 <p><strong>When &ldquo;not received&rdquo; means late.</strong> A forensic triage on a public Brazilian marketplace dataset showing which record lied before anyone blames the warehouse or the carrier. The Python code and its tests are public and re-runnable.</p>
 <p><a class="btn btn-ghost" href="../not-received-but-delivered/">Read the audit</a></p>
 </div>
 </div>
-</div>
-<div class="band band-deep">
-<h2>Built systems</h2>
+</section>
+<section class="band">
+<h2 id="built-systems">Built systems</h2>
 <p>I build diagnostic and planning tools so I do not arrive on a floor with a blank spreadsheet. None is in commercial production at a client yet; they show how operational physics becomes tested software before touching a live system.</p>
-<div class="sys-grid">
-<ul>
-<li><strong>Inventory and replenishment engine.</strong> 10,607 passing tests in Python and none failing, clean install on 18 November 2026 (private repository). Decision cards set the engine&rsquo;s recommendation beside the operator&rsquo;s play and the status quo, staging changes behind HMAC-SHA256-signed approval and rollback.</li>
-<li><strong>Receiving kit.</strong> Open source under the MIT licence, with 1,141 passing tests and none failing, clean install on 18 November 2026.</li>
-<li><strong>Field kit.</strong> 1,187 passing tests on 20 October 2026. Checks an event log against the five-column contract (case, activity, timestamp, who, where) before analysis runs; integrity guards catch one-to-many join fanout, unbalanced blocked stock and negative stock against planted defects.</li>
-<li><strong>Weightlifting planning application.</strong> TypeScript monorepo with about 1,332 unit tests, 31 integration tests on embedded PostgreSQL and an adversarial review agent. Building it left a builder-side adoption postmortem: putting a number on what an expert used to judge by eye can still trigger refusal.</li>
+<ul class="rows">
+<li><details class="row" open><summary><strong>Inventory and replenishment engine.</strong></summary><p>10,607 passing tests in Python and none failing, clean install on 18 November 2026 (private repository). Decision cards set the engine&rsquo;s recommendation beside the operator&rsquo;s play and the status quo, staging changes behind HMAC-SHA256-signed approval and rollback.</p></details></li>
+<li><details class="row"><summary><strong>Receiving kit.</strong></summary><p>Open source under the MIT licence, with 1,141 passing tests and none failing, clean install on 18 November 2026.</p></details></li>
+<li><details class="row"><summary><strong>Field kit.</strong></summary><p>1,187 passing tests on 20 October 2026. Checks an event log against the five-column contract (case, activity, timestamp, who, where) before analysis runs; integrity guards catch one-to-many join fanout, unbalanced blocked stock and negative stock against planted defects.</p></details></li>
+<li><details class="row"><summary><strong>Weightlifting planning application.</strong></summary><p>TypeScript monorepo with about 1,332 unit tests, 31 integration tests on embedded PostgreSQL and an adversarial review agent. Building it left a builder-side adoption postmortem: putting a number on what an expert used to judge by eye can still trigger refusal.</p></details></li>
 </ul>
-</div>
 <p>The rule I build to:</p>
 <ol class="flow">
 <li><strong>Check the extract before the math.</strong> Run integrity guards on raw tables: one-to-many join fanout, unbalanced blocked stock, negative stock and double-counted stock in transit. <span class="flow-stop">If a number fails, nothing is written to the live system.</span></li>
@@ -176,7 +158,7 @@
 <li><strong>Keep the way back.</strong> Every approved change carries a rollback path and a 90-day check against the floor baseline.</li>
 </ol>
 <p>One decision card, as it waits for a signature. Pick a play to see what the sign-off records, then take the lead time away to see what the engine does with a cost it cannot measure.</p>
-</div>
+</section>
 <section class="card-demo" id="decision-card" aria-label="A sample decision card, in draft">
 <input class="card-demo-pick" type="radio" name="card-play" id="card-play-a" checked>
 <input class="card-demo-pick" type="radio" name="card-play" id="card-play-b">
@@ -243,17 +225,19 @@
 </section>
 
 <p>The code is on <a href="https://github.com/esstipi-debug">GitHub</a>.</p>
+<section class="band">
 <h2>Writing</h2>
 <div class="writing-grid">
 <div class="writing-card">
 <p>Ten field notes, among them <a href="../the-smith-and-the-tailor/"><em>The Smith and the Tailor</em></a> and <a href="../nobody-pays-for-being-wrong/"><em>Nobody Pays for Being Wrong</em></a>, and ten short answers, among them <a href="../why-inventory-records-do-not-match-the-shelf/">why inventory records do not match the shelf</a> and <a href="../why-people-follow-the-system-when-it-is-wrong/">why people follow the system when it is wrong</a>.</p>
 </div>
-<div class="writing-card writing-book">
+<div class="writing-card">
 <p><a href="../the-deployment-chasm/"><em>The Deployment Chasm</em></a>, a manuscript on why enterprise and supply-chain systems fail between the contract and the floor. Leaf through the sample as a book or read it full screen.</p>
 <p><a class="btn btn-ghost" href="../the-deployment-chasm/">Open sample book</a></p>
 </div>
 </div>
-<p class="actions"><a class="btn btn-contact" href="mailto:marcos.stipicic@gmail.com?subject=Question%20on%20the%20proof">Ask for a walk-through</a></p>
+</section>
+<p class="page-close"><a class="page-close-link" href="mailto:marcos.stipicic@gmail.com?subject=Question%20on%20the%20proof">Ask for a walk-through</a></p>
 </article>
 </main>
 <footer class="site-footer"><div class="wrap">

@@ -53,10 +53,6 @@ def words_of(fragment: str) -> str:
     return " ".join(html.unescape(re.sub(r"<[^>]+>", " ", fragment)).split())
 
 
-def middle(values: list[int]) -> int:
-    """The middle value of an odd number of levels."""
-    return sorted(values)[len(values) // 2]
-
 
 def reaching(level: int) -> list[int]:
     """For each risk, how many coded roles reach at least `level`."""
@@ -77,14 +73,51 @@ def test_each_plate_stands_on_its_own_page_and_leaves_no_marker(site):
 
 # ---------------------------------------------------------------- the scope plate
 
-def test_the_scope_plate_draws_the_middle_of_each_kind_and_my_engagement(site):
+def test_the_scope_plate_draws_every_coded_role_and_my_engagement(site):
+    """One mark for each posting, in the order of the data, then mine: the sentence over the plate counts
+    ten roles, so the plate shows the ten (the owner's choice of 2026-11-19; it showed the middle of each kind)."""
     root, pages = site
     rows = dict(ROW.findall(plate(read(root, "engagements", pages), "scope")))
     assert list(rows) == RISK_IDS
     for index, risk_id in enumerate(RISK_IDS):
-        expected = [middle([role["levels"][index] for role in kind["roles"]]) for kind in DATA["scope"]["kinds"]]
+        expected = [role["levels"][index] for kind in DATA["scope"]["kinds"] for role in kind["roles"]]
         expected.append(DATA["scope"]["mine"]["levels"][index])
         assert [int(level) for level in CELL_LEVEL.findall(rows[risk_id])] == expected, risk_id
+
+
+def test_each_mark_is_filled_up_to_its_level(site):
+    """Three strokes, filled from the bottom: the level reads from the shape, and the words stand beside it."""
+    root, pages = site
+    scope = plate(read(root, "engagements", pages), "scope")
+    marks = re.findall(r'<span class="risk-level" data-level="(\d)"><span class="risk-tally" aria-hidden="true">(.*?)</span>'
+                       r'<span class="risk-level-word">([^<]*)</span></span>', scope)
+    assert len(marks) >= len(RISK_IDS) * 11
+    for level, strokes, word in marks:
+        filled = re.findall(r'<i class="risk-level-(on|off)"></i>', strokes)
+        assert filled == ["off"] * (3 - int(level)) + ["on"] * int(level), (level, strokes)
+        assert word == risks.LEVEL_WORDS[int(level)]
+
+
+def test_the_scope_plate_counts_what_its_lead_counts(site):
+    root, pages = site
+    rows = dict(ROW.findall(plate(read(root, "engagements", pages), "scope")))
+    total = sum(len(kind["roles"]) for kind in DATA["scope"]["kinds"])
+    for risk_id, counted in zip(RISK_IDS, reaching(risks.BUILT)):
+        assert f'<td role="cell" class="risk-count"><b>{counted}</b> of {total}</td>' in rows[risk_id], risk_id
+
+
+def test_the_scope_plate_says_how_to_read_it(site):
+    root, pages = site
+    scope = plate(read(root, "engagements", pages), "scope")
+    legend = re.search(r'<ul class="risk-legend">(.*?)</ul>', scope, re.S).group(1)
+    assert LEVEL_WORD.findall(legend) == list(risks.LEVEL_WORDS)
+    assert html.escape(DATA["scope"]["mine"]["short"]) in legend
+    heads = [html.unescape(head) for head in re.findall(r"<th scope=\"col(?:group)?\"[^>]*>(.*?)</th>", scope)]
+    assert heads == ["The risk", *(kind["group"] for kind in DATA["scope"]["kinds"]), DATA["scope"]["mine"]["short"],
+                     DATA["scope"]["count_head"]]
+    assert words_of(re.search(r'<p class="risk-read">(.*?)</p>', scope, re.S).group(1)) == DATA["scope"]["reading"]
+    source = words_of(re.search(r'<p class="src">(.*?)</p>', scope, re.S).group(1))
+    assert "Each mark is one posting" in source and "middle of five roles" not in source
 
 
 def test_the_scope_plate_codes_five_roles_of_each_kind():
@@ -126,6 +159,38 @@ def test_the_backing_plate_draws_both_marks_for_each_risk(site):
     drawn = [(int(reached), int(checkable)) for reached, checkable in TRACK.findall(backing)]
     assert drawn == [(entry["reached"], entry["checkable"]) for entry in DATA["backing"]]
     assert [entry["risk"] for entry in DATA["backing"]] == RISK_IDS
+
+
+def test_the_backing_plate_draws_two_lines_on_one_scale(site):
+    """The upper line runs to how far I went and the lower one to what a stranger can check; a level of
+    nothing is a tick at the start, never a missing mark."""
+    root, pages = site
+    backing = plate(read(root, "proof", pages), "backing")
+    tracks = re.findall(r'<svg class="risk-track"[^>]*>(.*?)</svg>', backing, re.S)
+    assert len(tracks) == len(RISK_IDS)
+    start = f"{risks.TRACK_X[0]:g}"
+    for track, entry in zip(tracks, DATA["backing"]):
+        for name, level in (("reached", entry["reached"]), ("check", entry["checkable"])):
+            path = re.search(rf'<path class="risk-track-{name}" d="([^"]+)"/>', track).group(1)
+            assert path.startswith(f"M{start} "), (entry["risk"], name, path)
+            ends = re.findall(r"H([\d.]+)", path)
+            assert ends == ([f"{risks.TRACK_X[level]:g}"] if level else []), (entry["risk"], name, path)
+        assert len(re.findall(r'<path class="risk-track-tick"', track)) == len(risks.LEVEL_WORDS)
+    scale = re.search(r'<div class="risk-scale" aria-hidden="true">(.*?)</div>', backing, re.S).group(1)
+    assert re.findall(r"<span>([^<]+)</span>", scale) == list(risks.LEVEL_WORDS)
+
+
+def test_the_backing_key_speaks_of_the_two_lines(site):
+    root, pages = site
+    backing = plate(read(root, "proof", pages), "backing")
+    key = words_of(re.search(r'<p class="risk-key">(.*?)</p>', backing, re.S).group(1))
+    assert key == DATA["backing_key"]
+    assert "upper line" in key and "lower line" in key and "dot" not in key and "ring" not in key
+    legend = re.search(r'<p class="risk-lines">(.*?)</p>', backing, re.S).group(1)
+    assert re.findall(r'<i class="risk-swatch risk-swatch-(reached|check)" aria-hidden="true"></i>([^<]+)', legend) == [
+        ("reached", "How far I went"), ("check", "What you can check without me")]
+    for label in ("How far I went", "What you can check without me"):
+        assert backing.count(f"<strong>{label}:</strong>") == len(RISK_IDS), label   # the rows use the same words
 
 
 def test_the_backing_lead_counts_what_rests_on_my_word_and_what_you_can_rerun(site):
@@ -188,6 +253,10 @@ def test_the_plate_marks_take_their_colours_from_the_style_sheet(site):
     (lambda data: data["backing"][1].__setitem__("grade", "Tested, private repository"), "field work"),
     (lambda data: data["backing"][0].pop("links"), "links"),
     (lambda data: data["scope"]["kinds"][1].pop("short"), "short"),
+    (lambda data: data["scope"]["kinds"][0].pop("group"), "group"),
+    (lambda data: data["scope"]["kinds"].pop(), "two kinds of role"),   # the narrow layout lays out two
+    (lambda data: data["scope"].pop("reading"), "reading"),
+    (lambda data: data["scope"].__setitem__("count_head", " "), "count_head"),
     (lambda data: data["risks"][0].__setitem__("id", "platform"), "system, record"),
 ])
 def test_faults_in_the_data_file_name_the_file_and_the_fault(tmp_path, change, fault):

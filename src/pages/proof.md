@@ -11,40 +11,30 @@ cta: Ask for a walk-through
 published: 2026-11-09
 updated: 2026-11-18
 ---
-<div class="proof-strip" aria-label="Headline figures">
-<div class="proof-kpi proof-kpi-lead">
-<span class="proof-kpi-n">50,000</span>
-<span class="proof-kpi-t">SKU warehouse cutover in Melbourne; order processing time fell about 20%</span>
-</div>
-<div class="proof-kpi">
-<span class="proof-kpi-n">USD 30M</span>
-<span class="proof-kpi-t">Cross-border e-commerce P&amp;L; about USD 5M of inventory freed</span>
-</div>
-<div class="proof-kpi">
-<span class="proof-kpi-n">2,708</span>
-<span class="proof-kpi-t">Public marketplace claims audited; 57% written on or before delivery day</span>
-</div>
-<div class="proof-kpi">
-<span class="proof-kpi-n">10,607</span>
-<span class="proof-kpi-t">Passing tests on the deterministic replenishment engine (private repository)</span>
-</div>
+<!-- contact -->
+
+<div class="fig-list fig-jumps" role="group" aria-label="Headline figures">
+<a class="fig" href="#track-record"><span class="fig-g">My field work</span><span class="fig-n">50,000</span><span class="fig-t">SKU warehouse cutover in Melbourne; order processing time fell about 20%</span><span class="fig-go">Field work</span></a>
+<a class="fig" href="#track-record"><span class="fig-g">My field work</span><span class="fig-n">USD 30M</span><span class="fig-t">Cross-border e-commerce P&amp;L; about USD 5M of inventory freed</span><span class="fig-go">Field work</span></a>
+<a class="fig" href="#sample-audit"><span class="fig-g">My analysis</span><span class="fig-n">2,708</span><span class="fig-t">Public marketplace claims audited; 57% written on or before delivery day</span><span class="fig-go">Published audit you can re-run</span></a>
+<a class="fig" href="#built-systems"><span class="fig-g">Tested, private repository</span><span class="fig-n">10,607</span><span class="fig-t">Passing tests on the deterministic replenishment engine (private repository)</span><span class="fig-go">Built systems</span></a>
 </div>
 
-<div class="plate-card" markdown="1">
+<section class="band" markdown="1">
 
 ## What each claim rests on {: #evidence-map }
 
 <!-- plate: backing -->
 
-</div>
+</section>
 
-<div class="band band-deep" markdown="1">
+<section class="band" markdown="1">
 
 ## Field work {: #track-record }
 
 Thirteen years across operations, planning and consulting. Unarchived field diagnoses were consolidated into [*The Deployment Chasm*](../the-deployment-chasm/) and encoded into the checks below.
 
-<div class="track-grid" markdown="1">
+<div class="rows" markdown="1">
 
 - **System changeover without floor bypass (AGCO Corporation, Melbourne, 2022 to 2024).** Outbound Leader, split between the desk and the floor: picking, packing and the carriers. Through the full cutover of a 50,000-SKU distribution centre with a team of 20, I closed the legacy warehouse system and opened Manhattan Associates, trained 23 operators on RF scanning, and stayed on shift until the workarounds ended. Order processing time fell about 20% (a shift estimate without retained logs).
 - **Working capital and demand rules under rapid scale (cross-border e-commerce, 2020 to 2022).** Owned a USD 30M P&L spanning direct consumer sales and wholesale. Through 300% annual growth, replaced judgement buffers with aggregate statistical demand forecasting and wrote the operating procedures that kept volume moving, freeing about USD 5M of inventory.
@@ -57,29 +47,18 @@ Thirteen years across operations, planning and consulting. Unarchived field diag
 The Melbourne employer is named once, here. Earlier employers and consulting clients stay unnamed; for proof you can verify without calling anyone, start with the public audit and tested tools below.
 {: .track-note }
 
-</div>
+</section>
 
-<div class="band band-panel" markdown="1">
+<section class="band" markdown="1">
 
 ## Published audit you can re-run {: #sample-audit }
 
-<div class="audit-spotlight" markdown="1">
-<div class="audit-visual">
-<span class="audit-big">57%</span>
-<span class="audit-sub">of 2,708 &ldquo;not received&rdquo; claims on delivered orders were written on or before the recorded delivery day</span>
-<div class="audit-bar">
-<svg viewBox="0 0 300 14" preserveAspectRatio="none" role="img" aria-label="2,708 claims: 1,542 late orders; 73 at flagged sellers; 1,093 with no clear cause">
-<rect class="seg-late" x="0.0" y="0" width="170.8" height="14"/>
-<rect class="seg-flag" x="170.8" y="0" width="8.1" height="14"/>
-<rect class="seg-open" x="178.9" y="0" width="121.1" height="14"/>
-</svg>
-<div class="audit-legend">
-<span class="audit-leg audit-leg-late">1,542 late orders</span>
-<span class="audit-leg audit-leg-flag">73 at flagged sellers</span>
-<span class="audit-leg audit-leg-open">1,093 with no clear cause</span>
-</div>
-</div>
-</div>
+<div class="audit" markdown="1">
+
+<p class="audit-lead"><span class="audit-big">57%</span> <span class="audit-sub">of 2,708 &ldquo;not received&rdquo; claims on delivered orders were written on or before the recorded delivery day</span></p>
+
+<!-- drawing: claims -->
+
 <div class="audit-copy" markdown="1">
 **When "not received" means late.** A forensic triage on a public Brazilian marketplace dataset showing which record lied before anyone blames the warehouse or the carrier. The Python code and its tests are public and re-runnable.
 
@@ -87,15 +66,15 @@ The Melbourne employer is named once, here. Earlier employers and consulting cli
 </div>
 </div>
 
-</div>
+</section>
 
-<div class="band band-deep" markdown="1">
+<section class="band" markdown="1">
 
-## Built systems
+## Built systems {: #built-systems }
 
 I build diagnostic and planning tools so I do not arrive on a floor with a blank spreadsheet. None is in commercial production at a client yet; they show how operational physics becomes tested software before touching a live system.
 
-<div class="sys-grid" markdown="1">
+<div class="rows" markdown="1">
 
 - **Inventory and replenishment engine.** 10,607 passing tests in Python and none failing, clean install on 18 November 2026 (private repository). Decision cards set the engine's recommendation beside the operator's play and the status quo, staging changes behind HMAC-SHA256-signed approval and rollback.
 - **Receiving kit.** Open source under the MIT licence, with 1,141 passing tests and none failing, clean install on 18 November 2026.
@@ -115,7 +94,7 @@ The rule I build to:
 
 One decision card, as it waits for a signature. Pick a play to see what the sign-off records, then take the lead time away to see what the engine does with a cost it cannot measure.
 
-</div>
+</section>
 
 <section class="card-demo" id="decision-card" aria-label="A sample decision card, in draft">
 <input class="card-demo-pick" type="radio" name="card-play" id="card-play-a" checked>
@@ -184,15 +163,19 @@ One decision card, as it waits for a signature. Pick a play to see what the sign
 
 The code is on [GitHub](https://github.com/esstipi-debug).
 
+<section class="band" markdown="1">
+
 ## Writing
 
 <div class="writing-grid" markdown="1">
 <div class="writing-card" markdown="1">
 Ten field notes, among them [*The Smith and the Tailor*](../the-smith-and-the-tailor/) and [*Nobody Pays for Being Wrong*](../nobody-pays-for-being-wrong/), and ten short answers, among them [why inventory records do not match the shelf](../why-inventory-records-do-not-match-the-shelf/) and [why people follow the system when it is wrong](../why-people-follow-the-system-when-it-is-wrong/).
 </div>
-<div class="writing-card writing-book" markdown="1">
+<div class="writing-card" markdown="1">
 [*The Deployment Chasm*](../the-deployment-chasm/), a manuscript on why enterprise and supply-chain systems fail between the contract and the floor. Leaf through the sample as a book or read it full screen.
 
 <a class="btn btn-ghost" href="../the-deployment-chasm/">Open sample book</a>
 </div>
 </div>
+
+</section>
