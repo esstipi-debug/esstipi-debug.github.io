@@ -10,13 +10,13 @@ door_text: You paid for it. The spreadsheet is still beside it.
 description: When a system is live and the floor still keeps a spreadsheet beside it: find why people go around it and make it the fast way.
 subject: A system the floor works around
 published: 2026-11-12
-updated: 2026-11-14
+updated: 2026-11-20
 ---
 You paid for the system. The vendor installed it and left. Nobody in the contract was paid to make the floor use it, and the spreadsheet is still beside the terminal.
 
 ## What I check first
 
-Where people go around the system, shift by shift, and what the workaround saves them. Whether the records the system reads are right. What each shift is paid for. Who owns the system now that the vendor has gone. Then, instead of banning the spreadsheet, I put the system's recommendation, the planner's own play and the status quo side by side in a draft stage, and record the reason for each override before the order goes out. What the floor knows ends up in the rules, or is corrected with evidence.
+Where people go around the system, shift by shift, and what the workaround saves them. Which steps on the screen are not the work, and which of them ever caught a mistake. Whether the records the system reads are right. What each shift is paid for. Who owns the system now that the vendor has gone. Then, instead of banning the spreadsheet, I put the system's recommendation, the planner's own play and the status quo side by side in a draft stage, and record the reason for each override before the order goes out. What the floor knows ends up in the rules, or is corrected with evidence.
 
 ## Where I have stood
 
@@ -28,7 +28,7 @@ I do not replace your vendor or your team, and I do not sell a second system. Th
 
 ## How we would start
 
-Three weeks: every shift walked, every workaround listed with what it costs, and the short list of changes that make the system the fast way. Then I stay, part time, until the floor no longer needs the spreadsheet.
+The first look is read-only, from your system's own exports: no login, nothing installed, nothing written to it. Three weeks: every shift walked, every workaround listed with what it costs, and the short list of changes that make the system the fast way. Then I stay, part time, until the floor no longer needs the spreadsheet.
 
 ## What each of you will ask first
 

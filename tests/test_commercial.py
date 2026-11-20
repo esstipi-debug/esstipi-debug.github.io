@@ -35,8 +35,11 @@ COMPANY_VOICE = re.compile(
 )
 PRICE_WORDS = re.compile(r"\bper (?:hour|day|month)\b|\bfrom USD\b", re.I)
 FOREIGN_MONEY = re.compile(r"[$€£]|\b(?:AUD|CAD|GBP|EUR|CLP|UF)\b")
+# No ERP is named as one this work runs on until that has happened on a live system (the owner's choice of
+# 2026-11-20): the audit says "exports", whatever the system that produced them.
 BANNED = re.compile(
-    r"\b(?:SAP|Oracle|revolutionary|unprecedented|cutting[- ]edge|state[- ]of[- ]the[- ]art|game[- ]changer"
+    r"\b(?:SAP|Oracle|NetSuite|Business Central|Dynamics 365|Xero|QuickBooks"
+    r"|revolutionary|unprecedented|cutting[- ]edge|state[- ]of[- ]the[- ]art|game[- ]changer"
     r"|unicorns?|paradigm|world[- ]class|best[- ]in[- ]class|seamless(?:ly)?|unparalleled|guarantee[sd]?)\b",
     re.I,
 )
@@ -191,6 +194,17 @@ def test_situation_pages_answer_each_role(site):
         section = read(root, page).split(f"{ROLE_SECTION}</h2>", 1)[1]
         asked = re.findall(r"<p><strong>([^:<]+):", section)
         assert sorted(asked) == sorted(ROLES_ASKING), page.slug
+
+
+def test_the_workaround_page_starts_read_only_and_sells_no_second_system(site):
+    """The first look at a system the floor works around is read-only, and it is a way of working, not a
+    product: the same page still says no second system is sold (the owner's choice of 2026-11-20)."""
+    root, pages = site
+    text = read(root, build.find(pages, "the-floor-works-around-the-system"))
+    start = words_of(text.split("How we would start</h2>", 1)[1].split("<h2", 1)[0])
+    assert "read-only" in start, start
+    claim = words_of(text.split("claim</h2>", 1)[1].split("<h2", 1)[0])
+    assert "I do not sell a second system" in claim, claim
 
 
 def test_home_opens_with_situations_not_job_titles(site):

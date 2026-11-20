@@ -181,6 +181,16 @@ def test_each_engagement_is_a_line_of_a_rate_sheet(site):
         assert "eng-cta" not in what
 
 
+def test_the_audit_starts_read_only_on_the_clients_own_exports(site):
+    """What the first week asks of the client's systems stands on the card: exports, and nothing else (the
+    owner's choice of 2026-11-20). A rewrite of the card that drops one of these terms fails here."""
+    name, _, _, what, _ = BODY.findall(read(site, "engagements"))[0]
+    assert html.unescape(name) == "Diagnostic Field Audit"
+    week_one = words_of(what.split("<li>", 1)[1].split("</li>", 1)[0])
+    for term in ("read-only", "no credentials", "nothing written back"):
+        assert term in week_one, term
+
+
 def test_the_engagements_stand_open_on_a_wide_screen_and_fold_on_a_phone(site):
     css = style_sheet(site)
     gone = ".eng-pick, .eng-hit, .eng-rail { display: none; }"

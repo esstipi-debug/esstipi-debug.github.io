@@ -13,7 +13,7 @@ offer: Fractional Operations / Deployment Lead | 6000 | month
 offer: Advisory & Operational Due Diligence | 250 | hour
 offer: On-site days | 1200 | day
 published: 2026-11-09
-updated: 2026-11-18
+updated: 2026-11-20
 ---
 Each one starts from the same place: what your records say against what your floor does.
 
@@ -35,7 +35,7 @@ Each one starts from the same place: what your records say against what your flo
 <div class="eng-text">
 <p>For stock that does not reconcile, write-offs nobody can explain, or a deployment that has stalled.</p>
 <ul>
-<li><strong>Week one, the records or the floor.</strong> Starts offline on a static five-column export (case, activity, timestamp, who, where) with zero network access, or on the floor by video or on site across every shift.</li>
+<li><strong>Week one, the records or the floor.</strong> Starts read-only, on exports your team already runs: no network access, no credentials, nothing installed, and nothing written back to your system. I put them into five columns (case, activity, timestamp, who, where). Or it starts on the floor, by video or on site, across every shift.</li>
 <li><strong>Week two, loopholes and incentives.</strong> Cross-check the records against the shifts for control loopholes, shared logins, bypass paths, and floor KPIs or bonuses that pay for shortcuts.</li>
 <li><strong>Week three, the baseline and the list.</strong> Every loss in the order of what it costs, with the count and the arithmetic shown on pages you can forward, and a 30-60-90-day plan, presented to whoever signs.</li>
 </ul>
