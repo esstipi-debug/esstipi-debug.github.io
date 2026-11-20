@@ -5,11 +5,11 @@ slug: proof
 title: Proof
 kicker: Proof
 headline: What I changed, checkable before we talk.
-description: Field work from thirteen years in operations, a published audit of 2,708 marketplace claims, and deterministic diagnostic software with 10,607 passing tests.
+description: Field work from thirteen years in operations, a published audit of 2,708 marketplace claims, and deterministic diagnostic software with 10,756 passing tests.
 subject: Question on the proof
 cta: Ask for a walk-through
 published: 2026-11-09
-updated: 2026-11-18
+updated: 2026-11-19
 ---
 <!-- contact -->
 
@@ -17,7 +17,7 @@ updated: 2026-11-18
 <a class="fig" href="#track-record"><span class="fig-g">My field work</span><span class="fig-n">50,000</span><span class="fig-t">SKU warehouse cutover in Melbourne; order processing time fell about 20%</span><span class="fig-go">Field work</span></a>
 <a class="fig" href="#track-record"><span class="fig-g">My field work</span><span class="fig-n">USD 30M</span><span class="fig-t">Cross-border e-commerce P&amp;L; about USD 5M of inventory freed</span><span class="fig-go">Field work</span></a>
 <a class="fig" href="#sample-audit"><span class="fig-g">My analysis</span><span class="fig-n">2,708</span><span class="fig-t">Public marketplace claims audited; 57% written on or before delivery day</span><span class="fig-go">Published audit you can re-run</span></a>
-<a class="fig" href="#built-systems"><span class="fig-g">Tested, private repository</span><span class="fig-n">10,607</span><span class="fig-t">Passing tests on the deterministic replenishment engine (private repository)</span><span class="fig-go">Built systems</span></a>
+<a class="fig" href="#built-systems"><span class="fig-g">Tested, private repository</span><span class="fig-n">10,756</span><span class="fig-t">Passing tests on the deterministic replenishment engine (private repository)</span><span class="fig-go">Built systems</span></a>
 </div>
 
 <section class="band" markdown="1">
@@ -76,7 +76,7 @@ I build diagnostic and planning tools so I do not arrive on a floor with a blank
 
 <div class="rows" markdown="1">
 
-- **Inventory and replenishment engine.** 10,607 passing tests in Python and none failing, clean install on 18 November 2026 (private repository). Decision cards set the engine's recommendation beside the operator's play and the status quo, staging changes behind HMAC-SHA256-signed approval and rollback.
+- **Inventory and replenishment engine.** 10,756 passing tests in Python and none failing, clean install on 19 November 2026 (private repository). Decision cards set the engine's recommendation beside the operator's play and the status quo, staging changes behind HMAC-SHA256-signed approval and rollback.
 - **Receiving kit.** Open source under the MIT licence, with 1,141 passing tests and none failing, clean install on 18 November 2026.
 - **Field kit.** 1,187 passing tests on 20 October 2026. Checks an event log against the five-column contract (case, activity, timestamp, who, where) before analysis runs; integrity guards catch one-to-many join fanout, unbalanced blocked stock and negative stock against planted defects.
 - **Weightlifting planning application.** TypeScript monorepo with about 1,332 unit tests, 31 integration tests on embedded PostgreSQL and an adversarial review agent. Building it left a builder-side adoption postmortem: putting a number on what an expert used to judge by eye can still trigger refusal.
@@ -169,7 +169,7 @@ The code is on [GitHub](https://github.com/esstipi-debug).
 
 <div class="writing-grid" markdown="1">
 <div class="writing-card" markdown="1">
-Ten field notes, among them [*The Smith and the Tailor*](../the-smith-and-the-tailor/) and [*Nobody Pays for Being Wrong*](../nobody-pays-for-being-wrong/), and ten short answers, among them [why inventory records do not match the shelf](../why-inventory-records-do-not-match-the-shelf/) and [why people follow the system when it is wrong](../why-people-follow-the-system-when-it-is-wrong/).
+Eleven field notes, among them [*The Smith and the Tailor*](../the-smith-and-the-tailor/) and [*Nobody Pays for Being Wrong*](../nobody-pays-for-being-wrong/), and ten short answers, among them [why inventory records do not match the shelf](../why-inventory-records-do-not-match-the-shelf/) and [why people follow the system when it is wrong](../why-people-follow-the-system-when-it-is-wrong/).
 </div>
 <div class="writing-card" markdown="1">
 [*The Deployment Chasm*](../the-deployment-chasm/), a manuscript on why enterprise and supply-chain systems fail between the contract and the floor. Leaf through the sample as a book or read it full screen.

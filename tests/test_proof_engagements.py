@@ -22,7 +22,7 @@ import risks  # noqa: E402
 CSS_COMMENT = re.compile(r"/\*.*?\*/", re.S)
 FIGURE_ROW = re.compile(r'<a class="fig" href="#([a-z-]+)"><span class="fig-g">(.*?)</span><span class="fig-n">(.*?)</span>'
                         r'<span class="fig-t">(.*?)</span><span class="fig-go">(.*?)</span></a>', re.S)
-HEADLINE_FIGURES = ("50,000", "USD 30M", "2,708", "10,607")   # the four the proof page opens with, in its order
+HEADLINE_FIGURES = ("50,000", "USD 30M", "2,708", "10,756")   # the four the proof page opens with, in its order
 BUTTON = re.compile(r'<p class="actions"><a class="btn btn-contact" href="([^"]+)">(.*?)</a></p>')
 CLOSING = re.compile(r'<p class="page-close"><a class="page-close-link" href="([^"]+)">(.*?)</a></p>')
 ROW = re.compile(r"<li><details class=\"row\"( open)?><summary><strong>(.*?)</strong></summary><p>(.*?)</p></details></li>", re.S)

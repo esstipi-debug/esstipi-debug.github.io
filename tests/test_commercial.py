@@ -68,8 +68,8 @@ FIGURES = {
     "15": "15 planners (HECHOS, Trayectoria 2016-2017); 15 to 20 hours a week (plan B5); 15 November 2026, "
           "end of the job-posting sample of the scope plate "
           "(src/risks.json; coding table in C:/tolkien/docs/designs/laminas-c-level/codificacion.csv)",
-    "18": "18 November 2026, date of the clean-install counts of the engine and the receiving kit "
-          "(HECHOS, kern and mellon)",
+    "18": "18 November 2026, date of the clean-install count of the receiving kit (HECHOS, mellon)",
+    "19": "19 November 2026, date of the clean-install count of the engine (HECHOS, kern)",
     "20": "team of 20 (HECHOS, AGCO row); 15 to 20 hours a week; 20 October 2026 (HECHOS, fdekit)",
     "20%": "order processing time down about 20%, by his estimate (HECHOS, AGCO row; book l.6921); returning "
            "clients pay 20% less (owner decision 2026-11-13, content plan §3 A)",
@@ -114,8 +114,8 @@ FIGURES = {
             "scope plate (src/risks.json)",
     "6,000": "fractional lead fee in USD per month (plan C, option A)",
     "8,500": "field audit fee in USD (plan C, option A)",
-    "10,607": "engine passing tests, CLM_TESTS_KERN_ACTUAL: at commit e852ec6 on a clean install on "
-              "18 November 2026 (HECHOS, kern)",
+    "10,756": "engine passing tests, CLM_TESTS_KERN_ACTUAL: at commit a48ef3a on a clean install on "
+              "19 November 2026 (HECHOS, kern)",
     "15,000": "cutover leadership fee in USD (plan C, option A)",
     "50,000": "50,000-SKU distribution centre (HECHOS, AGCO row)",
     "2M": "about USD 2M a year of savings identified (HECHOS, Trayectoria 2013-2014)",

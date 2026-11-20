@@ -14,7 +14,7 @@ secondary: See a sample audit | not-received-but-delivered
 subject: What we're seeing
 description: I find the money an operation loses between its records and its floor, and take it out at the cause. US, Australia, Canada, UK, Europe.
 published: 2026-11-09
-updated: 2026-11-18
+updated: 2026-11-19
 ---
 <details class="fold home-thesis" markdown="1">
 <summary><h2>Why a system that works in the plan fails on the floor</h2><span class="thesis-intro">Rarely the algorithm. Usually one of three things that were there before the system arrived.</span></summary>
@@ -48,7 +48,7 @@ A three-week field audit, cutover leadership, a fractional operations or deploym
 
 <details class="fold pillar">
 <summary><h2>Proof</h2></summary>
-<p>A 50,000-SKU distribution-centre cutover in Melbourne, a USD 30M cross-border P&amp;L, a re-runnable triage of 2,708 marketplace claims, and tools I build in Python, SQL and TypeScript, among them an inventory and replenishment engine with 10,607 passing tests that stages every decision in draft before write-back.</p>
+<p>A 50,000-SKU distribution-centre cutover in Melbourne, a USD 30M cross-border P&amp;L, a re-runnable triage of 2,708 marketplace claims, and tools I build in Python, SQL and TypeScript, among them an inventory and replenishment engine with 10,756 passing tests that stages every decision in draft before write-back.</p>
 <p><a href="proof/">See the proof</a> or <a href="proof/#decision-card">try a decision card</a></p>
 </details>
 
