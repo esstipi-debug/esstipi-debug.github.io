@@ -5,6 +5,8 @@ slug: the-shortcut-is-not-a-lapse
 title: The Shortcut Is Not a Lapse
 kicker: Field notes for the COO
 description: Field notes for the COO: why dented units ship, and three questions to ask where the record is written.
+about: Why dented units ship.
+takeaway: Three questions to ask where the record is written.
 published: 2026-11-16
 updated: 2026-11-16
 pdf: https://cdn.jsdelivr.net/gh/esstipi-debug/esstipi-debug@main/papers/the-shortcut-is-not-a-lapse.pdf

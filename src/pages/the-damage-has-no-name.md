@@ -5,6 +5,8 @@ slug: the-damage-has-no-name
 title: The Damage Has No Name
 kicker: Field notes for the CFO
 description: Field notes for the CFO: why the fastest driver on the report can be the most expensive one in the ledger, and how to trace the damage to a name.
+about: Why the fastest driver on the report can be the most expensive one in the ledger.
+takeaway: How to trace the damage to a name.
 published: 2026-11-16
 updated: 2026-11-16
 pdf: https://cdn.jsdelivr.net/gh/esstipi-debug/esstipi-debug@main/papers/the-damage-has-no-name.pdf

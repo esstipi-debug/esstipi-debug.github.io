@@ -5,6 +5,8 @@ slug: put-the-toll-on-the-bridge
 title: Put the Toll on the Bridge
 kicker: Field notes for the COO
 description: Field notes for the COO: where a step on a shift screen protects you, where it buys workarounds, and four questions for the next screen you approve.
+about: Where a step on a shift screen protects you, where it buys workarounds.
+takeaway: Four questions for the next screen you approve.
 published: 2026-11-16
 updated: 2026-11-16
 pdf: https://cdn.jsdelivr.net/gh/esstipi-debug/esstipi-debug@main/papers/put-the-toll-on-the-bridge.pdf

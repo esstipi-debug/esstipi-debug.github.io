@@ -206,51 +206,105 @@
 <section id="library">
 <div class="wrap">
 <h2 id="field-notes">Field notes</h2>
-<table class="index">
-<thead><tr><th scope="col">Note</th><th scope="col">For</th><th scope="col">What it covers</th><th scope="col">File</th></tr></thead>
-<tbody>
-<tr><th scope="row"><a href="the-smith-and-the-tailor/">The Smith and the Tailor</a></th>
-<td class="ix-for">CEO</td>
-<td class="ix-what">Field notes for the CEO: why many deployments are cut before anyone measures the floor, and two rules you can set before kickoff.</td>
-<td class="ix-file"><a href="https://cdn.jsdelivr.net/gh/esstipi-debug/esstipi-debug@main/papers/the-smith-and-the-tailor.pdf">PDF, 10 pages</a></td></tr>
-<tr><th scope="row"><a href="nobody-pays-for-being-wrong/">Nobody Pays for Being Wrong</a></th>
-<td class="ix-for"></td>
-<td class="ix-what">A bestiary of the go-live: why obeying the system and dodging it answer the same rule, and what a rule looks like when nobody has to carry it.</td>
-<td class="ix-file"><a href="https://cdn.jsdelivr.net/gh/esstipi-debug/esstipi-debug@main/papers/nobody-pays-for-being-wrong.pdf">PDF, 27 pages</a></td></tr>
-<tr><th scope="row"><a href="the-shortcut-is-not-a-lapse/">The Shortcut Is Not a Lapse</a></th>
-<td class="ix-for">COO</td>
-<td class="ix-what">Field notes for the COO: why dented units ship, and three questions to ask where the record is written.</td>
-<td class="ix-file"><a href="https://cdn.jsdelivr.net/gh/esstipi-debug/esstipi-debug@main/papers/the-shortcut-is-not-a-lapse.pdf">PDF, 8 pages</a></td></tr>
-<tr><th scope="row"><a href="the-damage-has-no-name/">The Damage Has No Name</a></th>
-<td class="ix-for">CFO</td>
-<td class="ix-what">Field notes for the CFO: why the fastest driver on the report can be the most expensive one in the ledger, and how to trace the damage to a name.</td>
-<td class="ix-file"><a href="https://cdn.jsdelivr.net/gh/esstipi-debug/esstipi-debug@main/papers/the-damage-has-no-name.pdf">PDF, 8 pages</a></td></tr>
-<tr><th scope="row"><a href="when-exceptions-outrun-the-desk/">When Exceptions Outrun the Desk</a></th>
-<td class="ix-for">COO</td>
-<td class="ix-what">Field notes for the COO: why exceptions the desk cannot clear leave the procedure, and four numbers to watch each week before the record drifts.</td>
-<td class="ix-file"><a href="https://cdn.jsdelivr.net/gh/esstipi-debug/esstipi-debug@main/papers/when-exceptions-outrun-the-desk.pdf">PDF, 8 pages</a></td></tr>
-<tr><th scope="row"><a href="who-is-allowed-to-be-right/">Who Is Allowed to Be Right?</a></th>
-<td class="ix-for">CEO</td>
-<td class="ix-what">Field notes for the CEO: why the person who sees a rule fail after go-live may not be the one who can stop it, and how to measure the gap.</td>
-<td class="ix-file"><a href="https://cdn.jsdelivr.net/gh/esstipi-debug/esstipi-debug@main/papers/who-is-allowed-to-be-right.pdf">PDF, 8 pages</a></td></tr>
-<tr><th scope="row"><a href="the-tow-the-system-calls-idle/">The Tow the System Calls Idle</a></th>
-<td class="ix-for">COO</td>
-<td class="ix-what">Field notes for the COO: why minutes the time standard has no category for are charged to the operator, and five steps to let the floor contest them.</td>
-<td class="ix-file"><a href="https://cdn.jsdelivr.net/gh/esstipi-debug/esstipi-debug@main/papers/the-tow-the-system-calls-idle.pdf">PDF, 8 pages</a></td></tr>
-<tr><th scope="row"><a href="a-hundred-eyes-one-percent/">A Hundred Eyes, One Percent</a></th>
-<td class="ix-for">CFO</td>
-<td class="ix-what">Field notes for the CFO: why a human approval can get weaker as the system it checks gets better, and how to test the control, not the signature.</td>
-<td class="ix-file"><a href="https://cdn.jsdelivr.net/gh/esstipi-debug/esstipi-debug@main/papers/a-hundred-eyes-one-percent.pdf">PDF, 9 pages</a></td></tr>
-<tr><th scope="row"><a href="use-it-or-lose-it/">Use It or Lose It</a></th>
-<td class="ix-for">CEO</td>
-<td class="ix-what">Field notes for the CEO: why a budget that expires on a fixed date pays for a rush in its last week, who carries the bill, and the rule you can change.</td>
-<td class="ix-file"><a href="https://cdn.jsdelivr.net/gh/esstipi-debug/esstipi-debug@main/papers/use-it-or-lose-it.pdf">PDF, 8 pages</a></td></tr>
-<tr><th scope="row"><a href="put-the-toll-on-the-bridge/">Put the Toll on the Bridge</a></th>
-<td class="ix-for">COO</td>
-<td class="ix-what">Field notes for the COO: where a step on a shift screen protects you, where it buys workarounds, and four questions for the next screen you approve.</td>
-<td class="ix-file"><a href="https://cdn.jsdelivr.net/gh/esstipi-debug/esstipi-debug@main/papers/put-the-toll-on-the-bridge.pdf">PDF, 10 pages</a></td></tr>
-</tbody>
-</table>
+<div class="shelf">
+<input class="shelf-pick" type="radio" name="shelf-for" id="shelf-all" aria-label="All field notes" checked>
+<input class="shelf-pick" type="radio" name="shelf-for" id="shelf-ceo" aria-label="Field notes for the CEO">
+<input class="shelf-pick" type="radio" name="shelf-for" id="shelf-cfo" aria-label="Field notes for the CFO">
+<input class="shelf-pick" type="radio" name="shelf-for" id="shelf-coo" aria-label="Field notes for the COO">
+<p class="shelf-filter"><label for="shelf-all">All</label><label for="shelf-ceo">CEO</label><label for="shelf-cfo">CFO</label><label for="shelf-coo">COO</label></p>
+<div class="shelf-groups">
+<div class="shelf-group" data-for="ceo">
+<h3 class="shelf-for">For the CEO</h3>
+<ul class="shelf-list">
+<li class="shelf-note">
+<input class="shelf-pick" type="radio" name="shelf-note" id="shelf-note-1" checked>
+<img class="shelf-cover" src="files/covers/the-smith-and-the-tailor.webp" alt="" width="216" height="270" loading="eager" decoding="async">
+<label class="shelf-about" for="shelf-note-1">Why many deployments are cut before anyone measures the floor.</label>
+<p class="shelf-takeaway">Two rules you can set before kickoff.</p>
+<p class="shelf-links"><a class="shelf-name" href="the-smith-and-the-tailor/"><em>The Smith and the Tailor</em></a><a class="shelf-file" href="https://cdn.jsdelivr.net/gh/esstipi-debug/esstipi-debug@main/papers/the-smith-and-the-tailor.pdf">PDF, 10 pages</a></p>
+</li>
+<li class="shelf-note">
+<input class="shelf-pick" type="radio" name="shelf-note" id="shelf-note-2">
+<img class="shelf-cover" src="files/covers/who-is-allowed-to-be-right.webp" alt="" width="216" height="270" loading="lazy" decoding="async">
+<label class="shelf-about" for="shelf-note-2">Why the person who sees a rule fail after go-live may not be the one who can stop it.</label>
+<p class="shelf-takeaway">How to measure the gap.</p>
+<p class="shelf-links"><a class="shelf-name" href="who-is-allowed-to-be-right/"><em>Who Is Allowed to Be Right?</em></a><a class="shelf-file" href="https://cdn.jsdelivr.net/gh/esstipi-debug/esstipi-debug@main/papers/who-is-allowed-to-be-right.pdf">PDF, 8 pages</a></p>
+</li>
+<li class="shelf-note">
+<input class="shelf-pick" type="radio" name="shelf-note" id="shelf-note-3">
+<img class="shelf-cover" src="files/covers/use-it-or-lose-it.webp" alt="" width="216" height="270" loading="lazy" decoding="async">
+<label class="shelf-about" for="shelf-note-3">Why a budget that expires on a fixed date pays for a rush in its last week.</label>
+<p class="shelf-takeaway">Who carries the bill, and the rule you can change.</p>
+<p class="shelf-links"><a class="shelf-name" href="use-it-or-lose-it/"><em>Use It or Lose It</em></a><a class="shelf-file" href="https://cdn.jsdelivr.net/gh/esstipi-debug/esstipi-debug@main/papers/use-it-or-lose-it.pdf">PDF, 8 pages</a></p>
+</li>
+</ul>
+</div>
+<div class="shelf-group" data-for="cfo">
+<h3 class="shelf-for">For the CFO</h3>
+<ul class="shelf-list">
+<li class="shelf-note">
+<input class="shelf-pick" type="radio" name="shelf-note" id="shelf-note-4">
+<img class="shelf-cover" src="files/covers/the-damage-has-no-name.webp" alt="" width="216" height="270" loading="lazy" decoding="async">
+<label class="shelf-about" for="shelf-note-4">Why the fastest driver on the report can be the most expensive one in the ledger.</label>
+<p class="shelf-takeaway">How to trace the damage to a name.</p>
+<p class="shelf-links"><a class="shelf-name" href="the-damage-has-no-name/"><em>The Damage Has No Name</em></a><a class="shelf-file" href="https://cdn.jsdelivr.net/gh/esstipi-debug/esstipi-debug@main/papers/the-damage-has-no-name.pdf">PDF, 8 pages</a></p>
+</li>
+<li class="shelf-note">
+<input class="shelf-pick" type="radio" name="shelf-note" id="shelf-note-5">
+<img class="shelf-cover" src="files/covers/a-hundred-eyes-one-percent.webp" alt="" width="216" height="270" loading="lazy" decoding="async">
+<label class="shelf-about" for="shelf-note-5">Why a human approval can get weaker as the system it checks gets better.</label>
+<p class="shelf-takeaway">How to test the control, not the signature.</p>
+<p class="shelf-links"><a class="shelf-name" href="a-hundred-eyes-one-percent/"><em>A Hundred Eyes, One Percent</em></a><a class="shelf-file" href="https://cdn.jsdelivr.net/gh/esstipi-debug/esstipi-debug@main/papers/a-hundred-eyes-one-percent.pdf">PDF, 9 pages</a></p>
+</li>
+</ul>
+</div>
+<div class="shelf-group" data-for="coo">
+<h3 class="shelf-for">For the COO</h3>
+<ul class="shelf-list">
+<li class="shelf-note">
+<input class="shelf-pick" type="radio" name="shelf-note" id="shelf-note-6">
+<img class="shelf-cover" src="files/covers/the-shortcut-is-not-a-lapse.webp" alt="" width="216" height="270" loading="lazy" decoding="async">
+<label class="shelf-about" for="shelf-note-6">Why dented units ship.</label>
+<p class="shelf-takeaway">Three questions to ask where the record is written.</p>
+<p class="shelf-links"><a class="shelf-name" href="the-shortcut-is-not-a-lapse/"><em>The Shortcut Is Not a Lapse</em></a><a class="shelf-file" href="https://cdn.jsdelivr.net/gh/esstipi-debug/esstipi-debug@main/papers/the-shortcut-is-not-a-lapse.pdf">PDF, 8 pages</a></p>
+</li>
+<li class="shelf-note">
+<input class="shelf-pick" type="radio" name="shelf-note" id="shelf-note-7">
+<img class="shelf-cover" src="files/covers/when-exceptions-outrun-the-desk.webp" alt="" width="216" height="270" loading="lazy" decoding="async">
+<label class="shelf-about" for="shelf-note-7">Why exceptions the desk cannot clear leave the procedure.</label>
+<p class="shelf-takeaway">Four numbers to watch each week before the record drifts.</p>
+<p class="shelf-links"><a class="shelf-name" href="when-exceptions-outrun-the-desk/"><em>When Exceptions Outrun the Desk</em></a><a class="shelf-file" href="https://cdn.jsdelivr.net/gh/esstipi-debug/esstipi-debug@main/papers/when-exceptions-outrun-the-desk.pdf">PDF, 8 pages</a></p>
+</li>
+<li class="shelf-note">
+<input class="shelf-pick" type="radio" name="shelf-note" id="shelf-note-8">
+<img class="shelf-cover" src="files/covers/the-tow-the-system-calls-idle.webp" alt="" width="216" height="270" loading="lazy" decoding="async">
+<label class="shelf-about" for="shelf-note-8">Why minutes the time standard has no category for are charged to the operator.</label>
+<p class="shelf-takeaway">Five steps to let the floor contest them.</p>
+<p class="shelf-links"><a class="shelf-name" href="the-tow-the-system-calls-idle/"><em>The Tow the System Calls Idle</em></a><a class="shelf-file" href="https://cdn.jsdelivr.net/gh/esstipi-debug/esstipi-debug@main/papers/the-tow-the-system-calls-idle.pdf">PDF, 8 pages</a></p>
+</li>
+<li class="shelf-note">
+<input class="shelf-pick" type="radio" name="shelf-note" id="shelf-note-9">
+<img class="shelf-cover" src="files/covers/put-the-toll-on-the-bridge.webp" alt="" width="216" height="270" loading="lazy" decoding="async">
+<label class="shelf-about" for="shelf-note-9">Where a step on a shift screen protects you, where it buys workarounds.</label>
+<p class="shelf-takeaway">Four questions for the next screen you approve.</p>
+<p class="shelf-links"><a class="shelf-name" href="put-the-toll-on-the-bridge/"><em>Put the Toll on the Bridge</em></a><a class="shelf-file" href="https://cdn.jsdelivr.net/gh/esstipi-debug/esstipi-debug@main/papers/put-the-toll-on-the-bridge.pdf">PDF, 10 pages</a></p>
+</li>
+</ul>
+</div>
+<div class="shelf-group" data-for="all">
+<h3 class="shelf-for">Field bestiary</h3>
+<ul class="shelf-list">
+<li class="shelf-note">
+<input class="shelf-pick" type="radio" name="shelf-note" id="shelf-note-10">
+<img class="shelf-cover" src="files/covers/nobody-pays-for-being-wrong.webp" alt="" width="216" height="270" loading="lazy" decoding="async">
+<label class="shelf-about" for="shelf-note-10">Why obeying the system and dodging it answer the same rule.</label>
+<p class="shelf-takeaway">What a rule looks like when nobody has to carry it.</p>
+<p class="shelf-links"><a class="shelf-name" href="nobody-pays-for-being-wrong/"><em>Nobody Pays for Being Wrong</em></a><a class="shelf-file" href="https://cdn.jsdelivr.net/gh/esstipi-debug/esstipi-debug@main/papers/nobody-pays-for-being-wrong.pdf">PDF, 27 pages</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
 <h2 id="questions">Short answers</h2>
 <div class="qa">
 <div>

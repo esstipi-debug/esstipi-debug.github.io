@@ -74,7 +74,8 @@ DISALLOWED_PATHS = ("/src/", "/tests/")
 
 PAGE_TYPES = ("home", "question", "note", "author", "book", "landing", "page")
 REQUIRED_KEYS = ("type", "order", "slug", "title", "description", "published", "updated")
-KIND_KEYS = {"home": ("headline", "lede"), "landing": ("group", "door", "door_text")}
+# A note says, in two lines of its own, what it is about and what the reader takes away: a title alone does not.
+KIND_KEYS = {"home": ("headline", "lede"), "landing": ("group", "door", "door_text"), "note": ("about", "takeaway")}
 SLUG_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 RESERVED_SLUGS = frozenset({"files", "src", "tests"})  # folders the build or the repository already use
 FRONT_MATTER_RE = re.compile(r"\A---\n(.*?)\n---\n(.*)\Z", re.S)
@@ -156,6 +157,8 @@ class Page:
     origin_url: str | None = None
     pdf: str | None = None
     pdf_pages: int | None = None
+    about: str | None = None     # a note: what it is about, in one sentence of its description
+    takeaway: str | None = None  # a note: what the reader takes away, in the rest of that description
     cites: tuple[Citation, ...] = ()
     headline: str | None = None
     lede: str | None = None
@@ -332,6 +335,8 @@ def load_page(path: Path) -> Page:
         origin_url=one.get("origin_url"),
         pdf=one.get("pdf"),
         pdf_pages=int(one["pdf_pages"]) if "pdf_pages" in one else None,
+        about=one.get("about"),
+        takeaway=one.get("takeaway"),
         cites=tuple(parse_citation(value) for value in meta.get("cite", [])),
         **extra,
     )
@@ -402,8 +407,9 @@ def citation_html(citation: Citation) -> str:
     return f'{text} <a href="{esc(citation.url)}">{esc(link_label(citation.url))}</a>'
 
 
-def pdf_link(note: Page) -> str:
-    return f'<a href="{esc(note.pdf or "")}">PDF, {note.pdf_pages} pages</a>'
+def pdf_link(note: Page, css_class: str = "") -> str:
+    named = f' class="{esc(css_class)}"' if css_class else ""
+    return f'<a{named} href="{esc(note.pdf or "")}">PDF, {note.pdf_pages} pages</a>'
 
 
 # ---------------------------------------------------------------- structured data
@@ -701,19 +707,14 @@ def note_main(page: Page, pages: list[Page], depth: int) -> str:
 
 
 def author_main(page: Page, pages: list[Page], depth: int) -> str:
-    writing = [f'<li><a href="{href(note.path, depth)}"><em>{esc(note.title)}</em></a> · {pdf_link(note)}</li>'
-               for note in notes_of(pages)]
-    writing.append(f'<li><a href="{href(BOOK_SLUG + "/", depth)}"><em>The Deployment Chasm</em></a>, '
-                   'a manuscript</li>')
-    items = "\n".join(writing)
+    import shelf  # late: shelf.py lays the field notes out with this module's data and helpers
     return f"""<article>
 <h1>{AUTHOR}</h1>
 <p class="lede">{AUTHOR_ROLE}, {LOCATION}</p>
 {page.body_html}
-<h2>Writing</h2>
-<ul>
-{items}
-</ul>
+<h2 id="writing">Writing</h2>
+{shelf.shelf(pages, depth)}
+<p class="shelf-book"><a href="{href(BOOK_SLUG + "/", depth)}"><em>The Deployment Chasm</em></a>, a manuscript</p>
 <h2>Contact</h2>
 <p><a href="{LINKEDIN}">LinkedIn</a>, <a href="{GITHUB}">GitHub</a>, <a href="mailto:{EMAIL}">{EMAIL}</a></p>
 </article>"""

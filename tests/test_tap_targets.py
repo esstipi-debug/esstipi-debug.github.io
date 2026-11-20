@@ -80,3 +80,10 @@ def test_a_link_of_two_lines_keeps_air_around_it(site):
     """In a list of links, a link that wraps is taller than 44px: it still keeps a little air above and below,
     so that two of them do not run together."""
     assert re.search(r"padding-block:\s*\.\d+rem", declarations(site, ".links a"))
+
+
+def test_the_shelf_of_field_notes_gives_a_finger_its_44px(site):
+    """On the author page: the buttons of the filter, the line that opens a note on a phone, and the two links
+    of an entry (its name and its file)."""
+    for selector in (".shelf-filter label", ".shelf-about", ".shelf-links a"):
+        assert f"min-height: {TAP}" in declarations(site, selector), selector

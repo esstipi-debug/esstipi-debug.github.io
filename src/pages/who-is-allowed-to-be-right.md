@@ -5,6 +5,8 @@ slug: who-is-allowed-to-be-right
 title: Who Is Allowed to Be Right?
 kicker: Field notes for the CEO
 description: Field notes for the CEO: why the person who sees a rule fail after go-live may not be the one who can stop it, and how to measure the gap.
+about: Why the person who sees a rule fail after go-live may not be the one who can stop it.
+takeaway: How to measure the gap.
 published: 2026-11-16
 updated: 2026-11-16
 pdf: https://cdn.jsdelivr.net/gh/esstipi-debug/esstipi-debug@main/papers/who-is-allowed-to-be-right.pdf

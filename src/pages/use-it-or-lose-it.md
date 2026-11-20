@@ -5,6 +5,8 @@ slug: use-it-or-lose-it
 title: Use It or Lose It
 kicker: Field notes for the CEO
 description: Field notes for the CEO: why a budget that expires on a fixed date pays for a rush in its last week, who carries the bill, and the rule you can change.
+about: Why a budget that expires on a fixed date pays for a rush in its last week.
+takeaway: Who carries the bill, and the rule you can change.
 published: 2026-11-16
 updated: 2026-11-16
 pdf: https://cdn.jsdelivr.net/gh/esstipi-debug/esstipi-debug@main/papers/use-it-or-lose-it.pdf

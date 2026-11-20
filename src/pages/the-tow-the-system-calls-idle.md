@@ -5,6 +5,8 @@ slug: the-tow-the-system-calls-idle
 title: The Tow the System Calls Idle
 kicker: Field notes for the COO
 description: Field notes for the COO: why minutes the time standard has no category for are charged to the operator, and five steps to let the floor contest them.
+about: Why minutes the time standard has no category for are charged to the operator.
+takeaway: Five steps to let the floor contest them.
 published: 2026-11-16
 updated: 2026-11-16
 pdf: https://cdn.jsdelivr.net/gh/esstipi-debug/esstipi-debug@main/papers/the-tow-the-system-calls-idle.pdf

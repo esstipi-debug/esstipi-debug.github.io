@@ -5,6 +5,8 @@ slug: nobody-pays-for-being-wrong
 title: Nobody Pays for Being Wrong
 kicker: Field bestiary
 description: A bestiary of the go-live: why obeying the system and dodging it answer the same rule, and what a rule looks like when nobody has to carry it.
+about: Why obeying the system and dodging it answer the same rule.
+takeaway: What a rule looks like when nobody has to carry it.
 published: 2026-11-09
 updated: 2026-11-09
 pdf: https://cdn.jsdelivr.net/gh/esstipi-debug/esstipi-debug@main/papers/nobody-pays-for-being-wrong.pdf

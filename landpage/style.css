@@ -615,6 +615,75 @@ article.page:has(.eng-deck) > hgroup + p { max-width: 38rem; margin: 1rem 0 0; f
 .writing-card p:last-child { margin-bottom: 0; }
 @media (min-width: 56rem) { .writing-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 
+/* ---------------------------------------------------------------- the field notes, as a shelf (shelf.py)
+   One entry per note, and each opens with what the note is about: a title alone does not say it. The entries
+   stand under the reader they are written for and a filter leaves one reader, with radio buttons and the
+   selectors below: no script. On a phone the list opens one note at a time. A shut entry still says what the
+   note is about and names it, and the only rules that hide anything name a note that is not picked, so the
+   page never depends on anything but the radio buttons to be read. From 64rem up every entry stands open, the
+   radio buttons of the notes leave the page and a dimension line gathers the entries of one reader. The shelf
+   is wider than the column of text it stands in; everything else on the page stays in the column. */
+main.wrap > article:has(.shelf) { max-width: none; }
+main.wrap > article:has(.shelf) > :not(.shelf) { max-width: 44rem; }
+.shelf { max-width: 74rem; margin: 1.25rem 0 0; }
+.shelf-pick { position: absolute; opacity: 0; pointer-events: none; }
+.shelf-filter { display: flex; flex-wrap: wrap; gap: 0 1.6rem; margin: 0 0 .6rem; }
+.shelf-filter label { display: inline-flex; align-items: center; justify-content: center; min-width: 2.75rem; min-height: 2.75rem; font-size: .9375rem; color: var(--ink-2); cursor: pointer; transition: color .2s; }
+.shelf-filter label:hover { color: var(--ink); }
+#shelf-all:checked ~ .shelf-filter label[for="shelf-all"],
+#shelf-ceo:checked ~ .shelf-filter label[for="shelf-ceo"],
+#shelf-cfo:checked ~ .shelf-filter label[for="shelf-cfo"],
+#shelf-coo:checked ~ .shelf-filter label[for="shelf-coo"] { color: var(--ink); box-shadow: inset 0 -2px 0 var(--accent); }
+#shelf-all:focus-visible ~ .shelf-filter label[for="shelf-all"],
+#shelf-ceo:focus-visible ~ .shelf-filter label[for="shelf-ceo"],
+#shelf-cfo:focus-visible ~ .shelf-filter label[for="shelf-cfo"],
+#shelf-coo:focus-visible ~ .shelf-filter label[for="shelf-coo"] { outline: 2px solid var(--accent); outline-offset: 2px; }
+#shelf-ceo:checked ~ .shelf-groups .shelf-group:not([data-for="ceo"]),
+#shelf-cfo:checked ~ .shelf-groups .shelf-group:not([data-for="cfo"]),
+#shelf-coo:checked ~ .shelf-groups .shelf-group:not([data-for="coo"]) { display: none; }
+.shelf-groups { border-bottom: 1px solid var(--rule); }
+.shelf-group { padding: 1.1rem 0 0; border-top: 1px solid var(--rule-strong); }
+.shelf-for { padding: 0 0 .6rem; font-size: .875rem; font-weight: 500; line-height: 1.3; letter-spacing: 0; color: var(--muted); }
+.shelf-list { margin: 0; padding: 0; list-style: none; }
+.shelf-note { display: grid; grid-template-columns: 4.75rem minmax(0, 1fr); grid-template-rows: auto 1fr auto; column-gap: 1rem; margin: 0; border-top: 1px solid var(--rule); }
+.shelf-cover { grid-column: 1; grid-row: 1 / span 2; width: 100%; height: auto; margin-top: 1.15rem; border: 1px solid var(--rule-strong); background: var(--ground-deep); }
+.shelf-about { grid-column: 2; position: relative; display: block; min-height: 2.75rem; padding-top: 1.05rem; font-size: 1.0625rem; font-weight: 500; line-height: 1.35; color: var(--ink); }
+.shelf-takeaway { grid-column: 2; align-self: start; margin: .35rem 0 0; font-size: .9375rem; line-height: 1.5; color: var(--ink-2); }
+.shelf-links { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: center; gap: 0 1.4rem; margin: .4rem 0 .5rem; font-size: .9375rem; line-height: 1.3; }
+.shelf-links a { display: inline-flex; align-items: center; min-height: 2.75rem; text-decoration: underline; text-decoration-color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: .22em; transition: color .2s; }
+.shelf-links a:hover { color: var(--accent); }
+.shelf-name { font-weight: 600; }
+.shelf-file { color: var(--ink-2); white-space: nowrap; }
+.shelf-book { margin-top: 1.75rem; color: var(--ink-2); }
+@media (max-width: 63.99rem) {
+  .shelf-pick:not(:checked) ~ .shelf-cover,
+  .shelf-pick:not(:checked) ~ .shelf-takeaway,
+  .shelf-pick:not(:checked) ~ .shelf-links .shelf-file { display: none; }
+  .shelf-pick:not(:checked) ~ .shelf-about { grid-column: 1 / -1; padding: .75rem 2.5rem 0 0; cursor: pointer; }
+  .shelf-pick:not(:checked) ~ .shelf-about::before,
+  .shelf-pick:not(:checked) ~ .shelf-about::after { content: ""; position: absolute; right: .3rem; top: 1.45rem; width: .9rem; height: 1.5px; background: var(--accent); }
+  .shelf-pick:not(:checked) ~ .shelf-about::after { transform: rotate(90deg); }
+  .shelf-pick:not(:checked) ~ .shelf-about:hover { text-decoration: underline; text-decoration-color: var(--accent); text-decoration-thickness: 1.5px; text-underline-offset: .2em; }
+  .shelf-pick:not(:checked) ~ .shelf-links { margin: -.3rem 0 .1rem; }
+  .shelf-pick:not(:checked) ~ .shelf-links .shelf-name { font-size: .875rem; font-weight: 400; color: var(--ink-2); }
+  .shelf-pick:focus-visible ~ .shelf-about { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .shelf-note:has(> .shelf-pick:checked) { box-shadow: inset 0 2px 0 var(--accent); }
+}
+@media (min-width: 64rem) {
+  .shelf-group { position: relative; display: grid; grid-template-columns: 7.75rem minmax(0, 1fr); column-gap: 1.75rem; padding-top: 0; }
+  .shelf-for { padding: 1.35rem 0 0; }
+  .shelf-group::before { content: ""; position: absolute; left: 7.45rem; top: 1.15rem; bottom: 1.2rem; width: 9px; border: solid var(--muted); border-width: 1px 0; background: linear-gradient(var(--muted), var(--muted)) 50% 0 / 1px 100% no-repeat; }
+  .shelf-note > .shelf-pick { display: none; }
+  .shelf-note { grid-template-columns: 3.75rem minmax(0, 1fr) 15.5rem 7.25rem; grid-template-rows: auto 1fr; column-gap: 1.6rem; padding: 1.05rem 0 1.1rem; }
+  .shelf-note:first-child { border-top: 0; }
+  .shelf-cover { margin-top: 0; }
+  .shelf-about { min-height: 0; padding-top: 0; font-size: 1.1875rem; pointer-events: none; }
+  .shelf-links { display: contents; }
+  .shelf-links a { grid-row: 1 / span 2; align-self: start; margin-top: -.5rem; }
+  .shelf-name { grid-column: 3; }
+  .shelf-file { grid-column: 4; }
+}
+
 /* ---------------------------------------------------------------- interactive zero-JS book sample reader */
 .book-page { max-width: 44rem; }
 .book-reader { position: relative; max-width: 74rem; margin: 1.75rem 0 2.5rem; }

@@ -7,8 +7,8 @@ with <details>, and what moves, moves with CSS.
 
 From top to bottom: the headline beside the sheet where the reader picks a situation (each one shows its
 drawing, its figure and its door); who the reader is and where the work is; the four figures; the method;
-the argument and the pillars, written in src/pages/index.md; the field notes and the short answers; and
-the closing call. Two sentences come from other pages and are read from them, never retyped: who the
+the argument and the pillars, written in src/pages/index.md; the field notes (the shelf of the author page,
+laid out by shelf.py) and the short answers; and the closing call. Two sentences come from other pages and are read from them, never retyped: who the
 work fits best (engagements) and the door for whoever is hiring (the author page). The drawing of the
 claims, with the audit's own sentence under it, is page_parts.py's: the proof page shows the same one.
 """
@@ -18,6 +18,7 @@ import re
 
 import build
 import drawings
+import shelf  # the field notes are laid out as the shelf of the author page: one layout, in shelf.py
 from build import Page, esc, href
 from page_parts import AUDIT_SLUG, claims_drawing
 
@@ -42,9 +43,7 @@ SITUATION_FIGURE = {
 }
 BEST_FIT = ("engagements", "Best fit")              # the page and the heading the sentence stands under
 HIRING = (build.AUTHOR_SLUG, "If you are hiring")   # the same, for the door of whoever is hiring
-READER = re.compile(r"for the (CEO|COO|CFO)\b")     # a field note says who it is written for
 COUNT_WORDS = ("no", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten")
-INDEX_HEADS = ("Note", "For", "What it covers", "File")
 
 
 # ---------------------------------------------------------------- what other pages already say
@@ -261,15 +260,6 @@ def method(pages: list[Page], depth: int) -> str:
 </section>"""
 
 
-def note_row(note: Page, depth: int) -> str:
-    """One field note in the index: its title, who it is written for, what it covers and its file."""
-    reader = READER.search(note.description)
-    return f"""<tr><th scope="row"><a href="{href(note.path, depth)}">{esc(note.title)}</a></th>
-<td class="ix-for">{reader.group(1) if reader else ""}</td>
-<td class="ix-what">{esc(note.description)}</td>
-<td class="ix-file">{build.pdf_link(note)}</td></tr>"""
-
-
 def answer_item(question: Page, depth: int) -> str:
     return (f"<details><summary>{build.render_inline(question.title)}</summary>\n"
             f'<p class="short">{esc(question.description)} '
@@ -277,10 +267,9 @@ def answer_item(question: Page, depth: int) -> str:
 
 
 def library(pages: list[Page], depth: int) -> str:
-    """The field notes as an index and the short answers, at the foot of the home page. The answers open in
-    place; on a phone the second half of them waits behind one line."""
-    rows = "\n".join(note_row(note, depth) for note in build.notes_of(pages))
-    heads = "".join(f'<th scope="col">{head}</th>' for head in INDEX_HEADS)
+    """The field notes and the short answers, at the foot of the home page. The notes are the shelf the author
+    page shows (shelf.py): each opens with what it is about, under the reader it is written for. The answers open
+    in place; on a phone the second half of them waits behind one line."""
     questions = build.questions_of(pages)
     half = (len(questions) + 1) // 2
     first = "\n".join(answer_item(question, depth) for question in questions[:half])
@@ -290,12 +279,7 @@ def library(pages: list[Page], depth: int) -> str:
     return f"""<section id="library">
 <div class="wrap">
 <h2 id="field-notes">Field notes</h2>
-<table class="index">
-<thead><tr>{heads}</tr></thead>
-<tbody>
-{rows}
-</tbody>
-</table>
+{shelf.shelf(pages, depth)}
 <h2 id="questions">Short answers</h2>
 <div class="qa">
 <div>

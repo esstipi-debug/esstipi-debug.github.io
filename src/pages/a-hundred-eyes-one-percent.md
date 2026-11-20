@@ -5,6 +5,8 @@ slug: a-hundred-eyes-one-percent
 title: A Hundred Eyes, One Percent
 kicker: Field notes for the CFO
 description: Field notes for the CFO: why a human approval can get weaker as the system it checks gets better, and how to test the control, not the signature.
+about: Why a human approval can get weaker as the system it checks gets better.
+takeaway: How to test the control, not the signature.
 published: 2026-11-16
 updated: 2026-11-16
 pdf: https://cdn.jsdelivr.net/gh/esstipi-debug/esstipi-debug@main/papers/a-hundred-eyes-one-percent.pdf

@@ -17,8 +17,9 @@ import pytest
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 import build  # noqa: E402
+import shelf  # noqa: E402
 
-COMMERCIAL_KINDS = ("home", "landing", "page")
+COMMERCIAL_KINDS =("home", "landing", "page")
 LANDING_SECTIONS = ("What I check first", "Where I have stood", "What I don't claim", "How we would start")
 DOORS_PER_GROUP = {"situation": 3, "floor": 3, "buyer": 2}
 # Situation pages carry one more section: the first question of each of the three people who will read it.
@@ -1248,18 +1249,17 @@ def test_the_thesis_and_the_pillars_fold_on_a_phone_and_stand_open_on_a_wide_scr
         assert phrase in visible, phrase
 
 
-def test_the_field_notes_are_an_index_that_names_the_reader(site):
+def test_the_field_notes_are_the_shelf_of_the_author_page(site):
+    """The home page shows the field notes as the author page does: the same shelf, with the cover of each note,
+    what it is about, the groups by reader and the filter (the owner's choice of 2026-11-19, after seeing both
+    this and a plain table). One layout of the notes, and no second one beside it."""
     root, pages = site
     library = library_of(home_page(site))
-    rows = re.findall(r"<tr>(.*?)</tr>", library.split("<tbody>", 1)[1].split("</tbody>", 1)[0], re.S)
-    notes = build.notes_of(pages)
-    assert len(rows) == len(notes)
-    for row, note in zip(rows, notes):
-        assert f'<a href="{note.slug}/">{build.esc(note.title)}</a>' in row, note.slug
-        assert build.esc(note.description) in row, note.slug     # still on the page, for whoever reads the markup
-        reader = re.search(r"for the (CEO|COO|CFO)\b", note.description)
-        assert f'<td class="ix-for">{reader.group(1) if reader else ""}</td>' in row, note.slug
-        assert build.pdf_link(note) in row, note.slug
+    assert shelf.shelf(pages, 0) in library
+    assert "<table" not in library and 'class="index"' not in library
+    for note in build.notes_of(pages):
+        assert f'<a class="shelf-name" href="{note.slug}/"><em>{build.esc(note.title)}</em></a>' in library, note.slug
+        assert f'>{build.esc(note.about)}</label>' in library, note.slug
 
 
 def test_half_the_short_answers_fold_on_a_phone(site):

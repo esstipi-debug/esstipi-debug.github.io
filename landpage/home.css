@@ -2,9 +2,10 @@
 
 /* The home page only, on top of style.css, laid out as a working drawing: the headline beside the sheet
    where a situation is picked; who the reader is; the four figures, the third with its drawing; the method
-   as one line in three states; the argument and the pillars, which fold on a phone; the field notes as an
-   index, the short answers and the closing call. Sections run the full width; .wrap or a padded edge keeps
-   their content on the page's column. No script: radio buttons, <details> and the selectors below. */
+   as one line in three states; the argument and the pillars, which fold on a phone; the field notes (the shelf
+   of style.css, the same one the author page shows), the short answers and the closing call. Sections run the
+   full width; .wrap or a padded edge keeps their content on the page's column. No script: radio buttons,
+   <details> and the selectors below. */
 
 :where(.kind-home) { --band: clamp(2.75rem, 1.8rem + 4.4vw, 5.5rem); --edge: max(1.25rem, calc((100% - 84rem) / 2)); }
 :where(.kind-home) h2 { font-size: clamp(1.55rem, 1.15rem + 1.6vw, 2.25rem); line-height: 1.14; }
@@ -198,26 +199,8 @@
 }
 @media (min-width: 75rem) { .home-pillars { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
 
-/* ---------------------------------------------------------------- the field notes as an index, and the short answers */
-.index { width: 100%; max-width: 46rem; margin-top: 1.4rem; border-collapse: collapse; border-bottom: 1px solid var(--rule); }
-.index thead, .ix-what { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
-.index tbody { display: block; }
-.index tr { display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: 1rem; align-items: center; border-top: 1px solid var(--rule); }
-.index th, .index td { padding: 0; font-weight: 400; text-align: left; }
-.index th a { display: inline-flex; align-items: center; min-height: 2.75rem; padding-block: .3rem; font-weight: 600; line-height: 1.25; }
-.index th a:hover { text-decoration: underline; text-decoration-color: var(--accent); text-decoration-thickness: 1.5px; text-underline-offset: .2em; }
-.ix-for { display: none; font-size: .875rem; line-height: 1.3; color: var(--ink-2); }
-.ix-file a { display: inline-flex; align-items: center; min-width: 2.75rem; min-height: 2.75rem; font-size: .875rem; color: var(--ink-2); white-space: nowrap; text-decoration: underline; text-decoration-color: var(--accent); text-underline-offset: .22em; }
-.ix-file a:hover { color: var(--ink); }
-@media (min-width: 40rem) {
-  .index thead { position: static; display: block; width: auto; height: auto; overflow: visible; clip-path: none; }
-  .index thead tr { border-top: 0; padding-bottom: .5rem; }
-  .index thead th { font-size: .8125rem; line-height: 1.3; color: var(--muted); }
-  .index thead th:nth-child(3) { display: none; }
-  .index tr { grid-template-columns: minmax(0, 1fr) 4rem 7.5rem; column-gap: 1.5rem; }
-  .ix-for { display: block; }
-  .ix-file, .index thead th:last-child { justify-self: end; }
-}
+/* ---------------------------------------------------------------- the short answers
+   The field notes above them are the shelf of the author page: its rules are in style.css. */
 #questions { margin-top: clamp(2.75rem, 6vw, 4.5rem); }
 .qa { display: grid; gap: 0 3.5rem; margin-top: 1.1rem; align-items: start; }
 @media (min-width: 62rem) { .qa { grid-template-columns: repeat(2, minmax(0, 1fr)); } }

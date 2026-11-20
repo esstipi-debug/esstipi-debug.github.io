@@ -5,6 +5,8 @@ slug: the-smith-and-the-tailor
 title: The Smith and the Tailor
 kicker: Field notes for the CEO
 description: Field notes for the CEO: why many deployments are cut before anyone measures the floor, and two rules you can set before kickoff.
+about: Why many deployments are cut before anyone measures the floor.
+takeaway: Two rules you can set before kickoff.
 published: 2026-11-09
 updated: 2026-11-09
 pdf: https://cdn.jsdelivr.net/gh/esstipi-debug/esstipi-debug@main/papers/the-smith-and-the-tailor.pdf
